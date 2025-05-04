@@ -1,0 +1,8 @@
+[submodule "ThirdParty/openvr"]
+	path = ThirdParty/openvr
+	url = https://github.com/ValveSoftware/openvr
+	shallow = true
+[submodule "ThirdParty/minhook"]
+	path = ThirdParty/minhook
+	url = https://github.com/TsudaKageyu/minhook
+	shallow = true

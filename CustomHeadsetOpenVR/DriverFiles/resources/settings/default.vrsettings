@@ -1,0 +1,7 @@
+{
+	"driver_CustomHeadsetOpenVR": {
+		"enable": true,
+		"Note":"The settings will be moving to Appdata/Roaming/CustomHeadset/settings.json",
+		"ipd": 63.0
+	}
+}
