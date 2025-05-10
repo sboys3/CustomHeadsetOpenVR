@@ -77,6 +77,20 @@
 		"xstring": "cpp",
 		"xtr1common": "cpp",
 		"xtree": "cpp",
-		"xutility": "cpp"
-	}
+		"xutility": "cpp",
+		"any": "cpp",
+		"chrono": "cpp",
+		"csignal": "cpp",
+		"filesystem": "cpp",
+		"forward_list": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"regex": "cpp",
+		"unordered_set": "cpp",
+		"valarray": "cpp",
+		"variant": "cpp"
+	},
+	"cSpell.words": [
+		"Megane"
+	]
 }

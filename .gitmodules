@@ -6,3 +6,8 @@
 	path = ThirdParty/minhook
 	url = https://github.com/TsudaKageyu/minhook
 	shallow = true
+[submodule "ThirdParty/json"]
+	path = ThirdParty/json
+	url = https://github.com/nlohmann/json
+	branch = master
+	shallow = true

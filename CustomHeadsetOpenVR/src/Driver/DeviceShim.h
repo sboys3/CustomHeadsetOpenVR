@@ -1,4 +1,3 @@
-//============ Copyright (c) Valve Corporation, All rights reserved. ============
 #pragma once
 
 #include <array>
@@ -10,7 +9,7 @@
 
 
 /**
- * This class implements overrides for functions in the devices.abort
+ * This class implements overrides for functions in SteamVR devices
  * Pre functions run before the original function and return false to prevent the original function from running.
  * Post functions run after the original function and can modify the return value or other parameters.
  * 
@@ -55,6 +54,11 @@ public:
 	virtual void PosDisplayComponentComputeInverseDistortion(vr::HmdVector2_t *&pResult, vr::EVREye &eEye, uint32_t &unChannel, float &fU, float &fV, bool &returnValue){};
 	virtual bool PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight){return true;};
 	virtual void PosDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight){};
+	
+	// non-shim functions
+	
+	// run on every frame of the main loop of the server
+	virtual void RunFrame(){};
 };
 
 class ShimTrackedDeviceDriver : public vr::ITrackedDeviceServerDriver{

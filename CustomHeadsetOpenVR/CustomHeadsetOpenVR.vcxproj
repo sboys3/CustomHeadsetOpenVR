@@ -30,10 +30,13 @@
     <ClInclude Include="src\Headsets\MeganeX8K.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Config\Config.cpp" />
+    <ClCompile Include="src\Config\ConfigLoader.cpp" />
     <ClCompile Include="src\Distortion\RadialBezierDistortionProfile.cpp" />
     <ClCompile Include="src\Driver\DeviceProvider.cpp" />
     <ClCompile Include="src\Driver\DeviceShim.cpp" />
     <ClCompile Include="src\Driver\DriverLog.cpp" />
+    <ClCompile Include="src\Driver\HmdDriverFactory.cpp" />
     <ClCompile Include="src\Driver\Hooking\Hooking.cpp" />
     <ClCompile Include="src\Driver\Hooking\InterfaceHookInjector.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
@@ -96,25 +99,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)</OutDir>
@@ -125,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +150,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,6 +171,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -187,6 +193,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

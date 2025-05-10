@@ -39,10 +39,8 @@ static Hook<void(*)(vr::IVRServerDriverHost *_this, const char *pchDeviceSerialN
 
 static void DetourTrackedDeviceAdded006(vr::IVRServerDriverHost *_this, const char *pchDeviceSerialNumber, vr::ETrackedDeviceClass eDeviceClass, vr::ITrackedDeviceServerDriver *pDriver)
 {
-	DriverLog("pDriver: %p", pDriver);  // debug
 	if (Driver->HandleDeviceAdded(pchDeviceSerialNumber, eDeviceClass, pDriver))  
 	{
-		DriverLog("pDriver after: %p", Driver);  // debug
 		TrackedDeviceAddedHook006.originalFunc(_this, pchDeviceSerialNumber, eDeviceClass, pDriver);
 	}
 }

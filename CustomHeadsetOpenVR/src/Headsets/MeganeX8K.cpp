@@ -1,5 +1,8 @@
 #include "MeganeX8K.h"
+#include <chrono>
+#include <cmath>
 #include "../Distortion/RadialBezierDistortionProfile.h"
+#include "../Config/Config.h"
 
 
 void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
@@ -15,7 +18,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 		shimActive = false;
 		return;
 	}
-
+	
 	isActive = true;
 	// TODO: apply a propper hidden area mesh
 	vr::HmdVector2_t mesh[1];
@@ -34,7 +37,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_DisplayDebugMode_Bool, true);
 	
 	// I think this is already the default and produces true blacks
-	// vr::VRProperties()->SetFloatProperty( container, vr::Prop_DisplayGCBlackClamp_Float, 0.0f);
+	// vr::VRProperties()->SetFloatProperty( container, vr::Prop_DisplayGCBlackClamp_Float, 0.00f);
 	// vr::VRProperties()->SetFloatProperty( container, vr::Prop_DriverRequestedMuraCorrectionMode_Int32, vr::EVRMuraCorrectionMode_NoCorrection);
 	
 	
@@ -60,8 +63,8 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// set ipd
-	float ipd = vr::VRSettings()->GetFloat("driver_CustomHeadsetOpenVR", "ipd");
-	SetIPD(ipd / 1000.0);
+	// float ipd = vr::VRSettings()->GetFloat("driver_CustomHeadsetOpenVR", "ipd");
+	// SetIPD(ipd / 1000.0);
 	
 	
 	// vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(unObjectId, 5000, 5000);
@@ -72,7 +75,11 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// start collection of the context so we can send events later
 	deviceProvider->SendContextCollectionEvents(unObjectId);
 	
-	testThread = std::thread( &MeganeX8KShim::TestThread, this );
+	if(!testThread.joinable()){
+		testThread = std::thread(&MeganeX8KShim::TestThread, this);
+	}
+	
+	UpdateSettings();
 	
 	returnValue = vr::VRInitError_None;
 }
@@ -216,6 +223,28 @@ void MeganeX8KShim::SetIPD(float ipd){
 }
 
 
+void MeganeX8KShim::RunFrame(){
+	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
+	
+	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
+	
+	// float brightness = std::sin(now) * 0.5 + 0.5;
+	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultLeft_Vector3, {brightness, brightness, brightness});
+	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {brightness, brightness, brightness});
+	
+	if(driverConfig.hasBeenUpdated){
+		UpdateSettings();
+	}
+}
+
+void MeganeX8KShim::UpdateSettings(){
+	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
+	
+	SetIPD(driverConfig.meganeX8K.ipd / 1000.0);
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, driverConfig.meganeX8K.blackLevel);
+	
+}
+
 
 // a thread that is run every 5 seconds to test things with
 void MeganeX8KShim::TestThread(){
@@ -224,12 +253,19 @@ void MeganeX8KShim::TestThread(){
 		
 		// DriverLog("TestToggle: %d\n", testToggle);
 		
+		
 		// uncomment this to regenerate the distortion mesh which will cause stutters
 		// deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
 		
 		vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 		
 		
-		std::this_thread::sleep_for( std::chrono::milliseconds( 5000 ) );
+		// vr::VRProperties()->SetFloatProperty( container, vr::Prop_DisplayGCBlackClamp_Float, testToggle ? 0.00f : 0.02f);
+		
+		// float brightness = std::sin(now) * 0.5 + 0.5;
+		// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultLeft_Vector3, {brightness, brightness, brightness});
+		// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {brightness, brightness, brightness});
+		
+		std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 	}
 }

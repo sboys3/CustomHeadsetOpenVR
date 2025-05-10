@@ -28,7 +28,12 @@ public:
 	virtual bool PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight) override;
 	virtual bool PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, uint32_t *&pnX, uint32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight) override;
 	virtual bool PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight) override;
+	
 	void SetIPD(float ipd);
+	
+	virtual void RunFrame() override;
+	
+	void UpdateSettings();
 	
 	void TestThread();
 };

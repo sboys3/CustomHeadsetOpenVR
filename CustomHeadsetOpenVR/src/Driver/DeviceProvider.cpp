@@ -6,10 +6,15 @@
 
 #include "../Headsets/MeganeX8K.h"
 
+#include "../Config/ConfigLoader.h"
+
+ConfigLoader configLoader;
+
 // general driver functions
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
 	// initialise this driver
 	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
+	configLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
 	return vr::VRInitError_None;
@@ -26,6 +31,9 @@ void CustomHeadsetDeviceProvider::LeaveStandby(){}
 
 
 void CustomHeadsetDeviceProvider::RunFrame(){
+	// acquire driverConfig.configLock for the duration of this function
+	std::lock_guard<std::mutex> lock(driverConfig.configLock);
+	
 	// process events that were submitted for this frame.
 	vr::VREvent_t vrevent{};
 	while(vr::VRServerDriverHost()->PollNextEvent(&vrevent, sizeof(vr::VREvent_t))){
@@ -48,6 +56,13 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			}
 		}
 	}
+	for(auto shim : shims){
+		if(shim->shimActive){
+			shim->RunFrame();
+		}
+	}
+	// clear update flag at end of frame
+	driverConfig.hasBeenUpdated = false;
 }
 
 void CustomHeadsetDeviceProvider::SendContextCollectionEvents(uint32_t id){
@@ -87,40 +102,15 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		// later shims can override earlier shims
 		// the PosTrackedDeviceActivate function will likely have enough information that you can decide if it is the device you want and can then set shimActive to false to deactivate the shim
 		
-		MeganeX8KShim* meganeX8KShim = new MeganeX8KShim();
-		meganeX8KShim->deviceProvider = this;
-		pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver);
+		if(driverConfig.meganeX8K.enable){
+			MeganeX8KShim* meganeX8KShim = new MeganeX8KShim();
+			meganeX8KShim->deviceProvider = this;
+			shims.insert(meganeX8KShim);
+			pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver);
+		}
 	}
 	// you can change eDeviceClass to change what an existing device shows up as
 	
 	// if false is returned the device will not be added
 	return true;
-}
-
-
-
-
-#if defined( _WIN32 )
-#define HMD_DLL_EXPORT extern "C" __declspec( dllexport )
-#define HMD_DLL_IMPORT extern "C" __declspec( dllimport )
-#elif defined( __GNUC__ ) || defined( COMPILER_GCC ) || defined( __APPLE__ )
-#define HMD_DLL_EXPORT extern "C" __attribute__( ( visibility( "default" ) ) )
-#define HMD_DLL_IMPORT extern "C"
-#else
-#error "Unsupported Platform."
-#endif
-
-CustomHeadsetDeviceProvider deviceProvider;
-
-// this is the main entry point from vrserver
-HMD_DLL_EXPORT void *HmdDriverFactory( const char *pInterfaceName, int *pReturnCode ){
-	// return CustomHeadsetDeviceProvider
-	if (0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName)){
-		return &deviceProvider;
-	}
-	// Otherwise tell the runtime that we don't have this interface.
-	if(pReturnCode){
-		*pReturnCode = vr::VRInitError_Init_InterfaceNotFound;
-	}
-	return NULL;
 }
