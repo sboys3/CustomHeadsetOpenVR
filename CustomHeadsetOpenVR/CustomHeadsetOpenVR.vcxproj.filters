@@ -74,5 +74,8 @@
     <ClCompile Include="src\Driver\HmdDriverFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Distortion\DistortionProfileConstructor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

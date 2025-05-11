@@ -18,17 +18,7 @@ public:
 	};
 	// radial distortions from the input image in degrees to the output image in percent
 	// this will be used as the values for the green channel
-	// std::vector<DistortionPoint> distortions ={{0, 0}, {47.5, 100}};
-	std::vector<DistortionPoint> distortions = {
-		{0.0000,	0},
-		{10.0000,	24.77952472},
-		{20.0000,	48.32328161},
-		{30.0000,	69.9136628},
-		{35.0000,	79.99462488},
-		{40.0000,	89.06057112},
-		{45.0000,	96.29634484},
-		{48.3073,	100},
-	};
+	std::vector<DistortionPoint> distortions ={{0, 0}, {47.5, 100}};
 	// additional percent distortions for the red channel to be done after the main distortion
 	std::vector<DistortionPoint> distortionsRed ={{0, 0.5}, {47.5, 0.5}};
 	// additional percent distortions for the blue channel to be done after the main distortion
@@ -49,10 +39,13 @@ private:
 	int inBetweenPoints = 20;
 	inline float SampleFromMap(float* map, float radius);
 	float ComputePPD(std::vector<DistortionPoint> distortion, float degreeStart, float degreeEnd);
+	void Cleanup();
 public:
 	virtual void Initialize() override;
 	
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) override;
 	
 	virtual Point2D ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) override;
+	
+	virtual ~RadialBezierDistortionProfile();
 };

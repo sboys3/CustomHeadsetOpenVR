@@ -8,13 +8,12 @@
 
 #include "../Config/ConfigLoader.h"
 
-ConfigLoader configLoader;
 
 // general driver functions
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
 	// initialise this driver
 	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
-	configLoader.Start();
+	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
 	return vr::VRInitError_None;
@@ -32,7 +31,7 @@ void CustomHeadsetDeviceProvider::LeaveStandby(){}
 
 void CustomHeadsetDeviceProvider::RunFrame(){
 	// acquire driverConfig.configLock for the duration of this function
-	std::lock_guard<std::mutex> lock(driverConfig.configLock);
+	std::lock_guard<std::mutex> lock(driverConfigLock);
 	
 	// process events that were submitted for this frame.
 	vr::VREvent_t vrevent{};

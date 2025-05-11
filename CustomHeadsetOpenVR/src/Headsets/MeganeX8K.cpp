@@ -28,7 +28,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Inverse, mesh, 0);
 	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_LineLoop, mesh, 0);
 	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_LineLoop, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Max, mesh, 0);
+	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_Max, mesh, 0);
 	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Max, mesh, 0);
 	
 	
@@ -68,9 +68,10 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(unObjectId, 5000, 5000);
-	distortionProfile = new RadialBezierDistortionProfile();
-	distortionProfile->resolution = 3552;
-	distortionProfile->Initialize();
+	distortionProfileConstructor.distortionSettings.resolution = 3552;
+	
+	distortionProfileConstructor.distortionSettings.noneDistortionFovHorizontal = 95;
+	distortionProfileConstructor.distortionSettings.noneDistortionFovVertical = 95;
 	
 	// start collection of the context so we can send events later
 	deviceProvider->SendContextCollectionEvents(unObjectId);
@@ -90,7 +91,7 @@ void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 
 // defines the fov of the input image
 bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float *&pfLeft, float *&pfRight, float *&pfBottom, float *&pfTop){
-	distortionProfile->GetProjectionRaw(eEye, pfLeft, pfRight, pfBottom, pfTop);
+	distortionProfileConstructor.profile->GetProjectionRaw(eEye, pfLeft, pfRight, pfBottom, pfTop);
 	return false;
 }
 
@@ -110,8 +111,9 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	}
 	float redV = fV;
 	float greenV = fV;
+	
 	// apply sub pixel offsets for super sampling
-	double subpixelOffset = 1.0f / 3.0f / 3552.0f;
+	float subpixelOffset = (float)(1.0 / 3.0 / 3552.0);
 	// if(testToggle){
 	if(eEye == vr::Eye_Left){
 		redV -= subpixelOffset;
@@ -121,9 +123,11 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 		greenV -= subpixelOffset;
 	}
 	// }
-	Point2D distortionRed = distortionProfile->ComputeDistortion(eEye, ColorChannelRed, fU, redV);
-	Point2D distortionGreen = distortionProfile->ComputeDistortion(eEye, ColorChannelGreen, fU, greenV);
-	Point2D distortionBlue = distortionProfile->ComputeDistortion(eEye, ColorChannelBlue, fU, fV);
+	
+	// apply distortion profile to each color channel
+	Point2D distortionRed = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelRed, fU, redV);
+	Point2D distortionGreen = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelGreen, fU, greenV);
+	Point2D distortionBlue = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelBlue, fU, fV);
 	
 	coordinates.rfRed[0] = distortionRed.x;
 	coordinates.rfRed[1] = distortionRed.y;
@@ -240,9 +244,14 @@ void MeganeX8KShim::RunFrame(){
 void MeganeX8KShim::UpdateSettings(){
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD(driverConfig.meganeX8K.ipd / 1000.0);
-	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, driverConfig.meganeX8K.blackLevel);
+	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
 	
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
+	
+	if(distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile)){
+		// it has changed so signal the compositor to regenerate the distortion mesh
+		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
+	}
 }
 
 

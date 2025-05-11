@@ -12,6 +12,7 @@ struct Point2D{
 	float y;
 };
 
+// An abstract class that all distortion profiles are derived from
 class DistortionProfile{
 public:
 	// the resolution from -1 to 1 in the output coordinates

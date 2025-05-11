@@ -130,6 +130,7 @@ float RadialBezierDistortionProfile::ComputePPD(std::vector<DistortionPoint> dis
 }
 
 void RadialBezierDistortionProfile::Initialize(){
+	Cleanup();
 	// smooth the points
 	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints);
 	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints);
@@ -254,4 +255,23 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	distortion.x = unitU * radius;
 	distortion.y = unitV * radius;
 	return distortion;
+}
+
+void RadialBezierDistortionProfile::Cleanup(){
+	if(radialUVMapR != nullptr){
+		delete[] radialUVMapR;
+		radialUVMapR = nullptr;
+	}
+	if(radialUVMapG != nullptr){
+		delete[] radialUVMapG;
+		radialUVMapG = nullptr;
+	}
+	if(radialUVMapB != nullptr){
+		delete[] radialUVMapB;
+		radialUVMapB = nullptr;
+	}
+}
+
+RadialBezierDistortionProfile::~RadialBezierDistortionProfile(){
+	Cleanup();
 }

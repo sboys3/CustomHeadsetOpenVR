@@ -2,7 +2,7 @@
 #include "../Driver/DeviceProvider.h"
 #include "../Driver/DriverLog.h"
 
-#include "../Distortion/DistortionProfile.h"
+#include "../Distortion/DistortionProfileConstructor.h"
 
 #include <thread>
 #include <cmath>
@@ -12,7 +12,7 @@ class MeganeX8KShim : public ShimDefinition{
 public:
 	CustomHeadsetDeviceProvider* deviceProvider;
 	
-	DistortionProfile* distortionProfile;
+	DistortionProfileConstructor distortionProfileConstructor;
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;
