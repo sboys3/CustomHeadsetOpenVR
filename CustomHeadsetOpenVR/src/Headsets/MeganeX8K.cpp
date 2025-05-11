@@ -251,6 +251,12 @@ void MeganeX8KShim::UpdateSettings(){
 	if(distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile)){
 		// it has changed so signal the compositor to regenerate the distortion mesh
 		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
+		// also update fov
+		float leftEyeLeft, leftEyeRight, leftEyeTop, leftEyeBottom;
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeTop, &leftEyeBottom);
+		float rightEyeLeft, rightEyeRight, rightEyeTop, rightEyeBottom;
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeTop, &rightEyeBottom);
+		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeTop}, {leftEyeRight, leftEyeBottom}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeTop}, {rightEyeRight, rightEyeBottom}});
 	}
 }
 

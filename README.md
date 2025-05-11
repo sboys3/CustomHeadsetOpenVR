@@ -9,10 +9,11 @@ Distortion profiles go in a folder named `Distortion` and they are referenced by
 
 ## Building
 1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
-2. Pull the submodules with `git submodule update --init --recursive`
-3. Open the solution in Visual Studio.
-4. Change the configuration to Release.
-5. Build the solution. It will create the driver folder in `output` and copy it to the SteamVR drivers folder.
+2. Navigate to the repository folder with `cd CustomHeadsetOpenVR` in the terminal.
+3. Pull the submodules with `git submodule update --init --recursive`
+4. Open the solution in Visual Studio.
+5. Change the configuration to Release.
+6. Build the solution. It will create the driver folder in `output` and copy it to the SteamVR drivers folder.
 
 To pull the latest changes, run `git pull --recurse-submodules`
 
