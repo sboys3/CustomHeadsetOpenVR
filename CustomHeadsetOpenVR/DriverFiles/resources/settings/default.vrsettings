@@ -1,7 +1,8 @@
 {
 	"driver_CustomHeadsetOpenVR": {
 		"enable": true,
+		"loadPriority": 1000,
 		"Note1": "The settings have moved to Appdata/Roaming/CustomHeadset/settings.json",
-		"Note2": ""
+		"Note2": "See more information at https://github.com/sboys3/CustomHeadsetOpenVR"
 	}
 }

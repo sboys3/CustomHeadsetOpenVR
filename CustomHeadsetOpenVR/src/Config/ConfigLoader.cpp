@@ -159,6 +159,16 @@ void ConfigLoader::WatcherThreadDistortions(){
 	}
 }
 				
+// only define settings that most users will change and are unlikely to have their default changed
+// settings not defined here will easily be able to have their defaults changed in the future for everyone
+std::string defaultConfig = R"({
+	"meganeX8K": {
+		"enable": true,
+		"ipd": 63.0,
+		"ipdOffset": 0.0,
+		"distortionProfile": "MeganeX8K Default"
+	}
+})";
 
 
 void ConfigLoader::Start(){
@@ -166,15 +176,32 @@ void ConfigLoader::Start(){
 		return;
 	}
 	started = true;
+	
+	try{
+		// create directory
+		std::filesystem::create_directories(GetConfigFolder());
+		
+		// create default config if it doesn't exist
+		std::string configPath = GetConfigFolder() + "settings.json";
+		if(!std::filesystem::exists(configPath)){
+			std::ofstream configFile(configPath);
+			configFile << defaultConfig;
+			configFile.close();
+		}
+	}catch(const std::exception& e){
+		DriverLog("Failed to create settings.json %s", e.what());
+	}
+	
 	// load config for the first time
 	ParseConfig();
-	try{
-		// create directory and start watcher thread
-		std::filesystem::create_directories(GetConfigFolder());
+	
+	try{	
+		// start watcher thread
 		std::thread watcher(&ConfigLoader::WatcherThread, this);
-		// Detach the thread to run independently
+		// detach the thread to run forever
 		watcher.detach();
 		
+		// create distortion profiles directory and watch if configured
 		std::filesystem::create_directories(GetConfigFolder() + "Distortion/");
 		if(driverConfig.watchDistortionProfiles){
 			std::thread distortionWatcher(&ConfigLoader::WatcherThreadDistortions, this);

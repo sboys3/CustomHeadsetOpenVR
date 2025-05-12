@@ -1,11 +1,17 @@
 # CustomHeadsetOpenVR
-This is a custom headset driver for SteamVR that allows the MeganeX Superlight 8K to operate as a native SteamVR headset. In the future this will provide tools to modify any SteamVR device.
+This is a custom headset driver for SteamVR that allows the MeganeX superlight 8K to operate as a native SteamVR headset. In the future this will provide tools to modify any SteamVR device.  
+⚠️Be careful with high brightnesses to avoid burn in. This driver does not automatically dim the headset in bright scenes which may permanently dim the panel if viewed for many hours. Avoid falling asleep in the headset or other circumstances where the screen will say on and stationary as it may cause burn in.
+
+## Installing
+1. Download the latest release from the [releases page](https://github.com/sboys3/CustomHeadsetOpenVR/releases)
+2. Copy the `CustomHeadsetOpenVR` folder from inside the zip into `C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers` 
+3. Restart SteamVR
 
 ## Configuring
-Enter `%APPDATA%/CustomHeadset` into the file browser top bar to get to the folder.
-Create a file named `settings.json`
-Edit the file based on the [Config header file](./CustomHeadsetOpenVR/src/Config/Config.h)
-Distortion profiles go in a folder named `Distortion` and they are referenced by their name.
+Almost all settings will be immediately applied when the file is saved without restarting SteamVR.  
+Enter `%APPDATA%/CustomHeadset` into the file browser top bar to get to the folder.  
+Edit the `settings.json` file based on the [Config header file](./CustomHeadsetOpenVR/src/Config/Config.h)  
+Distortion profiles go in a folder named `Distortion` and they are referenced by their name.  
 
 ## Building
 1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
@@ -36,10 +42,12 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [ ] Define the structure for the overrides section
 - GUI
 	- [ ] Create a Tauri project
-	- [ ] Create a Vue project within it
+	- [ ] Create a Vue JavaScript project within it
 	- [ ] Configure MeganeX settings
 	- [ ] Edit distortion profiles my dragging points on a curve
 	- [ ] Create overrides for any headset
+	- [ ] Install the driver
+	- [ ] Change physical MeganeX settings
 - Driver
 	- [ ] Linux build support
 	- [ ] Override any property of any SteamVR device based on the config
@@ -53,7 +61,7 @@ This project is licensed under the GPLv2 license. See the LICENSE file for more 
 I may relicense this project for to allow for use that GPLv2 does not allow for so be aware of that when you contribute
 
 ## Contributing
-By comiting to this repository you give me the right to relicense your code for others to use. If you want to make a significant contribution but do not want to comply with this, make your code as such and let me know so I will be able to remove it if I need to.
+By committing to this repository you give me the right to relicense your code for others to use. If you want to make a significant contribution but do not want to comply with this, make your code as such and let me know so I will be able to remove it if I need to.
 
 Try to keep the coding style consistent with existing files. But other than using tabs, I will not enforce strict guidelines.
 

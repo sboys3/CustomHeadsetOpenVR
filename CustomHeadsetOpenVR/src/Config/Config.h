@@ -8,7 +8,7 @@ class Config{
 public:
 	class MeganeX8KConfig{
 	public:
-		// if the MeganeX superlight 8K should be shimmed
+		// if the MeganeX superlight 8K should be shimmed byt this driver
 		bool enable = true;
 		// ipd in mm
 		double ipd = 63.0;

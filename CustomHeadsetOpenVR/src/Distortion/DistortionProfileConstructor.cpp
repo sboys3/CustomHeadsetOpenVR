@@ -8,7 +8,24 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 	if(name == "MeganeX8K Default"){
 		config.name = name;
 		config.modifiedTime = 0;
-		config.description = "MeganeX8K Default Distortion Profile";
+		config.description = "MeganeX8K default distortion profile";
+		config.type = "RadialBezier";
+		config.distortions = {
+			0.00000f, 0.0f,
+			10.0000f, 24.7f,
+			20.0000f, 48.0f,
+			30.0000f, 69.6f,
+			35.0000f, 79.9f,
+			40.0000f, 89.06f,
+			45.0000f, 96.30f,
+			48.3073f, 100.0f
+		};
+	}
+	
+	if(name == "MeganeX8K Original"){
+		config.name = name;
+		config.modifiedTime = 0;
+		config.description = "MeganeX8K original distortion profile which is the same as simplehmd.";
 		config.type = "RadialBezier";
 		config.distortions = {
 			00.0000f, 0.0f,
