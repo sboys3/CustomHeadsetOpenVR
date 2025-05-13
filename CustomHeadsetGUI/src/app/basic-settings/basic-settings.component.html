@@ -13,7 +13,7 @@
         <div class="control">
             <span class="value">{{settings.ipd|number:'1.1'}}</span>
             <mat-slider max="80" min="50" step="0.5" showTickMarks discrete>
-                <input matSliderThumb [(ngModel)]="settings.ipd"  (ngModelChange)="update()">
+                <input matSliderThumb [(ngModel)]="settings.ipd" (ngModelChange)="update()">
             </mat-slider>
         </div>
     </div>
@@ -23,23 +23,24 @@
         <div class="control">
             <span class="value">{{settings.distortionZoom|number:'1.1'}}</span>
             <mat-slider max="1.1" min="1" step="0.01" showTickMarks discrete>
-                <input matSliderThumb [(ngModel)]="settings.distortionZoom"  (ngModelChange)="update()">
+                <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="update()">
             </mat-slider>
         </div>
     </div>
     <mat-divider></mat-divider>
-     <div class="field">
+    <div class="field">
         <div class="title" i18n>Subpixel Shift</div>
         <div class="control">
-            <span class="value">{{settings.subpixelShift|number:'1.3'}}</span>
-            <mat-slider max="1" min="0" step="0.001"  >
-                <input matSliderThumb [(ngModel)]="settings.subpixelShift" (ngModelChange)="update()">
-            </mat-slider>
+            <mat-select [(ngModel)]="settings.subpixelShift" (ngModelChange)="update()">
+                <mat-option [value]="-0.33">-0.33</mat-option>
+                 <mat-option [value]="0">0</mat-option>
+                  <mat-option [value]="0.33">0.33</mat-option>
+            </mat-select>
         </div>
     </div>
     <mat-divider></mat-divider>
-    <button mat-stroked-button  [disabled]="loading" (click)="loadSettings()">
-        <mat-icon>refresh</mat-icon>
+    <button mat-stroked-button [disabled]="loading" (click)="loadSettings()">
+
         <span i18n>Reload from file</span>
     </button>
 </ng-container>
