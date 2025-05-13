@@ -1,10 +1,24 @@
+@use '@angular/material' as mat;
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+  @include mat.theme((color: mat.$green-palette,
+      typography: Roboto,
+      density: 0));
+}
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

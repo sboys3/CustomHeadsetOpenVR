@@ -1,0 +1,25 @@
+:host {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+mat-tab-nav-panel {
+    position: relative;
+    display: block;
+    flex: 1 1 auto;
+    overflow: auto;
+    min-height: 0;
+    min-width: 0;
+
+    margin: .3rem;
+
+    router-outlet {
+        ::ng-deep~* {
+            display: block;
+            width: 100%;
+        }
+    }
+}
