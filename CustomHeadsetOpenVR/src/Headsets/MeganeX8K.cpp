@@ -109,11 +109,15 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 		fU = fV;
 		fV = -tmp;
 	}
+	
+	fU /= driverConfig.meganeX8K.distortionZoom;
+	fV /= driverConfig.meganeX8K.distortionZoom;
+	
 	float redV = fV;
 	float greenV = fV;
 	
 	// apply sub pixel offsets for super sampling
-	float subpixelOffset = (float)(1.0 / 3.0 / 3552.0);
+	float subpixelOffset = (float)(driverConfig.meganeX8K.subpixelShift / 3552.0);
 	// if(testToggle){
 	if(eEye == vr::Eye_Left){
 		redV -= subpixelOffset;
@@ -248,7 +252,12 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	
-	if(distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile)){
+	bool shouldUpdateDistortion = false;
+	shouldUpdateDistortion |= distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
+	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
+	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
+
+	if(shouldUpdateDistortion){
 		// it has changed so signal the compositor to regenerate the distortion mesh
 		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
 		// also update fov

@@ -28,17 +28,22 @@ private:
 	// this is automatically calculated from the distortions
 	// this is the fov that is given by circle at radius 1
 	float halfFov = 0.0f;
-	// radial maps computed from distortions the index is the output image and the values are the input
+	// radial maps computed from distortions, the index is the output radius and the values are the input radius
 	// these are ready to quickly compute the uv distortions
 	float* radialUVMapR = nullptr;
 	float* radialUVMapG = nullptr;
 	float* radialUVMapB = nullptr;
 	// conversion from radius in output to to an index in the maps
 	float radialMapConversion = 0;
+	// number of entires in each radial map
 	int radialMapSize = 512;
+	// number of smoothed points to create between each distortion point
 	int inBetweenPoints = 20;
+	// sample points from the radial maps
 	inline float SampleFromMap(float* map, float radius);
+	// helper function to compute statistics on ppd
 	float ComputePPD(std::vector<DistortionPoint> distortion, float degreeStart, float degreeEnd);
+	// delete allocated resources
 	void Cleanup();
 public:
 	virtual void Initialize() override;

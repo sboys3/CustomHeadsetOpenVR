@@ -51,12 +51,19 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["distortionProfile"].is_string()){
 				newConfig.meganeX8K.distortionProfile = meganeX8KData["distortionProfile"].get<std::string>();
 			}
+			if(meganeX8KData["distortionZoom"].is_number()){
+				newConfig.meganeX8K.distortionZoom = meganeX8KData["distortionZoom"].get<double>();
+			}
+			if(meganeX8KData["subpixelShift"].is_number()){
+				newConfig.meganeX8K.subpixelShift = meganeX8KData["subpixelShift"].get<double>();
+			}
 		}
 		if(data["watchDistortionProfiles"].is_boolean()){
 			newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		}
 		// write to global config
 		driverConfigLock.lock();
+		driverConfigOld = driverConfig;
 		driverConfig = newConfig;
 		driverConfigLock.unlock();
 	}catch(const std::exception& e){

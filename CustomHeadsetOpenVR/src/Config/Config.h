@@ -18,6 +18,10 @@ public:
 		double blackLevel = 0;
 		// distortion profile to use
 		std::string distortionProfile = "MeganeX8K Default";
+		// amount to zoom in the distortion profile
+		double distortionZoom = 1.0;
+		// amount to shift the subpixels to account for their diffent rows
+		double subpixelShift = 1.0 / 3.0;
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;
@@ -53,6 +57,9 @@ public:
 
 // global config object
 extern Config driverConfig;
+
+// config from before the last reload
+extern Config driverConfigOld;
 
 // lock for the config to prevent updates while reading
 extern std::mutex driverConfigLock;
