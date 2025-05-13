@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
-
+@use './fonts.scss' as fonts;
+@include fonts.font();
 *,
 *::after,
 *::before {
@@ -15,7 +16,9 @@ html {
 
 html,
 body {
-  height: 100%;
+
+    width: 100vw;
+    height: 100vh;
 }
 
 body {

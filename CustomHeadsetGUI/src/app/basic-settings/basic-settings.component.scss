@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    margin: 0.5rem 0;
+}
+
+.field {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    height: 3rem;
+
+    .title {
+        display: flex;
+        align-items: center;
+        width: 30%;
+    }
+
+    .value {
+        width: 10%;
+    }
+
+    .control {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+
+        mat-slider {
+            flex: 1 1 auto;
+        }
+    }
+
+}

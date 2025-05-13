@@ -15,8 +15,8 @@ export class AppComponent {
       link: '/basic-settings',
     },
     {
-      name: $localize`Distortion Profile Editor`,
-      link: '/distortion-profile-editor',
+      name: $localize`Distortion Profile`,
+      link: '/distortion-profile',
     }
   ];
 }
