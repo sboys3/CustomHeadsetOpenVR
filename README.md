@@ -41,8 +41,8 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [X] Load custom distortion profiles
 	- [ ] Define the structure for the overrides section
 - GUI
-	- [ ] Create a Tauri project
-	- [ ] Create a Vue JavaScript project within it
+	- [X] Create a Tauri project
+	- [X] Create a Angular project within it
 	- [ ] Configure MeganeX settings
 	- [ ] Edit distortion profiles my dragging points on a curve
 	- [ ] Create overrides for any headset
