@@ -3,8 +3,10 @@ import { readDir, readTextFile, exists, watch, DirEntry, mkdir, size, copyFile, 
 import { appDataDir, basename, join, } from '@tauri-apps/api/path';
 import { Config } from './JsonFileDefines';
 import { Subject, throttleTime } from 'rxjs';
-import { debouncedFileWriter } from '../helpers';
+import { DebouncedFileWriter, debouncedFileWriter } from '../helpers';
 import { signal } from '@angular/core';
+import { PathService } from './path.service';
+import { AppSettingService } from './app-setting.service';
 export type DistortionProfileEntry = {
   name: string;
   isDefault: boolean;
@@ -20,10 +22,12 @@ export class DriverSettingService {
   private readonly _distortionProfileList = signal<DirEntry[]>([]);
   public readonly settings = this._setting.asReadonly();
   public readonly distortionProfileList = this._distortionProfileList.asReadonly();
-  private readonly settingPath = this.getDriverAppDirPath('settings.json');
-  private readonly distortionDirPath = this.getDriverAppDirPath('Distortion');
-  private readonly debouncedFileWriter = debouncedFileWriter(this.settingPath, this.getDriverAppDirPath())
-  constructor() {
+  private readonly settingPath: Promise<string>;
+  private readonly debouncedFileWriter: DebouncedFileWriter
+  constructor(private pathService: PathService, appSettingService: AppSettingService) {
+    this.settingPath = this.pathService.getDriverAppDirPath('settings.json');
+    this.debouncedFileWriter = debouncedFileWriter(this.settingPath, this.pathService.getDriverAppDirPath(),
+      () => appSettingService.values()?.updateMode == 'rewrite');
     this.saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe((setting) => {
       this.saveSettingInternal(setting)
     });
@@ -39,14 +43,14 @@ export class DriverSettingService {
         }
       }
     }, { delayMs: 20 })
-    watch(await this.distortionDirPath, (ev) => {
+    watch(await this.pathService.distortionDirPath, (ev) => {
       if (ev.paths.some(x => x.match(/\.json$/))) {
         this.listDistortionProfiles();
       }
     }, { delayMs: 20 });
   }
   private async listDistortionProfiles() {
-    const list = (await readDir(await this.distortionDirPath))
+    const list = (await readDir(await this.pathService.distortionDirPath))
       .filter(x => x.isFile && x.name.endsWith('.json'))
     this._distortionProfileList.set(list);
   }
@@ -66,24 +70,15 @@ export class DriverSettingService {
     this.debouncedFileWriter.save(JSON.stringify(settings, undefined, 4))
   }
   async delete(name: string) {
-    const path = await this.getProfileFullPath(name);
+    const path = await this.pathService.getProfileFullPath(name);
     if (await exists(path)) {
       await remove(path);
     }
   }
-  async getDriverAppDirPath(rel?: string) {
-    const seg = [await appDataDir(), '../CustomHeadset']
-    if (rel) {
-      seg.push(rel)
-    }
-    return await join(...seg);
-  }
-  async getProfileFullPath(name: string) {
-    return await join(await this.distortionDirPath, name);
-  }
+
   async importFile(paths: string[]) {
-    if (!await exists(await this.distortionDirPath)) {
-      await mkdir(await this.distortionDirPath);
+    if (!await exists(await this.pathService.distortionDirPath)) {
+      await mkdir(await this.pathService.distortionDirPath);
     }
     const message: { [path: string]: { success: boolean, message?: string } } = {}
     for (let path of paths) {
@@ -103,7 +98,7 @@ export class DriverSettingService {
         } catch (jex) {
           message[path] = { success: false, message: $localize`import file not valid ${jex}` }
         }
-        await copyFile(path, await join(await this.distortionDirPath, await basename(path)));
+        await copyFile(path, await join(await this.pathService.distortionDirPath, await basename(path)));
         message[path] = { success: true }
       } catch (ex) {
         message[path] = { success: false, message: $localize`import file error ${ex}` }

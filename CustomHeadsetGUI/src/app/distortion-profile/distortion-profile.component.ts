@@ -9,6 +9,7 @@ import { copyFile } from '@tauri-apps/plugin-fs';
 import { basename } from '@tauri-apps/api/path';
 import { DialogService } from '../services/dialog.service';
 import { Config, MeganeX8KConfig } from '../services/JsonFileDefines';
+import { PathService } from '../services/path.service';
 @Component({
   selector: 'app-distortion-profile',
   imports: [MatListModule, MatButtonModule, ScrollingModule],
@@ -19,7 +20,7 @@ export class DistortionProfileComponent {
   profiles: DistortionProfileEntry[] = [];
   settings?: MeganeX8KConfig
   config?: Config;
-  constructor(private fs: DriverSettingService, private dialog: DialogService) {
+  constructor(private fs: DriverSettingService, private ps: PathService, private dialog: DialogService) {
     effect(() => {
       const config = fs.settings();
       this.config = config;
@@ -65,7 +66,7 @@ export class DistortionProfileComponent {
     const file = await save({ defaultPath: await basename(profile.name), filters: [{ name: `json file`, extensions: ["json"] }] });
     if (file) {
       console.log(file)
-      await copyFile(await this.fs.getProfileFullPath(profile.file!.name), file);
+      await copyFile(await this.ps.getProfileFullPath(profile.file!.name), file);
     }
   }
 }

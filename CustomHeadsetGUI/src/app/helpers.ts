@@ -1,4 +1,4 @@
-import { create, exists, remove, rename } from "@tauri-apps/plugin-fs";
+import { copyFile, create, exists, remove, rename, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Subject, throttleTime } from "rxjs";
 import { join } from '@tauri-apps/api/path';
 
@@ -13,7 +13,7 @@ export type DebouncedFileWriter = {
     isSavingFile: () => boolean;
 };
 
-export function debouncedFileWriter(path: string | Promise<string>, tempFileDir: string| Promise<string>): DebouncedFileWriter {
+export function debouncedFileWriter(path: string | Promise<string>, tempFileDir: string | Promise<string>, directWrite?: (() => boolean)): DebouncedFileWriter {
     const saveSbj = new Subject<string>();
     let fileSaveTask: Promise<void> | undefined;
     let savingFile = false
@@ -26,15 +26,14 @@ export function debouncedFileWriter(path: string | Promise<string>, tempFileDir:
             await task;
             savingFile = true;
             try {
-                const tempPath = await join(await tempFileDir, `${self.crypto.randomUUID()}`);
-                const temp = await create(tempPath);
-                await temp.write(new TextEncoder().encode(content));
-                await temp.close();
-                if (await exists(await path)) {
-                    await remove(await path);
+                if (directWrite?.()) {
+                    await writeTextFile(await path, content);
+                } else {
+                    const tempPath = await join(await tempFileDir, `${self.crypto.randomUUID()}`);
+                    await writeTextFile(tempPath, content);
+                    await copyFile(tempPath, await path);
+                    await remove(tempPath);
                 }
-                await delay(10);
-                await rename(tempPath, await path);
             } finally {
                 savingFile = false;
             }

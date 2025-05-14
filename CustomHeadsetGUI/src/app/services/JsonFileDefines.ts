@@ -50,4 +50,5 @@ export type MeganeX8KConfig = {
 
 export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light';
+  updateMode: 'replace' | 'rewrite';
 }
