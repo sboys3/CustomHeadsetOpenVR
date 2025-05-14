@@ -1,14 +1,19 @@
 @use '@angular/material' as mat;
 @use './fonts.scss' as fonts;
 @include fonts.font();
+
 *,
 *::after,
 *::before {
   box-sizing: border-box;
 }
 
+:root {
+  --color-scheme: light dark;
+}
+
 html {
-  color-scheme: light dark;
+  color-scheme: var(--color-scheme);
   @include mat.theme((color: mat.$green-palette,
       typography: Roboto,
       density: 0));
@@ -17,8 +22,8 @@ html {
 html,
 body {
 
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 body {

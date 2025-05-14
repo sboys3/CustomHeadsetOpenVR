@@ -47,3 +47,7 @@ export type MeganeX8KConfig = {
    */
   subpixelShift: number;
 };
+
+export type AppSetting = {
+  colorScheme: 'system' | 'dark' | 'light';
+}

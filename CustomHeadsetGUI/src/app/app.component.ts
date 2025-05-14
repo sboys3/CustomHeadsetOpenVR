@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, effect, ElementRef, Inject } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { AppSettingService } from './services/app-setting.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterModule, MatTabsModule, CommonModule],
@@ -12,11 +13,34 @@ export class AppComponent {
   navigation = [
     {
       name: $localize`Basic`,
-      link: '/basic-settings',
+      route: '/basic-settings',
     },
     {
       name: $localize`Distortion Profile`,
-      link: '/distortion-profile',
+      route: '/distortion-profile',
+    },
+    {
+      name: $localize`App Settings`,
+      route: '/app-settings'
     }
   ];
+  constructor(appSettingService: AppSettingService, @Inject(DOCUMENT) document: Document) {
+    effect(() => {
+      const settings = appSettingService.values();
+      console.log('effect',settings)
+      if (settings) {
+        switch (settings.colorScheme) {
+          case 'dark':
+            document.documentElement.style.setProperty('--color-scheme', 'dark');
+            break;
+          case 'light':
+            document.documentElement.style.setProperty('--color-scheme', 'light');
+            break;
+          default:
+            document.documentElement.style.setProperty('--color-scheme', 'dark light');
+            break;
+        }
+      }
+    });
+  }
 }

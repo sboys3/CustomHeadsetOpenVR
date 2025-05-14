@@ -2,7 +2,7 @@
     <div class="field">
         <div class="title" i18n>Distortion Profile</div>
         <div class="control">
-            <mat-select [(ngModel)]="settings.distortionProfile" (ngModelChange)="update()">
+            <mat-select [(ngModel)]="settings.distortionProfile" (valueChange)="saveConfigSettings()">
                 <mat-option *ngFor="let p of profiles" [value]="p.name">{{p.name}}</mat-option>
             </mat-select>
         </div>
@@ -11,9 +11,9 @@
     <div class="field">
         <div class="title" i18n>IPD</div>
         <div class="control">
-            <span class="value">{{settings.ipd|number:'1.1'}}</span>
+            <input matInput [(ngModel)]="settings.ipd" (change)="saveConfigSettings()" type="number">
             <mat-slider max="80" min="50" step="0.5" showTickMarks discrete>
-                <input matSliderThumb [(ngModel)]="settings.ipd" (ngModelChange)="update()">
+                <input matSliderThumb [(ngModel)]="settings.ipd" (input)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -21,9 +21,9 @@
     <div class="field">
         <div class="title" i18n>Distortion Zoom</div>
         <div class="control">
-            <span class="value">{{settings.distortionZoom|number:'1.1'}}</span>
+            <input matInput [(ngModel)]="settings.distortionZoom" (change)="saveConfigSettings()" type="number">
             <mat-slider max="1.1" min="1" step="0.01" showTickMarks discrete>
-                <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="update()">
+                <input matSliderThumb [(ngModel)]="settings.distortionZoom" (input)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -31,16 +31,11 @@
     <div class="field">
         <div class="title" i18n>Subpixel Shift</div>
         <div class="control">
-            <mat-select [(ngModel)]="settings.subpixelShift" (ngModelChange)="update()">
-                <mat-option [value]="-0.33">-0.33</mat-option>
-                 <mat-option [value]="0">0</mat-option>
-                  <mat-option [value]="0.33">0.33</mat-option>
+            <input matInput [(ngModel)]="settings.subpixelShift" (change)="saveConfigSettings()" type="number">
+            <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()">
+                <mat-option [value]="opt" *ngFor="let opt of subpixelShiftOptions">{{opt|number}}</mat-option>
             </mat-select>
         </div>
     </div>
     <mat-divider></mat-divider>
-    <button mat-stroked-button [disabled]="loading" (click)="loadSettings()">
-
-        <span i18n>Reload from file</span>
-    </button>
 </ng-container>

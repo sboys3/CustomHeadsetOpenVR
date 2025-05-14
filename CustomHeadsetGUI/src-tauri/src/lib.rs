@@ -11,6 +11,7 @@ pub fn run() {
             let driver_app_data_dir: PathBuf = app_data_path.join(r"..\CustomHeadset");
             let fs_scope = app.fs_scope();
             let _ = fs_scope.allow_directory(&driver_app_data_dir, true);
+            let _ = fs_scope.allow_directory(&app_data_path, true);
             dbg!(fs_scope.allowed_patterns());
             if cfg!(debug_assertions) {
                 app.handle().plugin(

@@ -1,0 +1,54 @@
+@mixin formStyle() {
+
+    display: flex;
+    flex-direction: column;
+
+
+    button {
+        margin: 0.5rem 0;
+    }
+
+    .field {
+        display: flex;
+        flex-shrink: 0;
+        flex-direction: row;
+        height: 3rem;
+
+        .title {
+            display: flex;
+            align-items: center;
+            width: 30%;
+
+            &::after {
+                content: '';
+                height: 80%;
+                border-right: 1px solid var(--mat-sys-outline);
+                margin-left: auto;
+                margin-right: 1rem;
+            }
+        }
+
+        .value {
+            width: 10%;
+        }
+
+        .control {
+            display: flex;
+            align-items: center;
+            flex: 1 1 auto;
+
+            input[type=number] {
+                width: 7rem;
+                font-size: 130%;
+                margin-right: 1rem;
+                text-align: right;
+            }
+
+            mat-slider,
+            mat-select {
+                flex: 1 1 auto;
+            }
+        }
+
+    }
+}
