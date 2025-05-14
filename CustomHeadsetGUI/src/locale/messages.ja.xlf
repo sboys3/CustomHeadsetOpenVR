@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
-        <target state="translated">OK</target>
+        <target state="translated">はい</target>
       </trans-unit>
       <trans-unit id="3656080382305974312" datatype="html">
         <source>Color Scheme</source>
@@ -96,7 +96,7 @@
       </trans-unit>
       <trans-unit id="392265817484232889" datatype="html">
         <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
-        <target state="translated">インポートファイルが無効です。"type" または "distortions" がありませんか？</target>
+        <target state="translated">インポートファイルが無効です。&quot;type&quot; または &quot;distortions&quot; がありませんか？</target>
       </trans-unit>
       <trans-unit id="1172447031847067737" datatype="html">
         <source>import file not valid <x id="PH" equiv-text="jex"/></source>

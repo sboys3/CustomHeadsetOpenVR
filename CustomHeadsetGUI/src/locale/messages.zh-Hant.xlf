@@ -1,109 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="zh-Hant" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
-        <target state="new">Basic</target>
+        <target state="translated">基本</target>
       </trans-unit>
       <trans-unit id="7944521161821675937" datatype="html">
         <source>Distortion Profile</source>
-        <target state="new">Distortion Profile</target>
+        <target state="translated">扭曲校正設定檔</target>
       </trans-unit>
       <trans-unit id="7994506939670314559" datatype="html">
         <source>App Settings</source>
-        <target state="new">App Settings</target>
+        <target state="translated">應用程式設定</target>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
-        <target state="new">Yes</target>
+        <target state="translated">是</target>
       </trans-unit>
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
-        <target state="new">Ok</target>
+        <target state="translated">確定</target>
       </trans-unit>
       <trans-unit id="3656080382305974312" datatype="html">
         <source>Color Scheme</source>
-        <target state="new">Color Scheme</target>
+        <target state="translated">色彩主題</target>
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">系統</target>
       </trans-unit>
       <trans-unit id="3892161059518616136" datatype="html">
         <source>Dark</source>
-        <target state="new">Dark</target>
+        <target state="translated">深色</target>
       </trans-unit>
       <trans-unit id="413116577994876478" datatype="html">
         <source>Light</source>
-        <target state="new">Light</target>
+        <target state="translated">淺色</target>
       </trans-unit>
       <trans-unit id="5537197768139679727" datatype="html">
         <source>Update Mode</source>
-        <target state="new">Update Mode</target>
+        <target state="translated">更新模式</target>
       </trans-unit>
       <trans-unit id="6254459922754143568" datatype="html">
         <source>Replace</source>
-        <target state="new">Replace</target>
+        <target state="translated">取代</target>
       </trans-unit>
       <trans-unit id="5590001862286989245" datatype="html">
         <source>Rewrite</source>
-        <target state="new">Rewrite</target>
+        <target state="translated">覆寫</target>
       </trans-unit>
       <trans-unit id="7742544409064011729" datatype="html">
         <source>IPD</source>
-        <target state="new">IPD</target>
+        <target state="translated">瞳距</target>
       </trans-unit>
       <trans-unit id="1624999947532228823" datatype="html">
         <source>Distortion Zoom</source>
-        <target state="new">Distortion Zoom</target>
+        <target state="translated">畸變縮放</target>
       </trans-unit>
       <trans-unit id="7892467764301667860" datatype="html">
         <source>Subpixel Shift</source>
-        <target state="new">Subpixel Shift</target>
+        <target state="translated">次像素偏移</target>
       </trans-unit>
       <trans-unit id="1071721880474488785" datatype="html">
         <source>Import</source>
-        <target state="new">Import</target>
+        <target state="translated">匯入</target>
       </trans-unit>
       <trans-unit id="7462301153729425254" datatype="html">
         <source>Export</source>
-        <target state="new">Export</target>
+        <target state="translated">匯出</target>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
         <source>Delete</source>
-        <target state="new">Delete</target>
+        <target state="translated">刪除</target>
       </trans-unit>
       <trans-unit id="5510904560009009880" datatype="html">
         <source>Delete Profile</source>
-        <target state="new">Delete Profile</target>
+        <target state="translated">刪除設定檔</target>
       </trans-unit>
       <trans-unit id="13546353273306589" datatype="html">
         <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
-        <target state="new">Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</target>
+        <target state="translated">正在刪除 [<x id="PH" equiv-text="profile.name"/>]。此動作無法復原。確定要繼續嗎？</target>
       </trans-unit>
       <trans-unit id="7949487308140215792" datatype="html">
         <source>Import Error</source>
-        <target state="new">Import Error</target>
+        <target state="translated">匯入錯誤</target>
       </trans-unit>
       <trans-unit id="437916745901884501" datatype="html">
         <source>file to large</source>
-        <target state="new">file to large</target>
+        <target state="translated">檔案過大</target>
       </trans-unit>
       <trans-unit id="392265817484232889" datatype="html">
         <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
-        <target state="new">import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</target>
+        <target state="translated">匯入檔案無效，缺少 &quot;type&quot; 或 &quot;distortions&quot;？</target>
       </trans-unit>
       <trans-unit id="1172447031847067737" datatype="html">
         <source>import file not valid <x id="PH" equiv-text="jex"/></source>
-        <target state="new">import file not valid <x id="PH" equiv-text="jex"/></target>
+        <target state="translated">匯入檔案無效 <x id="PH" equiv-text="jex"/></target>
       </trans-unit>
       <trans-unit id="3389786765701617878" datatype="html">
         <source>import file error <x id="PH" equiv-text="ex"/></source>
-        <target state="new">import file error <x id="PH" equiv-text="ex"/></target>
+        <target state="translated">匯入檔案錯誤 <x id="PH" equiv-text="ex"/></target>
       </trans-unit>
     </body>
   </file>
