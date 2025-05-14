@@ -6,8 +6,8 @@
     "angular-app": {
       "i18n": {
         "locales": {
-          "zh-Hant": "src/locale/messages.zh-Hant.json",
-          "ja": "src/locale/messages.ja.json"
+          "zh-Hant": "src/locale/messages.zh-Hant.xlf",
+          "ja": "src/locale/messages.ja.xlf"
         }
       },
       "projectType": "application",
@@ -65,6 +65,16 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "ja": {
+              "localize": [
+                "ja"
+              ]
+            },
+            "zh-Hant": {
+              "localize": [
+                "zh-Hant"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -77,6 +87,12 @@
             },
             "development": {
               "buildTarget": "angular-app:build:development"
+            },
+            "ja": {
+              "buildTarget": "angular-app:build:development,ja"
+            },
+            "zh-Hant": {
+              "buildTarget": "angular-app:build:development,zh-Hant"
             }
           },
           "defaultConfiguration": "development"
@@ -85,11 +101,11 @@
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
             "buildTarget": "angular-app:build",
-            "format": "json",
+            "format": "xlf",
             "outputPath": "src/locale",
             "targetFiles": [
-              "messages.zh-Hant.json",
-              "messages.ja.json"
+              "messages.zh-Hant.xlf",
+              "messages.ja.xlf"
             ]
           }
         },

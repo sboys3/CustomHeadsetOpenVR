@@ -1,0 +1,110 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" target-language="zh-Hant" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="8643289769990675407" datatype="html">
+        <source>Basic</source>
+        <target state="new">Basic</target>
+      </trans-unit>
+      <trans-unit id="7944521161821675937" datatype="html">
+        <source>Distortion Profile</source>
+        <target state="new">Distortion Profile</target>
+      </trans-unit>
+      <trans-unit id="7994506939670314559" datatype="html">
+        <source>App Settings</source>
+        <target state="new">App Settings</target>
+      </trans-unit>
+      <trans-unit id="2159130950882492111" datatype="html">
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="2807800733729323332" datatype="html">
+        <source>Yes</source>
+        <target state="new">Yes</target>
+      </trans-unit>
+      <trans-unit id="8720977247725652816" datatype="html">
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="3656080382305974312" datatype="html">
+        <source>Color Scheme</source>
+        <target state="new">Color Scheme</target>
+      </trans-unit>
+      <trans-unit id="29832309535656200" datatype="html">
+        <source>System</source>
+        <target state="new">System</target>
+      </trans-unit>
+      <trans-unit id="3892161059518616136" datatype="html">
+        <source>Dark</source>
+        <target state="new">Dark</target>
+      </trans-unit>
+      <trans-unit id="413116577994876478" datatype="html">
+        <source>Light</source>
+        <target state="new">Light</target>
+      </trans-unit>
+      <trans-unit id="5537197768139679727" datatype="html">
+        <source>Update Mode</source>
+        <target state="new">Update Mode</target>
+      </trans-unit>
+      <trans-unit id="6254459922754143568" datatype="html">
+        <source>Replace</source>
+        <target state="new">Replace</target>
+      </trans-unit>
+      <trans-unit id="5590001862286989245" datatype="html">
+        <source>Rewrite</source>
+        <target state="new">Rewrite</target>
+      </trans-unit>
+      <trans-unit id="7742544409064011729" datatype="html">
+        <source>IPD</source>
+        <target state="new">IPD</target>
+      </trans-unit>
+      <trans-unit id="1624999947532228823" datatype="html">
+        <source>Distortion Zoom</source>
+        <target state="new">Distortion Zoom</target>
+      </trans-unit>
+      <trans-unit id="7892467764301667860" datatype="html">
+        <source>Subpixel Shift</source>
+        <target state="new">Subpixel Shift</target>
+      </trans-unit>
+      <trans-unit id="1071721880474488785" datatype="html">
+        <source>Import</source>
+        <target state="new">Import</target>
+      </trans-unit>
+      <trans-unit id="7462301153729425254" datatype="html">
+        <source>Export</source>
+        <target state="new">Export</target>
+      </trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+        <target state="new">Delete</target>
+      </trans-unit>
+      <trans-unit id="5510904560009009880" datatype="html">
+        <source>Delete Profile</source>
+        <target state="new">Delete Profile</target>
+      </trans-unit>
+      <trans-unit id="13546353273306589" datatype="html">
+        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+        <target state="new">Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</target>
+      </trans-unit>
+      <trans-unit id="7949487308140215792" datatype="html">
+        <source>Import Error</source>
+        <target state="new">Import Error</target>
+      </trans-unit>
+      <trans-unit id="437916745901884501" datatype="html">
+        <source>file to large</source>
+        <target state="new">file to large</target>
+      </trans-unit>
+      <trans-unit id="392265817484232889" datatype="html">
+        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
+        <target state="new">import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</target>
+      </trans-unit>
+      <trans-unit id="1172447031847067737" datatype="html">
+        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+        <target state="new">import file not valid <x id="PH" equiv-text="jex"/></target>
+      </trans-unit>
+      <trans-unit id="3389786765701617878" datatype="html">
+        <source>import file error <x id="PH" equiv-text="ex"/></source>
+        <target state="new">import file error <x id="PH" equiv-text="ex"/></target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
