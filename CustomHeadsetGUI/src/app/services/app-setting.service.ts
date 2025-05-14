@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { AppSetting } from './JsonFileDefines';
-import { appDataDir,  join } from '@tauri-apps/api/path';
+import { join } from '@tauri-apps/api/path';
 import { exists, mkdir, readTextFile, writeTextFile } from '@tauri-apps/plugin-fs';
 import { DebouncedFileWriter, debouncedFileWriter } from '../helpers';
 import { PathService } from './path.service';
@@ -19,14 +19,14 @@ export class AppSettingService {
   private filePath: Promise<string>;
   private debouncedFileWriter: DebouncedFileWriter;
   private initTask = this.init()
-  constructor(ps:PathService) {
+  constructor(ps: PathService) {
     this.folder = ps.getDriverAppDirPath();
     this.filePath = (async () => await join(await ps.getDriverAppDirPath(), 'gui-settings.json'))();
     this.debouncedFileWriter = debouncedFileWriter(this.filePath, this.folder);
   }
   async init() {
-    if (!await exists(await appDataDir())) {
-      await mkdir(await appDataDir());
+    if (!await exists(await this.folder)) {
+      await mkdir(await this.folder);
     }
     if (!await exists(await this.filePath)) {
       await writeTextFile(await this.filePath, JSON.stringify(this.defaults, undefined, 4))
