@@ -1,1 +1,12 @@
-<p>Coming soon™</p>
+<div class="actions">
+    <button mat-stroked-button i18n (click)="importFile()">Import</button>
+</div>
+<div class="list">
+    <cdk-virtual-scroll-viewport [itemSize]="50" class="viewport">
+        <div class="item" [class.alternate]="odd" *cdkVirtualFor="let profile of profiles;let odd = odd;">
+            <span class="name">{{profile.name}}</span>
+            <button mat-stroked-button i18n (click)="exportFile(profile)">Export</button>
+            <button [disabled]="settings?.distortionProfile==profile.name" class="warn" mat-stroked-button i18n (click)="deleteProfile(profile)">Delete</button>
+        </div>
+    </cdk-virtual-scroll-viewport>
+</div>

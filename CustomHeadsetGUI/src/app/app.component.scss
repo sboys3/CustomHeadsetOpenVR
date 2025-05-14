@@ -8,13 +8,14 @@
 
 mat-tab-nav-panel {
     position: relative;
-    display: block;
+    display: flex;
     flex: 1 1 auto;
     overflow: auto;
     min-height: 0;
-    padding: 0.3rem;
+    padding: 1rem;
 
-    ::ng-deep>* {
-        width: calc(100% - 0.6rem);
+    ::ng-deep>*:not(router-outlet) {
+        flex: 1 1 auto;
+        min-width: 0;
     }
 }

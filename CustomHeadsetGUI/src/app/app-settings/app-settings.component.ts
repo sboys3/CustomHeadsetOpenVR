@@ -5,10 +5,10 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { CdkListboxModule } from '@angular/cdk/listbox';
 @Component({
   selector: 'app-app-settings',
-  imports: [CommonModule, MatSelectModule, FormsModule, MatDividerModule],
+  imports: [CommonModule, MatSelectModule, FormsModule, MatDividerModule, CdkListboxModule],
   templateUrl: './app-settings.component.html',
   styleUrl: './app-settings.component.scss'
 })

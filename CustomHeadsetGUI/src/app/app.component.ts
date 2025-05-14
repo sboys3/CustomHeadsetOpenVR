@@ -1,11 +1,11 @@
-import { Component, effect, ElementRef, Inject } from '@angular/core';
+import { Component, effect,  Inject } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import {  DOCUMENT } from '@angular/common';
 import { AppSettingService } from './services/app-setting.service';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, MatTabsModule, CommonModule],
+  imports: [RouterOutlet, RouterModule, MatTabsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

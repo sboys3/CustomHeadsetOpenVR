@@ -14,12 +14,14 @@
     "fs:allow-mkdir",
     "fs:allow-exists",
     "fs:allow-watch",
+    "fs:allow-size",
     "fs:read-dirs",
     {
       "identifier": "fs:scope",
       "allow": [
         "**/*"
       ]
-    }
+    },
+    "dialog:default"
   ]
 }

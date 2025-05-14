@@ -25,3 +25,4 @@ tauri = { version = "2.5.0", features = [] }
 tauri-plugin-log = "2.0.0-rc"
 tauri-plugin-fs = { version = "2.0.0", features = ["watch"] }
 locale_config = "0.3"
+tauri-plugin-dialog = "2"

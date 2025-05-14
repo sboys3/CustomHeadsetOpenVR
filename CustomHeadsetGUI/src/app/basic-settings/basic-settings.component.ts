@@ -5,21 +5,17 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { DriverSettingService } from '../services/driver-setting.service';
+import { DistortionProfileEntry, DriverSettingService } from '../services/driver-setting.service';
 import { DirEntry } from '@tauri-apps/plugin-fs';
 import { CommonModule } from '@angular/common';
 import { Config, MeganeX8KConfig } from '../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 
-type DistortionProfileEntry = {
-    name: string;
-    isDefault: boolean;
-    file?: DirEntry;
-};
+
 
 @Component({
     selector: 'app-basic-settings',
-    imports: [MatSliderModule, MatSelectModule, CommonModule, FormsModule, MatDividerModule, MatButtonModule, MatIconModule, MatInputModule],
+    imports: [MatSliderModule, MatSelectModule, FormsModule, MatDividerModule, MatButtonModule, MatIconModule, MatInputModule, CommonModule],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
 })

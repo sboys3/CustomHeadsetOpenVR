@@ -1,12 +1,12 @@
-<ng-container *ngIf="settings">
-    <div class="field">
-        <div class="title" i18n>Color Scheme</div>
-        <div class="control">
-            <mat-select [(ngModel)]="settings.colorScheme" (valueChange)="saveConfigSettings()">
-                <mat-option value="system" i18n>System</mat-option>
-                <mat-option value="dark" i18n>Dark</mat-option>
-                <mat-option value="light" i18n>Light</mat-option>
-            </mat-select>
-        </div>
+@if(settings){
+<div class="field">
+    <div class="title" i18n>Color Scheme</div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.colorScheme" (valueChange)="saveConfigSettings()">
+            <mat-option value="system" i18n>System</mat-option>
+            <mat-option value="dark" i18n>Dark</mat-option>
+            <mat-option value="light" i18n>Light</mat-option>
+        </mat-select>
     </div>
-</ng-container>
+</div>
+}
