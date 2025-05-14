@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="1071721880474488785" datatype="html">
+        <source>Import</source>
+      </trans-unit>
+      <trans-unit id="1172447031847067737" datatype="html">
+        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+      </trans-unit>
+      <trans-unit id="13546353273306589" datatype="html">
+        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+      </trans-unit>
+      <trans-unit id="1624999947532228823" datatype="html">
+        <source>Distortion Zoom</source>
+      </trans-unit>
+      <trans-unit id="2159130950882492111" datatype="html">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="2807800733729323332" datatype="html">
+        <source>Yes</source>
+      </trans-unit>
+      <trans-unit id="29832309535656200" datatype="html">
+        <source>System</source>
+      </trans-unit>
+      <trans-unit id="3389786765701617878" datatype="html">
+        <source>import file error <x id="PH" equiv-text="ex"/></source>
+      </trans-unit>
+      <trans-unit id="3656080382305974312" datatype="html">
+        <source>Color Scheme</source>
+      </trans-unit>
+      <trans-unit id="3892161059518616136" datatype="html">
+        <source>Dark</source>
+      </trans-unit>
+      <trans-unit id="392265817484232889" datatype="html">
+        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
+      </trans-unit>
+      <trans-unit id="413116577994876478" datatype="html">
+        <source>Light</source>
+      </trans-unit>
+      <trans-unit id="437916745901884501" datatype="html">
+        <source>file to large</source>
+      </trans-unit>
+      <trans-unit id="5510904560009009880" datatype="html">
+        <source>Delete Profile</source>
+      </trans-unit>
+      <trans-unit id="5537197768139679727" datatype="html">
+        <source>Update Mode</source>
+      </trans-unit>
+      <trans-unit id="5590001862286989245" datatype="html">
+        <source>Rewrite</source>
+      </trans-unit>
+      <trans-unit id="6254459922754143568" datatype="html">
+        <source>Replace</source>
+      </trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+      </trans-unit>
+      <trans-unit id="7462301153729425254" datatype="html">
+        <source>Export</source>
+      </trans-unit>
+      <trans-unit id="7742544409064011729" datatype="html">
+        <source>IPD</source>
+      </trans-unit>
+      <trans-unit id="7892467764301667860" datatype="html">
+        <source>Subpixel Shift</source>
+      </trans-unit>
+      <trans-unit id="7944521161821675937" datatype="html">
+        <source>Distortion Profile</source>
+      </trans-unit>
+      <trans-unit id="7949487308140215792" datatype="html">
+        <source>Import Error</source>
+      </trans-unit>
+      <trans-unit id="7994506939670314559" datatype="html">
+        <source>App Settings</source>
+      </trans-unit>
+      <trans-unit id="8643289769990675407" datatype="html">
+        <source>Basic</source>
+      </trans-unit>
+      <trans-unit id="8720977247725652816" datatype="html">
+        <source>Ok</source>
+      </trans-unit>
+      <trans-unit id="8039363581560527021" datatype="html">
+        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

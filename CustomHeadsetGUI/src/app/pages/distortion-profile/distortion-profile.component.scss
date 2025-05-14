@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+.action {
+    flex-shrink: 0;
+    margin: 0.5rem;
+}
+
+.list {
+    flex: 1 1 auto;
+
+    .item {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 0 0.5rem;
+
+        &.alternate {
+            background-color: var(--mat-sys-surface-container-low);
+        }
+
+        button {
+            margin: 0 0.5rem;
+        }
+
+        .name {
+            flex: 1 1 auto;
+        }
+    }
+}
+
+.viewport {
+    height: 100%;
+}

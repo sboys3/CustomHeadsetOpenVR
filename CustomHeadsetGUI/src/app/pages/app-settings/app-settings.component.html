@@ -1,0 +1,21 @@
+@if(settings){
+<div class="field">
+    <div class="title" i18n>Color Scheme</div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.colorScheme" (valueChange)="saveConfigSettings()">
+            <mat-option value="system" i18n>System</mat-option>
+            <mat-option value="dark" i18n>Dark</mat-option>
+            <mat-option value="light" i18n>Light</mat-option>
+        </mat-select>
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>Update Mode</div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.updateMode" (valueChange)="saveConfigSettings()">
+            <mat-option value="replace" i18n>Replace</mat-option>
+            <mat-option value="rewrite" i18n>Rewrite</mat-option>
+        </mat-select>
+    </div>
+</div>
+}

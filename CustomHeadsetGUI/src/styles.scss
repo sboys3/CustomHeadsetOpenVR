@@ -1,0 +1,37 @@
+@use '@angular/material' as mat;
+@use './fonts.scss' as fonts;
+@include fonts.font();
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-scheme: light dark;
+}
+
+html {
+  color-scheme: var(--color-scheme);
+  @include mat.theme((color: mat.$green-palette,
+      typography: Roboto,
+      density: 0));
+}
+
+.warn {
+  @include mat.theme((color: mat.$red-palette,
+    ));
+}
+
+html,
+body {
+
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

@@ -1,0 +1,11 @@
+<nav mat-tab-nav-bar [tabPanel]="tabPanel">
+  @for(l of navigation;track l){
+  <a mat-tab-link  [routerLink]="l.route" routerLinkActive #rla="routerLinkActive"
+    [active]="rla.isActive">
+    {{l.name}}
+  </a>
+}
+</nav>
+<mat-tab-nav-panel #tabPanel>
+  <router-outlet></router-outlet>
+</mat-tab-nav-panel>

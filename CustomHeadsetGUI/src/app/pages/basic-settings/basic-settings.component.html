@@ -1,0 +1,47 @@
+@if(settings){
+<div class="field">
+    <div class="title" i18n>Distortion Profile</div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.distortionProfile" (valueChange)="saveConfigSettings()">
+            @for(p of profiles;track p){
+            <mat-option [value]="p.name">{{p.name}}</mat-option>
+            }
+        </mat-select>
+    </div>
+</div>
+<mat-divider></mat-divider>
+<div class="field">
+    <div class="title" i18n>IPD</div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.ipd" (change)="saveConfigSettings()" type="number">
+        <mat-slider max="80" min="50" step="0.5" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.ipd" (input)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<mat-divider></mat-divider>
+<div class="field">
+    <div class="title" i18n>Distortion Zoom</div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.distortionZoom" (change)="saveConfigSettings()" type="number">
+        <mat-slider max="1.1" min="1" step="0.002" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.distortionZoom" (input)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<mat-divider></mat-divider>
+<div class="field">
+    <div class="title" i18n>Subpixel Shift</div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.subpixelShift" (change)="saveConfigSettings()" type="number">
+        <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()">
+            @for(opt of subpixelShiftOptions;track opt){
+            <mat-option [value]="opt">{{opt|number}}</mat-option>
+            }
+        </mat-select>
+    </div>
+</div>
+<mat-divider></mat-divider>
+}@else {
+    <h2 i18n>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</h2>
+}
