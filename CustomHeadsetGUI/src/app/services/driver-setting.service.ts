@@ -37,7 +37,7 @@ export class DriverSettingService {
     await this.listDistortionProfiles();
     await this.loadSetting();
     watch(await this.settingPath, (ev) => {
-      if (!this.debouncedFileWriter.isSavingFile && typeof ev.type === 'object') {
+      if (!this.debouncedFileWriter.isSavingFile() && typeof ev.type === 'object') {
         if ('modify' in ev.type && ev.type.modify.kind == 'any') {
           this.loadSetting();
         }
