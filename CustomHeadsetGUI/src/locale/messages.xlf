@@ -80,6 +80,9 @@
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
       </trans-unit>
+      <trans-unit id="8039363581560527021" datatype="html">
+        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { readDir, readTextFile, exists, watch, DirEntry, mkdir, size, copyFile, remove } from '@tauri-apps/plugin-fs';
-import { appDataDir, basename, join, } from '@tauri-apps/api/path';
+import { readDir, readTextFile, exists, DirEntry, mkdir, size, copyFile, remove, watchImmediate } from '@tauri-apps/plugin-fs';
+import { basename, join, } from '@tauri-apps/api/path';
 import { Config } from './JsonFileDefines';
-import { Subject, throttleTime } from 'rxjs';
+import { debounceTime, Subject, throttleTime } from 'rxjs';
 import { DebouncedFileWriter, debouncedFileWriter } from '../helpers';
 import { signal } from '@angular/core';
 import { PathService } from './path.service';
@@ -36,18 +36,24 @@ export class DriverSettingService {
   private async init() {
     await this.listDistortionProfiles();
     await this.loadSetting();
-    watch(await this.settingPath, (ev) => {
-      if (!this.debouncedFileWriter.isSavingFile() && typeof ev.type === 'object') {
-        if ('modify' in ev.type && ev.type.modify.kind == 'any') {
-          this.loadSetting();
-        }
+    const settingFileSbj = new Subject<void>();
+    settingFileSbj.pipe(debounceTime(20)).subscribe(() => {
+      this.loadSetting();
+    })
+    const distrotionProfileSbj = new Subject<void>();
+    distrotionProfileSbj.pipe(debounceTime(20)).subscribe(() => {
+      this.listDistortionProfiles();
+    })
+    watchImmediate(await this.settingPath, (ev) => {
+      if (!this.debouncedFileWriter.isSavingFile()) {
+        settingFileSbj.next();
       }
-    }, { delayMs: 20 })
-    watch(await this.pathService.distortionDirPath, (ev) => {
+    })
+    watchImmediate(await this.pathService.distortionDirPath, (ev) => {
       if (ev.paths.some(x => x.match(/\.json$/))) {
-        this.listDistortionProfiles();
+        distrotionProfileSbj.next();
       }
-    }, { delayMs: 20 });
+    });
   }
   private async listDistortionProfiles() {
     const list = (await readDir(await this.pathService.distortionDirPath))

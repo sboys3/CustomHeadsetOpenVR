@@ -106,6 +106,10 @@
         <source>import file error <x id="PH" equiv-text="ex"/></source>
         <target state="translated">インポートファイルエラー <x id="PH" equiv-text="ex"/></target>
       </trans-unit>
+      <trans-unit id="8039363581560527021" datatype="html">
+        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
+        <target state="translated">設定ファイルが見つかりません、CustomHeadsetOpenVR ドライバーをインストールし、SteamVR を起動してください</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
