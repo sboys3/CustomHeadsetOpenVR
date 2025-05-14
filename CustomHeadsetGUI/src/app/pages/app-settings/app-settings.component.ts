@@ -1,6 +1,6 @@
 import { Component, effect } from '@angular/core';
-import { AppSettingService } from '../services/app-setting.service';
-import { AppSetting } from '../services/JsonFileDefines';
+import { AppSettingService } from '../../services/app-setting.service';
+import { AppSetting } from '../../services/JsonFileDefines';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';

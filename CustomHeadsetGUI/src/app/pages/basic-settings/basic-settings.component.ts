@@ -5,10 +5,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { DistortionProfileEntry, DriverSettingService } from '../services/driver-setting.service';
-import { DirEntry } from '@tauri-apps/plugin-fs';
+import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
-import { Config, MeganeX8KConfig } from '../services/JsonFileDefines';
+import { Config, MeganeX8KConfig } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 
 

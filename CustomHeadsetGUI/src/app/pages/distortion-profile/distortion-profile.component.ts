@@ -1,5 +1,5 @@
 import { Component, effect } from '@angular/core';
-import { DistortionProfileEntry, DriverSettingService } from '../services/driver-setting.service';
+import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -7,9 +7,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { open, save } from '@tauri-apps/plugin-dialog';
 import { copyFile } from '@tauri-apps/plugin-fs';
 import { basename } from '@tauri-apps/api/path';
-import { DialogService } from '../services/dialog.service';
-import { Config, MeganeX8KConfig } from '../services/JsonFileDefines';
-import { PathService } from '../services/path.service';
+import { DialogService } from '../../services/dialog.service';
+import { Config, MeganeX8KConfig } from '../../services/JsonFileDefines';
+import { PathService } from '../../services/path.service';
 @Component({
   selector: 'app-distortion-profile',
   imports: [MatListModule, MatButtonModule, ScrollingModule],
