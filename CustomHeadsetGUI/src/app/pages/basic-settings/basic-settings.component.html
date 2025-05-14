@@ -14,7 +14,7 @@
     <div class="title" i18n>IPD</div>
     <div class="control">
         <input matInput [(ngModel)]="settings.ipd" (change)="saveConfigSettings()" type="number">
-        <mat-slider max="80" min="50" step="0.5" showTickMarks discrete>
+        <mat-slider max="80" min="50" step="0.5" showTickMarks>
             <input matSliderThumb [(ngModel)]="settings.ipd" (input)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -24,7 +24,7 @@
     <div class="title" i18n>Distortion Zoom</div>
     <div class="control">
         <input matInput [(ngModel)]="settings.distortionZoom" (change)="saveConfigSettings()" type="number">
-        <mat-slider max="1.1" min="1" step="0.01" showTickMarks discrete>
+        <mat-slider max="1.1" min="1" step="0.002" showTickMarks>
             <input matSliderThumb [(ngModel)]="settings.distortionZoom" (input)="saveConfigSettings()">
         </mat-slider>
     </div>
