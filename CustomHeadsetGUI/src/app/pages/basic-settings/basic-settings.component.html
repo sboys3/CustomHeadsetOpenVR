@@ -2,16 +2,16 @@
 <div class="field">
     <div class="title">
         <span i18n>Resolution</span>
-        @if(resolutionModel?.x!=defaults?.resolutionX){
+        @if(resolutionModel!=defaults?.resolutionX){
         <button mat-icon-button (click)="resetResolution()" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="resolutionModel" (closed)="setResolution()" (valueChange)="saveConfigSettings()">
+        <mat-select [(ngModel)]="resolutionModel" (ngModelChange)="setResolution()">
             @for(p of resolutionOptions;track p.x){
-            <mat-option [value]="p">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
+            <mat-option [value]="p.x">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
             }
         </mat-select>
     </div>
@@ -27,8 +27,7 @@
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.distortionProfile" (closed)="saveConfigSettings()"
-            (valueChange)="saveConfigSettings()">
+        <mat-select [(ngModel)]="settings.distortionProfile" (ngModelChange)="saveConfigSettings()">
             @for(p of profiles;track p.name){
             <mat-option [value]="p.name">{{p.name}}</mat-option>
             }
@@ -45,9 +44,9 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.ipd" step="0.5" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.ipd" step="0.5" (ngModelChange)="saveConfigSettings()" type="number">
         <mat-slider max="80" min="50" step="0.5" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.ipd" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.ipd" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -61,9 +60,10 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
+            type="number">
         <mat-slider max="20" min="-20" step="0.5" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.ipdOffset" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -77,9 +77,10 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (ngModelChange)="saveConfigSettings()"
+            type="number">
         <mat-slider max="1.1" min="1" step="0.002" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.distortionZoom" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -93,9 +94,10 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (ngModelChange)="saveConfigSettings()"
+            type="number">
         <mat-slider max="1" min="0" step="0.001" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.blackLevel" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.blackLevel" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -111,8 +113,9 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.subpixelShift" (input)="saveConfigSettings()" type="number" step="0.01">
-        <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()" (valueChange)="saveConfigSettings()">
+        <input matInput [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()" type="number"
+            step="0.01">
+        <mat-select [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()">
             @for(opt of subpixelShiftOptions;track opt){
             <mat-option [value]="opt">{{opt|number}}</mat-option>
             }
@@ -129,9 +132,9 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovX" step="1" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
         <mat-slider [max]="(defaults?.maxFovX??0)*2" min="0" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovX" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -145,9 +148,9 @@
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovY" step="1" (input)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
         <mat-slider [max]="(defaults?.maxFovY??0)*2" min="0" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovY" (input)="saveConfigSettings()">
+            <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -162,8 +165,7 @@
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.distortionMeshResolution" (closed)="saveConfigSettings()"
-            (valueChange)="saveConfigSettings()">
+        <mat-select [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()">
             @for(opt of distortionMeshResolutionOptions;track opt){
             <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>
             }

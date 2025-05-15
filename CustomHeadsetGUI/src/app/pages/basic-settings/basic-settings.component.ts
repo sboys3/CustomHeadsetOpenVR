@@ -34,7 +34,7 @@ export class BasicSettingsComponent {
     config?: Settings;
     defaults?: MeganeX8KConfig;
     subpixelShiftOptions = [0, 0.33];
-    resolutionModel?: { x: number, y: number };
+    resolutionModel?: number;
     resolutionOptions = [
         { name: '4K', x: 3840, y: 3552 }, { name: '2K', x: 2880, y: 2664 }
     ]
@@ -51,7 +51,7 @@ export class BasicSettingsComponent {
             const config = dss.values();
             this.config = config;
             this.settings = config?.meganeX8K;
-            this.resolutionModel = this.resolutionOptions.find(x => x.x == this.settings?.resolutionX);
+            this.resolutionModel = this.settings?.resolutionX;
         });
 
         effect(() => {
@@ -74,14 +74,17 @@ export class BasicSettingsComponent {
         }
     }
     resetResolution() {
-        this.resolutionModel = this.resolutionOptions.find(x => x.x == this.defaults?.resolutionX);
+        this.resolutionModel = this.defaults?.resolutionX;
         this.setResolution();
     }
     setResolution() {
         if (this.settings && this.resolutionModel) {
-            this.settings.resolutionX = this.resolutionModel.x;
-            this.settings.resolutionY = this.resolutionModel.y;
-            this.saveConfigSettings();
+            const res = this.resolutionOptions.find(x => x.x == this.resolutionModel)
+            if (res) {
+                this.settings.resolutionX = res.x;
+                this.settings.resolutionY = res.y;
+                this.saveConfigSettings();
+            }
         }
     }
     saveConfigSettings() {

@@ -2,7 +2,7 @@
 <div class="field">
     <div class="title" i18n>Color Scheme</div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.colorScheme" (valueChange)="saveConfigSettings()"
+        <mat-select [(ngModel)]="settings.colorScheme" (ngModelChange)="saveConfigSettings()"
             (closed)="saveConfigSettings()">
             <mat-option value="system" i18n>System</mat-option>
             <mat-option value="dark" i18n>Dark</mat-option>
@@ -13,7 +13,7 @@
 <div class="field">
     <div class="title" i18n>Update Mode</div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.updateMode" (valueChange)="saveConfigSettings()"
+        <mat-select [(ngModel)]="settings.updateMode" (ngModelChange)="saveConfigSettings()"
             (closed)="saveConfigSettings()">
             <mat-option value="replace" i18n>Replace</mat-option>
             <mat-option value="rewrite" i18n>Rewrite</mat-option>
@@ -23,7 +23,7 @@
 <div class="field">
     <div class="title" i18n>Advance Mode</div>
     <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.advanceMode" (toggleChange)="saveConfigSettings()"></mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="settings.advanceMode" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
 }
