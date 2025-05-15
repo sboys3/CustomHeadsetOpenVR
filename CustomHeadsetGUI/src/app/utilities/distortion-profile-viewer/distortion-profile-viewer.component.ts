@@ -91,7 +91,7 @@ export class DistortionProfileViewerComponent {
     color: string,
     name: string
   ): void {
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
