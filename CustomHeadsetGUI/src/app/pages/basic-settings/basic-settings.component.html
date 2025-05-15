@@ -112,7 +112,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.subpixelShift" (input)="saveConfigSettings()" type="number" step="0.01">
-        <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()">
+        <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()" (valueChange)="saveConfigSettings()">
             @for(opt of subpixelShiftOptions;track opt){
             <mat-option [value]="opt">{{opt|number}}</mat-option>
             }
