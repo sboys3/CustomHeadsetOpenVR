@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
-import { Config, MeganeX8KConfig } from '../../services/JsonFileDefines';
+import { Settings, MeganeX8KConfig } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 
 
@@ -21,8 +21,8 @@ import { FormsModule } from '@angular/forms';
 export class BasicSettingsComponent {
     profiles: DistortionProfileEntry[] = []
     settings?: MeganeX8KConfig
-    config?: Config;
-    subpixelShiftOptions = [-0.33, 0, 0.33];
+    config?: Settings;
+    subpixelShiftOptions = [0, 0.33];
     defaultProfiles = [
         {
             name: 'MeganeX8K Default',
@@ -35,13 +35,15 @@ export class BasicSettingsComponent {
     ]
     constructor(private fs: DriverSettingService) {
         effect(() => {
-            const config = fs.settings();
+            const config = fs.values();
             this.config = config;
             this.settings = config?.meganeX8K;
         });
+
         effect(() => {
+            const info = fs.driverInfo()?.builtinDistortionProfiles ?? {};
             this.profiles = [
-                ...this.defaultProfiles,
+                ...Object.keys(info).map(name => ({ name, isDefault: true })),
                 ...this.fs.distortionProfileList().map(f => ({
                     name: f.name.split('.').slice(0, -1).join('.'),
                     isDefault: false,
@@ -51,7 +53,7 @@ export class BasicSettingsComponent {
     }
     saveConfigSettings() {
         if (this.config) {
-            this.fs.saveSetting(this.config);
+            this.fs.save(this.config);
         }
     }
     loading = false;

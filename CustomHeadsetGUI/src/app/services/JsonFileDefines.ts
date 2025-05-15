@@ -7,8 +7,8 @@ export type DistortionProfileConfig = {
   distortionsRed: number[];
   distortionsBlue: number[];
 };
-export type Config = {
-  [name: string]: any,
+export type Settings = {
+  watchDistortionProfiles: boolean,
   meganeX8K: MeganeX8KConfig
 }
 export type MeganeX8KConfig = {
@@ -51,4 +51,15 @@ export type MeganeX8KConfig = {
 export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light';
   updateMode: 'replace' | 'rewrite';
+  advanceMode: boolean
+}
+
+export type DriverInfo = {
+  about: string;
+  defaultSettings: Settings;
+  builtinDistortionProfiles: BuiltinDistortionProfiles;
+}
+
+export type BuiltinDistortionProfiles = {
+  [profileName: string]: {};
 }

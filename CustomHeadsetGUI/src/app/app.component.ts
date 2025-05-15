@@ -27,7 +27,6 @@ export class AppComponent {
   constructor(appSettingService: AppSettingService, @Inject(DOCUMENT) document: Document) {
     effect(() => {
       const settings = appSettingService.values();
-      console.log('effect',settings)
       if (settings) {
         switch (settings.colorScheme) {
           case 'dark':

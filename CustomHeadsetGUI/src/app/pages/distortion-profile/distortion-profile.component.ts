@@ -8,8 +8,8 @@ import { open, save } from '@tauri-apps/plugin-dialog';
 import { copyFile } from '@tauri-apps/plugin-fs';
 import { basename } from '@tauri-apps/api/path';
 import { DialogService } from '../../services/dialog.service';
-import { Config, MeganeX8KConfig } from '../../services/JsonFileDefines';
-import { PathService } from '../../services/path.service';
+import { Settings, MeganeX8KConfig } from '../../services/JsonFileDefines';
+import { PathsService } from '../../services/paths.service';
 @Component({
   selector: 'app-distortion-profile',
   imports: [MatListModule, MatButtonModule, ScrollingModule],
@@ -19,10 +19,10 @@ import { PathService } from '../../services/path.service';
 export class DistortionProfileComponent {
   profiles: DistortionProfileEntry[] = [];
   settings?: MeganeX8KConfig
-  config?: Config;
-  constructor(private fs: DriverSettingService, private ps: PathService, private dialog: DialogService) {
+  config?: Settings;
+  constructor(private fs: DriverSettingService, private ps: PathsService, private dialog: DialogService) {
     effect(() => {
-      const config = fs.settings();
+      const config = fs.values();
       this.config = config;
       this.settings = config?.meganeX8K;
     });
@@ -65,7 +65,6 @@ export class DistortionProfileComponent {
   async exportFile(profile: DistortionProfileEntry) {
     const file = await save({ defaultPath: await basename(profile.name), filters: [{ name: `json file`, extensions: ["json"] }] });
     if (file) {
-      console.log(file)
       await copyFile(await this.ps.getProfileFullPath(profile.file!.name), file);
     }
   }

@@ -3,7 +3,7 @@
     <div class="title" i18n>Distortion Profile</div>
     <div class="control">
         <mat-select [(ngModel)]="settings.distortionProfile" (valueChange)="saveConfigSettings()">
-            @for(p of profiles;track p){
+            @for(p of profiles;track p.name){
             <mat-option [value]="p.name">{{p.name}}</mat-option>
             }
         </mat-select>

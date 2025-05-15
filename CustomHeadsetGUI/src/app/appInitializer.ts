@@ -1,8 +1,8 @@
 import { inject } from "@angular/core";
-import { PathService } from "./services/path.service";
+import { PathsService } from "./services/paths.service";
 
 export async function appInitializer() {
-  const pathService = inject(PathService);
+  const pathService = inject(PathsService);
   await pathService.ensureAllDirCreated();
   return 
 }
