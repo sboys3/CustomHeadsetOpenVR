@@ -12,8 +12,12 @@ public:
 	void ParseConfig();
 	// load a distortion profile config from disk
 	DistortionProfileConfig ParseDistortionConfig(std::string name);
+	// save the info.json file to disk
+	void WriteInfo();
 	// start the config parser
 	void Start();
+	// thread to write info
+	void WriteInfoThread();
 	// thread to watch for file changes
 	void WatcherThread();
 	// thread for watching distortions if enabled

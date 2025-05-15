@@ -1,4 +1,5 @@
 #include "ConfigLoader.h"
+#include <map>
 #include <thread>
 #include <fstream>
 #include <filesystem>
@@ -9,6 +10,7 @@
 
 
 using json = nlohmann::json;
+using ordered_json = nlohmann::ordered_json;
 
 std::string ConfigLoader::GetConfigFolder(){
 	char* appdataPath = std::getenv("APPDATA");
@@ -126,6 +128,51 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 	}
 }
 
+void ConfigLoader::WriteInfo(){
+	std::string infoPath = GetConfigFolder() + "info.json";
+	std::ofstream infoFile(infoPath);
+	if(!infoFile.is_open()){
+		DriverLog("Failed to open info.json for writing: %d", GetLastError());
+		return;
+	}
+	Config defaultSettings;
+	std::map<std::string,int> emptyObject;
+	ordered_json data = {
+		{"about", "This file is not for configuration. It provides info from the driver for other utilities to use."},
+		{"defaultSettings", {
+			{"meganeX8K", {
+				{"enable", defaultSettings.meganeX8K.enable},
+				{"ipd", defaultSettings.meganeX8K.ipd},
+				{"ipdOffset", defaultSettings.meganeX8K.ipdOffset},
+				{"blackLevel", defaultSettings.meganeX8K.blackLevel},
+				{"distortionProfile", defaultSettings.meganeX8K.distortionProfile},
+				{"distortionZoom", defaultSettings.meganeX8K.distortionZoom},
+				{"subpixelShift", defaultSettings.meganeX8K.subpixelShift},
+				{"resolutionX", defaultSettings.meganeX8K.resolutionX},
+				{"resolutionY", defaultSettings.meganeX8K.resolutionY},
+				{"maxFovX", defaultSettings.meganeX8K.maxFovX},
+				{"maxFovY", defaultSettings.meganeX8K.maxFovY},
+				{"distortionMeshResolution", defaultSettings.meganeX8K.distortionMeshResolution}
+			}},
+			{"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
+		}},
+		// eventually these will have the full distortion data in them
+		{"builtinDistortionProfiles", {
+			{"MeganeX8K Default", emptyObject},
+			{"MeganeX8K Original", emptyObject},
+		}},
+	};
+	infoFile << data.dump(1, '\t');
+	infoFile.close();
+}
+
+void ConfigLoader::WriteInfoThread(){
+	// while(started){
+	// 	WriteInfo();
+	// 	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+	// }
+}
+
 void ConfigLoader::WatcherThread(){
 	// watch for changes in the config file directory
 	std::string configPath = GetConfigFolder();
@@ -158,7 +205,7 @@ void ConfigLoader::WatcherThread(){
 			}
 			pNotify = (FILE_NOTIFY_INFORMATION*)((char*)pNotify + pNotify->NextEntryOffset);
 		}while(pNotify->NextEntryOffset != 0);
-		DriverLog("Waiting for next change...");
+		//DriverLog("Waiting for next change...");
 		std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	}
 }
@@ -226,6 +273,11 @@ void ConfigLoader::Start(){
 			configFile << defaultConfig;
 			configFile.close();
 		}
+		
+		// start info thread
+		WriteInfo();
+		// std::thread infoThread(&ConfigLoader::WriteInfoThread, this);
+		// infoThread.detach();
 	}catch(const std::exception& e){
 		DriverLog("Failed to create settings.json %s", e.what());
 	}
