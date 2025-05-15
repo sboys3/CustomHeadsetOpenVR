@@ -9,7 +9,7 @@
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="resolutionModel" (closed)="setResolution()">
+        <mat-select [(ngModel)]="resolutionModel" (closed)="setResolution()" (valueChange)="saveConfigSettings()">
             @for(p of resolutionOptions;track p.x){
             <mat-option [value]="p">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
             }
@@ -20,13 +20,15 @@
     <div class="title">
         <span i18n>Distortion Profile</span>
         @if(settings.distortionProfile!=defaults?.distortionProfile){
-        <button mat-icon-button (click)="resetOption('distortionProfile')" matTooltip="Reset to default" i18n-matTooltip>
+        <button mat-icon-button (click)="resetOption('distortionProfile')" matTooltip="Reset to default"
+            i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.distortionProfile" (closed)="saveConfigSettings()">
+        <mat-select [(ngModel)]="settings.distortionProfile" (closed)="saveConfigSettings()"
+            (valueChange)="saveConfigSettings()">
             @for(p of profiles;track p.name){
             <mat-option [value]="p.name">{{p.name}}</mat-option>
             }
@@ -153,13 +155,15 @@
     <div class="title">
         <span i18n>Distortion Mesh Resolution</span>
         @if(settings.distortionMeshResolution!=defaults?.distortionMeshResolution){
-        <button mat-icon-button (click)="resetOption('distortionMeshResolution')" matTooltip="Reset to default" i18n-matTooltip>
+        <button mat-icon-button (click)="resetOption('distortionMeshResolution')" matTooltip="Reset to default"
+            i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.distortionMeshResolution" (closed)="saveConfigSettings()">
+        <mat-select [(ngModel)]="settings.distortionMeshResolution" (closed)="saveConfigSettings()"
+            (valueChange)="saveConfigSettings()">
             @for(opt of distortionMeshResolutionOptions;track opt){
             <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>
             }
