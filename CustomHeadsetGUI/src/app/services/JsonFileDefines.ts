@@ -46,6 +46,16 @@ export type MeganeX8KConfig = {
    * amount to shift the subpixels to account for their different rows
    */
   subpixelShift: number;
+
+  resolutionX: number;
+
+  resolutionY: number;
+
+  maxFovX: number;
+
+  maxFovY: number;
+
+  distortionMeshResolution: number;
 };
 
 export type AppSetting = {

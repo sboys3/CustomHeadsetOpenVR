@@ -18,4 +18,10 @@
         </mat-select>
     </div>
 </div>
+<div class="field">
+    <div class="title" i18n>Advance Mode</div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.advanceMode" (toggleChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
 }

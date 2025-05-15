@@ -1,4 +1,4 @@
-import { Component, effect } from '@angular/core';
+import { Component, computed, effect } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
@@ -9,6 +9,7 @@ import { DistortionProfileEntry, DriverSettingService } from '../../services/dri
 import { CommonModule } from '@angular/common';
 import { Settings, MeganeX8KConfig } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
+import { AppSettingService } from '../../services/app-setting.service';
 
 
 
@@ -23,6 +24,7 @@ export class BasicSettingsComponent {
     settings?: MeganeX8KConfig
     config?: Settings;
     subpixelShiftOptions = [0, 0.33];
+    advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
     defaultProfiles = [
         {
             name: 'MeganeX8K Default',
@@ -33,18 +35,18 @@ export class BasicSettingsComponent {
             isDefault: true
         }
     ]
-    constructor(private fs: DriverSettingService) {
+    constructor(private dss: DriverSettingService, private ass: AppSettingService) {
         effect(() => {
-            const config = fs.values();
+            const config = dss.values();
             this.config = config;
             this.settings = config?.meganeX8K;
         });
 
         effect(() => {
-            const info = fs.driverInfo()?.builtinDistortionProfiles ?? {};
+            const info = dss.driverInfo()?.builtinDistortionProfiles ?? {};
             this.profiles = [
                 ...Object.keys(info).map(name => ({ name, isDefault: true })),
-                ...this.fs.distortionProfileList().map(f => ({
+                ...this.dss.distortionProfileList().map(f => ({
                     name: f.name.split('.').slice(0, -1).join('.'),
                     isDefault: false,
                     file: f
@@ -53,7 +55,7 @@ export class BasicSettingsComponent {
     }
     saveConfigSettings() {
         if (this.config) {
-            this.fs.save(this.config);
+            this.dss.save(this.config);
         }
     }
     loading = false;
