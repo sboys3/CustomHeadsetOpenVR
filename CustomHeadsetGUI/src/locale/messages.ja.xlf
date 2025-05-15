@@ -1,115 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" target-language="ja" datatype="plaintext" original="ng2.template">
-    <body>
-      <trans-unit id="8643289769990675407" datatype="html">
-        <source>Basic</source>
-        <target state="translated">基本</target>
-      </trans-unit>
-      <trans-unit id="7944521161821675937" datatype="html">
-        <source>Distortion Profile</source>
-        <target state="translated">ディストーションプロファイル</target>
-      </trans-unit>
-      <trans-unit id="7994506939670314559" datatype="html">
-        <source>App Settings</source>
-        <target state="translated">アプリ設定</target>
-      </trans-unit>
-      <trans-unit id="2159130950882492111" datatype="html">
-        <source>Cancel</source>
-        <target state="translated">キャンセル</target>
-      </trans-unit>
-      <trans-unit id="2807800733729323332" datatype="html">
-        <source>Yes</source>
-        <target state="translated">はい</target>
-      </trans-unit>
-      <trans-unit id="8720977247725652816" datatype="html">
-        <source>Ok</source>
-        <target state="translated">はい</target>
-      </trans-unit>
-      <trans-unit id="3656080382305974312" datatype="html">
-        <source>Color Scheme</source>
-        <target state="translated">カラースキーム</target>
-      </trans-unit>
-      <trans-unit id="29832309535656200" datatype="html">
-        <source>System</source>
-        <target state="translated">システム</target>
-      </trans-unit>
-      <trans-unit id="3892161059518616136" datatype="html">
-        <source>Dark</source>
-        <target state="translated">ダーク</target>
-      </trans-unit>
-      <trans-unit id="413116577994876478" datatype="html">
-        <source>Light</source>
-        <target state="translated">ライト</target>
-      </trans-unit>
-      <trans-unit id="5537197768139679727" datatype="html">
-        <source>Update Mode</source>
-        <target state="translated">更新モード</target>
-      </trans-unit>
-      <trans-unit id="6254459922754143568" datatype="html">
-        <source>Replace</source>
-        <target state="translated">置換</target>
-      </trans-unit>
-      <trans-unit id="5590001862286989245" datatype="html">
-        <source>Rewrite</source>
-        <target state="translated">上書き</target>
-      </trans-unit>
-      <trans-unit id="7742544409064011729" datatype="html">
-        <source>IPD</source>
-        <target state="translated">IPD</target>
-      </trans-unit>
-      <trans-unit id="1624999947532228823" datatype="html">
-        <source>Distortion Zoom</source>
-        <target state="translated">ディストーションズーム</target>
-      </trans-unit>
-      <trans-unit id="7892467764301667860" datatype="html">
-        <source>Subpixel Shift</source>
-        <target state="translated">サブピクセルシフト</target>
-      </trans-unit>
-      <trans-unit id="1071721880474488785" datatype="html">
-        <source>Import</source>
-        <target state="translated">インポート</target>
-      </trans-unit>
-      <trans-unit id="7462301153729425254" datatype="html">
-        <source>Export</source>
-        <target state="translated">エクスポート</target>
-      </trans-unit>
-      <trans-unit id="7022070615528435141" datatype="html">
-        <source>Delete</source>
-        <target state="translated">削除</target>
-      </trans-unit>
-      <trans-unit id="5510904560009009880" datatype="html">
-        <source>Delete Profile</source>
-        <target state="translated">プロファイルの削除</target>
-      </trans-unit>
-      <trans-unit id="13546353273306589" datatype="html">
-        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
-        <target state="translated">[<x id="PH" equiv-text="profile.name"/>] を削除します。この操作は元に戻せません。よろしいですか？</target>
-      </trans-unit>
-      <trans-unit id="7949487308140215792" datatype="html">
-        <source>Import Error</source>
-        <target state="translated">インポートエラー</target>
-      </trans-unit>
-      <trans-unit id="4441102284303911974" datatype="html">
-        <source>file too large</source>
-        <target state="translated">ファイルが大きすぎます</target>
-      </trans-unit>
-      <trans-unit id="392265817484232889" datatype="html">
-        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
-        <target state="translated">インポートファイルが無効です。&quot;type&quot; または &quot;distortions&quot; がありませんか？</target>
-      </trans-unit>
-      <trans-unit id="1172447031847067737" datatype="html">
-        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
-        <target state="translated">インポートファイルが無効です <x id="PH" equiv-text="jex"/></target>
-      </trans-unit>
-      <trans-unit id="3389786765701617878" datatype="html">
-        <source>import file error <x id="PH" equiv-text="ex"/></source>
-        <target state="translated">インポートファイルエラー <x id="PH" equiv-text="ex"/></target>
-      </trans-unit>
-      <trans-unit id="8039363581560527021" datatype="html">
-        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
-        <target state="translated">設定ファイルが見つかりません、CustomHeadsetOpenVR ドライバーをインストールし、SteamVR を起動してください</target>
-      </trans-unit>
-    </body>
-  </file>
+ <file source-language="en-US" target-language="ja" datatype="plaintext" original="ng2.template">
+  <body>
+   <trans-unit id="8643289769990675407" datatype="html">
+    <source>Basic</source>
+    <target state="translated">基本</target>
+   </trans-unit>
+   <trans-unit id="7944521161821675937" datatype="html">
+    <source>Distortion Profile</source>
+    <target state="translated">ディストーションプロファイル</target>
+   </trans-unit>
+   <trans-unit id="7994506939670314559" datatype="html">
+    <source>App Settings</source>
+    <target state="translated">アプリ設定</target>
+   </trans-unit>
+   <trans-unit id="2159130950882492111" datatype="html">
+    <source>Cancel</source>
+    <target state="translated">キャンセル</target>
+   </trans-unit>
+   <trans-unit id="2807800733729323332" datatype="html">
+    <source>Yes</source>
+    <target state="translated">はい</target>
+   </trans-unit>
+   <trans-unit id="8720977247725652816" datatype="html">
+    <source>Ok</source>
+    <target state="translated">はい</target>
+   </trans-unit>
+   <trans-unit id="3656080382305974312" datatype="html">
+    <source>Color Scheme</source>
+    <target state="translated">カラースキーム</target>
+   </trans-unit>
+   <trans-unit id="29832309535656200" datatype="html">
+    <source>System</source>
+    <target state="translated">システム</target>
+   </trans-unit>
+   <trans-unit id="3892161059518616136" datatype="html">
+    <source>Dark</source>
+    <target state="translated">ダーク</target>
+   </trans-unit>
+   <trans-unit id="413116577994876478" datatype="html">
+    <source>Light</source>
+    <target state="translated">ライト</target>
+   </trans-unit>
+   <trans-unit id="5537197768139679727" datatype="html">
+    <source>Update Mode</source>
+    <target state="translated">更新モード</target>
+   </trans-unit>
+   <trans-unit id="6254459922754143568" datatype="html">
+    <source>Replace</source>
+    <target state="translated">置換</target>
+   </trans-unit>
+   <trans-unit id="5590001862286989245" datatype="html">
+    <source>Rewrite</source>
+    <target state="translated">上書き</target>
+   </trans-unit>
+   <trans-unit id="7742544409064011729" datatype="html">
+    <source>IPD</source>
+    <target state="translated">IPD</target>
+   </trans-unit>
+   <trans-unit id="1624999947532228823" datatype="html">
+    <source>Distortion Zoom</source>
+    <target state="translated">ディストーションズーム</target>
+   </trans-unit>
+   <trans-unit id="7892467764301667860" datatype="html">
+    <source>Subpixel Shift</source>
+    <target state="translated">サブピクセルシフト</target>
+   </trans-unit>
+   <trans-unit id="1071721880474488785" datatype="html">
+    <source>Import</source>
+    <target state="translated">インポート</target>
+   </trans-unit>
+   <trans-unit id="7462301153729425254" datatype="html">
+    <source>Export</source>
+    <target state="translated">エクスポート</target>
+   </trans-unit>
+   <trans-unit id="7022070615528435141" datatype="html">
+    <source>Delete</source>
+    <target state="translated">削除</target>
+   </trans-unit>
+   <trans-unit id="5510904560009009880" datatype="html">
+    <source>Delete Profile</source>
+    <target state="translated">プロファイルの削除</target>
+   </trans-unit>
+   <trans-unit id="13546353273306589" datatype="html">
+    <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+    <target state="translated">[<x id="PH" equiv-text="profile.name"/>] を削除します。この操作は元に戻せません。よろしいですか？</target>
+   </trans-unit>
+   <trans-unit id="7949487308140215792" datatype="html">
+    <source>Import Error</source>
+    <target state="translated">インポートエラー</target>
+   </trans-unit>
+   <trans-unit id="4441102284303911974" datatype="html">
+    <source>file too large</source>
+    <target state="translated">ファイルが大きすぎます</target>
+   </trans-unit>
+   <trans-unit id="392265817484232889" datatype="html">
+    <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
+    <target state="translated">インポートファイルが無効です。&quot;type&quot; または &quot;distortions&quot; がありませんか？</target>
+   </trans-unit>
+   <trans-unit id="1172447031847067737" datatype="html">
+    <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+    <target state="translated">インポートファイルが無効です <x id="PH" equiv-text="jex"/></target>
+   </trans-unit>
+   <trans-unit id="3389786765701617878" datatype="html">
+    <source>import file error <x id="PH" equiv-text="ex"/></source>
+    <target state="translated">インポートファイルエラー <x id="PH" equiv-text="ex"/></target>
+   </trans-unit>
+   <trans-unit id="8039363581560527021" datatype="html">
+    <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
+    <target state="translated">設定ファイルが見つかりません、CustomHeadsetOpenVR ドライバーをインストールし、SteamVR を起動してください</target>
+   </trans-unit>
+   <trans-unit id="1093376176752187612" datatype="html">
+    <source>Advance Mode</source>
+    <target state="translated">アドバンスモード</target>
+   </trans-unit>
+   <trans-unit id="1963136290621768454" datatype="html">
+    <source>Resolution</source>
+    <target state="translated">解像度</target>
+   </trans-unit>
+   <trans-unit id="648306878592239743" datatype="html">
+    <source>Reset to default</source>
+    <target state="translated">デフォルトにリセット</target>
+   </trans-unit>
+   <trans-unit id="4831283424104605009" datatype="html">
+    <source>IPD Offset</source>
+    <target state="translated">IPDオフセット</target>
+   </trans-unit>
+   <trans-unit id="2133427521398732619" datatype="html">
+    <source>Black Level</source>
+    <target state="translated">ブラックレベル</target>
+   </trans-unit>
+   <trans-unit id="1960460633115255569" datatype="html">
+    <source>Max Fov Horizontal</source>
+    <target state="translated">最大水平FOV</target>
+   </trans-unit>
+   <trans-unit id="7702362431118838491" datatype="html">
+    <source>Max Fov Vertical</source>
+    <target state="translated">最大垂直FOV</target>
+   </trans-unit>
+   <trans-unit id="1537728937939680401" datatype="html">
+    <source>Distortion Mesh Resolution</source>
+    <target state="translated">ディストーションメッシュ解像度</target>
+   </trans-unit>
+   <trans-unit id="6607372754568222882" datatype="html">
+    <source>Low (<x id="PH" equiv-text="64"/>)</source>
+    <target state="translated">低 (<x id="PH" equiv-text="64"/>)</target>
+   </trans-unit>
+   <trans-unit id="8197514619650471762" datatype="html">
+    <source>Normal (<x id="PH" equiv-text="128"/>)</source>
+    <target state="translated">標準 (<x id="PH" equiv-text="128"/>)</target>
+   </trans-unit>
+   <trans-unit id="2780234993728008588" datatype="html">
+    <source>High (<x id="PH" equiv-text="256"/>)</source>
+    <target state="translated">高 (<x id="PH" equiv-text="256"/>)</target>
+   </trans-unit>
+   <trans-unit id="6309735826442522713" datatype="html">
+    <source>Current Profile : </source>
+    <target state="translated">現在のプロファイル：</target>
+   </trans-unit>
+   <trans-unit id="8461842260159597706" datatype="html">
+    <source>Show</source>
+    <target state="translated">表示</target>
+   </trans-unit>
+   <trans-unit id="4391289919356861627" datatype="html">
+    <source>Apply</source>
+    <target state="translated">適用</target>
+   </trans-unit>
+   <trans-unit id="7358890221143927213" datatype="html">
+    <source>Radius from center of the output (%)</source>
+    <target state="translated">出力中心からの半径 (%)</target>
+   </trans-unit>
+   <trans-unit id="5731056400307534906" datatype="html">
+    <source>Radius from center of the input (degrees)</source>
+    <target state="translated">入力中心からの半径 (度)</target>
+   </trans-unit>
+  </body>
+ </file>
 </xliff>

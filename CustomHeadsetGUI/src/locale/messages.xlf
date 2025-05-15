@@ -83,6 +83,54 @@
       <trans-unit id="8039363581560527021" datatype="html">
         <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
       </trans-unit>
+      <trans-unit id="1093376176752187612" datatype="html">
+        <source>Advance Mode</source>
+      </trans-unit>
+      <trans-unit id="1537728937939680401" datatype="html">
+        <source>Distortion Mesh Resolution</source>
+      </trans-unit>
+      <trans-unit id="1960460633115255569" datatype="html">
+        <source>Max Fov Horizontal</source>
+      </trans-unit>
+      <trans-unit id="1963136290621768454" datatype="html">
+        <source>Resolution</source>
+      </trans-unit>
+      <trans-unit id="2133427521398732619" datatype="html">
+        <source>Black Level</source>
+      </trans-unit>
+      <trans-unit id="2780234993728008588" datatype="html">
+        <source>High (<x id="PH" equiv-text="256"/>)</source>
+      </trans-unit>
+      <trans-unit id="4391289919356861627" datatype="html">
+        <source>Apply</source>
+      </trans-unit>
+      <trans-unit id="4831283424104605009" datatype="html">
+        <source>IPD Offset</source>
+      </trans-unit>
+      <trans-unit id="5731056400307534906" datatype="html">
+        <source>Radius from center of the input (degrees)</source>
+      </trans-unit>
+      <trans-unit id="6309735826442522713" datatype="html">
+        <source>Current Profile : </source>
+      </trans-unit>
+      <trans-unit id="648306878592239743" datatype="html">
+        <source>Reset to default</source>
+      </trans-unit>
+      <trans-unit id="6607372754568222882" datatype="html">
+        <source>Low (<x id="PH" equiv-text="64"/>)</source>
+      </trans-unit>
+      <trans-unit id="7358890221143927213" datatype="html">
+        <source>Radius from center of the output (%)</source>
+      </trans-unit>
+      <trans-unit id="7702362431118838491" datatype="html">
+        <source>Max Fov Vertical</source>
+      </trans-unit>
+      <trans-unit id="8197514619650471762" datatype="html">
+        <source>Normal (<x id="PH" equiv-text="128"/>)</source>
+      </trans-unit>
+      <trans-unit id="8461842260159597706" datatype="html">
+        <source>Show</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

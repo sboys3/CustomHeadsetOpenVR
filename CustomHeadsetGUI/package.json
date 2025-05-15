@@ -6,6 +6,8 @@
     "start": "tauri dev",
     "build": "tauri build",
     "start:ng": "ng serve",
+    "start:ng:zh": "ng serve --configuration=zh-Hant",
+    "start:ng:ja": "ng serve --configuration=ja",
     "build:ng": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
