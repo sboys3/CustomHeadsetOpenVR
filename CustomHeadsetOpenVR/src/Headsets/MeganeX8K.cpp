@@ -68,7 +68,9 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(unObjectId, 5000, 5000);
-	distortionProfileConstructor.distortionSettings.resolution = 3552;
+	distortionProfileConstructor.distortionSettings.resolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+	distortionProfileConstructor.distortionSettings.resolutionX = driverConfig.meganeX8K.resolutionX;
+	distortionProfileConstructor.distortionSettings.resolutionY = driverConfig.meganeX8K.resolutionY;
 	
 	distortionProfileConstructor.distortionSettings.noneDistortionFovHorizontal = 95;
 	distortionProfileConstructor.distortionSettings.noneDistortionFovVertical = 95;
@@ -97,9 +99,11 @@ bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float 
 
 // run for each vertex of the distortion mesh and outputs the uv coordinates to sample for each color
 bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float &fU, float &fV, vr::DistortionCoordinates_t &coordinates){
-	// change range to -1 to 1
-	fU = fU * 2.0f - 1.0f;
-	fV = fV * 2.0f - 1.0f;
+	
+	float minResolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+	// change range to -1 to 1 for coverage of the minResolution square
+	fU = (fU - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionY / minResolution;
+	fV = (fV - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionX / minResolution;
 	if(eEye == vr::Eye_Left){
 		float tmp = fU;
 		fU = -fV;
@@ -117,7 +121,7 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	float greenV = fV;
 	
 	// apply sub pixel offsets for super sampling
-	float subpixelOffset = (float)(driverConfig.meganeX8K.subpixelShift / 3552.0);
+	float subpixelOffset = (float)(driverConfig.meganeX8K.subpixelShift / minResolution);
 	// if(testToggle){
 	if(eEye == vr::Eye_Left){
 		redV -= subpixelOffset;
@@ -166,8 +170,8 @@ bool MeganeX8KShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&
 	// *pnWidth = 2160;
 	// *pnHeight = 1200;
 	// applies to direct mode as well
-	*pnWidth = 7104;
-	*pnHeight = 3840;
+	*pnWidth = driverConfig.meganeX8K.resolutionY * 2;
+	*pnHeight = driverConfig.meganeX8K.resolutionX;
 	// *pnWidth = 5328;
 	// *pnHeight = 2880;
 	return false;
@@ -175,20 +179,21 @@ bool MeganeX8KShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&
 
 // define where each eye is drawn onto the output screen
 bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, uint32_t *&pnX, uint32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight){
+	// X and Y from teh config are seemingly reversed here because the panels are rotated 90 degrees
 	if(eEye == vr::Eye_Left){
 		*pnX = 0;
-		// *pnY = 0;
-		*pnY = (3840 - 3552) / 2;
-		*pnWidth = 3552;
-		// *pnHeight = 3840;
-		*pnHeight = 3552;
+		*pnY = 0;
+		// *pnY = (3840 - 3552) / 2;
+		*pnWidth = driverConfig.meganeX8K.resolutionY;
+		*pnHeight = driverConfig.meganeX8K.resolutionX;
+		// *pnHeight = 3552;
 	}else{
-		*pnX = 3552;
-		// *pnY = 0;
-		*pnY = (3840 - 3552) / 2;
-		*pnWidth = 3552;
-		// *pnHeight = 3840;
-		*pnHeight = 3552;
+		*pnX = driverConfig.meganeX8K.resolutionY;
+		*pnY = 0;
+		// *pnY = (3840 - 3552) / 2;
+		*pnWidth = driverConfig.meganeX8K.resolutionY;
+		*pnHeight = driverConfig.meganeX8K.resolutionX;
+		// *pnHeight = 3552;
 	}
 	// if(eEye == vr::Eye_Left){
 	// 	*pnX = 0;
@@ -206,8 +211,8 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 
 // this is the 100% resolution in steamvr settings
 bool MeganeX8KShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight){
-	*pnWidth = 3552;
-	*pnHeight = 3552;
+	*pnWidth = driverConfig.meganeX8K.resolutionX;
+	*pnHeight = driverConfig.meganeX8K.resolutionY;
 	// nWidth = 2880;
 	// nHeight = 2880;
 	return false;
@@ -252,11 +257,27 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	
-	bool shouldUpdateDistortion = false;
-	shouldUpdateDistortion |= distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
+	
+	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
+	distortionProfileConstructor.distortionSettings.maxFovY = driverConfig.meganeX8K.maxFovY;
+	
+	
+	bool shouldReInitializeDistortion = false;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovX != driverConfig.meganeX8K.maxFovX;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovY != driverConfig.meganeX8K.maxFovY;
+	
+	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
+	bool shouldUpdateDistortion = loadedNewDistortionProfile | shouldReInitializeDistortion;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
-
+	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;
+	
+	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, driverConfig.meganeX8K.distortionMeshResolution);
+	
+	if(shouldReInitializeDistortion && !loadedNewDistortionProfile){
+		distortionProfileConstructor.ReInitializeProfile();
+	}
+	
 	if(shouldUpdateDistortion){
 		// it has changed so signal the compositor to regenerate the distortion mesh
 		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);

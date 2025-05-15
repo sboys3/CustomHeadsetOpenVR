@@ -57,6 +57,21 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["subpixelShift"].is_number()){
 				newConfig.meganeX8K.subpixelShift = meganeX8KData["subpixelShift"].get<double>();
 			}
+			if(meganeX8KData["resolutionX"].is_number()){
+				newConfig.meganeX8K.resolutionX = meganeX8KData["resolutionX"].get<int>();
+			}
+			if(meganeX8KData["resolutionY"].is_number()){
+				newConfig.meganeX8K.resolutionY = meganeX8KData["resolutionY"].get<int>();
+			}
+			if(meganeX8KData["maxFovX"].is_number()){
+				newConfig.meganeX8K.maxFovX = meganeX8KData["maxFovX"].get<double>();
+			}
+			if(meganeX8KData["maxFovY"].is_number()){
+				newConfig.meganeX8K.maxFovY = meganeX8KData["maxFovY"].get<double>();
+			}
+			if(meganeX8KData["distortionMeshResolution"].is_number()){
+				newConfig.meganeX8K.distortionMeshResolution = meganeX8KData["distortionMeshResolution"].get<int>();
+			}
 		}
 		if(data["watchDistortionProfiles"].is_boolean()){
 			newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
@@ -101,6 +116,9 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 		if(data["distortionsBlue"].is_array()){
 			profile.distortionsBlue = data["distortionsBlue"].get<std::vector<double>>();
 		}
+		if(data["smoothAmount"].is_number()){
+			profile.smoothAmount = data["smoothAmount"].get<double>();
+		}
 		return profile;
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse distortion profile: %s", e.what());
@@ -130,11 +148,18 @@ void ConfigLoader::WatcherThread(){
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
 			if(fileName == L"settings.json" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
 				DriverLog("Config file changed, reloading...");
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				while(driverConfig.hasBeenUpdated){
+					// wait for the last config update to be used before doing another one
+					std::this_thread::sleep_for(std::chrono::milliseconds(10)); 
+				}
 				ParseConfig();
+				break;
 			}
 			pNotify = (FILE_NOTIFY_INFORMATION*)((char*)pNotify + pNotify->NextEntryOffset);
 		}while(pNotify->NextEntryOffset != 0);
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		DriverLog("Waiting for next change...");
+		std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	}
 }
 
@@ -159,10 +184,16 @@ void ConfigLoader::WatcherThreadDistortions(){
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
 			if(fileName.find(L".json") != std::wstring::npos && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
 				DriverLog("Distortion profile changed, reloading...");
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				while(driverConfig.hasBeenUpdated){
+					// wait for the last config update to be used before doing another one
+					std::this_thread::sleep_for(std::chrono::milliseconds(10)); 
+				}
 				ParseConfig();
+				break;
 			}
 		}while(pNotify->NextEntryOffset != 0);
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
+		std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	}
 }
 				

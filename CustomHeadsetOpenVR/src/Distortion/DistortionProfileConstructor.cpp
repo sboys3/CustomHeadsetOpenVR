@@ -75,20 +75,18 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 				radialBezierProfile->distortionsBlue.push_back({(float)config.distortionsBlue[i * 2], (float)config.distortionsBlue[i * 2 + 1]});
 			}
 		}
+		radialBezierProfile->smoothAmount = config.smoothAmount;
 		newProfile = radialBezierProfile;
 	}
 	
 	bool changed = false;
 	
 	if(newProfile != nullptr){
-		// copy settings to new distortion profile
-		newProfile->resolution = distortionSettings.resolution;
-		// initialize new profile and replace old one
-		newProfile->Initialize();
 		if(profile != nullptr && profile != &distortionSettings){
 			delete profile;
 		}
 		profile = newProfile;
+		ReInitializeProfile();
 		changed = true;
 	}
 	
@@ -104,6 +102,17 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 	profileName = config.name;
 	profileModifiedTime = config.modifiedTime;
 	return changed;
+}
+
+void DistortionProfileConstructor::ReInitializeProfile(){
+	// copy settings to new distortion profile
+	profile->resolution = distortionSettings.resolution;
+	profile->resolutionX = distortionSettings.resolutionX;
+	profile->resolutionY = distortionSettings.resolutionY;
+	profile->maxFovX = distortionSettings.maxFovX;
+	profile->maxFovY = distortionSettings.maxFovY;
+	// initialize new profile and replace old one
+	profile->Initialize();
 }
 
 DistortionProfileConstructor::~DistortionProfileConstructor(){

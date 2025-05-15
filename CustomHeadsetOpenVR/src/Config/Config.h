@@ -21,7 +21,17 @@ public:
 		// amount to zoom in the distortion profile
 		double distortionZoom = 1.0;
 		// amount to shift the subpixels to account for their diffent rows
-		double subpixelShift = 1.0 / 3.0;
+		double subpixelShift = 0.33;
+		// width of one eye in pixels
+		int resolutionX = 3840;
+		// height of one eye in pixels
+		int resolutionY = 3552;
+		// max horizontal fov
+		double maxFovX = 100.0;
+		// max vertical fov
+		double maxFovY = 96.0;
+		// distortion mesh resolution
+		int distortionMeshResolution = 128;
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;
@@ -53,6 +63,8 @@ public:
 	std::vector<double> distortionsRed = {};
 	// additional distortion to apply to the blue channel
 	std::vector<double> distortionsBlue = {};
+	// amount to smooth the curve from 0 to 1
+	double smoothAmount = 0.66;
 };
 
 // global config object

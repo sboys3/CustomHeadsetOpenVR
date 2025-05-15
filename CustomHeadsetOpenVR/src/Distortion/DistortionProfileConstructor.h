@@ -15,6 +15,7 @@ class DistortionProfileConstructor{
 		// load a distortion profile by name
 		// returns true if the profile was changed to indicate the distortion mesh must be refreshed
 		bool LoadDistortionProfile(std::string name);
+		void ReInitializeProfile();
 		virtual ~DistortionProfileConstructor();
 	private:
 		std::string profileName;

@@ -25,10 +25,9 @@ DistortionPoint BezierPoint(float t, const std::vector<DistortionPoint>& control
 }
 
 // SmoothPoints takes a list of points and returns a new list of points with additional points inserted between each pair of points using bezier curves.
-std::vector<DistortionPoint> SmoothPoints(const std::vector<DistortionPoint>& points, int innerPointCounts){
-	// how far out to move the center bezier points from the existing points
+std::vector<DistortionPoint> SmoothPoints(const std::vector<DistortionPoint>& points, int innerPointCounts, float smoothAmount){
+	// smoothAmount is how far out to move the center bezier points from the existing points
 	// larger values will make the curve more "smooth" and less "sharp" at the existing points
-	float smoothAmount = 1.0f / 3.0f;
 	std::vector<DistortionPoint> outPoints;
 	for(int i = 0; i < points.size() - 1; i++){
 		// the new points will be inserted between existing points
@@ -132,9 +131,9 @@ float RadialBezierDistortionProfile::ComputePPD(std::vector<DistortionPoint> dis
 void RadialBezierDistortionProfile::Initialize(){
 	Cleanup();
 	// smooth the points
-	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints);
-	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints);
-	std::vector<DistortionPoint> distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints);
+	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints, smoothAmount / 2.0f);
+	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints, smoothAmount / 2.0f);
+	std::vector<DistortionPoint> distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints, smoothAmount / 2.0f);
 	
 	std::vector<DistortionPoint> distortionsSmoothRed = distortionsSmoothGreen;
 	std::vector<DistortionPoint> distortionsSmoothBlue = distortionsSmoothGreen;
@@ -142,9 +141,9 @@ void RadialBezierDistortionProfile::Initialize(){
 	for(int i = 0; i < distortionsSmoothGreen.size(); i++){
 		distortionsSmoothRed[i].position *= SampleFromPoints(distortionsRedPercent, distortionsSmoothRed[i].degree) / 100.0f + 1.0f;
 		distortionsSmoothBlue[i].position *= SampleFromPoints(distortionsBluePercent, distortionsSmoothBlue[i].degree) / 100.0f + 1.0f;
-		halfFov = std::max(halfFov, distortionsSmoothGreen[i].degree);
+		// halfFov = std::max(halfFov, distortionsSmoothGreen[i].degree);
 	}
-	
+	DriverLog("== Distortion Statistics ==");
 	DriverLog("PPD at 0°: %f\n", ComputePPD(distortionsSmoothGreen, 0, 1));
 	DriverLog("PPD at 10°: %f\n", ComputePPD(distortionsSmoothGreen, 10, 11));
 	DriverLog("PPD at 20°: %f\n", ComputePPD(distortionsSmoothGreen, 20, 21));
@@ -154,26 +153,71 @@ void RadialBezierDistortionProfile::Initialize(){
 	DriverLog("PPD average 0° to 10°: %f\n", ComputePPD(distortionsSmoothGreen, 0, 10));
 	DriverLog("PPD average 0° to 20°: %f\n", ComputePPD(distortionsSmoothGreen, 0, 20));
 	
+	DriverLog("Display resolution: %ix%i\n", (int)resolutionX, (int)resolutionY);
+	
+	// find maximum degrees that fit all color channels on the screen
+	halfFovX = SampleFromPointsInverse(distortionsSmoothRed, resolutionX / resolution * 100.0f);
+	halfFovX = std::min(halfFovX, SampleFromPointsInverse(distortionsSmoothGreen, resolutionX / resolution * 100.0f));
+	halfFovX = std::min(halfFovX, SampleFromPointsInverse(distortionsSmoothBlue, resolutionX / resolution * 100.0f));
+	halfFovY = SampleFromPointsInverse(distortionsSmoothRed, resolutionY / resolution * 100.0f);
+	halfFovY = std::min(halfFovY, SampleFromPointsInverse(distortionsSmoothGreen, resolutionY / resolution * 100.0f));
+	halfFovY = std::min(halfFovY, SampleFromPointsInverse(distortionsSmoothBlue, resolutionY / resolution * 100.0f));
+	
+	// limit to max fov
+	halfFovX = std::min(halfFovX, maxFovX / 2.0f);
+	halfFovY = std::min(halfFovY, maxFovY / 2.0f);
+	
+	// halfFovY = halfFovX;
+	DriverLog("FOV: %fx%f\n", halfFovX * 2, halfFovY * 2);
+	// halfFovX = 20;
+	// halfFovY = 20;
+	
+	
 	// convert to input coordinates and flip the point values to sample from output to input
-	float edgeTan = tan(halfFov * M_PI / 180.0f);
 	for (int i = 0; i < distortionsSmoothGreen.size(); i++){
 		// use tangent to convert from degrees into input screen space
-		distortionsSmoothRed[i].degree = tan(distortionsSmoothRed[i].degree * M_PI / 180.0f) / edgeTan;
-		distortionsSmoothGreen[i].degree = tan(distortionsSmoothGreen[i].degree * M_PI / 180.0f) / edgeTan;
-		distortionsSmoothBlue[i].degree = tan(distortionsSmoothBlue[i].degree * M_PI / 180.0f) / edgeTan;
+		distortionsSmoothRed[i].degree = tan(distortionsSmoothRed[i].degree * M_PI / 180.0f);
+		distortionsSmoothGreen[i].degree = tan(distortionsSmoothGreen[i].degree * M_PI / 180.0f);
+		distortionsSmoothBlue[i].degree = tan(distortionsSmoothBlue[i].degree * M_PI / 180.0f);
 	}
 	
+	// calculate tangents for the edges of the input screen
+	float edgeTanX = tan(halfFovX * M_PI / 180.0f);
+	float edgeTanY = tan(halfFovY * M_PI / 180.0f);
 	
-	float maxInputOutputRatio = 0.0f;
+	// calculate the maximum output percentage for the edge of the output
+	float maxOutputPercentageX = SampleFromPoints(distortionsSmoothGreen, edgeTanX);
+	float maxOutputPercentageY = SampleFromPoints(distortionsSmoothGreen, edgeTanY);
+	// calculate the maximum ratio between input and output image pixels
+	float maxInputOutputRatioX = 0.0f;
+	float maxInputOutputRatioY = 0.0f;
 	for(int i = 0; i < distortionsSmoothGreen.size() - 1; i++){
 		DistortionPoint prevPoint = distortionsSmoothGreen[i];
 		DistortionPoint nextPoint = distortionsSmoothGreen[i + 1];
-		float inputOutputRatio = (nextPoint.position - prevPoint.position) / 100.0f / (nextPoint.degree - prevPoint.degree);
-		maxInputOutputRatio = std::max(maxInputOutputRatio, inputOutputRatio);
+		float inputOutputRatioX = (nextPoint.position - prevPoint.position) / maxOutputPercentageX / ((nextPoint.degree - prevPoint.degree) / edgeTanX);
+		maxInputOutputRatioX = std::max(maxInputOutputRatioX, inputOutputRatioX);
+		float inputOutputRatioY = (nextPoint.position - prevPoint.position) / maxOutputPercentageY / ((nextPoint.degree - prevPoint.degree) / edgeTanY);
+		maxInputOutputRatioY = std::max(maxInputOutputRatioY, inputOutputRatioY);
 		// DriverLog("distortion ratio: %f", inputOutputRatio);
 	}
+	
+	// calculate the resolution of the output screen that is actually used based on the maximum output percentage for the given fov
+	float usedOutputScreenResolutionX = maxOutputPercentageX / 100.0f * resolution;
+	float usedOutputScreenResolutionY = maxOutputPercentageY / 100.0f * resolution;
+	DriverLog("Used output screen resolution: %fx%f", usedOutputScreenResolutionX, usedOutputScreenResolutionY);
+	// calculate the required input resoltions required to get 1:1 distortion in the most distorted spot
+	float desiredInputResolutionX = maxInputOutputRatioX * usedOutputScreenResolutionX;
+	float desiredInputResolutionY = maxInputOutputRatioY * usedOutputScreenResolutionY;
+	
+	DriverLog("Max distortion ratio X: %f", maxInputOutputRatioX);
+	DriverLog("Max distortion ratio Y: %f", maxInputOutputRatioY);
 	// steamvr lists percentage as total number of pixels, not a single dimension
-	DriverLog("Oversampling required for 1:1 distortion: %f%% %ix%i", (maxInputOutputRatio * maxInputOutputRatio) * 100.0f, (int)(maxInputOutputRatio * resolution), (int)(maxInputOutputRatio * resolution));
+	DriverLog("Oversampling required for 1:1 distortion: %f%% %ix%i", ((desiredInputResolutionX * desiredInputResolutionY) / (resolutionX * resolutionY)) * 100.0f, (int)(desiredInputResolutionX), (int)(desiredInputResolutionY));
+	
+	// calculate aspect ratios of output and desired input resolution
+	DriverLog("Display aspect ratio : %f\n", resolutionX / resolutionY);
+	DriverLog("Used output aspect ratio : %f\n", usedOutputScreenResolutionX / usedOutputScreenResolutionY);
+	DriverLog("1:1 input aspect ratio : %f\n", desiredInputResolutionX / desiredInputResolutionY);
 	
 	if(false){
 		char* distortionPointLog = new char[distortionsSmoothGreen.size() * 40];
@@ -189,7 +233,9 @@ void RadialBezierDistortionProfile::Initialize(){
 	radialUVMapR = new float[radialMapSize];
 	radialUVMapG = new float[radialMapSize];
 	radialUVMapB = new float[radialMapSize];
-	radialMapConversion = (float)radialMapSize / 1.0f;
+	// calculate how much further the radial map needs to go to cover the entire screen area
+	float distancePastOne = std::max(resolutionX, resolutionY) / resolution;
+	radialMapConversion = (float)radialMapSize / distancePastOne;
 	for(int i = 0; i < radialMapSize; i++){
 		float outputRadius = i / radialMapConversion * 100;
 		radialUVMapR[i] = SampleFromPointsInverse(distortionsSmoothRed, outputRadius);
@@ -210,9 +256,9 @@ void RadialBezierDistortionProfile::Initialize(){
 }
 
 void RadialBezierDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop){
-	DriverLog("GetProjectionRaw returning an fov of %f", halfFov * 2.0f);
-	float hFovHalf = halfFov;
-	float vFovHalf = halfFov;
+	// DriverLog("GetProjectionRaw returning an fov of %f", halfFov * 2.0f);
+	float hFovHalf = halfFovX;
+	float vFovHalf = halfFovY;
 	
 	hFovHalf = hFovHalf * M_PI / 180.0f;
 	vFovHalf = vFovHalf * M_PI / 180.0f;
@@ -254,6 +300,8 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	Point2D distortion;
 	distortion.x = unitU * radius;
 	distortion.y = unitV * radius;
+	distortion.x /= tan(halfFovX * M_PI / 180.0f);
+	distortion.y /= tan(halfFovY * M_PI / 180.0f);
 	return distortion;
 }
 

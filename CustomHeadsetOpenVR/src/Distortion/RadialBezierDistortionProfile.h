@@ -23,11 +23,13 @@ public:
 	std::vector<DistortionPoint> distortionsRed ={{0, 0.5}, {47.5, 0.5}};
 	// additional percent distortions for the blue channel to be done after the main distortion
 	std::vector<DistortionPoint> distortionsBlue ={{0, -0.42}, {47.5, -0.42}};
-	
+	// amount to smooth the curve from 0 to 1
+	double smoothAmount = 0.66;
 private:
 	// this is automatically calculated from the distortions
-	// this is the fov that is given by circle at radius 1
-	float halfFov = 0.0f;
+	// this is half the fov of the input image in degrees
+	float halfFovX = 0.0f;
+	float halfFovY = 0.0f;
 	// radial maps computed from distortions, the index is the output radius and the values are the input radius
 	// these are ready to quickly compute the uv distortions
 	float* radialUVMapR = nullptr;

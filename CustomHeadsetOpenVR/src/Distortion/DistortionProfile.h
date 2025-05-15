@@ -17,6 +17,17 @@ class DistortionProfile{
 public:
 	// the resolution from -1 to 1 in the output coordinates
 	float resolution;
+	// total resolution in the horizontal direction
+	float resolutionX;
+	// total resolution in the vertical direction
+	float resolutionY;
+	// max fov to be displayed horizontally
+	float maxFovX = 175;
+	// max fov to be displayed vertically
+	float maxFovY = 175;
+	
+	
+	
 	// called before the other functions are called
 	virtual void Initialize(){};
 	// fU and fV are normalized to be within [-1, 1] within the smallest box that fit on the screen
