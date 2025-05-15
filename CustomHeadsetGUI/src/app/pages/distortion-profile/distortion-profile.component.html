@@ -5,8 +5,12 @@
     <cdk-virtual-scroll-viewport [itemSize]="50" class="viewport">
         <div class="item" [class.alternate]="odd" *cdkVirtualFor="let profile of profiles;let odd = odd;">
             <span class="name">{{profile.name}}</span>
-            <button mat-stroked-button i18n (click)="exportFile(profile)">Export</button>
-            <button [disabled]="settings?.distortionProfile==profile.name" class="warn" mat-stroked-button i18n (click)="deleteProfile(profile)">Delete</button>
+            <button mat-icon-button (click)="exportFile(profile)" matTooltip="Export" i18n-matTooltip>
+                <mat-icon class="primary-color">share</mat-icon>
+            </button>
+            <button [disabled]="settings?.distortionProfile==profile.name" matTooltip="Delete" class="warn"
+                mat-icon-button i18n-matTooltip (click)="deleteProfile(profile)">
+                <mat-icon class="warn-color">delete</mat-icon></button>
         </div>
     </cdk-virtual-scroll-viewport>
 </div>

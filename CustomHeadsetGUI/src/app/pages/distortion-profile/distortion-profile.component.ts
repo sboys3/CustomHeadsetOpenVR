@@ -3,16 +3,17 @@ import { DistortionProfileEntry, DriverSettingService } from '../../services/dri
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatDialogModule } from '@angular/material/dialog';
 import { open, save } from '@tauri-apps/plugin-dialog';
 import { copyFile } from '@tauri-apps/plugin-fs';
 import { basename } from '@tauri-apps/api/path';
 import { DialogService } from '../../services/dialog.service';
 import { Settings, MeganeX8KConfig } from '../../services/JsonFileDefines';
 import { PathsService } from '../../services/paths.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip'
 @Component({
   selector: 'app-distortion-profile',
-  imports: [MatListModule, MatButtonModule, ScrollingModule],
+  imports: [MatListModule, MatButtonModule, ScrollingModule, MatIconModule, MatTooltipModule],
   templateUrl: './distortion-profile.component.html',
   styleUrl: './distortion-profile.component.scss'
 })

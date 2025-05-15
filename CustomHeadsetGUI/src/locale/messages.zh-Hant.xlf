@@ -90,8 +90,8 @@
         <source>Import Error</source>
         <target state="translated">匯入錯誤</target>
       </trans-unit>
-      <trans-unit id="437916745901884501" datatype="html">
-        <source>file to large</source>
+      <trans-unit id="4441102284303911974" datatype="html">
+        <source>file too large</source>
         <target state="translated">檔案過大</target>
       </trans-unit>
       <trans-unit id="392265817484232889" datatype="html">

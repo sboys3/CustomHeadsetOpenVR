@@ -1,7 +1,5 @@
 @use '@angular/material' as mat;
-@use './fonts.scss' as fonts;
-@include fonts.font();
-
+@use 'fonts/fonts.css';
 *,
 *::after,
 *::before {
@@ -14,14 +12,29 @@
 
 html {
   color-scheme: var(--color-scheme);
-  @include mat.theme((color: mat.$green-palette,
+  @include mat.theme((color: (primary:mat.$green-palette,
+        tertiary:mat.$orange-palette ),
       typography: Roboto,
       density: 0));
 }
 
+
 .warn {
-  @include mat.theme((color: mat.$red-palette,
-    ));
+  @include mat.theme((color:mat.$red-palette))
+}
+.tertiary {
+  @include mat.theme((color:mat.$orange-palette))
+}
+.primary-color {
+  color: var(--mat-sys-primary);
+}
+
+.tertiary-color {
+  color: var(--mat-sys-tertiary);
+}
+
+.warn-color {
+  color: var(--mat-sys-error);
 }
 
 html,
@@ -34,4 +47,7 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
 }

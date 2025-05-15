@@ -90,8 +90,8 @@
         <source>Import Error</source>
         <target state="translated">インポートエラー</target>
       </trans-unit>
-      <trans-unit id="437916745901884501" datatype="html">
-        <source>file to large</source>
+      <trans-unit id="4441102284303911974" datatype="html">
+        <source>file too large</source>
         <target state="translated">ファイルが大きすぎます</target>
       </trans-unit>
       <trans-unit id="392265817484232889" datatype="html">

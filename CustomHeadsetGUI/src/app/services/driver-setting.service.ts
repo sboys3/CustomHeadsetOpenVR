@@ -73,7 +73,7 @@ export class DriverSettingService extends JsonSettingServiceBase<Settings> {
       try {
         const l = await size(path);
         if (l > 5000) {
-          message[path] = { success: false, message: $localize`file to large` }
+          message[path] = { success: false, message: $localize`file too large` }
           continue;
         }
         const json = await readTextFile(path);

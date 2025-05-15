@@ -13,7 +13,7 @@
     "windows": [
       {
         "title": "Custom Headset",
-        "width": 800,
+        "width": 960,
         "height": 600,
         "resizable": false,
         "fullscreen": false,
