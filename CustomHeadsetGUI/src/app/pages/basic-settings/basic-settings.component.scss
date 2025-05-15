@@ -1,5 +1,11 @@
 @use '../../../simple-form.scss' as sf;
 
-:host{
+:host {
     @include sf.formStyle();
+
+    .title {
+        button {
+            margin-left: auto;
+        }
+    }
 }

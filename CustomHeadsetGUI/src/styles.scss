@@ -13,7 +13,7 @@
 html {
   color-scheme: var(--color-scheme);
   @include mat.theme((color: (primary:mat.$green-palette,
-        tertiary:mat.$orange-palette ),
+        tertiary:mat.$yellow-palette ),
       typography: Roboto,
       density: 0));
 }
@@ -23,7 +23,7 @@ html {
   @include mat.theme((color:mat.$red-palette))
 }
 .tertiary {
-  @include mat.theme((color:mat.$orange-palette))
+  @include mat.theme((color:mat.$yellow-palette))
 }
 .primary-color {
   color: var(--mat-sys-primary);

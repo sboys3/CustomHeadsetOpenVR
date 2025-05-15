@@ -1,10 +1,32 @@
 @if(settings){
 <div class="field">
     <div class="title">
-        <span i18n>Distortion Profile</span>
+        <span i18n>Resolution</span>
+        @if(resolutionModel?.x!=defaults?.resolutionX){
+        <button mat-icon-button (click)="resetResolution()">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
     </div>
     <div class="control">
-        <mat-select [(ngModel)]="settings.distortionProfile" (valueChange)="saveConfigSettings()">
+        <mat-select [(ngModel)]="resolutionModel" (closed)="setResolution()">
+            @for(p of resolutionOptions;track p.x){
+            <mat-option [value]="p">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
+            }
+        </mat-select>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Distortion Profile</span>
+        @if(settings.distortionProfile!=defaults?.distortionProfile){
+        <button mat-icon-button (click)="resetOption('distortionProfile')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.distortionProfile" (closed)="saveConfigSettings()">
             @for(p of profiles;track p.name){
             <mat-option [value]="p.name">{{p.name}}</mat-option>
             }
@@ -14,6 +36,11 @@
 <div class="field">
     <div class="title">
         <span i18n>IPD</span>
+        @if(settings.ipd!=defaults?.ipd){
+        <button mat-icon-button (click)="resetOption('ipd')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.ipd" step="0.5" (input)="saveConfigSettings()" type="number">
@@ -23,7 +50,14 @@
     </div>
 </div>
 <div class="field">
-    <div class="title"><span i18n>IPD Offset</span></div>
+    <div class="title">
+        <span i18n>IPD Offset</span>
+        @if(settings.ipdOffset!=defaults?.ipdOffset){
+        <button mat-icon-button (click)="resetOption('ipdOffset')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (input)="saveConfigSettings()" type="number">
         <mat-slider max="20" min="-20" step="0.5" showTickMarks>
@@ -32,7 +66,14 @@
     </div>
 </div>
 <div class="field">
-    <div class="title"><span i18n>Distortion Zoom</span></div>
+    <div class="title">
+        <span i18n>Distortion Zoom</span>
+        @if(settings.distortionZoom!=defaults?.distortionZoom){
+        <button mat-icon-button (click)="resetOption('distortionZoom')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (input)="saveConfigSettings()" type="number">
         <mat-slider max="1.1" min="1" step="0.002" showTickMarks>
@@ -40,9 +81,15 @@
         </mat-slider>
     </div>
 </div>
-@if(advanceMode()){
 <div class="field">
-    <div class="title"><span i18n>Black Level</span></div>
+    <div class="title">
+        <span i18n>Black Level</span>
+        @if(settings.blackLevel!=defaults?.blackLevel){
+        <button mat-icon-button (click)="resetOption('blackLevel')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (input)="saveConfigSettings()" type="number">
         <mat-slider max="1" min="0" step="0.001" showTickMarks>
@@ -50,8 +97,17 @@
         </mat-slider>
     </div>
 </div>
+
+@if(advanceMode()){
 <div class="field">
-    <div class="title"><span i18n>Subpixel Shift</span></div>
+    <div class="title">
+        <span i18n>Subpixel Shift</span>
+        @if(settings.subpixelShift!=defaults?.subpixelShift){
+        <button mat-icon-button (click)="resetOption('subpixelShift')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.subpixelShift" (input)="saveConfigSettings()" type="number" step="0.01">
         <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()">
@@ -61,51 +117,53 @@
         </mat-select>
     </div>
 </div>
-
 <div class="field">
-    <div class="title"><span i18n>Resolution X</span></div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.resolutionX" step="32" (input)="saveConfigSettings()" type="number">
-        <mat-slider max="3840" min="0" step="32">
-            <input matSliderThumb [(ngModel)]="settings.resolutionX" (input)="saveConfigSettings()">
-        </mat-slider>
+    <div class="title">
+        <span i18n>Max Fov Horizontal</span>
+        @if(settings.maxFovX!=defaults?.maxFovX){
+        <button mat-icon-button (click)="resetOption('maxFovX')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
     </div>
-</div>
-<div class="field">
-    <div class="title"><span i18n>Resolution Y</span></div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.resolutionY" step="32" (input)="saveConfigSettings()" type="number">
-        <mat-slider max="3552" min="0" step="32">
-            <input matSliderThumb [(ngModel)]="settings.resolutionY" (input)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title"><span i18n>Max Fov X</span></div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovX" step="1" (input)="saveConfigSettings()" type="number">
-        <mat-slider max="150" min="0" step="1">
+        <mat-slider [max]="(defaults?.maxFovX??0)*2" min="0" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovX" (input)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
 <div class="field">
-    <div class="title"><span i18n>Max Fov Y</span></div>
+    <div class="title">
+        <span i18n>Max Fov Vertical</span>
+        @if(settings.maxFovY!=defaults?.maxFovY){
+        <button mat-icon-button (click)="resetOption('maxFovY')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovY" step="1" (input)="saveConfigSettings()" type="number">
-        <mat-slider max="150" min="0" step="1">
+        <mat-slider [max]="(defaults?.maxFovY??0)*2" min="0" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovY" (input)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
 <div class="field">
-    <div class="title"><span i18n>Distortion Mesh Resolution</span></div>
+    <div class="title">
+        <span i18n>Distortion Mesh Resolution</span>
+        @if(settings.distortionMeshResolution!=defaults?.distortionMeshResolution){
+        <button mat-icon-button (click)="resetOption('distortionMeshResolution')">
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.distortionMeshResolution" step="32" (input)="saveConfigSettings()"
-            type="number">
-        <mat-slider max="1024" min="32" step="32">
-            <input matSliderThumb [(ngModel)]="settings.distortionMeshResolution" (input)="saveConfigSettings()">
-        </mat-slider>
+        <mat-select [(ngModel)]="settings.distortionMeshResolution" (closed)="saveConfigSettings()">
+            @for(opt of distortionMeshResolutionOptions;track opt){
+            <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>
+            }
+        </mat-select>
     </div>
 </div>
 }
