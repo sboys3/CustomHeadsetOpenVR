@@ -3,15 +3,19 @@ import { Subject, throttleTime } from "rxjs";
 import { join } from '@tauri-apps/api/path';
 
 export async function delay(ms = 1) {
-    return new Promise<void>(done => {
-        setTimeout(done, ms);
-    })
+  return new Promise<void>(done => {
+    setTimeout(done, ms);
+  })
 }
 
 export type DebouncedFileWriter = {
-    save: (content: string) => void;
-    isSavingFile: () => boolean;
+  save: (content: string) => void;
+  isSavingFile: () => boolean;
 };
+export function cleanJsonComments(jsonString: string) {
+  return jsonString.replace(/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g, (m, g) => g ? "" : m)
+}
+
 /**
  * Deeply compares two values, specifically performing content comparison for arrays.
  * This is used to check for exclusion at the leaf level.
@@ -61,9 +65,9 @@ export const deepCopy = <T>(obj: T, excludeObj: Partial<T> = {}): T => {
   }
 
   if (Array.isArray(obj)) {
-     if (Array.isArray(excludeObj) && areValuesEqual(obj, excludeObj)) {
-         return obj;
-     }
+    if (Array.isArray(excludeObj) && areValuesEqual(obj, excludeObj)) {
+      return obj;
+    }
     return obj.map(item => deepCopy(item, excludeObj)) as unknown as T;
   }
 
@@ -74,17 +78,17 @@ export const deepCopy = <T>(obj: T, excludeObj: Partial<T> = {}): T => {
     const excludeValue = (excludeObj as { [key: string]: any })[key];
 
     const relevantExcludeForValue = (typeof excludeValue === 'object' && excludeValue !== null && !Array.isArray(excludeValue))
-                                     ? excludeValue
-                                     : {};
+      ? excludeValue
+      : {};
 
     const copiedValue = deepCopy(objValue, relevantExcludeForValue);
 
     const isLeafValue = typeof objValue !== 'object' || objValue === null || Array.isArray(objValue);
 
     if (isLeafValue && Object.prototype.hasOwnProperty.call(excludeObj, key)) {
-        if (areValuesEqual(objValue, excludeValue)) {
-            return;
-        }
+      if (areValuesEqual(objValue, excludeValue)) {
+        return;
+      }
     }
 
     copy[key as keyof T] = copiedValue;
@@ -161,36 +165,36 @@ export const deepMerge = <TX extends IObject, TY extends IObject, TR = TX & TY>(
   return result as TR;
 };
 export function debouncedFileWriter(path: string | Promise<string>, tempFileDir: string | Promise<string>, directWrite?: (() => boolean)): DebouncedFileWriter {
-    const saveSbj = new Subject<string>();
-    let fileSaveTask: Promise<void> | undefined;
-    let savingFile = false
-    saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe((content) => {
-        let task: Promise<void>
-        if (fileSaveTask) {
-            task = fileSaveTask;
-        }
-        fileSaveTask = new Promise(async done => {
-            await task;
-            savingFile = true;
-            try {
-                if (directWrite?.()) {
-                    await writeTextFile(await path, content);
-                } else {
-                    const tempPath = await join(await tempFileDir, `${self.crypto.randomUUID()}`);
-                    await writeTextFile(tempPath, content);
-                    await copyFile(tempPath, await path);
-                    await remove(tempPath);
-                }
-            } finally {
-                savingFile = false;
-            }
-            done();
-        });
-    });
-    return {
-        save: (content: string) => {
-            saveSbj.next(content)
-        },
-        isSavingFile: () => savingFile
+  const saveSbj = new Subject<string>();
+  let fileSaveTask: Promise<void> | undefined;
+  let savingFile = false
+  saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe((content) => {
+    let task: Promise<void>
+    if (fileSaveTask) {
+      task = fileSaveTask;
     }
+    fileSaveTask = new Promise(async done => {
+      await task;
+      savingFile = true;
+      try {
+        if (directWrite?.()) {
+          await writeTextFile(await path, content);
+        } else {
+          const tempPath = await join(await tempFileDir, `${self.crypto.randomUUID()}`);
+          await writeTextFile(tempPath, content);
+          await copyFile(tempPath, await path);
+          await remove(tempPath);
+        }
+      } finally {
+        savingFile = false;
+      }
+      done();
+    });
+  });
+  return {
+    save: (content: string) => {
+      saveSbj.next(content)
+    },
+    isSavingFile: () => savingFile
+  }
 }

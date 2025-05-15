@@ -3,9 +3,16 @@
     flex-direction: column;
 }
 
-.action {
+.actions {
     flex-shrink: 0;
-    margin: 0.5rem;
+    margin: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    >div {
+        margin: 0 0.5rem;
+    }
 }
 
 .list {
@@ -31,6 +38,18 @@
     }
 }
 
+
+
 .viewport {
     height: 100%;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+
+    app-distortion-profile-viewer {
+        flex: 1 1 auto;
+    }
 }

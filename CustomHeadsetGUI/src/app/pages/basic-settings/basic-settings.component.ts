@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
 import { Settings, MeganeX8KConfig, DriverInfo } from '../../services/JsonFileDefines';
@@ -15,7 +16,15 @@ import { AppSettingService } from '../../services/app-setting.service';
 
 @Component({
     selector: 'app-basic-settings',
-    imports: [MatSliderModule, MatSelectModule, FormsModule, MatDividerModule, MatButtonModule, MatIconModule, MatInputModule, CommonModule],
+    imports: [MatSliderModule,
+        MatSelectModule,
+        FormsModule,
+        MatDividerModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatTooltipModule,
+        CommonModule],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
 })
@@ -48,7 +57,7 @@ export class BasicSettingsComponent {
         effect(() => {
             const info = (dss.driverInfo() ?? {}) as DriverInfo;
             const defaultProfiles = info?.builtinDistortionProfiles ?? {};
-            this.defaults = info.defaultSettings.meganeX8K;
+            this.defaults = info?.defaultSettings?.meganeX8K;
             this.profiles = [
                 ...Object.keys(defaultProfiles).map(name => ({ name, isDefault: true })),
                 ...this.dss.distortionProfileList().map(f => ({

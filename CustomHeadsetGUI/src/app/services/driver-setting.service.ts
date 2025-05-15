@@ -6,6 +6,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { signal } from '@angular/core';
 import { PathsService } from './paths.service';;
 import { JsonSettingServiceBase } from './JsonSettingServiceBase';
+import { cleanJsonComments } from '../helpers';
 export type DistortionProfileEntry = {
   name: string;
   isDefault: boolean;
@@ -78,7 +79,7 @@ export class DriverSettingService extends JsonSettingServiceBase<Settings> {
         }
         const json = await readTextFile(path);
         try {
-          const dpObj = JSON.parse(this.cleanJsonComments(json));
+          const dpObj = JSON.parse(cleanJsonComments(json));
           if (!('type' in dpObj) || !('distortions' in dpObj)) {
             message[path] = { success: false, message: $localize`import file not valid, missing "type" or "distortions"?` }
             continue;

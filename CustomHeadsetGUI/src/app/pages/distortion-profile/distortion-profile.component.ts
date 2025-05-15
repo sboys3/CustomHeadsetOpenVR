@@ -11,9 +11,11 @@ import { Settings, MeganeX8KConfig } from '../../services/JsonFileDefines';
 import { PathsService } from '../../services/paths.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip'
+import { deepCopy } from '../../helpers';
+import { DistortionProfileViewerComponent } from "../../utilities/distortion-profile-viewer/distortion-profile-viewer.component";
 @Component({
   selector: 'app-distortion-profile',
-  imports: [MatListModule, MatButtonModule, ScrollingModule, MatIconModule, MatTooltipModule],
+  imports: [MatListModule, MatButtonModule, ScrollingModule, MatIconModule, MatTooltipModule, DistortionProfileViewerComponent],
   templateUrl: './distortion-profile.component.html',
   styleUrl: './distortion-profile.component.scss'
 })
@@ -21,24 +23,47 @@ export class DistortionProfileComponent {
   profiles: DistortionProfileEntry[] = [];
   settings?: MeganeX8KConfig
   config?: Settings;
-  constructor(private fs: DriverSettingService, private ps: PathsService, private dialog: DialogService) {
+  displayedCurve: string[] = [];
+  activedProfile?: string;
+  constructor(private dss: DriverSettingService, private ps: PathsService, private dialog: DialogService) {
     effect(() => {
-      const config = fs.values();
+      const config = dss.values();
       this.config = config;
       this.settings = config?.meganeX8K;
+      this.updateDisplayCurve()
     });
     effect(() => {
       this.profiles = [
-        ...this.fs.distortionProfileList().map(f => ({
+        ...this.dss.distortionProfileList().map(f => ({
           name: f.name.split('.').slice(0, -1).join('.'),
           isDefault: false,
           file: f
         }))]
     });
   }
+  private updateDisplayCurve() {
+    const n: string[] = []
+    if (this.settings?.distortionProfile) {
+      n.push(this.settings.distortionProfile)
+    }
+    if (this.activedProfile && !n.includes(this.activedProfile)) {
+      n.push(this.activedProfile)
+    }
+    this.displayedCurve = n;
+  }
+  async showProfile(profile: DistortionProfileEntry) {
+    this.activedProfile = profile.name;
+    this.updateDisplayCurve()
+
+  }
+  async applyProfile(name: string) {
+    const saving = deepCopy(this.config)!;
+    saving.meganeX8K.distortionProfile = name;
+    await this.dss.save(saving);
+  }
   async deleteProfile(profile: DistortionProfileEntry) {
     if (await this.dialog.confirm($localize`Delete Profile`, $localize`Deleting [${profile.name}].\nThis action cannot be reverted. Are you sure?`)) {
-      await this.fs.delete(profile.file!.name);
+      await this.dss.delete(profile.file!.name);
     }
   }
   async importFile() {
@@ -48,7 +73,7 @@ export class DistortionProfileComponent {
       filters: [{ name: `json file`, extensions: ["json"] }]
     })
     if (files?.length) {
-      const result = await this.fs.importFile(files);
+      const result = await this.dss.importFile(files);
       const message = []
       for (const f of files) {
         if (result[f]) {

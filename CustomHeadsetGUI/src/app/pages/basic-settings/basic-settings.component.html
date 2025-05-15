@@ -3,7 +3,7 @@
     <div class="title">
         <span i18n>Resolution</span>
         @if(resolutionModel?.x!=defaults?.resolutionX){
-        <button mat-icon-button (click)="resetResolution()">
+        <button mat-icon-button (click)="resetResolution()" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -20,7 +20,7 @@
     <div class="title">
         <span i18n>Distortion Profile</span>
         @if(settings.distortionProfile!=defaults?.distortionProfile){
-        <button mat-icon-button (click)="resetOption('distortionProfile')">
+        <button mat-icon-button (click)="resetOption('distortionProfile')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -37,7 +37,7 @@
     <div class="title">
         <span i18n>IPD</span>
         @if(settings.ipd!=defaults?.ipd){
-        <button mat-icon-button (click)="resetOption('ipd')">
+        <button mat-icon-button (click)="resetOption('ipd')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -53,7 +53,7 @@
     <div class="title">
         <span i18n>IPD Offset</span>
         @if(settings.ipdOffset!=defaults?.ipdOffset){
-        <button mat-icon-button (click)="resetOption('ipdOffset')">
+        <button mat-icon-button (click)="resetOption('ipdOffset')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -69,7 +69,7 @@
     <div class="title">
         <span i18n>Distortion Zoom</span>
         @if(settings.distortionZoom!=defaults?.distortionZoom){
-        <button mat-icon-button (click)="resetOption('distortionZoom')">
+        <button mat-icon-button (click)="resetOption('distortionZoom')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -85,7 +85,7 @@
     <div class="title">
         <span i18n>Black Level</span>
         @if(settings.blackLevel!=defaults?.blackLevel){
-        <button mat-icon-button (click)="resetOption('blackLevel')">
+        <button mat-icon-button (click)="resetOption('blackLevel')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -103,7 +103,7 @@
     <div class="title">
         <span i18n>Subpixel Shift</span>
         @if(settings.subpixelShift!=defaults?.subpixelShift){
-        <button mat-icon-button (click)="resetOption('subpixelShift')">
+        <button mat-icon-button (click)="resetOption('subpixelShift')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -121,7 +121,7 @@
     <div class="title">
         <span i18n>Max Fov Horizontal</span>
         @if(settings.maxFovX!=defaults?.maxFovX){
-        <button mat-icon-button (click)="resetOption('maxFovX')">
+        <button mat-icon-button (click)="resetOption('maxFovX')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -137,7 +137,7 @@
     <div class="title">
         <span i18n>Max Fov Vertical</span>
         @if(settings.maxFovY!=defaults?.maxFovY){
-        <button mat-icon-button (click)="resetOption('maxFovY')">
+        <button mat-icon-button (click)="resetOption('maxFovY')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
@@ -153,7 +153,7 @@
     <div class="title">
         <span i18n>Distortion Mesh Resolution</span>
         @if(settings.distortionMeshResolution!=defaults?.distortionMeshResolution){
-        <button mat-icon-button (click)="resetOption('distortionMeshResolution')">
+        <button mat-icon-button (click)="resetOption('distortionMeshResolution')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }

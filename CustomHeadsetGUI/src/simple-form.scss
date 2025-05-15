@@ -24,6 +24,7 @@
             align-items: center;
             width: 35%;
             position: relative;
+            user-select: none;
 
             &::after {
                 content: '';
