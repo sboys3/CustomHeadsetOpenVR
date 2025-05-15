@@ -15,23 +15,19 @@ export class AppSettingService {
   }
   private _values = signal<AppSetting | undefined>(undefined);
   public values = this._values.asReadonly();
-  private folder: Promise<string>;
-  private filePath: Promise<string>;
+  private guiSettingPath: Promise<string>;
   private debouncedFileWriter: DebouncedFileWriter;
-  private initTask = this.init()
+  private initTask: Promise<void>;
   constructor(ps: PathService) {
-    this.folder = ps.getDriverAppDirPath();
-    this.filePath = (async () => await join(await ps.getDriverAppDirPath(), 'gui-settings.json'))();
-    this.debouncedFileWriter = debouncedFileWriter(this.filePath, this.folder);
+    this.guiSettingPath = (async () => await join(await ps.getDriverAppDirPath(), 'gui-settings.json'))();
+    this.debouncedFileWriter = debouncedFileWriter(this.guiSettingPath, ps.appDataDirPath);
+    this.initTask = this.init();
   }
   async init() {
-    if (!await exists(await this.folder)) {
-      await mkdir(await this.folder);
+    if (!await exists(await this.guiSettingPath)) {
+      await writeTextFile(await this.guiSettingPath, JSON.stringify(this.defaults, undefined, 4))
     }
-    if (!await exists(await this.filePath)) {
-      await writeTextFile(await this.filePath, JSON.stringify(this.defaults, undefined, 4))
-    }
-    this._values.set(Object.assign(Object.assign({}, this.defaults), JSON.parse(await readTextFile(await this.filePath))));
+    this._values.set(Object.assign(Object.assign({}, this.defaults), JSON.parse(await readTextFile(await this.guiSettingPath))));
   }
   async save(values: AppSetting) {
     await this.initTask;

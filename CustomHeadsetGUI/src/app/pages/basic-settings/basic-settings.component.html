@@ -33,7 +33,7 @@
 <div class="field">
     <div class="title" i18n>Subpixel Shift</div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.subpixelShift" (change)="saveConfigSettings()" type="number">
+        <input matInput [(ngModel)]="settings.subpixelShift" (change)="saveConfigSettings()" type="number" step="0.01">
         <mat-select [(ngModel)]="settings.subpixelShift" (closed)="saveConfigSettings()">
             @for(opt of subpixelShiftOptions;track opt){
             <mat-option [value]="opt">{{opt|number}}</mat-option>

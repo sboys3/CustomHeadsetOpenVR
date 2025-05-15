@@ -20,10 +20,14 @@ export class DriverSettingService {
   private saveSbj = new Subject<Config>();
   private readonly _setting = signal<Config | undefined>(undefined);
   private readonly _distortionProfileList = signal<DirEntry[]>([]);
+
+  private readonly settingPath: Promise<string>;
+  private readonly debouncedFileWriter: DebouncedFileWriter;
+
   public readonly settings = this._setting.asReadonly();
   public readonly distortionProfileList = this._distortionProfileList.asReadonly();
-  private readonly settingPath: Promise<string>;
-  private readonly debouncedFileWriter: DebouncedFileWriter
+
+  private readonly initTask: Promise<void>;
   constructor(private pathService: PathService, appSettingService: AppSettingService) {
     this.settingPath = this.pathService.getDriverAppDirPath('settings.json');
     this.debouncedFileWriter = debouncedFileWriter(this.settingPath, this.pathService.getDriverAppDirPath(),
@@ -31,7 +35,7 @@ export class DriverSettingService {
     this.saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe((setting) => {
       this.saveSettingInternal(setting)
     });
-    this.init();
+    this.initTask = this.init();
   }
   private async init() {
     await this.listDistortionProfiles();
@@ -44,8 +48,9 @@ export class DriverSettingService {
     distrotionProfileSbj.pipe(debounceTime(20)).subscribe(() => {
       this.listDistortionProfiles();
     })
-    watchImmediate(await this.settingPath, (ev) => {
-      if (!this.debouncedFileWriter.isSavingFile()) {
+    const settingPath = await this.settingPath;
+    watchImmediate(await this.pathService.appDataDirPath, (ev) => {
+      if (!this.debouncedFileWriter.isSavingFile() && ev.paths.some(x => x == settingPath)) {
         settingFileSbj.next();
       }
     })
@@ -76,6 +81,7 @@ export class DriverSettingService {
     this.debouncedFileWriter.save(JSON.stringify(settings, undefined, 4))
   }
   async delete(name: string) {
+    await this.initTask;
     const path = await this.pathService.getProfileFullPath(name);
     if (await exists(path)) {
       await remove(path);
@@ -83,9 +89,7 @@ export class DriverSettingService {
   }
 
   async importFile(paths: string[]) {
-    if (!await exists(await this.pathService.distortionDirPath)) {
-      await mkdir(await this.pathService.distortionDirPath);
-    }
+    await this.initTask;
     const message: { [path: string]: { success: boolean, message?: string } } = {}
     for (let path of paths) {
       try {
@@ -104,7 +108,7 @@ export class DriverSettingService {
         } catch (jex) {
           message[path] = { success: false, message: $localize`import file not valid ${jex}` }
         }
-        await copyFile(path, await join(await this.pathService.distortionDirPath, await basename(path)));
+        await copyFile(path, await join(this.pathService.distortionDirPath, await basename(path)));
         message[path] = { success: true }
       } catch (ex) {
         message[path] = { success: false, message: $localize`import file error ${ex}` }
@@ -115,6 +119,7 @@ export class DriverSettingService {
 
 
   async saveSetting(settings: Config) {
+    await this.initTask;
     this.saveSbj.next(settings);
   }
 
