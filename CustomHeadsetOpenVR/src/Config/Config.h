@@ -78,3 +78,6 @@ extern Config driverConfigOld;
 
 // lock for the config to prevent updates while reading
 extern std::mutex driverConfigLock;
+
+// version of the application
+extern std::string driverVersion;

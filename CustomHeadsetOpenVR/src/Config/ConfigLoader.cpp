@@ -165,6 +165,7 @@ void ConfigLoader::WriteInfo(){
 			{"MeganeX8K Default", emptyObject},
 			{"MeganeX8K Original", emptyObject},
 		}},
+		{"driverVersion", driverVersion}
 	};
 	infoFile << data.dump(1, '\t');
 	infoFile.close();
