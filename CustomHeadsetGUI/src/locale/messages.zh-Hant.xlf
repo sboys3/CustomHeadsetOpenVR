@@ -186,6 +186,22 @@
         <source>FOV Burn-In Prevention</source>
         <target state="translated">FOV 烙印預防</target>
       </trans-unit>
+      <trans-unit id="1726363342938046830" datatype="html">
+        <source>About</source>
+        <target state="translated">關於</target>
+      </trans-unit>
+      <trans-unit id="765305289258005204" datatype="html">
+        <source>app version</source>
+        <target state="translated">應用程式版本</target>
+      </trans-unit>
+      <trans-unit id="6915767768628367173" datatype="html">
+        <source>Github Page</source>
+        <target state="translated">Github 頁面</target>
+      </trans-unit>
+      <trans-unit id="1955403421668504940" datatype="html">
+        <source>Fields marked with * require restart SteamVR to apply changes.</source>
+        <target state="translated">標有 * 的欄位需要重新啟動 SteamVR 才能套用變更。</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -140,6 +140,18 @@
       <trans-unit id="1136931556684562864" datatype="html">
         <source>FOV Burn-In Prevention</source>
       </trans-unit>
+      <trans-unit id="1726363342938046830" datatype="html">
+        <source>About</source>
+      </trans-unit>
+      <trans-unit id="6915767768628367173" datatype="html">
+        <source>Github Page</source>
+      </trans-unit>
+      <trans-unit id="765305289258005204" datatype="html">
+        <source>app version</source>
+      </trans-unit>
+      <trans-unit id="1955403421668504940" datatype="html">
+        <source>Fields marked with * require restart SteamVR to apply changes.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
