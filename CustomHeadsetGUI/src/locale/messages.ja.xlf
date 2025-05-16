@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="8360107325291301836" datatype="html">
         <source>Advanced Settings</source>
-        <target state="translated">高度な設定</target>
+        <target state="translated">上級設定</target>
       </trans-unit>
       <trans-unit id="3303629114160653296" datatype="html">
         <source>Enable MeganeX 8K Driver</source>
