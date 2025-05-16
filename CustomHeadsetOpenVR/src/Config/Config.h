@@ -32,13 +32,16 @@ public:
 		double maxFovY = 96.0;
 		// distortion mesh resolution
 		int distortionMeshResolution = 128;
+		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
+		bool fovBurnInPrevention = true;
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;
 	
 	// reload the config every time a file is changed in the distortions directory
 	// this is for manual json editing, utilities should touch the main settings file when done modifying distortions instead
-	bool watchDistortionProfiles = false;
+	// this is now enabled by default
+	// bool watchDistortionProfiles = false;
 	
 	// if the config has been changes and should be reloaded
 	// this will be set the false at the end of RunFrame

@@ -194,6 +194,19 @@
         </mat-select>
     </div>
 </div>
+<div class="field">
+    <div class="title">
+        <span i18n>FOV Burn-In Prevention</span>
+        @if(settings.fovBurnInPrevention!=defaults?.fovBurnInPrevention){
+        <button mat-icon-button (click)="resetOption('fovBurnInPrevention')" matTooltip="Reset to default" i18n-matTooltip>
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.fovBurnInPrevention" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
 }
 }@else {
 <h2 i18n>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</h2>

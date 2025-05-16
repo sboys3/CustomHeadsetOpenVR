@@ -137,6 +137,9 @@
       <trans-unit id="3303629114160653296" datatype="html">
         <source>Enable MeganeX 8K Driver</source>
       </trans-unit>
+      <trans-unit id="1136931556684562864" datatype="html">
+        <source>FOV Burn-In Prevention</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

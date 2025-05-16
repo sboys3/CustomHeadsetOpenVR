@@ -72,6 +72,11 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	distortionProfileConstructor.distortionSettings.resolutionX = driverConfig.meganeX8K.resolutionX;
 	distortionProfileConstructor.distortionSettings.resolutionY = driverConfig.meganeX8K.resolutionY;
 	
+	// initialize random value for session
+	fovBurnInOffset = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 10000) / 10000.0 * 3.0;
+	DriverLog("fovBurnInOffset: %f", fovBurnInOffset);
+	
+	
 	distortionProfileConstructor.distortionSettings.noneDistortionFovHorizontal = 95;
 	distortionProfileConstructor.distortionSettings.noneDistortionFovVertical = 95;
 	
@@ -261,11 +266,16 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = driverConfig.meganeX8K.maxFovY;
+	if(driverConfig.meganeX8K.fovBurnInPrevention){
+		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
+		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;
+	}
 	
 	
 	bool shouldReInitializeDistortion = false;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovX != driverConfig.meganeX8K.maxFovX;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovY != driverConfig.meganeX8K.maxFovY;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.fovBurnInPrevention != driverConfig.meganeX8K.fovBurnInPrevention;
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);

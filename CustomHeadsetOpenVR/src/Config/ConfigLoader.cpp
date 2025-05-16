@@ -74,10 +74,13 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["distortionMeshResolution"].is_number()){
 				newConfig.meganeX8K.distortionMeshResolution = meganeX8KData["distortionMeshResolution"].get<int>();
 			}
+			if(meganeX8KData["fovBurnInPrevention"].is_boolean()){
+				newConfig.meganeX8K.fovBurnInPrevention = meganeX8KData["fovBurnInPrevention"].get<bool>();
+			}
 		}
-		if(data["watchDistortionProfiles"].is_boolean()){
-			newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
-		}
+		// if(data["watchDistortionProfiles"].is_boolean()){
+		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
+		// }
 		// write to global config
 		driverConfigLock.lock();
 		driverConfigOld = driverConfig;
@@ -135,8 +138,8 @@ void ConfigLoader::WriteInfo(){
 		DriverLog("Failed to open info.json for writing: %d", GetLastError());
 		return;
 	}
-	Config defaultSettings;
-	std::map<std::string,int> emptyObject;
+	Config defaultSettings = {};
+	std::map<std::string,int> emptyObject = {};
 	ordered_json data = {
 		{"about", "This file is not for configuration. It provides info from the driver for other utilities to use."},
 		{"defaultSettings", {
@@ -152,12 +155,13 @@ void ConfigLoader::WriteInfo(){
 				{"resolutionY", defaultSettings.meganeX8K.resolutionY},
 				{"maxFovX", defaultSettings.meganeX8K.maxFovX},
 				{"maxFovY", defaultSettings.meganeX8K.maxFovY},
-				{"distortionMeshResolution", defaultSettings.meganeX8K.distortionMeshResolution}
+				{"distortionMeshResolution", defaultSettings.meganeX8K.distortionMeshResolution},
+				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
 			}},
-			{"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
+			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
 		// eventually these will have the full distortion data in them
-		{"builtinDistortionProfiles", {
+		{"builtInDistortionProfiles", {
 			{"MeganeX8K Default", emptyObject},
 			{"MeganeX8K Original", emptyObject},
 		}},
@@ -293,10 +297,10 @@ void ConfigLoader::Start(){
 		
 		// create distortion profiles directory and watch if configured
 		std::filesystem::create_directories(GetConfigFolder() + "Distortion/");
-		if(driverConfig.watchDistortionProfiles){
-			std::thread distortionWatcher(&ConfigLoader::WatcherThreadDistortions, this);
-			distortionWatcher.detach();
-		}
+		// if(driverConfig.watchDistortionProfiles){
+		std::thread distortionWatcher(&ConfigLoader::WatcherThreadDistortions, this);
+		distortionWatcher.detach();
+		// }
 	}catch(const std::exception& e){
 		DriverLog("Failed to start config watcher: %s", e.what());
 	}

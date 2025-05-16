@@ -56,6 +56,8 @@ export type MeganeX8KConfig = {
   maxFovY: number;
 
   distortionMeshResolution: number;
+  
+  fovBurnInPrevention: boolean;
 };
 
 export type AppSetting = {
@@ -67,9 +69,9 @@ export type AppSetting = {
 export type DriverInfo = {
   about: string;
   defaultSettings: Settings;
-  builtinDistortionProfiles: BuiltinDistortionProfiles;
+  builtInDistortionProfiles: BuiltInDistortionProfiles;
 }
 
-export type BuiltinDistortionProfiles = {
+export type BuiltInDistortionProfiles = {
   [profileName: string]: {};
 }

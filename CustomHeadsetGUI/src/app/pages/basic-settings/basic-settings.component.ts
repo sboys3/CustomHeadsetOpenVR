@@ -58,7 +58,7 @@ export class BasicSettingsComponent {
 
         effect(() => {
             const info = (dss.driverInfo() ?? {}) as DriverInfo;
-            const defaultProfiles = info?.builtinDistortionProfiles ?? {};
+            const defaultProfiles = info?.builtInDistortionProfiles ?? {};
             this.defaults = info?.defaultSettings?.meganeX8K;
             this.profiles = [
                 ...Object.keys(defaultProfiles).map(name => ({ name, isDefault: true })),

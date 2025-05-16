@@ -15,6 +15,8 @@ public:
 	
 	DistortionProfileConstructor distortionProfileConstructor;
 	std::mutex distortionProfileLock;
+	// the offset used for burn in prevention
+	float fovBurnInOffset = 0;
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;

@@ -182,6 +182,10 @@
         <source>Enable MeganeX 8K Driver</source>
         <target state="translated">啟用 MeganeX 8K 驅動程式</target>
       </trans-unit>
+      <trans-unit id="1136931556684562864" datatype="html">
+        <source>FOV Burn-In Prevention</source>
+        <target state="translated">FOV 老化預防</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
