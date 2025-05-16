@@ -29,7 +29,7 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [x] Ignore other headsets
 	- [x] Code to generate the distortion mesh
 	- [ ] Darken the display when no motion is detected
-	- [ ] Support for non square outputs to light edges of the display
+	- [X] Support for non square outputs to light edges of the display
 	- [ ] A near perfect default distortion profile
 	- [X] Multiple distortion profiles
 	- [ ] Hidden area mesh
@@ -43,7 +43,7 @@ To pull the latest changes, run `git pull --recurse-submodules`
 - GUI
 	- [X] Create a Tauri project
 	- [X] Create a Angular project within it
-	- [ ] Configure MeganeX settings
+	- [X] Configure MeganeX settings
 	- [ ] Edit distortion profiles my dragging points on a curve
 	- [ ] Create overrides for any headset
 	- [ ] Install the driver
