@@ -1,6 +1,19 @@
 @if(settings){
 <div class="field">
     <div class="title">
+        <span i18n>Enable MeganeX 8K Driver</span>
+        @if(settings.enable!=defaults?.enable){
+        <button mat-icon-button (click)="resetOption('enable')" matTooltip="Reset to default" i18n-matTooltip>
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
         <span i18n>Resolution</span>
         @if(resolutionModel!=defaults?.resolutionX){
         <button mat-icon-button (click)="resetResolution()" matTooltip="Reset to default" i18n-matTooltip>
@@ -52,18 +65,33 @@
 </div>
 <div class="field">
     <div class="title">
-        <span i18n>IPD Offset</span>
-        @if(settings.ipdOffset!=defaults?.ipdOffset){
-        <button mat-icon-button (click)="resetOption('ipdOffset')" matTooltip="Reset to default" i18n-matTooltip>
+        <span i18n>Max Fov Horizontal</span>
+        @if(settings.maxFovX!=defaults?.maxFovX){
+        <button mat-icon-button (click)="resetOption('maxFovX')" matTooltip="Reset to default" i18n-matTooltip>
             <mat-icon class="tertiary-color">refresh</mat-icon>
         </button>
         }
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
-            type="number">
-        <mat-slider max="20" min="-20" step="0.5" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
+        <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider [max]="110" min="0" step="1">
+            <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Max Fov Vertical</span>
+        @if(settings.maxFovY!=defaults?.maxFovY){
+        <button mat-icon-button (click)="resetOption('maxFovY')" matTooltip="Reset to default" i18n-matTooltip>
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider [max]="96" min="0" step="1">
+            <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
@@ -79,11 +107,20 @@
     <div class="control">
         <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (ngModelChange)="saveConfigSettings()"
             type="number">
-        <mat-slider max="1.1" min="1" step="0.002" showTickMarks>
+        <mat-slider max="1.1" min="0.9" step="0.002" showTickMarks>
             <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
 </div>
+
+@if(advanceMode()){
+
+<div class="field">
+    <div class="section-title">
+        <span i18n>Advanced Settings</span>
+    </div>
+</div>
+
 <div class="field">
     <div class="title">
         <span i18n>Black Level</span>
@@ -101,8 +138,23 @@
         </mat-slider>
     </div>
 </div>
-
-@if(advanceMode()){
+<div class="field">
+    <div class="title">
+        <span i18n>IPD Offset</span>
+        @if(settings.ipdOffset!=defaults?.ipdOffset){
+        <button mat-icon-button (click)="resetOption('ipdOffset')" matTooltip="Reset to default" i18n-matTooltip>
+            <mat-icon class="tertiary-color">refresh</mat-icon>
+        </button>
+        }
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
+            type="number">
+        <mat-slider max="20" min="-20" step="0.5" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
 <div class="field">
     <div class="title">
         <span i18n>Subpixel Shift</span>
@@ -124,38 +176,6 @@
 </div>
 <div class="field">
     <div class="title">
-        <span i18n>Max Fov Horizontal</span>
-        @if(settings.maxFovX!=defaults?.maxFovX){
-        <button mat-icon-button (click)="resetOption('maxFovX')" matTooltip="Reset to default" i18n-matTooltip>
-            <mat-icon class="tertiary-color">refresh</mat-icon>
-        </button>
-        }
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="(defaults?.maxFovX??0)*2" min="0" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Max Fov Vertical</span>
-        @if(settings.maxFovY!=defaults?.maxFovY){
-        <button mat-icon-button (click)="resetOption('maxFovY')" matTooltip="Reset to default" i18n-matTooltip>
-            <mat-icon class="tertiary-color">refresh</mat-icon>
-        </button>
-        }
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="(defaults?.maxFovY??0)*2" min="0" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
         <span i18n>Distortion Mesh Resolution</span>
         @if(settings.distortionMeshResolution!=defaults?.distortionMeshResolution){
         <button mat-icon-button (click)="resetOption('distortionMeshResolution')" matTooltip="Reset to default"
@@ -165,6 +185,8 @@
         }
     </div>
     <div class="control">
+        <input matInput [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()" type="number"
+            step="16">
         <mat-select [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()">
             @for(opt of distortionMeshResolutionOptions;track opt){
             <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>

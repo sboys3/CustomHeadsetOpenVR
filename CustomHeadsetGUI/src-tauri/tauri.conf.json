@@ -15,9 +15,11 @@
         "title": "Custom Headset",
         "width": 960,
         "height": 600,
-        "resizable": false,
+        "minWidth": 960,
+        "minHeight": 600,
+        "resizable": true,
         "fullscreen": false,
-        "maximizable": false,
+        "maximizable": true,
         "url": "en-US/index.html"
       }
     ],

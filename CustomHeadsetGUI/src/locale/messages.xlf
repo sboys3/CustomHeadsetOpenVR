@@ -83,8 +83,8 @@
       <trans-unit id="8039363581560527021" datatype="html">
         <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
       </trans-unit>
-      <trans-unit id="1093376176752187612" datatype="html">
-        <source>Advance Mode</source>
+      <trans-unit id="3119794609322363234" datatype="html">
+        <source>Advanced Mode</source>
       </trans-unit>
       <trans-unit id="1537728937939680401" datatype="html">
         <source>Distortion Mesh Resolution</source>
@@ -130,6 +130,12 @@
       </trans-unit>
       <trans-unit id="8461842260159597706" datatype="html">
         <source>Show</source>
+      </trans-unit>
+      <trans-unit id="8360107325291301836" datatype="html">
+        <source>Advanced Settings</source>
+      </trans-unit>
+      <trans-unit id="3303629114160653296" datatype="html">
+        <source>Enable MeganeX 8K Driver</source>
       </trans-unit>
     </body>
   </file>

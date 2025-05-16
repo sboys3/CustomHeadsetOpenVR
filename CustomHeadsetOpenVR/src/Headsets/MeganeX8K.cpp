@@ -274,7 +274,7 @@ void MeganeX8KShim::UpdateSettings(){
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;
 	
-	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, driverConfig.meganeX8K.distortionMeshResolution);
+	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, std::min(1024, driverConfig.meganeX8K.distortionMeshResolution));
 	
 	if(shouldReInitializeDistortion && !loadedNewDistortionProfile){
 		distortionProfileConstructor.ReInitializeProfile();

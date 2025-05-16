@@ -1,179 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
- <file source-language="en-US" target-language="zh-Hant" datatype="plaintext" original="ng2.template">
-  <body>
-   <trans-unit id="8643289769990675407" datatype="html">
-    <source>Basic</source>
-    <target state="translated">基本</target>
-   </trans-unit>
-   <trans-unit id="7944521161821675937" datatype="html">
-    <source>Distortion Profile</source>
-    <target state="translated">扭曲校正設定檔</target>
-   </trans-unit>
-   <trans-unit id="7994506939670314559" datatype="html">
-    <source>App Settings</source>
-    <target state="translated">應用程式設定</target>
-   </trans-unit>
-   <trans-unit id="2159130950882492111" datatype="html">
-    <source>Cancel</source>
-    <target state="translated">取消</target>
-   </trans-unit>
-   <trans-unit id="2807800733729323332" datatype="html">
-    <source>Yes</source>
-    <target state="translated">是</target>
-   </trans-unit>
-   <trans-unit id="8720977247725652816" datatype="html">
-    <source>Ok</source>
-    <target state="translated">確定</target>
-   </trans-unit>
-   <trans-unit id="3656080382305974312" datatype="html">
-    <source>Color Scheme</source>
-    <target state="translated">色彩主題</target>
-   </trans-unit>
-   <trans-unit id="29832309535656200" datatype="html">
-    <source>System</source>
-    <target state="translated">系統</target>
-   </trans-unit>
-   <trans-unit id="3892161059518616136" datatype="html">
-    <source>Dark</source>
-    <target state="translated">深色</target>
-   </trans-unit>
-   <trans-unit id="413116577994876478" datatype="html">
-    <source>Light</source>
-    <target state="translated">淺色</target>
-   </trans-unit>
-   <trans-unit id="5537197768139679727" datatype="html">
-    <source>Update Mode</source>
-    <target state="translated">更新模式</target>
-   </trans-unit>
-   <trans-unit id="6254459922754143568" datatype="html">
-    <source>Replace</source>
-    <target state="translated">取代</target>
-   </trans-unit>
-   <trans-unit id="5590001862286989245" datatype="html">
-    <source>Rewrite</source>
-    <target state="translated">覆寫</target>
-   </trans-unit>
-   <trans-unit id="7742544409064011729" datatype="html">
-    <source>IPD</source>
-    <target state="translated">瞳距</target>
-   </trans-unit>
-   <trans-unit id="1624999947532228823" datatype="html">
-    <source>Distortion Zoom</source>
-    <target state="translated">扭曲設定檔縮放</target>
-   </trans-unit>
-   <trans-unit id="7892467764301667860" datatype="html">
-    <source>Subpixel Shift</source>
-    <target state="translated">次像素偏移</target>
-   </trans-unit>
-   <trans-unit id="1071721880474488785" datatype="html">
-    <source>Import</source>
-    <target state="translated">匯入</target>
-   </trans-unit>
-   <trans-unit id="7462301153729425254" datatype="html">
-    <source>Export</source>
-    <target state="translated">匯出</target>
-   </trans-unit>
-   <trans-unit id="7022070615528435141" datatype="html">
-    <source>Delete</source>
-    <target state="translated">刪除</target>
-   </trans-unit>
-   <trans-unit id="5510904560009009880" datatype="html">
-    <source>Delete Profile</source>
-    <target state="translated">刪除設定檔</target>
-   </trans-unit>
-   <trans-unit id="13546353273306589" datatype="html">
-    <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
-    <target state="translated">正在刪除 [<x id="PH" equiv-text="profile.name"/>]。此動作無法復原。確定要繼續嗎？</target>
-   </trans-unit>
-   <trans-unit id="7949487308140215792" datatype="html">
-    <source>Import Error</source>
-    <target state="translated">匯入錯誤</target>
-   </trans-unit>
-   <trans-unit id="4441102284303911974" datatype="html">
-    <source>file too large</source>
-    <target state="translated">檔案過大</target>
-   </trans-unit>
-   <trans-unit id="392265817484232889" datatype="html">
-    <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
-    <target state="translated">匯入檔案無效，缺少 &quot;type&quot; 或 &quot;distortions&quot;？</target>
-   </trans-unit>
-   <trans-unit id="1172447031847067737" datatype="html">
-    <source>import file not valid <x id="PH" equiv-text="jex"/></source>
-    <target state="translated">匯入檔案無效 <x id="PH" equiv-text="jex"/></target>
-   </trans-unit>
-   <trans-unit id="3389786765701617878" datatype="html">
-    <source>import file error <x id="PH" equiv-text="ex"/></source>
-    <target state="translated">匯入檔案錯誤 <x id="PH" equiv-text="ex"/></target>
-   </trans-unit>
-   <trans-unit id="8039363581560527021" datatype="html">
-    <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
-    <target state="translated">找不到設定檔，請安裝 CustomHeadsetOpenVR 驅動程式並啟動 SteamVR</target>
-   </trans-unit>
-   <trans-unit id="1093376176752187612" datatype="html">
-    <source>Advance Mode</source>
-    <target state="translated">進階模式</target>
-   </trans-unit>
-   <trans-unit id="1963136290621768454" datatype="html">
-    <source>Resolution</source>
-    <target state="translated">解析度</target>
-   </trans-unit>
-   <trans-unit id="648306878592239743" datatype="html">
-    <source>Reset to default</source>
-    <target state="translated">重設為預設值</target>
-   </trans-unit>
-   <trans-unit id="4831283424104605009" datatype="html">
-    <source>IPD Offset</source>
-    <target state="translated">瞳距偏移</target>
-   </trans-unit>
-   <trans-unit id="2133427521398732619" datatype="html">
-    <source>Black Level</source>
-    <target state="translated">黑階</target>
-   </trans-unit>
-   <trans-unit id="1960460633115255569" datatype="html">
-    <source>Max Fov Horizontal</source>
-    <target state="translated">最大水平視野</target>
-   </trans-unit>
-   <trans-unit id="7702362431118838491" datatype="html">
-    <source>Max Fov Vertical</source>
-    <target state="translated">最大垂直視野</target>
-   </trans-unit>
-   <trans-unit id="1537728937939680401" datatype="html">
-    <source>Distortion Mesh Resolution</source>
-    <target state="translated">畸變網格解析度</target>
-   </trans-unit>
-   <trans-unit id="6607372754568222882" datatype="html">
-    <source>Low (<x id="PH" equiv-text="64"/>)</source>
-    <target state="translated">低 (<x id="PH" equiv-text="64"/>)</target>
-   </trans-unit>
-   <trans-unit id="8197514619650471762" datatype="html">
-    <source>Normal (<x id="PH" equiv-text="128"/>)</source>
-    <target state="translated">一般 (<x id="PH" equiv-text="128"/>)</target>
-   </trans-unit>
-   <trans-unit id="2780234993728008588" datatype="html">
-    <source>High (<x id="PH" equiv-text="256"/>)</source>
-    <target state="translated">高 (<x id="PH" equiv-text="256"/>)</target>
-   </trans-unit>
-   <trans-unit id="6309735826442522713" datatype="html">
-    <source>Current Profile : </source>
-    <target state="translated">目前設定檔：</target>
-   </trans-unit>
-   <trans-unit id="8461842260159597706" datatype="html">
-    <source>Show</source>
-    <target state="translated">顯示</target>
-   </trans-unit>
-   <trans-unit id="4391289919356861627" datatype="html">
-    <source>Apply</source>
-    <target state="translated">套用</target>
-   </trans-unit>
-   <trans-unit id="7358890221143927213" datatype="html">
-    <source>Radius from center of the output (%)</source>
-    <target state="translated">距離輸出中心半徑 (%)</target>
-   </trans-unit>
-   <trans-unit id="5731056400307534906" datatype="html">
-    <source>Radius from center of the input (degrees)</source>
-    <target state="translated">距離輸入中心半徑 (度)</target>
-   </trans-unit>
-  </body>
- </file>
+  <file source-language="en-US" target-language="zh-Hant" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="8643289769990675407" datatype="html">
+        <source>Basic</source>
+        <target state="translated">基本</target>
+      </trans-unit>
+      <trans-unit id="7944521161821675937" datatype="html">
+        <source>Distortion Profile</source>
+        <target state="translated">扭曲校正設定檔</target>
+      </trans-unit>
+      <trans-unit id="7994506939670314559" datatype="html">
+        <source>App Settings</source>
+        <target state="translated">應用程式設定</target>
+      </trans-unit>
+      <trans-unit id="2159130950882492111" datatype="html">
+        <source>Cancel</source>
+        <target state="translated">取消</target>
+      </trans-unit>
+      <trans-unit id="2807800733729323332" datatype="html">
+        <source>Yes</source>
+        <target state="translated">是</target>
+      </trans-unit>
+      <trans-unit id="8720977247725652816" datatype="html">
+        <source>Ok</source>
+        <target state="translated">確定</target>
+      </trans-unit>
+      <trans-unit id="3656080382305974312" datatype="html">
+        <source>Color Scheme</source>
+        <target state="translated">色彩主題</target>
+      </trans-unit>
+      <trans-unit id="29832309535656200" datatype="html">
+        <source>System</source>
+        <target state="translated">系統</target>
+      </trans-unit>
+      <trans-unit id="3892161059518616136" datatype="html">
+        <source>Dark</source>
+        <target state="translated">深色</target>
+      </trans-unit>
+      <trans-unit id="413116577994876478" datatype="html">
+        <source>Light</source>
+        <target state="translated">淺色</target>
+      </trans-unit>
+      <trans-unit id="5537197768139679727" datatype="html">
+        <source>Update Mode</source>
+        <target state="translated">更新模式</target>
+      </trans-unit>
+      <trans-unit id="6254459922754143568" datatype="html">
+        <source>Replace</source>
+        <target state="translated">取代</target>
+      </trans-unit>
+      <trans-unit id="5590001862286989245" datatype="html">
+        <source>Rewrite</source>
+        <target state="translated">覆寫</target>
+      </trans-unit>
+      <trans-unit id="7742544409064011729" datatype="html">
+        <source>IPD</source>
+        <target state="translated">瞳距</target>
+      </trans-unit>
+      <trans-unit id="1624999947532228823" datatype="html">
+        <source>Distortion Zoom</source>
+        <target state="translated">扭曲設定檔縮放</target>
+      </trans-unit>
+      <trans-unit id="7892467764301667860" datatype="html">
+        <source>Subpixel Shift</source>
+        <target state="translated">次像素偏移</target>
+      </trans-unit>
+      <trans-unit id="1071721880474488785" datatype="html">
+        <source>Import</source>
+        <target state="translated">匯入</target>
+      </trans-unit>
+      <trans-unit id="7462301153729425254" datatype="html">
+        <source>Export</source>
+        <target state="translated">匯出</target>
+      </trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+        <target state="translated">刪除</target>
+      </trans-unit>
+      <trans-unit id="5510904560009009880" datatype="html">
+        <source>Delete Profile</source>
+        <target state="translated">刪除設定檔</target>
+      </trans-unit>
+      <trans-unit id="13546353273306589" datatype="html">
+        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+        <target state="translated">正在刪除 [<x id="PH" equiv-text="profile.name"/>]。此動作無法復原。確定要繼續嗎？</target>
+      </trans-unit>
+      <trans-unit id="7949487308140215792" datatype="html">
+        <source>Import Error</source>
+        <target state="translated">匯入錯誤</target>
+      </trans-unit>
+      <trans-unit id="4441102284303911974" datatype="html">
+        <source>file too large</source>
+        <target state="translated">檔案過大</target>
+      </trans-unit>
+      <trans-unit id="392265817484232889" datatype="html">
+        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
+        <target state="translated">匯入檔案無效，缺少 &quot;type&quot; 或 &quot;distortions&quot;？</target>
+      </trans-unit>
+      <trans-unit id="1172447031847067737" datatype="html">
+        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+        <target state="translated">匯入檔案無效 <x id="PH" equiv-text="jex"/></target>
+      </trans-unit>
+      <trans-unit id="3389786765701617878" datatype="html">
+        <source>import file error <x id="PH" equiv-text="ex"/></source>
+        <target state="translated">匯入檔案錯誤 <x id="PH" equiv-text="ex"/></target>
+      </trans-unit>
+      <trans-unit id="8039363581560527021" datatype="html">
+        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
+        <target state="translated">找不到設定檔，請安裝 CustomHeadsetOpenVR 驅動程式並啟動 SteamVR</target>
+      </trans-unit>
+      <trans-unit id="3119794609322363234" datatype="html">
+        <source>Advanced Mode</source>
+        <target state="translated">進階模式</target>
+      </trans-unit>
+      <trans-unit id="1963136290621768454" datatype="html">
+        <source>Resolution</source>
+        <target state="translated">解析度</target>
+      </trans-unit>
+      <trans-unit id="648306878592239743" datatype="html">
+        <source>Reset to default</source>
+        <target state="translated">重設為預設值</target>
+      </trans-unit>
+      <trans-unit id="4831283424104605009" datatype="html">
+        <source>IPD Offset</source>
+        <target state="translated">瞳距偏移</target>
+      </trans-unit>
+      <trans-unit id="2133427521398732619" datatype="html">
+        <source>Black Level</source>
+        <target state="translated">黑階</target>
+      </trans-unit>
+      <trans-unit id="1960460633115255569" datatype="html">
+        <source>Max Fov Horizontal</source>
+        <target state="translated">最大水平視野</target>
+      </trans-unit>
+      <trans-unit id="7702362431118838491" datatype="html">
+        <source>Max Fov Vertical</source>
+        <target state="translated">最大垂直視野</target>
+      </trans-unit>
+      <trans-unit id="1537728937939680401" datatype="html">
+        <source>Distortion Mesh Resolution</source>
+        <target state="translated">畸變網格解析度</target>
+      </trans-unit>
+      <trans-unit id="6607372754568222882" datatype="html">
+        <source>Low (<x id="PH" equiv-text="64"/>)</source>
+        <target state="translated">低 (<x id="PH" equiv-text="64"/>)</target>
+      </trans-unit>
+      <trans-unit id="8197514619650471762" datatype="html">
+        <source>Normal (<x id="PH" equiv-text="128"/>)</source>
+        <target state="translated">一般 (<x id="PH" equiv-text="128"/>)</target>
+      </trans-unit>
+      <trans-unit id="2780234993728008588" datatype="html">
+        <source>High (<x id="PH" equiv-text="256"/>)</source>
+        <target state="translated">高 (<x id="PH" equiv-text="256"/>)</target>
+      </trans-unit>
+      <trans-unit id="6309735826442522713" datatype="html">
+        <source>Current Profile : </source>
+        <target state="translated">目前設定檔：</target>
+      </trans-unit>
+      <trans-unit id="8461842260159597706" datatype="html">
+        <source>Show</source>
+        <target state="translated">顯示</target>
+      </trans-unit>
+      <trans-unit id="4391289919356861627" datatype="html">
+        <source>Apply</source>
+        <target state="translated">套用</target>
+      </trans-unit>
+      <trans-unit id="7358890221143927213" datatype="html">
+        <source>Radius from center of the output (%)</source>
+        <target state="translated">距離輸出中心半徑 (%)</target>
+      </trans-unit>
+      <trans-unit id="5731056400307534906" datatype="html">
+        <source>Radius from center of the input (degrees)</source>
+        <target state="translated">距離輸入中心半徑 (度)</target>
+      </trans-unit>
+      <trans-unit id="8360107325291301836" datatype="html">
+        <source>Advanced Settings</source>
+        <target state="translated">進階設定</target>
+      </trans-unit>
+      <trans-unit id="3303629114160653296" datatype="html">
+        <source>Enable MeganeX 8K Driver</source>
+        <target state="translated">啟用 MeganeX 8K 驅動程式</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

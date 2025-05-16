@@ -5,6 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
@@ -23,6 +24,7 @@ import { AppSettingService } from '../../services/app-setting.service';
         MatButtonModule,
         MatIconModule,
         MatInputModule,
+        MatSlideToggleModule,
         MatTooltipModule,
         CommonModule],
     templateUrl: './basic-settings.component.html',

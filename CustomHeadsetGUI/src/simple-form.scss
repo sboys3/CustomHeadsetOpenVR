@@ -37,6 +37,17 @@
 
             padding-right: 1rem;
         }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            user-select: none;
+            
+            padding-right: 1rem;
+        }
 
         .value {
             width: 10%;

@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, input, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, input, viewChild, HostListener, signal } from '@angular/core';
 import { PathsService } from '../../services/paths.service';
 import { exists, readTextFile } from '@tauri-apps/plugin-fs';
 import { cleanJsonComments } from '../../helpers';
@@ -32,6 +32,7 @@ export class DistortionProfileViewerComponent {
     [48.3073, 100.0],
   ];
   profiles = input<string[]>()
+  windowSize = signal<{ width: number, height: number }>({ width: window.innerWidth, height: window.innerHeight });
   canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   constructor(private pathsService: PathsService, host: ElementRef<HTMLElement>) {
     let width = 0, height = 0;
@@ -39,11 +40,11 @@ export class DistortionProfileViewerComponent {
     effect(async () => {
       this.curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
-      if (width == 0) {
-        const b = host.nativeElement.getBoundingClientRect()
-        width = b.width - 1;
-        height = b.height - 1;
-      }
+      // resize element when window resizes
+      let windowSize = this.windowSize();
+      const b = host.nativeElement.getBoundingClientRect()
+      width = b.width - 1;
+      height = Math.min(b.height - 20, windowSize.height * 0.8);
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -68,6 +69,10 @@ export class DistortionProfileViewerComponent {
       }
     });
 
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize(event : Event) {
+    this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
   }
   ngAfterViewInit(): void {
 
