@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { readDir, readTextFile, exists, DirEntry, size, copyFile, remove, watchImmediate } from '@tauri-apps/plugin-fs';
 import { basename, join, } from '@tauri-apps/api/path';
-import { DriverInfo, Settings } from './JsonFileDefines';
+import { Settings } from './JsonFileDefines';
 import { debounceTime, Subject } from 'rxjs';
 import { signal } from '@angular/core';
 import { PathsService } from './paths.service';;
 import { JsonSettingServiceBase } from './JsonSettingServiceBase';
 import { cleanJsonComments } from '../helpers';
+import { DriverInfoService } from './driver-info.service';
 export type DistortionProfileEntry = {
   name: string;
   isDefault: boolean;
@@ -18,36 +19,15 @@ export type DistortionProfileEntry = {
 export class DriverSettingService extends JsonSettingServiceBase<Settings> {
   private readonly _distortionProfileList = signal<DirEntry[]>([]);
   public readonly distortionProfileList = this._distortionProfileList.asReadonly();
-  private readonly _driverInfo = signal<DriverInfo | undefined>(undefined);
-  public readonly driverInfo = this._driverInfo.asReadonly();
-  constructor(private pathService: PathsService) {
-    super(pathService.settingPath, pathService.appDataDirPath, async () => {
-      if (await exists(pathService.infoPath)) {
-        const info = await readTextFile(pathService.infoPath);
-        const value = (JSON.parse(info) ?? {}) as DriverInfo;
-        this._driverInfo.set(value);
-        return value.defaultSettings;
-      }
-      console.warn('info.json not found')
-      return {} as Settings
-    }, false);
-
+  constructor(private pathService: PathsService, driverInfoService: DriverInfoService) {
+    super(pathService.settingPath, pathService.appDataDirPath, computed(() => driverInfoService.values()?.defaultSettings ?? ({} as Settings)), false, true);
   }
   protected override async init() {
     await super.init();
     await this.listDistortionProfiles();
-    const settingFileSbj = new Subject<void>();
-    settingFileSbj.pipe(debounceTime(20)).subscribe(() => {
-      this.loadSetting();
-    })
     const distrotionProfileSbj = new Subject<void>();
     distrotionProfileSbj.pipe(debounceTime(20)).subscribe(() => {
       this.listDistortionProfiles();
-    })
-    watchImmediate(this.pathService.appDataDirPath, (ev) => {
-      if (!this.debouncedFileWriter.isSavingFile() && ev.paths.some(x => x == this.pathService.settingPath)) {
-        settingFileSbj.next();
-      }
     })
     watchImmediate(this.pathService.distortionDirPath, (ev) => {
       if (ev.paths.some(x => x.match(/\.json$/))) {

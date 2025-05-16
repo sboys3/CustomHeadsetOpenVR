@@ -22,6 +22,10 @@ export class AppComponent {
     {
       name: $localize`App Settings`,
       route: '/app-settings'
+    },
+    {
+      name: $localize`About`,
+      route: '/about'
     }
   ];
   constructor(appSettingService: AppSettingService, @Inject(DOCUMENT) document: Document) {

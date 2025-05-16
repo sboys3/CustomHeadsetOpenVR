@@ -13,9 +13,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { deepCopy } from '../../helpers';
 import { DistortionProfileViewerComponent } from "../../utilities/distortion-profile-viewer/distortion-profile-viewer.component";
+import { DriverInfoService } from '../../services/driver-info.service';
+import { DriverTroubleshooterComponent } from '../../utilities/driver-troubleshooter/driver-troubleshooter.component';
 @Component({
   selector: 'app-distortion-profile',
-  imports: [MatListModule, MatButtonModule, ScrollingModule, MatIconModule, MatTooltipModule, DistortionProfileViewerComponent],
+  imports: [
+    MatListModule,
+    MatButtonModule,
+    ScrollingModule,
+    MatIconModule,
+    MatTooltipModule,
+    DistortionProfileViewerComponent,
+    DriverTroubleshooterComponent],
   templateUrl: './distortion-profile.component.html',
   styleUrl: './distortion-profile.component.scss'
 })
@@ -25,7 +34,7 @@ export class DistortionProfileComponent {
   config?: Settings;
   displayedCurve: string[] = [];
   activedProfile?: string;
-  constructor(private dss: DriverSettingService, private ps: PathsService, private dialog: DialogService) {
+  constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ps: PathsService, private dialog: DialogService) {
     effect(() => {
       const config = dss.values();
       this.config = config;

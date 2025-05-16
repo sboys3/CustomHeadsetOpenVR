@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
 import { Settings, MeganeX8KConfig, DriverInfo } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 import { AppSettingService } from '../../services/app-setting.service';
+import { DriverInfoService } from '../../services/driver-info.service';
+import { ResetButtonComponent } from '../../utilities/reset-button/reset-button.component';
+import { DriverTroubleshooterComponent } from '../../utilities/driver-troubleshooter/driver-troubleshooter.component';
 
 
 
@@ -26,6 +29,8 @@ import { AppSettingService } from '../../services/app-setting.service';
         MatInputModule,
         MatSlideToggleModule,
         MatTooltipModule,
+        ResetButtonComponent,
+        DriverTroubleshooterComponent,
         CommonModule],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
@@ -48,7 +53,7 @@ export class BasicSettingsComponent {
     }
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
 
-    constructor(private dss: DriverSettingService, private ass: AppSettingService) {
+    constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService) {
         effect(() => {
             const config = dss.values();
             this.config = config;
@@ -57,7 +62,7 @@ export class BasicSettingsComponent {
         });
 
         effect(() => {
-            const info = (dss.driverInfo() ?? {}) as DriverInfo;
+            const info = (dis.values() ?? {}) as DriverInfo;
             const defaultProfiles = info?.builtInDistortionProfiles ?? {};
             this.defaults = info?.defaultSettings?.meganeX8K;
             this.profiles = [

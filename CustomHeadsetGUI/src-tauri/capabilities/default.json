@@ -16,12 +16,14 @@
     "fs:allow-watch",
     "fs:allow-size",
     "fs:read-dirs",
+    "shell:allow-open",
     {
       "identifier": "fs:scope",
       "allow": [
         "**/*"
       ]
     },
-    "dialog:default"
+    "dialog:default",
+    "shell:default"
   ]
 }

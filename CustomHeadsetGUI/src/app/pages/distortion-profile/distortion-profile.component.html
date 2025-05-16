@@ -1,3 +1,4 @@
+@if(dis.values() && dss.values()){
 <div class="actions">
     <button mat-stroked-button i18n (click)="importFile()">Import</button>
     <div><span i18n>Current Profile : </span>{{settings?.distortionProfile}}</div>
@@ -27,3 +28,6 @@
         </cdk-virtual-scroll-viewport>
     </div>
 </div>
+}@else{
+    <app-driver-troubleshooter/>
+}

@@ -1,0 +1,12 @@
+@if(wait()){
+<h2 i18n>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</h2>
+<div class="debug">
+    <pre>
+app version:{{appVersion()}}
+
+{{dis.filePath}} : {{dis.values()?'found':dis.readFileError()|json}}
+
+{{dss.filePath}} : {{dss.values()?'found':dss.readFileError()|json}}
+</pre>
+</div>
+}

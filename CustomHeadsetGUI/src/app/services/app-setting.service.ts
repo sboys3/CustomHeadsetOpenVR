@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { AppSetting } from './JsonFileDefines';
 import { PathsService } from './paths.service';
 import { JsonSettingServiceBase } from './JsonSettingServiceBase';
@@ -8,10 +8,10 @@ import { JsonSettingServiceBase } from './JsonSettingServiceBase';
 })
 export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
   constructor(paths: PathsService) {
-    super(paths.guiSettingPath, paths.appDataDirPath, () => ({
+    super(paths.guiSettingPath, paths.appDataDirPath, signal({
       colorScheme: 'system',
       updateMode: 'rewrite',
       advanceMode: false
-    }), true)
+    }), true, true)
   }
 }

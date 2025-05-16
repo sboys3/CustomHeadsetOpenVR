@@ -8,6 +8,14 @@
         margin: 0.5rem 0;
     }
 
+    .required {
+        &::after {
+            content: '*';
+            margin-left: 0.2rem;
+            color: var(--mat-sys-error);
+        }
+    }
+
     .field {
         display: flex;
         flex-shrink: 0;
@@ -25,6 +33,12 @@
             width: 35%;
             position: relative;
             user-select: none;
+            justify-content: space-between;
+
+
+            &:ng-deep button {
+                margin: 0 0.5rem;
+            }
 
             &::after {
                 content: '';
@@ -37,7 +51,7 @@
 
             padding-right: 1rem;
         }
-        
+
         .section-title {
             display: flex;
             align-items: center;
@@ -45,7 +59,7 @@
             width: 100%;
             position: relative;
             user-select: none;
-            
+
             padding-right: 1rem;
         }
 
