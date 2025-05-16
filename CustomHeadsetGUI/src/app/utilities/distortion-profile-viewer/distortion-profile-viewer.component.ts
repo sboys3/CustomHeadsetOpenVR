@@ -37,7 +37,30 @@ export class DistortionProfileViewerComponent {
   constructor(private pathsService: PathsService, host: ElementRef<HTMLElement>) {
     let width = 0, height = 0;
     const colors = ['green', 'orange', 'blueviolet', 'deeppink']
+    const profileData = signal<DistortionProfileConfig[]>([]);
     effect(async () => {
+      const profiles = this.profiles()
+      let newData: DistortionProfileConfig[] = []
+      if (profiles) {
+        for (const profile of profiles) {
+          const path = await this.pathsService.getProfileFullPath(`${profile}.json`);
+          try {
+            if (await exists(path)) {
+              const content = await readTextFile(path);
+              const obj = JSON.parse(cleanJsonComments(content)) as DistortionProfileConfig
+              if (obj.distortions.length % 2 == 0) {
+                obj.name = profile;
+                newData.push(obj)
+              }
+            }
+          } catch (e) {
+            console.warn(e)
+          }
+        }
+      }
+      profileData.set(newData);
+    });
+    effect(() => {
       this.curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
       // resize element when window resizes
@@ -50,28 +73,15 @@ export class DistortionProfileViewerComponent {
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
       this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXDefault, 20), 'red', 'meganeX Default');
       this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXOriginal, 20), 'blue', 'meganeX Original');
-      const profiles = this.profiles()
-      if (profiles) {
-        for (const profile of profiles) {
-          const path = await this.pathsService.getProfileFullPath(`${profile}.json`);
-          try {
-            if (await exists(path)) {
-              const content = await readTextFile(path);
-              const obj = JSON.parse(cleanJsonComments(content)) as DistortionProfileConfig
-              if (obj.distortions.length % 2 == 0) {
-                this.drawPoints(canvas, ctx, this.smoothPoints(this.chunkArrayInPairs(obj.distortions), 20), colors[(this.curveIdx - 2) % colors.length], profile);
-              }
-            }
-          } catch (e) {
-            console.warn(e)
-          }
-        }
+      const data = profileData();
+      for (const obj of data) {
+        this.drawPoints(canvas, ctx, this.smoothPoints(this.chunkArrayInPairs(obj.distortions), 20), colors[(this.curveIdx - 2) % colors.length], obj.name);
       }
     });
 
   }
   @HostListener('window:resize', ['$event'])
-  onResize(event : Event) {
+  onResize(event: Event) {
     this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
   }
   ngAfterViewInit(): void {
