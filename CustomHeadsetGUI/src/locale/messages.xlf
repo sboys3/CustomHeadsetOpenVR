@@ -99,7 +99,7 @@
         <source>Black Level</source>
       </trans-unit>
       <trans-unit id="2780234993728008588" datatype="html">
-        <source>High (<x id="PH" equiv-text="256"/>)</source>
+        <source>High (<x id="PH" equiv-text="255"/>)</source>
       </trans-unit>
       <trans-unit id="4391289919356861627" datatype="html">
         <source>Apply</source>
@@ -117,7 +117,7 @@
         <source>Reset to default</source>
       </trans-unit>
       <trans-unit id="6607372754568222882" datatype="html">
-        <source>Low (<x id="PH" equiv-text="64"/>)</source>
+        <source>Low (<x id="PH" equiv-text="63"/>)</source>
       </trans-unit>
       <trans-unit id="7358890221143927213" datatype="html">
         <source>Radius from center of the output (%)</source>
@@ -126,7 +126,7 @@
         <source>Max Fov Vertical</source>
       </trans-unit>
       <trans-unit id="8197514619650471762" datatype="html">
-        <source>Normal (<x id="PH" equiv-text="128"/>)</source>
+        <source>Normal (<x id="PH" equiv-text="127"/>)</source>
       </trans-unit>
       <trans-unit id="8461842260159597706" datatype="html">
         <source>Show</source>

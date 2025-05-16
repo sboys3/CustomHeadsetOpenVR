@@ -15,6 +15,9 @@ public:
 	
 	DistortionProfileConstructor distortionProfileConstructor;
 	std::mutex distortionProfileLock;
+	double lastDistortionChangeTime = 0;
+	// the distortion profile may be changed in the middle of reading, so do a final update
+	bool needsDistortionFinalization = true;
 	// the offset used for burn in prevention
 	float fovBurnInOffset = 0;
 	

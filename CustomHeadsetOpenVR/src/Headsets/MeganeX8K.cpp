@@ -251,12 +251,14 @@ void MeganeX8KShim::RunFrame(){
 	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultLeft_Vector3, {brightness, brightness, brightness});
 	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {brightness, brightness, brightness});
 	
-	if(driverConfig.hasBeenUpdated){
+	if(driverConfig.hasBeenUpdated || ((now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization)){
 		UpdateSettings();
 	}
 }
 
 void MeganeX8KShim::UpdateSettings(){
+	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
+	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
 	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
@@ -283,6 +285,8 @@ void MeganeX8KShim::UpdateSettings(){
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;
+	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
+
 	
 	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, std::min(1024, driverConfig.meganeX8K.distortionMeshResolution));
 	
@@ -291,6 +295,9 @@ void MeganeX8KShim::UpdateSettings(){
 	}
 	
 	if(shouldUpdateDistortion){
+		// mark to finalize if regenerating within 0.5 seconds of the last
+		needsDistortionFinalization = now - lastDistortionChangeTime < 0.5;
+		lastDistortionChangeTime = now;
 		// it has changed so signal the compositor to regenerate the distortion mesh
 		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
 		// also update fov

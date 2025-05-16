@@ -31,7 +31,7 @@ public:
 		// max vertical fov
 		double maxFovY = 96.0;
 		// distortion mesh resolution
-		int distortionMeshResolution = 128;
+		int distortionMeshResolution = 127;
 		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
 		bool fovBurnInPrevention = true;
 	};

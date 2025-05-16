@@ -143,16 +143,16 @@
         <target state="translated">畸變網格解析度</target>
       </trans-unit>
       <trans-unit id="6607372754568222882" datatype="html">
-        <source>Low (<x id="PH" equiv-text="64"/>)</source>
-        <target state="translated">低 (<x id="PH" equiv-text="64"/>)</target>
+        <source>Low (<x id="PH" equiv-text="63"/>)</source>
+        <target state="translated">低 (<x id="PH" equiv-text="63"/>)</target>
       </trans-unit>
       <trans-unit id="8197514619650471762" datatype="html">
-        <source>Normal (<x id="PH" equiv-text="128"/>)</source>
-        <target state="translated">一般 (<x id="PH" equiv-text="128"/>)</target>
+        <source>Normal (<x id="PH" equiv-text="127"/>)</source>
+        <target state="translated">一般 (<x id="PH" equiv-text="127"/>)</target>
       </trans-unit>
       <trans-unit id="2780234993728008588" datatype="html">
-        <source>High (<x id="PH" equiv-text="256"/>)</source>
-        <target state="translated">高 (<x id="PH" equiv-text="256"/>)</target>
+        <source>High (<x id="PH" equiv-text="255"/>)</source>
+        <target state="translated">高 (<x id="PH" equiv-text="255"/>)</target>
       </trans-unit>
       <trans-unit id="6309735826442522713" datatype="html">
         <source>Current Profile : </source>
@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="1136931556684562864" datatype="html">
         <source>FOV Burn-In Prevention</source>
-        <target state="translated">FOV 老化預防</target>
+        <target state="translated">FOV 烙印預防</target>
       </trans-unit>
     </body>
   </file>

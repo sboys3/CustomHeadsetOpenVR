@@ -74,7 +74,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="110" min="0" step="1">
+        <mat-slider [max]="110" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -90,7 +90,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="96" min="0" step="1">
+        <mat-slider [max]="96" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>

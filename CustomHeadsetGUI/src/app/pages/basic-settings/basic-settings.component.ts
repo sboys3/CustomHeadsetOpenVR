@@ -40,11 +40,11 @@ export class BasicSettingsComponent {
     resolutionOptions = [
         { name: '4K', x: 3840, y: 3552 }, { name: '2K', x: 2880, y: 2664 }
     ]
-    distortionMeshResolutionOptions = [64, 128, 256];
+    distortionMeshResolutionOptions = [63, 127, 255];
     distortionMeshResolutionOptionsText: { [key: number]: string } = {
-        64: $localize`Low (${64})`,
-        128: $localize`Normal (${128})`,
-        256: $localize`High (${256})`
+        63: $localize`Low (${63})`,
+        127: $localize`Normal (${127})`,
+        255: $localize`High (${255})`
     }
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
 
