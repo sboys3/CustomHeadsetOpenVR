@@ -6,6 +6,7 @@
 
 #include <thread>
 #include <cmath>
+#include <mutex>
 
 
 class MeganeX8KShim : public ShimDefinition{
@@ -13,6 +14,7 @@ public:
 	CustomHeadsetDeviceProvider* deviceProvider;
 	
 	DistortionProfileConstructor distortionProfileConstructor;
+	std::mutex distortionProfileLock;
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;

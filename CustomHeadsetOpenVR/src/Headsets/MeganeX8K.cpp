@@ -132,6 +132,7 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	}
 	// }
 	
+	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	// apply distortion profile to each color channel
 	Point2D distortionRed = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelRed, fU, redV);
 	Point2D distortionGreen = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelGreen, fU, greenV);
@@ -266,6 +267,7 @@ void MeganeX8KShim::UpdateSettings(){
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovX != driverConfig.meganeX8K.maxFovX;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovY != driverConfig.meganeX8K.maxFovY;
 	
+	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
 	bool shouldUpdateDistortion = loadedNewDistortionProfile | shouldReInitializeDistortion;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
