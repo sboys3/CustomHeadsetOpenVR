@@ -1,3 +1,28 @@
 <h2>Custom Headset GUI</h2>
-<p><span i18n>app version</span> : {{appVersion()}}</p>
-<p><a (click)="openGithub()" href="javascript:;"><span i18n>Github Page</span></a></p>
+<p>
+    <span i18n>app version</span>
+    @if(aus.updateInfo();as update){
+    <span>&nbsp;:&nbsp;{{update.currentVersion}}&nbsp;</span>
+    @if(update.updateAvailable){
+    <a (click)="openExternal(update.url)" href="javascript:;">
+        <span i18n>New version available!</span>
+    </a>
+    }@else{
+    @if(!checking()){
+    <span i18n>(Up to date)</span>
+    }
+    <button mat-icon-button [disabled]="checking()" (click)="checkUpdate()">
+        @if(checking()){
+        <mat-icon class="primary-color">more_horiz</mat-icon>
+        }@else {
+        <mat-icon class="primary-color">refresh</mat-icon>
+        }
+    </button>
+    }
+    }
+</p>
+<p>
+    <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;">
+        <span i18n>Github Page</span>
+    </a>
+</p>

@@ -2,7 +2,7 @@ import { copyFile, create, exists, remove, rename, writeTextFile } from "@tauri-
 import { Subject, throttleTime } from "rxjs";
 import { join } from '@tauri-apps/api/path';
 
-export async function delay(ms = 1) {
+export async function delay(ms: number = 1) {
   return new Promise<void>(done => {
     setTimeout(done, ms);
   })

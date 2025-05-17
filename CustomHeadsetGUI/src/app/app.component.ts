@@ -1,11 +1,13 @@
-import { Component, effect,  Inject } from '@angular/core';
+import { Component, effect, Inject, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
-import {  DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { AppSettingService } from './services/app-setting.service';
+import { AppUpdateService } from './services/app-update.service';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, MatTabsModule],
+  imports: [RouterOutlet, RouterModule, MatTabsModule, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -22,13 +24,9 @@ export class AppComponent {
     {
       name: $localize`App Settings`,
       route: '/app-settings'
-    },
-    {
-      name: $localize`About`,
-      route: '/about'
     }
   ];
-  constructor(appSettingService: AppSettingService, @Inject(DOCUMENT) document: Document) {
+  constructor(appSettingService: AppSettingService,public appUpdateService: AppUpdateService, @Inject(DOCUMENT) document: Document) {
     effect(() => {
       const settings = appSettingService.values();
       if (settings) {
