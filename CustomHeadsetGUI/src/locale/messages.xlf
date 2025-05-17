@@ -203,6 +203,15 @@
       <trans-unit id="8860173484207854369" datatype="html">
         <source>Driver not installed</source>
       </trans-unit>
+      <trans-unit id="1849853714372469600" datatype="html">
+        <source>Driver setting valid</source>
+      </trans-unit>
+      <trans-unit id="5254833004479203580" datatype="html">
+        <source>Reset Setting</source>
+      </trans-unit>
+      <trans-unit id="7598169207760829172" datatype="html">
+        <source>Driver setting not valid</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

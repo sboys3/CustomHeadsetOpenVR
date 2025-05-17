@@ -11,7 +11,7 @@ import { openUrl } from '@tauri-apps/plugin-opener';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogService } from '../../services/dialog.service';
 import { join } from '@tauri-apps/api/path';
-import { copyFile, exists, mkdir, readDir } from '@tauri-apps/plugin-fs';
+import { copyFile, exists, mkdir, readDir, writeTextFile } from '@tauri-apps/plugin-fs';
 import { open } from '@tauri-apps/plugin-dialog';
 import { get_executable_path } from '../../tauri_wrapper';
 @Component({
@@ -86,5 +86,8 @@ export class DriverTroubleshooterComponent {
         await this.copyRec(await join(targetDir, e.name), await join(sourceDir, e.name));
       }
     }
+  }
+  public async resetDriverSetting() {
+    await writeTextFile(this.dss.filePath, "{}")
   }
 }

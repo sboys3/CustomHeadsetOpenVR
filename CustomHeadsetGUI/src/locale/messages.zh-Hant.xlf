@@ -270,6 +270,18 @@
         <source>the folder seems not include driver file, please check again</source>
         <target state="translated">資料夾似乎不包含驅動程式檔案，請重新檢查。</target>
       </trans-unit>
+      <trans-unit id="1849853714372469600" datatype="html">
+        <source>Driver setting valid</source>
+        <target state="translated">驅動程式設定有效</target>
+      </trans-unit>
+      <trans-unit id="5254833004479203580" datatype="html">
+        <source>Reset Setting</source>
+        <target state="translated">重設設定</target>
+      </trans-unit>
+      <trans-unit id="7598169207760829172" datatype="html">
+        <source>Driver setting not valid</source>
+        <target state="translated">驅動程式設定無效</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
