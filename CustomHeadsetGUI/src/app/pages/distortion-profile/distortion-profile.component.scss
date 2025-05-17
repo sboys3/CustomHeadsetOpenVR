@@ -1,4 +1,4 @@
-:host {
+app-system-ready {
     display: flex;
     flex-direction: column;
 }
@@ -10,14 +10,20 @@
     flex-direction: row;
     align-items: center;
 
-    >div {
-        margin: 0 0.5rem;
+    >*:not(:first-child) {
+        margin-left: 1rem;
+    }
+
+    .text {
+        display: flex;
+        align-items: center;
     }
 }
 
 .list {
     flex: 1 1 auto;
     border-left: 1px solid var(--mat-sys-outline-variant);
+
     .item {
         height: 50px;
         display: flex;

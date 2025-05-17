@@ -11,12 +11,14 @@ export class DialogService {
 
   constructor(private matDialog: MatDialog) { }
 
-  async confirm(title: string, message: string): Promise<true | undefined> {
+  async confirm(title: string, message: string, yesText?: string, yesClass?: string): Promise<true | undefined> {
     return await firstValueFrom(this.matDialog.open(ConfirmComponent, {
       hasBackdrop: true,
       data: {
         title,
-        message
+        message,
+        yesText,
+        yesClass
       }
     }).afterClosed());
   }

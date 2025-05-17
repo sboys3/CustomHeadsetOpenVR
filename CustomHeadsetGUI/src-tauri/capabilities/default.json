@@ -18,12 +18,29 @@
     "fs:read-dirs",
     "shell:allow-open",
     {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "**/*"
+        }
+      ]
+    },
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "url": "**/*"
+        }
+      ]
+    },
+    {
       "identifier": "fs:scope",
       "allow": [
         "**/*"
       ]
     },
     "dialog:default",
-    "shell:default"
+    "shell:default",
+    "opener:default"
   ]
 }

@@ -1,6 +1,6 @@
 @use '../../../simple-form.scss' as sf;
 
-:host {
+app-system-ready {
     @include sf.formStyle();
 }
 

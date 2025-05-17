@@ -50,7 +50,6 @@ export class AppUpdateService {
         updateAvailable: this.isNewVerrsion(current, response.tag_name),
         url: response.html_url
       }
-      console.log(response)
       this._updateInfo.set(result);
       return result;
     } catch (e) {

@@ -1,12 +1,46 @@
 @if(wait()){
-<h2 i18n>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</h2>
-<div class="debug">
-    <pre>
-app version:{{appVersion()}}
+<h2 i18n>System not ready</h2>
+<mat-divider />
 
-{{dis.filePath}} : {{dis.values()?'found':dis.readFileError()|json}}
-
-{{dss.filePath}} : {{dss.values()?'found':dss.readFileError()|json}}
-</pre>
+<div class="field">
+    <div class="title" i18n>SteamVR installation</div>
+    <div class="control">
+        @if(!sds.steamVRinstalled()){
+        <mat-icon class="warn-color">warning</mat-icon>
+        <span i18n>SteamVR not installed</span>
+        <button mat-stroked-button i18n (click)="installSteamVR()">Install SteamVR</button>
+        }@else {
+        <mat-icon class="primary-color">check</mat-icon>
+        }
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>Driver installation</div>
+    <div class="control">
+        @if(!sds.driverInstalled()){
+        <mat-icon class="warn-color">warning</mat-icon>
+        <span i18n>Driver not installed</span>
+        @if(this.sds.steamVRinstalled();as steamVrPath){
+        <button mat-stroked-button i18n (click)="installDriver(steamVrPath)" [disabled]="installingDriver()">Install
+            Driver</button>
+        }
+        }@else {
+        <mat-icon class="primary-color">check</mat-icon>
+        }
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>Driver setting initialization</div>
+    <div class="control">
+        @if(!dss.values || !dis.values()){
+        <mat-icon class="warn-color">warning</mat-icon>
+        <span i18n>Driver setting file not found, please launch SteamVR</span>
+        @if(sds.steamVRinstalled()){
+        <button mat-stroked-button i18n (click)="launchSteamVR()">Launch SteamVR</button>
+        }
+        }@else {
+        <mat-icon class="primary-color">check</mat-icon>
+        }
+    </div>
 </div>
 }

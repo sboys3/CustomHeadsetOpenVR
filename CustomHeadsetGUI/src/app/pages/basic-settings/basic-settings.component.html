@@ -1,177 +1,180 @@
-@if(dis.values() && dss.values() &&settings){
-<h5 class="warn-color italic" i18n>Fields marked with * require restart SteamVR to apply changes.</h5>
-<mat-divider></mat-divider>
-<div class="field">
-    <div class="title">
-        <span i18n class="required">Enable MeganeX 8K Driver</span>
-        <app-reset-button [canReset]="settings.enable!=defaults?.enable"
-            (resetClick)="resetOption('enable')"></app-reset-button>
+<app-system-ready>
+    @if(settings){
+    <h5 class="warn-color italic" i18n>Fields marked with * require restart SteamVR to apply changes.</h5>
+    <mat-divider></mat-divider>
+    <div class="field">
+        <div class="title">
+            <span i18n class="required">Enable MeganeX 8K Driver</span>
+            <app-reset-button [canReset]="settings.enable!=defaults?.enable"
+                (resetClick)="resetOption('enable')"></app-reset-button>
+        </div>
+        <div class="control">
+            <mat-slide-toggle [(ngModel)]="settings.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+        </div>
     </div>
-    <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    <div class="field">
+        <div class="title">
+            <span i18n class="required">Resolution</span>
+            <app-reset-button [canReset]="resolutionModel!=defaults?.resolutionX"
+                (resetClick)="resetResolution()"></app-reset-button>
+        </div>
+        <div class="control">
+            <mat-select [(ngModel)]="resolutionModel" (ngModelChange)="setResolution()">
+                @for(p of resolutionOptions;track p.x){
+                <mat-option [value]="p.x">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
+                }
+            </mat-select>
+        </div>
     </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n class="required">Resolution</span>
-        <app-reset-button [canReset]="resolutionModel!=defaults?.resolutionX"
-            (resetClick)="resetResolution()"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>Distortion Profile</span>
+            <app-reset-button [canReset]="settings.distortionProfile!=defaults?.distortionProfile"
+                (resetClick)="resetOption('distortionProfile')"></app-reset-button>
+        </div>
+        <div class="control">
+            <mat-select [(ngModel)]="settings.distortionProfile" (ngModelChange)="saveConfigSettings()">
+                @for(p of profiles;track p.name){
+                <mat-option [value]="p.name">{{p.name}}</mat-option>
+                }
+            </mat-select>
+        </div>
     </div>
-    <div class="control">
-        <mat-select [(ngModel)]="resolutionModel" (ngModelChange)="setResolution()">
-            @for(p of resolutionOptions;track p.x){
-            <mat-option [value]="p.x">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
-            }
-        </mat-select>
+    <div class="field">
+        <div class="title">
+            <span i18n>IPD</span>
+            <app-reset-button [canReset]="settings.ipd!=defaults?.ipd"
+                (resetClick)="resetOption('ipd')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.ipd" step="0.5" (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="80" min="50" step="0.5" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.ipd" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Distortion Profile</span>
-        <app-reset-button [canReset]="settings.distortionProfile!=defaults?.distortionProfile"
-            (resetClick)="resetOption('distortionProfile')"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>Max Fov Horizontal</span>
+            <app-reset-button [canReset]="settings.maxFovX!=defaults?.maxFovX"
+                (resetClick)="resetOption('maxFovX')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider [max]="110" min="1" step="1">
+                <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-    <div class="control">
-        <mat-select [(ngModel)]="settings.distortionProfile" (ngModelChange)="saveConfigSettings()">
-            @for(p of profiles;track p.name){
-            <mat-option [value]="p.name">{{p.name}}</mat-option>
-            }
-        </mat-select>
+    <div class="field">
+        <div class="title">
+            <span i18n>Max Fov Vertical</span>
+            <app-reset-button [canReset]="settings.maxFovY!=defaults?.maxFovY"
+                (resetClick)="resetOption('maxFovY')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider [max]="96" min="1" step="1">
+                <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>IPD</span>
-        <app-reset-button [canReset]="settings.ipd!=defaults?.ipd" (resetClick)="resetOption('ipd')"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>Distortion Zoom</span>
+            <app-reset-button [canReset]="settings.distortionZoom!=defaults?.distortionZoom"
+                (resetClick)="resetOption('distortionZoom')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="1.1" min="0.9" step="0.002" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.ipd" step="0.5" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider max="80" min="50" step="0.5" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.ipd" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Max Fov Horizontal</span>
-        <app-reset-button [canReset]="settings.maxFovX!=defaults?.maxFovX"
-            (resetClick)="resetOption('maxFovX')"></app-reset-button>
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="110" min="1" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Max Fov Vertical</span>
-        <app-reset-button [canReset]="settings.maxFovY!=defaults?.maxFovY"
-            (resetClick)="resetOption('maxFovY')"></app-reset-button>
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="96" min="1" step="1">
-            <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Distortion Zoom</span>
-        <app-reset-button [canReset]="settings.distortionZoom!=defaults?.distortionZoom"
-            (resetClick)="resetOption('distortionZoom')"></app-reset-button>
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.distortionZoom" step="0.002" (ngModelChange)="saveConfigSettings()"
-            type="number">
-        <mat-slider max="1.1" min="0.9" step="0.002" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.distortionZoom" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
-    </div>
-</div>
 
-@if(advanceMode()){
+    @if(advanceMode()){
 
-<div class="field">
-    <div class="section-title">
-        <span i18n>Advanced Settings</span>
+    <div class="field">
+        <div class="section-title">
+            <span i18n>Advanced Settings</span>
+        </div>
     </div>
-</div>
 
-<div class="field">
-    <div class="title">
-        <span i18n>Black Level</span>
-        <app-reset-button [canReset]="settings.blackLevel!=defaults?.blackLevel"
-            (resetClick)="resetOption('blackLevel')"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>Black Level</span>
+            <app-reset-button [canReset]="settings.blackLevel!=defaults?.blackLevel"
+                (resetClick)="resetOption('blackLevel')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="1" min="0" step="0.001" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.blackLevel" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (ngModelChange)="saveConfigSettings()"
-            type="number">
-        <mat-slider max="1" min="0" step="0.001" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.blackLevel" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
+    <div class="field">
+        <div class="title">
+            <span i18n>IPD Offset</span>
+            <app-reset-button [canReset]="settings.ipdOffset!=defaults?.ipdOffset"
+                (resetClick)="resetOption('ipdOffset')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="20" min="-20" step="0.5" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
     </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>IPD Offset</span>
-        <app-reset-button [canReset]="settings.ipdOffset!=defaults?.ipdOffset"
-            (resetClick)="resetOption('ipdOffset')"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>Subpixel Shift</span>
+            <app-reset-button [canReset]="settings.subpixelShift!=defaults?.subpixelShift"
+                (resetClick)="resetOption('subpixelShift')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()" type="number"
+                step="0.01">
+            <mat-select [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()">
+                @for(opt of subpixelShiftOptions;track opt){
+                <mat-option [value]="opt">{{opt|number}}</mat-option>
+                }
+            </mat-select>
+        </div>
     </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.ipdOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
-            type="number">
-        <mat-slider max="20" min="-20" step="0.5" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
-        </mat-slider>
+    <div class="field">
+        <div class="title">
+            <span i18n>Distortion Mesh Resolution</span>
+            <app-reset-button [canReset]="settings.distortionMeshResolution!=defaults?.distortionMeshResolution"
+                (resetClick)="resetOption('distortionMeshResolution')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()"
+                type="number" step="16">
+            <mat-select [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()">
+                @for(opt of distortionMeshResolutionOptions;track opt){
+                <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>
+                }
+            </mat-select>
+        </div>
     </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Subpixel Shift</span>
-        <app-reset-button [canReset]="settings.subpixelShift!=defaults?.subpixelShift"
-            (resetClick)="resetOption('subpixelShift')"></app-reset-button>
+    <div class="field">
+        <div class="title">
+            <span i18n>FOV Burn-In Prevention</span>
+            <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaults?.fovBurnInPrevention"
+                (resetClick)="resetOption('fovBurnInPrevention')"></app-reset-button>
+        </div>
+        <div class="control">
+            <mat-slide-toggle [(ngModel)]="settings.fovBurnInPrevention"
+                (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+        </div>
     </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()" type="number"
-            step="0.01">
-        <mat-select [(ngModel)]="settings.subpixelShift" (ngModelChange)="saveConfigSettings()">
-            @for(opt of subpixelShiftOptions;track opt){
-            <mat-option [value]="opt">{{opt|number}}</mat-option>
-            }
-        </mat-select>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>Distortion Mesh Resolution</span>
-        <app-reset-button [canReset]="settings.distortionMeshResolution!=defaults?.distortionMeshResolution"
-            (resetClick)="resetOption('distortionMeshResolution')"></app-reset-button>
-    </div>
-    <div class="control">
-        <input matInput [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()"
-            type="number" step="16">
-        <mat-select [(ngModel)]="settings.distortionMeshResolution" (ngModelChange)="saveConfigSettings()">
-            @for(opt of distortionMeshResolutionOptions;track opt){
-            <mat-option [value]="opt">{{distortionMeshResolutionOptionsText[opt]}}</mat-option>
-            }
-        </mat-select>
-    </div>
-</div>
-<div class="field">
-    <div class="title">
-        <span i18n>FOV Burn-In Prevention</span>
-        <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaults?.fovBurnInPrevention"
-            (resetClick)="resetOption('fovBurnInPrevention')"></app-reset-button>
-    </div>
-    <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.fovBurnInPrevention"
-            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
-    </div>
-</div>
-}
-}@else {
-<app-driver-troubleshooter />
-}
+    }
+    }
+</app-system-ready>

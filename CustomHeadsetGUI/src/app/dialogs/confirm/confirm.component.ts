@@ -8,5 +8,5 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './confirm.component.scss'
 })
 export class ConfirmComponent {
-constructor(@Inject(MAT_DIALOG_DATA) public data: { title: string, message: string }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { title: string, message: string, yesText?: string, yesClass?: string }) { }
 }

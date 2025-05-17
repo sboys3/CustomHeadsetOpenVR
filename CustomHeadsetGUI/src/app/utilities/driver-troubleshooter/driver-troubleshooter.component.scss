@@ -1,16 +1,20 @@
+@use '../../../simple-form.scss' as sf;
+
 :host {
     width: 100%;
     height: 100%;
+    @include sf.formStyle();
 }
 
-.debug {
-    display: flex;
-    flex-direction: column;
-    opacity: 0.5;
+h2 {
+    margin: 0;
+    margin-bottom: 1rem;
+}
 
-    pre {
-        flex-shrink: 0;
-        margin: 0.2rem 0;
-        white-space: pre-wrap;
-    }
+mat-divider {
+    margin-bottom: 0.5rem;
+}
+
+.control>*:not(:first-child) {
+    margin: 0.5rem;
 }

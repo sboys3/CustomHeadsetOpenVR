@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { AppSettingService } from '../../services/app-setting.service';
 import { DriverInfoService } from '../../services/driver-info.service';
 import { ResetButtonComponent } from '../../utilities/reset-button/reset-button.component';
-import { DriverTroubleshooterComponent } from '../../utilities/driver-troubleshooter/driver-troubleshooter.component';
+import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
 
 
 
@@ -30,7 +30,7 @@ import { DriverTroubleshooterComponent } from '../../utilities/driver-troublesho
         MatSlideToggleModule,
         MatTooltipModule,
         ResetButtonComponent,
-        DriverTroubleshooterComponent,
+        SystemReadyComponent,
         CommonModule],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
