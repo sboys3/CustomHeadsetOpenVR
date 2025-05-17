@@ -244,6 +244,7 @@ void ConfigLoader::WatcherThreadDistortions(){
 				ParseConfig();
 				break;
 			}
+			pNotify = (FILE_NOTIFY_INFORMATION*)((char*)pNotify + pNotify->NextEntryOffset);
 		}while(pNotify->NextEntryOffset != 0);
 		std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	}
