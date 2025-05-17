@@ -80,9 +80,6 @@
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
       </trans-unit>
-      <trans-unit id="8039363581560527021" datatype="html">
-        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
-      </trans-unit>
       <trans-unit id="3119794609322363234" datatype="html">
         <source>Advanced Mode</source>
       </trans-unit>
@@ -151,6 +148,60 @@
       </trans-unit>
       <trans-unit id="1955403421668504940" datatype="html">
         <source>Fields marked with * require restart SteamVR to apply changes.</source>
+      </trans-unit>
+      <trans-unit id="3248579138282446827" datatype="html">
+        <source>SteamVR installation</source>
+      </trans-unit>
+      <trans-unit id="4047643863189720714" datatype="html">
+        <source>Launch SteamVR</source>
+      </trans-unit>
+      <trans-unit id="4168563010189910891" datatype="html">
+        <source>Driver setting file not found, please launch SteamVR</source>
+      </trans-unit>
+      <trans-unit id="4234420385210303557" datatype="html">
+        <source>Driver files not valid</source>
+      </trans-unit>
+      <trans-unit id="462668030267703302" datatype="html">
+        <source>System not ready</source>
+      </trans-unit>
+      <trans-unit id="4678747519396968836" datatype="html">
+        <source>Driver folder not found</source>
+      </trans-unit>
+      <trans-unit id="5010152287347780808" datatype="html">
+        <source>the folder seems not include driver file, please check again</source>
+      </trans-unit>
+      <trans-unit id="537541612011498563" datatype="html">
+        <source>SteamVR not installed</source>
+      </trans-unit>
+      <trans-unit id="5390109235265623153" datatype="html">
+        <source>Install SteamVR</source>
+      </trans-unit>
+      <trans-unit id="5551731962623384570" datatype="html">
+        <source>New version available!</source>
+      </trans-unit>
+      <trans-unit id="5737034982985701605" datatype="html">
+        <source>Reveal In File Explorer</source>
+      </trans-unit>
+      <trans-unit id="6158163450651048125" datatype="html">
+        <source>Driver installation</source>
+      </trans-unit>
+      <trans-unit id="6353920713750092185" datatype="html">
+        <source>Locate</source>
+      </trans-unit>
+      <trans-unit id="7203035800259368462" datatype="html">
+        <source>Install Driver</source>
+      </trans-unit>
+      <trans-unit id="7555464695198772113" datatype="html">
+        <source>Driver setting initialization</source>
+      </trans-unit>
+      <trans-unit id="7697842312955845335" datatype="html">
+        <source>driver folder not in default location</source>
+      </trans-unit>
+      <trans-unit id="8491984279391991305" datatype="html">
+        <source>(Up to date)</source>
+      </trans-unit>
+      <trans-unit id="8860173484207854369" datatype="html">
+        <source>Driver not installed</source>
       </trans-unit>
     </body>
   </file>

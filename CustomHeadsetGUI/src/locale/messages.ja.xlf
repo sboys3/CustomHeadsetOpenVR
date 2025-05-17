@@ -106,10 +106,6 @@
         <source>import file error <x id="PH" equiv-text="ex"/></source>
         <target state="translated">インポートファイルエラー <x id="PH" equiv-text="ex"/></target>
       </trans-unit>
-      <trans-unit id="8039363581560527021" datatype="html">
-        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
-        <target state="translated">設定ファイルが見つかりません、CustomHeadsetOpenVR ドライバーをインストールし、SteamVR を起動してください</target>
-      </trans-unit>
       <trans-unit id="3119794609322363234" datatype="html">
         <source>Advanced Mode</source>
         <target state="translated">アドバンスモード</target>
@@ -186,7 +182,7 @@
         <source>FOV Burn-In Prevention</source>
         <target state="translated">FOV 焼き付き予防</target>
       </trans-unit>
-     <trans-unit id="1726363342938046830" datatype="html">
+      <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
         <target state="translated">このアプリについて</target>
       </trans-unit>
@@ -201,6 +197,46 @@
       <trans-unit id="1955403421668504940" datatype="html">
         <source>Fields marked with * require restart SteamVR to apply changes.</source>
         <target state="translated">* が付いている項目は、変更を適用するためにSteamVRの再起動が必要です。</target>
+      </trans-unit>
+     <trans-unit id="5551731962623384570" datatype="html">
+        <source>New version available!</source>
+        <target state="translated">新しいバージョンが利用可能です！</target>
+      </trans-unit>
+      <trans-unit id="8491984279391991305" datatype="html">
+        <source>(Up to date)</source>
+        <target state="translated">(最新です)</target>
+      </trans-unit>
+      <trans-unit id="5737034982985701605" datatype="html">
+        <source>Reveal In File Explorer</source>
+        <target state="translated">エクスプローラーで表示</target>
+      </trans-unit>
+      <trans-unit id="462668030267703302" datatype="html">
+        <source>System not ready</source>
+        <target state="translated">システムの準備ができていません</target>
+      </trans-unit>
+      <trans-unit id="3248579138282446827" datatype="html">
+        <source>SteamVR installation</source>
+        <target state="translated">SteamVRのインストール</target>
+      </trans-unit>
+      <trans-unit id="537541612011498563" datatype="html">
+        <source>SteamVR not installed</source>
+        <target state="translated">SteamVRがインストールされていません</target>
+      </trans-unit>
+      <trans-unit id="5390109235265623153" datatype="html">
+        <source>Install SteamVR</source>
+        <target state="translated">SteamVRをインストール</target>
+      </trans-unit>
+      <trans-unit id="6158163450651048125" datatype="html">
+        <source>Driver installation</source>
+        <target state="translated">ドライバーのインストール</target>
+      </trans-unit>
+      <trans-unit id="8860173484207854369" datatype="html">
+        <source>Driver not installed</source>
+        <target state="translated">ドライバーがインストールされていません</target>
+      </trans-unit>
+      <trans-unit id="7203035800259368462" datatype="html">
+        <source>Install Driver</source>
+        <target state="translated">ドライバーをインストール</target>
       </trans-unit>
     </body>
   </file>

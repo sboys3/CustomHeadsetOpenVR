@@ -106,10 +106,6 @@
         <source>import file error <x id="PH" equiv-text="ex"/></source>
         <target state="translated">匯入檔案錯誤 <x id="PH" equiv-text="ex"/></target>
       </trans-unit>
-      <trans-unit id="8039363581560527021" datatype="html">
-        <source>Setting file not found , please install CustomHeadsetOpenVR driver and launch steamVR</source>
-        <target state="translated">找不到設定檔，請安裝 CustomHeadsetOpenVR 驅動程式並啟動 SteamVR</target>
-      </trans-unit>
       <trans-unit id="3119794609322363234" datatype="html">
         <source>Advanced Mode</source>
         <target state="translated">進階模式</target>
@@ -201,6 +197,78 @@
       <trans-unit id="1955403421668504940" datatype="html">
         <source>Fields marked with * require restart SteamVR to apply changes.</source>
         <target state="translated">標有 * 的欄位需要重新啟動 SteamVR 才能套用變更。</target>
+      </trans-unit>
+      <trans-unit id="5551731962623384570" datatype="html">
+        <source>New version available!</source>
+        <target state="translated">有可用的新版本！</target>
+      </trans-unit>
+      <trans-unit id="8491984279391991305" datatype="html">
+        <source>(Up to date)</source>
+        <target state="translated">(已是最新)</target>
+      </trans-unit>
+      <trans-unit id="5737034982985701605" datatype="html">
+        <source>Reveal In File Explorer</source>
+        <target state="translated">在檔案總管中顯示</target>
+      </trans-unit>
+      <trans-unit id="462668030267703302" datatype="html">
+        <source>System not ready</source>
+        <target state="translated">系統尚未就緒</target>
+      </trans-unit>
+      <trans-unit id="3248579138282446827" datatype="html">
+        <source>SteamVR installation</source>
+        <target state="translated">SteamVR 安裝</target>
+      </trans-unit>
+      <trans-unit id="537541612011498563" datatype="html">
+        <source>SteamVR not installed</source>
+        <target state="translated">未安裝 SteamVR</target>
+      </trans-unit>
+      <trans-unit id="5390109235265623153" datatype="html">
+        <source>Install SteamVR</source>
+        <target state="translated">安裝 SteamVR</target>
+      </trans-unit>
+      <trans-unit id="6158163450651048125" datatype="html">
+        <source>Driver installation</source>
+        <target state="translated">驅動程式安裝</target>
+      </trans-unit>
+      <trans-unit id="8860173484207854369" datatype="html">
+        <source>Driver not installed</source>
+        <target state="translated">未安裝驅動程式</target>
+      </trans-unit>
+      <trans-unit id="7203035800259368462" datatype="html">
+        <source>Install Driver</source>
+        <target state="translated">安裝驅動程式</target>
+      </trans-unit>
+      <trans-unit id="7555464695198772113" datatype="html">
+        <source>Driver setting initialization</source>
+        <target state="translated">驅動程式設定初始化</target>
+      </trans-unit>
+      <trans-unit id="4168563010189910891" datatype="html">
+        <source>Driver setting file not found, please launch SteamVR</source>
+        <target state="translated">找不到驅動程式設定檔，請啟動 SteamVR</target>
+      </trans-unit>
+      <trans-unit id="4047643863189720714" datatype="html">
+        <source>Launch SteamVR</source>
+        <target state="translated">啟動 SteamVR</target>
+      </trans-unit>
+      <trans-unit id="4678747519396968836" datatype="html">
+        <source>Driver folder not found</source>
+        <target state="translated">找不到驅動程式資料夾</target>
+      </trans-unit>
+      <trans-unit id="7697842312955845335" datatype="html">
+        <source>driver folder not in default location</source>
+        <target state="translated">驅動程式資料夾不在預設位置</target>
+      </trans-unit>
+      <trans-unit id="6353920713750092185" datatype="html">
+        <source>Locate</source>
+        <target state="translated">定位</target>
+      </trans-unit>
+      <trans-unit id="4234420385210303557" datatype="html">
+        <source>Driver files not valid</source>
+        <target state="translated">驅動程式檔案無效</target>
+      </trans-unit>
+      <trans-unit id="5010152287347780808" datatype="html">
+        <source>the folder seems not include driver file, please check again</source>
+        <target state="translated">資料夾似乎不包含驅動程式檔案，請重新檢查。</target>
       </trans-unit>
     </body>
   </file>
