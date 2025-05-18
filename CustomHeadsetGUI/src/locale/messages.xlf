@@ -224,6 +224,15 @@
       <trans-unit id="648306878592239743" datatype="html">
         <source>Reset to default</source>
       </trans-unit>
+      <trans-unit id="3051991385923492490" datatype="html">
+        <source>Not installed</source>
+      </trans-unit>
+      <trans-unit id="5555679852113886646" datatype="html">
+        <source>driver version</source>
+      </trans-unit>
+      <trans-unit id="5696123826602687537" datatype="html">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

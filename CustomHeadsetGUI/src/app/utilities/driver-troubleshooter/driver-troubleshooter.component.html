@@ -20,8 +20,8 @@
         @if(!sds.driverInstalled()){
         <mat-icon class="warn-color">warning</mat-icon>
         <span i18n>Driver not installed</span>
-        @if(this.sds.steamVRinstalled();as steamVrPath){
-        <button mat-stroked-button i18n (click)="installDriver(steamVrPath)" [disabled]="installingDriver()">Install
+        @if(this.sds.steamVRinstalled()){
+        <button mat-stroked-button i18n (click)="sds.installDriver()" [disabled]="sds.installingDriver()">Install
             Driver</button>
         }
         }@else {
@@ -50,7 +50,7 @@
         <mat-icon class="warn-color">warning</mat-icon>
         <span i18n>Driver settings are not valid</span>
         @if(sds.driverInstalled()){
-        <button mat-stroked-button i18n (click)="resetDriverSetting()">Reset Setting</button>
+        <button mat-stroked-button i18n (click)="sds.resetDriverSetting()">Reset Setting</button>
         }
         }@else {
         <mat-icon class="primary-color">check</mat-icon>

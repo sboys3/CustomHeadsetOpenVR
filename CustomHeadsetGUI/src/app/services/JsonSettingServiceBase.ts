@@ -12,7 +12,7 @@ export type FileReadError = {
     message?: string
 }
 export abstract class JsonSettingServiceBase<T> {
-    protected _values = signal<T | undefined>(undefined);
+    protected _values = signal<T | undefined>(undefined,{ });
     public values = this._values.asReadonly();
     protected readonly debouncedFileWriter: DebouncedFileWriter;
     protected _initTask: Promise<void>;

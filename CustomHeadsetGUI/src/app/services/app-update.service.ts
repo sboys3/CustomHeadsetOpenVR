@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { getVersion } from '@tauri-apps/api/app';
+import { isNewVersion } from '../helpers';
 export type GitHubRelease = {
   tag_name: string,
   html_url: string
@@ -27,16 +28,6 @@ export class AppUpdateService {
   constructor(private http: HttpClient) {
     this.checkUpdate()
   }
-  private isNewVerrsion(current: string, latest: string) {
-    const cParts = current.split('.')
-    const lParts = latest.split('.')
-    for (let i = 0, c = Math.max(cParts.length, lParts.length); i < c; i++) {
-      const c = parseInt(cParts[i] ?? '0');
-      const l = parseInt(lParts[i] ?? '0');
-      if (l > c) return true;
-    }
-    return false;
-  }
   private currentCheckTask?: Promise<AppUpdateInfo>;
   private async checkUpdateInternal(): Promise<AppUpdateInfo> {
     try {
@@ -47,7 +38,7 @@ export class AppUpdateService {
         fetchSuccess: true,
         latestVersion: response.tag_name,
         currentVersion: current,
-        updateAvailable: this.isNewVerrsion(current, response.tag_name),
+        updateAvailable: isNewVersion(current, response.tag_name),
         url: response.html_url
       }
       this._updateInfo.set(result);

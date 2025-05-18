@@ -1,15 +1,19 @@
 import { computed, effect, Injectable, OnDestroy, signal } from '@angular/core';
-import { exists, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
+import { copyFile, exists, mkdir, readDir, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
 import { appLocalDataDir, join } from '@tauri-apps/api/path';
 import { DriverSettingService } from './driver-setting.service';
 import { DriverInfoService } from './driver-info.service';
 import { debounceTime, Subject } from 'rxjs';
-
+import { get_executable_path } from '../tauri_wrapper';
+import { open } from '@tauri-apps/plugin-dialog';
+import { DialogService } from './dialog.service';
 @Injectable()
 export class SystemDiagnosticService implements OnDestroy {
+  private _installingDriver = signal(false)
+  public readonly installingDriver = this._installingDriver.asReadonly()
   private _steamVRinstalled = signal<string | undefined>(undefined);
   public readonly steamVRinstalled = this._steamVRinstalled.asReadonly();
-  private _driverInstalled = signal<boolean>(false);
+  private _driverInstalled = signal(false);
   public readonly driverInstalled = this._driverInstalled.asReadonly();
   public readonly settingFileInited = computed(() => this.dss.values() && this.dis.values());
   public readonly systemReady = computed(() => this.steamVRinstalled() && this.driverInstalled() && this.settingFileInited())
@@ -20,7 +24,8 @@ export class SystemDiagnosticService implements OnDestroy {
   public get initTask() {
     return this._initTask;
   }
-  constructor(public dss: DriverSettingService, public dis: DriverInfoService) {
+  private id = self.crypto.randomUUID()
+  constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService) {
     let readySetup = false
     effect(() => {
       const ready = this.systemReady()
@@ -50,6 +55,7 @@ export class SystemDiagnosticService implements OnDestroy {
       watchImmediate(path, (e) => {
         subject.next()
       });
+       subject.next()
     }
   }
   ngOnDestroy(): void {
@@ -57,19 +63,41 @@ export class SystemDiagnosticService implements OnDestroy {
       cfn()
     }
   }
-  private pullingSteamVRinstallState = false;
+  private pullingSteamVRinstallStateCleanUpFn?: () => void;
   public startPullingSteamVRinstallState() {
-    if (this.pullingSteamVRinstallState) return;
-    this.pullingSteamVRinstallState = true
-    let interval = setInterval(() => this.checkSteamVrInstalled(), 1000);
-    this.cleanUp.push(() => clearInterval(interval))
+    if (this.pullingSteamVRinstallStateCleanUpFn) return;
+    const interval = setInterval(() => this.checkSteamVrInstalled(), 1000);
+    console.log('startPullingSteamVRinstallState', this.id)
+    const fn = this.pullingSteamVRinstallStateCleanUpFn = () => {
+      if (this.pullingSteamVRinstallStateCleanUpFn) {
+        this.cleanUp = this.cleanUp.filter(fn => fn !== this.pullingSteamVRinstallStateCleanUpFn)
+        console.log('stopPullingSteamVRinstallState', this.id)
+        clearInterval(interval);
+        this.pullingSteamVRinstallStateCleanUpFn = undefined;
+      }
+    }
+    this.cleanUp.push(fn)
   }
-  private pullingDriverinstallState = false;
+  public stopPullingSteamVRinstallState() {
+    this.pullingSteamVRinstallStateCleanUpFn?.();
+  }
+  private pullingDriverinstallStateFn?: () => void;
   public startPullingDriverinstallState() {
-    if (this.pullingDriverinstallState) return;
-    this.pullingDriverinstallState = true
-    let interval = setInterval(() => this.checkDriverInstalled(), 1000);
-    this.cleanUp.push(() => clearInterval(interval))
+    if (this.pullingDriverinstallStateFn) return;
+    const interval = setInterval(() => this.checkDriverInstalled(), 1000);
+    console.log('startPullingDriverinstallState', this.id)
+    const fn = this.pullingDriverinstallStateFn = () => {
+      if (this.pullingDriverinstallStateFn) {
+        this.cleanUp = this.cleanUp.filter(fn => fn !== this.pullingDriverinstallStateFn)
+        console.log('stopPullingDriverinstallState', this.id)
+        clearInterval(interval);
+        this.pullingDriverinstallStateFn = undefined;
+      }
+    }
+    this.cleanUp.push(fn)
+  }
+  public stopPullingDriverinstallState() {
+    this.pullingDriverinstallStateFn?.();
   }
   public async checkDriverInstalled() {
     const steamVrPath = await this.checkSteamVrInstalled();
@@ -77,6 +105,7 @@ export class SystemDiagnosticService implements OnDestroy {
       const driverPath = await join(steamVrPath, 'drivers', 'CustomHeadsetOpenVR', 'driver.vrdrivermanifest')
       if (await exists(driverPath)) {
         this._driverInstalled.set(true);
+        this.stopPullingDriverinstallState()
         return true;
       }
     }
@@ -117,7 +146,56 @@ export class SystemDiagnosticService implements OnDestroy {
   private getDriverFieldName(driverName: string) {
     return `driver_${driverName}`;
   }
-
+  private installing = false
+  async installDriver() {
+    if (this.installing) return;
+    const steamVrPath = this.steamVRinstalled();
+    if (!steamVrPath) return;
+    this._installingDriver.set(true);
+    this.installing = true
+    try {
+      let driverDir = await join(await get_executable_path(), '../CustomHeadsetOpenVR');
+      if (!await exists(driverDir)) {
+        if (await this.dialog.confirm($localize`Driver folder not found`, $localize`driver folder not in default location`, $localize`Locate`, 'primary')) {
+          const path = await open({ directory: true, multiple: false })
+          if (path) {
+            driverDir = path;
+          } else {
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+      if (await exists(await join(driverDir, 'driver.vrdrivermanifest'))) {
+        const steamVrDriverDir = await join(steamVrPath, 'drivers');
+        if (!await exists(steamVrDriverDir)) {
+          await mkdir(steamVrDriverDir)
+        }
+        const driverPath = await join(steamVrDriverDir, 'CustomHeadsetOpenVR');
+        await this.copyRec(driverPath, driverDir)
+        this.checkDriverInstalled()
+      } else {
+        await this.dialog.message($localize`Driver files not valid`, $localize`the folder seems not include driver file, please check again`)
+      }
+    } finally {
+      this.installing = false
+      this._installingDriver.set(false)
+    }
+  }
+  private async copyRec(targetDir: string, sourceDir: string) {
+    if (!await exists(targetDir)) {
+      await mkdir(targetDir)
+    }
+    const content = await readDir(sourceDir);
+    for (const e of content) {
+      if (e.isFile) {
+        await copyFile(await join(sourceDir, e.name), await join(targetDir, e.name));
+      } else if (e.isDirectory) {
+        await this.copyRec(await join(targetDir, e.name), await join(sourceDir, e.name));
+      }
+    }
+  }
   /**
    * 
    * @param update return true to save
@@ -165,11 +243,15 @@ export class SystemDiagnosticService implements OnDestroy {
       if (steamVrPath) {
         if (await exists(await join(steamVrPath, 'bin', 'version.txt'))) {
           this._steamVRinstalled.set(steamVrPath);
+          this.stopPullingSteamVRinstallState()
           return steamVrPath;
         }
       }
     }
     this._steamVRinstalled.set(undefined);
     return undefined;
+  }
+  public async resetDriverSetting() {
+    await writeTextFile(this.dss.filePath, "{}")
   }
 }

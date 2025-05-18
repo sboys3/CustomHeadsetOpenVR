@@ -198,3 +198,21 @@ export function debouncedFileWriter(path: string | Promise<string>, tempFileDir:
     isSavingFile: () => savingFile
   }
 }
+export function isNewVersion(current: string, latest: string): boolean {
+  const cParts = current.split('.');
+  const lParts = latest.split('.');
+  const maxLength = Math.max(cParts.length, lParts.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    const cNum = parseInt(cParts[i] || '0', 10);
+    const lNum = parseInt(lParts[i] || '0', 10);
+
+    if (lNum > cNum) {
+      return true; 
+    }
+    if (cNum > lNum) {
+      return false; 
+    }
+  }
+  return false;
+}

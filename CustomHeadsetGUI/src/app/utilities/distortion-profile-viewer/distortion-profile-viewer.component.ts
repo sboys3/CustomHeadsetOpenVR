@@ -61,7 +61,7 @@ export class DistortionProfileViewerComponent {
       profileData.set(newData);
     });
     effect(() => {
-      this.curveIdx = 0;
+      let curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
       // resize element when window resizes
       let windowSize = this.windowSize();
@@ -71,21 +71,22 @@ export class DistortionProfileViewerComponent {
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-      this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXDefault, 20), 'red', 'meganeX Default');
-      this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXOriginal, 20), 'blue', 'meganeX Original');
+      this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXDefault, 20), 'red', 'meganeX Default', curveIdx);
+      curveIdx++;
+      this.drawPoints(canvas, ctx, this.smoothPoints(this.meganeXOriginal, 20), 'blue', 'meganeX Original', curveIdx);
+      curveIdx++;
       const data = profileData();
       for (const obj of data) {
-        this.drawPoints(canvas, ctx, this.smoothPoints(this.chunkArrayInPairs(obj.distortions), 20), colors[(this.curveIdx - 2) % colors.length], obj.name);
+        this.drawPoints(canvas, ctx, this.smoothPoints(this.chunkArrayInPairs(obj.distortions), 20), colors[(curveIdx - 2) % colors.length], obj.name, curveIdx);
+        curveIdx++;
       }
     });
 
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
-    this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
-  }
-  ngAfterViewInit(): void {
 
+    this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
   }
   chunkArrayInPairs(arr: number[]): number[][] {
     const result: number[][] = [];
@@ -98,13 +99,13 @@ export class DistortionProfileViewerComponent {
     }
     return result;
   }
-  private curveIdx = 0;
   private drawPoints(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     points: number[][],
     color: string,
-    name: string
+    name: string,
+    curveIdx: number
   ): void {
     ctx.lineWidth = 1;
 
@@ -136,7 +137,7 @@ export class DistortionProfileViewerComponent {
     }
     ctx.stroke();
     ctx.fillStyle = color;
-    const y = scaledCanvasHeight * (105 - ((this.curveIdx++) * 6));
+    const y = scaledCanvasHeight * (105 - (curveIdx * 6));
     ctx.strokeStyle = 'black'
     ctx.fillRect(scaledCanvasWidth * 50, y, 15, 15)
     ctx.strokeRect(scaledCanvasWidth * 50, y, 15, 15)

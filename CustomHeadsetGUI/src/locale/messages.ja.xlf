@@ -298,6 +298,18 @@
         <source>Render Resolution Height Multiplier</source>
         <target state="translated">レンダリング解像度 縦倍率</target>
       </trans-unit>
+      <trans-unit id="5555679852113886646" datatype="html">
+        <source>driver version</source>
+        <target state="new">driver version</target>
+      </trans-unit>
+      <trans-unit id="5696123826602687537" datatype="html">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></source>
+        <target state="new">Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></target>
+      </trans-unit>
+      <trans-unit id="3051991385923492490" datatype="html">
+        <source>Not installed</source>
+        <target state="new">Not installed</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

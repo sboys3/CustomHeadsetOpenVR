@@ -22,6 +22,25 @@
     }
 </p>
 <p>
+    <span i18n>driver version</span>
+    @if(dis.values();as info){
+    @if(aus.updateInfo();as updateInfo){
+    <span>&nbsp;:&nbsp;{{info.driverVersion}}</span>
+    @if(isNewVersion(info.driverVersion,updateInfo.currentVersion)){
+    <span>
+        &nbsp;&nbsp;</span>
+    <button mat-stroked-button (click)="sds.installDriver()" [disabled]="sds.installingDriver()">
+        <span i18n>Install {{updateInfo.currentVersion}}</span>
+    </button>
+    }
+    }
+    }@else {
+    <span>
+        &nbsp;:&nbsp;</span>
+    <span i18n>Not installed</span>
+    }
+</p>
+<p>
     <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;">
         <span i18n>Github Page</span>
     </a>

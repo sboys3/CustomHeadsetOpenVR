@@ -26,5 +26,7 @@ h5 {
 }
 
 .page-disabled {
-    opacity: 0.7;
+    .field:not(.ignore-disable) {
+        opacity: 0.5;
+    }
 }

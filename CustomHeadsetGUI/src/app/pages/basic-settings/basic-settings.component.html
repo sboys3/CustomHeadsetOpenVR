@@ -2,7 +2,7 @@
     @if(settings){
     <h5 class="warn-color italic" i18n>Fields marked with * require restart SteamVR to apply changes.</h5>
     <mat-divider></mat-divider>
-    <div class="field">
+    <div class="field ignore-disable">
         <div class="title">
             <span i18n class="required">Enable MeganeX 8K Driver</span>
             <app-reset-button [canReset]="settings.enable!=defaults?.enable"

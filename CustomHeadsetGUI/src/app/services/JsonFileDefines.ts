@@ -56,11 +56,11 @@ export type MeganeX8KConfig = {
   maxFovY: number;
 
   distortionMeshResolution: number;
-  
+
   fovBurnInPrevention: boolean;
-  
+
   renderResolutionMultiplierX: number;
-  
+
   renderResolutionMultiplierY: number;
 };
 
@@ -74,6 +74,7 @@ export type DriverInfo = {
   about: string;
   defaultSettings: Settings;
   builtInDistortionProfiles: BuiltInDistortionProfiles;
+  driverVersion: string;
 }
 
 export type BuiltInDistortionProfiles = {
