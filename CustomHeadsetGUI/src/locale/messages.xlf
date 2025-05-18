@@ -2,17 +2,17 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="1071721880474488785" datatype="html">
-        <source>Import</source>
+      <trans-unit id="1726363342938046830" datatype="html">
+        <source>About</source>
       </trans-unit>
-      <trans-unit id="1172447031847067737" datatype="html">
-        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+      <trans-unit id="8643289769990675407" datatype="html">
+        <source>Basic</source>
       </trans-unit>
-      <trans-unit id="13546353273306589" datatype="html">
-        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+      <trans-unit id="7944521161821675937" datatype="html">
+        <source>Distortion Profile</source>
       </trans-unit>
-      <trans-unit id="1624999947532228823" datatype="html">
-        <source>Distortion Zoom</source>
+      <trans-unit id="7994506939670314559" datatype="html">
+        <source>App Settings</source>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
@@ -20,155 +20,158 @@
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
       </trans-unit>
-      <trans-unit id="29832309535656200" datatype="html">
-        <source>System</source>
-      </trans-unit>
-      <trans-unit id="3389786765701617878" datatype="html">
-        <source>import file error <x id="PH" equiv-text="ex"/></source>
-      </trans-unit>
-      <trans-unit id="3656080382305974312" datatype="html">
-        <source>Color Scheme</source>
-      </trans-unit>
-      <trans-unit id="3892161059518616136" datatype="html">
-        <source>Dark</source>
-      </trans-unit>
-      <trans-unit id="392265817484232889" datatype="html">
-        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
-      </trans-unit>
-      <trans-unit id="413116577994876478" datatype="html">
-        <source>Light</source>
-      </trans-unit>
-      <trans-unit id="4441102284303911974" datatype="html">
-        <source>file too large</source>
-      </trans-unit>
-      <trans-unit id="5510904560009009880" datatype="html">
-        <source>Delete Profile</source>
-      </trans-unit>
-      <trans-unit id="5537197768139679727" datatype="html">
-        <source>Update Mode</source>
-      </trans-unit>
-      <trans-unit id="5590001862286989245" datatype="html">
-        <source>Rewrite</source>
-      </trans-unit>
-      <trans-unit id="6254459922754143568" datatype="html">
-        <source>Replace</source>
-      </trans-unit>
-      <trans-unit id="7022070615528435141" datatype="html">
-        <source>Delete</source>
-      </trans-unit>
-      <trans-unit id="7462301153729425254" datatype="html">
-        <source>Export</source>
-      </trans-unit>
-      <trans-unit id="7742544409064011729" datatype="html">
-        <source>IPD</source>
-      </trans-unit>
-      <trans-unit id="7892467764301667860" datatype="html">
-        <source>Subpixel Shift</source>
-      </trans-unit>
-      <trans-unit id="7944521161821675937" datatype="html">
-        <source>Distortion Profile</source>
-      </trans-unit>
-      <trans-unit id="7949487308140215792" datatype="html">
-        <source>Import Error</source>
-      </trans-unit>
-      <trans-unit id="7994506939670314559" datatype="html">
-        <source>App Settings</source>
-      </trans-unit>
-      <trans-unit id="8643289769990675407" datatype="html">
-        <source>Basic</source>
-      </trans-unit>
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
-      </trans-unit>
-      <trans-unit id="3119794609322363234" datatype="html">
-        <source>Advanced Mode</source>
-      </trans-unit>
-      <trans-unit id="1537728937939680401" datatype="html">
-        <source>Distortion Mesh Resolution</source>
-      </trans-unit>
-      <trans-unit id="1960460633115255569" datatype="html">
-        <source>Max Fov Horizontal</source>
-      </trans-unit>
-      <trans-unit id="1963136290621768454" datatype="html">
-        <source>Resolution</source>
-      </trans-unit>
-      <trans-unit id="2133427521398732619" datatype="html">
-        <source>Black Level</source>
-      </trans-unit>
-      <trans-unit id="2780234993728008588" datatype="html">
-        <source>High (<x id="PH" equiv-text="255"/>)</source>
-      </trans-unit>
-      <trans-unit id="4391289919356861627" datatype="html">
-        <source>Apply</source>
-      </trans-unit>
-      <trans-unit id="4831283424104605009" datatype="html">
-        <source>IPD Offset</source>
-      </trans-unit>
-      <trans-unit id="5731056400307534906" datatype="html">
-        <source>Radius from center of the input (degrees)</source>
-      </trans-unit>
-      <trans-unit id="6309735826442522713" datatype="html">
-        <source>Current Profile : </source>
-      </trans-unit>
-      <trans-unit id="648306878592239743" datatype="html">
-        <source>Reset to default</source>
-      </trans-unit>
-      <trans-unit id="6607372754568222882" datatype="html">
-        <source>Low (<x id="PH" equiv-text="63"/>)</source>
-      </trans-unit>
-      <trans-unit id="7358890221143927213" datatype="html">
-        <source>Radius from center of the output (%)</source>
-      </trans-unit>
-      <trans-unit id="7702362431118838491" datatype="html">
-        <source>Max Fov Vertical</source>
-      </trans-unit>
-      <trans-unit id="8197514619650471762" datatype="html">
-        <source>Normal (<x id="PH" equiv-text="127"/>)</source>
-      </trans-unit>
-      <trans-unit id="8461842260159597706" datatype="html">
-        <source>Show</source>
-      </trans-unit>
-      <trans-unit id="8360107325291301836" datatype="html">
-        <source>Advanced Settings</source>
-      </trans-unit>
-      <trans-unit id="3303629114160653296" datatype="html">
-        <source>Enable MeganeX 8K Driver</source>
-      </trans-unit>
-      <trans-unit id="1136931556684562864" datatype="html">
-        <source>FOV Burn-In Prevention</source>
-      </trans-unit>
-      <trans-unit id="1726363342938046830" datatype="html">
-        <source>About</source>
-      </trans-unit>
-      <trans-unit id="6915767768628367173" datatype="html">
-        <source>Github Page</source>
       </trans-unit>
       <trans-unit id="765305289258005204" datatype="html">
         <source>app version</source>
       </trans-unit>
+      <trans-unit id="5551731962623384570" datatype="html">
+        <source>New version available!</source>
+      </trans-unit>
+      <trans-unit id="8491984279391991305" datatype="html">
+        <source>(Up to date)</source>
+      </trans-unit>
+      <trans-unit id="6915767768628367173" datatype="html">
+        <source>Github Page</source>
+      </trans-unit>
+      <trans-unit id="3656080382305974312" datatype="html">
+        <source>Color Scheme</source>
+      </trans-unit>
+      <trans-unit id="29832309535656200" datatype="html">
+        <source>System</source>
+      </trans-unit>
+      <trans-unit id="3892161059518616136" datatype="html">
+        <source>Dark</source>
+      </trans-unit>
+      <trans-unit id="413116577994876478" datatype="html">
+        <source>Light</source>
+      </trans-unit>
+      <trans-unit id="5537197768139679727" datatype="html">
+        <source>Update Mode</source>
+      </trans-unit>
+      <trans-unit id="6254459922754143568" datatype="html">
+        <source>Replace</source>
+      </trans-unit>
+      <trans-unit id="5590001862286989245" datatype="html">
+        <source>Rewrite</source>
+      </trans-unit>
+      <trans-unit id="3119794609322363234" datatype="html">
+        <source>Advanced Mode</source>
+      </trans-unit>
       <trans-unit id="1955403421668504940" datatype="html">
         <source>Fields marked with * require restart SteamVR to apply changes.</source>
       </trans-unit>
-      <trans-unit id="3248579138282446827" datatype="html">
-        <source>SteamVR installation</source>
+      <trans-unit id="3303629114160653296" datatype="html">
+        <source>Enable MeganeX 8K Driver</source>
       </trans-unit>
-      <trans-unit id="4047643863189720714" datatype="html">
-        <source>Launch SteamVR</source>
+      <trans-unit id="1753866341555293468" datatype="html">
+        <source>Shiftall driver is not disabled</source>
       </trans-unit>
-      <trans-unit id="4168563010189910891" datatype="html">
-        <source>Driver setting file not found, please launch SteamVR</source>
+      <trans-unit id="9187855490716817910" datatype="html">
+        <source>Disable</source>
       </trans-unit>
-      <trans-unit id="4234420385210303557" datatype="html">
-        <source>Driver files not valid</source>
+      <trans-unit id="1963136290621768454" datatype="html">
+        <source>Resolution</source>
+      </trans-unit>
+      <trans-unit id="7742544409064011729" datatype="html">
+        <source>IPD</source>
+      </trans-unit>
+      <trans-unit id="1960460633115255569" datatype="html">
+        <source>Max Fov Horizontal</source>
+      </trans-unit>
+      <trans-unit id="7702362431118838491" datatype="html">
+        <source>Max Fov Vertical</source>
+      </trans-unit>
+      <trans-unit id="1624999947532228823" datatype="html">
+        <source>Distortion Zoom</source>
+      </trans-unit>
+      <trans-unit id="8360107325291301836" datatype="html">
+        <source>Advanced Settings</source>
+      </trans-unit>
+      <trans-unit id="2133427521398732619" datatype="html">
+        <source>Black Level</source>
+      </trans-unit>
+      <trans-unit id="4831283424104605009" datatype="html">
+        <source>IPD Offset</source>
+      </trans-unit>
+      <trans-unit id="7892467764301667860" datatype="html">
+        <source>Subpixel Shift</source>
+      </trans-unit>
+      <trans-unit id="1537728937939680401" datatype="html">
+        <source>Distortion Mesh Resolution</source>
+      </trans-unit>
+      <trans-unit id="1136931556684562864" datatype="html">
+        <source>FOV Burn-In Prevention</source>
+      </trans-unit>
+      <trans-unit id="7605069838205533337" datatype="html">
+        <source>Render Resolution Width Multiplier</source>
+      </trans-unit>
+      <trans-unit id="5798596559724188992" datatype="html">
+        <source>Render Resolution Height Multiplier</source>
+      </trans-unit>
+      <trans-unit id="6607372754568222882" datatype="html">
+        <source>Low (<x id="PH" equiv-text="63"/>)</source>
+      </trans-unit>
+      <trans-unit id="8197514619650471762" datatype="html">
+        <source>Normal (<x id="PH" equiv-text="127"/>)</source>
+      </trans-unit>
+      <trans-unit id="2780234993728008588" datatype="html">
+        <source>High (<x id="PH" equiv-text="255"/>)</source>
+      </trans-unit>
+      <trans-unit id="1071721880474488785" datatype="html">
+        <source>Import</source>
+      </trans-unit>
+      <trans-unit id="5737034982985701605" datatype="html">
+        <source>Reveal In File Explorer</source>
+      </trans-unit>
+      <trans-unit id="6309735826442522713" datatype="html">
+        <source>Current Profile : </source>
+      </trans-unit>
+      <trans-unit id="8461842260159597706" datatype="html">
+        <source>Show</source>
+      </trans-unit>
+      <trans-unit id="4391289919356861627" datatype="html">
+        <source>Apply</source>
+      </trans-unit>
+      <trans-unit id="7462301153729425254" datatype="html">
+        <source>Export</source>
+      </trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+      </trans-unit>
+      <trans-unit id="5510904560009009880" datatype="html">
+        <source>Delete Profile</source>
+      </trans-unit>
+      <trans-unit id="13546353273306589" datatype="html">
+        <source>Deleting [<x id="PH" equiv-text="profile.name"/>]. This action cannot be reverted. Are you sure?</source>
+      </trans-unit>
+      <trans-unit id="7949487308140215792" datatype="html">
+        <source>Import Error</source>
+      </trans-unit>
+      <trans-unit id="4441102284303911974" datatype="html">
+        <source>file too large</source>
+      </trans-unit>
+      <trans-unit id="392265817484232889" datatype="html">
+        <source>import file not valid, missing &quot;type&quot; or &quot;distortions&quot;?</source>
+      </trans-unit>
+      <trans-unit id="1172447031847067737" datatype="html">
+        <source>import file not valid <x id="PH" equiv-text="jex"/></source>
+      </trans-unit>
+      <trans-unit id="3389786765701617878" datatype="html">
+        <source>import file error <x id="PH" equiv-text="ex"/></source>
+      </trans-unit>
+      <trans-unit id="7358890221143927213" datatype="html">
+        <source>Radius from center of the output (%)</source>
+      </trans-unit>
+      <trans-unit id="5731056400307534906" datatype="html">
+        <source>Radius from center of the input (degrees)</source>
       </trans-unit>
       <trans-unit id="462668030267703302" datatype="html">
         <source>System not ready</source>
       </trans-unit>
-      <trans-unit id="4678747519396968836" datatype="html">
-        <source>Driver folder not found</source>
-      </trans-unit>
-      <trans-unit id="5010152287347780808" datatype="html">
-        <source>the folder seems not include driver file, please check again</source>
+      <trans-unit id="3248579138282446827" datatype="html">
+        <source>SteamVR installation</source>
       </trans-unit>
       <trans-unit id="537541612011498563" datatype="html">
         <source>SteamVR not installed</source>
@@ -176,17 +179,11 @@
       <trans-unit id="5390109235265623153" datatype="html">
         <source>Install SteamVR</source>
       </trans-unit>
-      <trans-unit id="5551731962623384570" datatype="html">
-        <source>New version available!</source>
-      </trans-unit>
-      <trans-unit id="5737034982985701605" datatype="html">
-        <source>Reveal In File Explorer</source>
-      </trans-unit>
       <trans-unit id="6158163450651048125" datatype="html">
         <source>Driver installation</source>
       </trans-unit>
-      <trans-unit id="6353920713750092185" datatype="html">
-        <source>Locate</source>
+      <trans-unit id="8860173484207854369" datatype="html">
+        <source>Driver not installed</source>
       </trans-unit>
       <trans-unit id="7203035800259368462" datatype="html">
         <source>Install Driver</source>
@@ -194,29 +191,38 @@
       <trans-unit id="7555464695198772113" datatype="html">
         <source>Driver setting initialization</source>
       </trans-unit>
-      <trans-unit id="7697842312955845335" datatype="html">
-        <source>driver folder not in default location</source>
+      <trans-unit id="4168563010189910891" datatype="html">
+        <source>Driver setting file not found, please launch SteamVR</source>
       </trans-unit>
-      <trans-unit id="8491984279391991305" datatype="html">
-        <source>(Up to date)</source>
+      <trans-unit id="4047643863189720714" datatype="html">
+        <source>Launch SteamVR</source>
       </trans-unit>
-      <trans-unit id="8860173484207854369" datatype="html">
-        <source>Driver not installed</source>
+      <trans-unit id="7625955582398874896" datatype="html">
+        <source>Driver settings invalid</source>
       </trans-unit>
-      <trans-unit id="1849853714372469600" datatype="html">
-        <source>Driver setting valid</source>
+      <trans-unit id="4454114648752183451" datatype="html">
+        <source>Driver settings are not valid</source>
       </trans-unit>
       <trans-unit id="5254833004479203580" datatype="html">
         <source>Reset Setting</source>
       </trans-unit>
-      <trans-unit id="7598169207760829172" datatype="html">
-        <source>Driver setting not valid</source>
+      <trans-unit id="4678747519396968836" datatype="html">
+        <source>Driver folder not found</source>
       </trans-unit>
-      <trans-unit id="1523417162831746928" datatype="html">
-        <source>Shiftall driver not disable</source>
+      <trans-unit id="7697842312955845335" datatype="html">
+        <source>driver folder not in default location</source>
       </trans-unit>
-      <trans-unit id="9187855490716817910" datatype="html">
-        <source>Disable</source>
+      <trans-unit id="6353920713750092185" datatype="html">
+        <source>Locate</source>
+      </trans-unit>
+      <trans-unit id="4234420385210303557" datatype="html">
+        <source>Driver files not valid</source>
+      </trans-unit>
+      <trans-unit id="5010152287347780808" datatype="html">
+        <source>the folder seems not include driver file, please check again</source>
+      </trans-unit>
+      <trans-unit id="648306878592239743" datatype="html">
+        <source>Reset to default</source>
       </trans-unit>
     </body>
   </file>

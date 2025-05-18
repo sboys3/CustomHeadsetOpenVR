@@ -270,25 +270,33 @@
         <source>the folder seems not include driver file, please check again</source>
         <target state="translated">フォルダーにドライバーファイルが含まれていないようです。再確認してください</target>
       </trans-unit>
-      <trans-unit id="1849853714372469600" datatype="html">
-        <source>Driver setting valid</source>
-        <target state="translated">ドライバー設定有効</target>
+      <trans-unit id="7625955582398874896" datatype="html">
+        <source>Driver settings invalid</source>
+        <target state="new">ドライバー設定有効</target>
       </trans-unit>
       <trans-unit id="5254833004479203580" datatype="html">
         <source>Reset Setting</source>
         <target state="translated">設定をリセット</target>
       </trans-unit>
-      <trans-unit id="7598169207760829172" datatype="html">
-        <source>Driver setting not valid</source>
-        <target state="translated">ドライバー設定無効</target>
+      <trans-unit id="4454114648752183451" datatype="html">
+        <source>Driver settings are not valid</source>
+        <target state="new">ドライバー設定無効</target>
       </trans-unit>
-      <trans-unit id="1523417162831746928" datatype="html">
-        <source>Shiftall driver not disable</source>
-        <target state="translated">Shiftallドライバーが無効化されていません</target>
+      <trans-unit id="1753866341555293468" datatype="html">
+        <source>Shiftall driver is not disabled</source>
+        <target state="new">Shiftallドライバーが無効化されていません</target>
       </trans-unit>
       <trans-unit id="9187855490716817910" datatype="html">
         <source>Disable</source>
         <target state="translated">無効化</target>
+      </trans-unit>
+      <trans-unit id="7605069838205533337" datatype="html">
+        <source>Render Resolution Width Multiplier</source>
+        <target state="new">Render Resolution Width Multiplier</target>
+      </trans-unit>
+      <trans-unit id="5798596559724188992" datatype="html">
+        <source>Render Resolution Height Multiplier</source>
+        <target state="new">Render Resolution Height Multiplier</target>
       </trans-unit>
     </body>
   </file>

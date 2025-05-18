@@ -44,11 +44,11 @@
     </div>
 </div>
 <div class="field">
-    <div class="title" i18n>Driver setting valid</div>
+    <div class="title" i18n>Driver settings invalid</div>
     <div class="control">
         @if(dss.readFileError()){
         <mat-icon class="warn-color">warning</mat-icon>
-        <span i18n>Driver setting not valid</span>
+        <span i18n>Driver settings are not valid</span>
         @if(sds.driverInstalled()){
         <button mat-stroked-button i18n (click)="resetDriverSetting()">Reset Setting</button>
         }
