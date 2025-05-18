@@ -173,18 +173,25 @@ void ConfigLoader::WriteInfo(){
 			{"MeganeX8K Default", emptyObject},
 			{"MeganeX8K Original", emptyObject},
 		}},
+		{"resolution", {
+			{"renderResolution1To1X", info.renderResolution1To1X},
+			{"renderResolution1To1Y", info.renderResolution1To1Y},
+			{"renderResolution1To1Percent", info.renderResolution1To1Percent},
+			{"renderResolution100PercentX", info.renderResolution100PercentX},
+			{"renderResolution100PercentY", info.renderResolution100PercentY},
+		}},
 		{"driverVersion", driverVersion}
 	};
 	infoFile << data.dump(1, '\t');
 	infoFile.close();
 }
 
-void ConfigLoader::WriteInfoThread(){
+// void ConfigLoader::WriteInfoThread(){
 	// while(started){
 	// 	WriteInfo();
 	// 	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	// }
-}
+// }
 
 void ConfigLoader::WatcherThread(){
 	// watch for changes in the config file directory

@@ -129,8 +129,8 @@ void DistortionProfileConstructor::GetRecommendedRenderTargetSize(uint32_t* pnWi
 	double renderPixels = renderWidth * renderHeight;
 	renderWidth = (uint32_t)(renderWidth * std::sqrt(targetPixels / renderPixels));
 	renderHeight = (uint32_t)(renderHeight * std::sqrt(targetPixels / renderPixels));
-	renderWidth = std::min(renderWidth, 65535u);
-	renderHeight = std::min(renderHeight, 65535u);
+	renderWidth = std::min(renderWidth, 16384u);
+	renderHeight = std::min(renderHeight, 16384u);
 	DriverLog("100% render target size: %d x %d", renderWidth, renderHeight);
 	*pnWidth = renderWidth;
 	*pnHeight = renderHeight;

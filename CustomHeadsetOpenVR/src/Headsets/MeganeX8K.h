@@ -36,6 +36,9 @@ public:
 	virtual bool PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, uint32_t *&pnX, uint32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight) override;
 	virtual bool PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight) override;
 	
+	// helper function to calculate the 100% render resolution
+	void GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight);
+	
 	void SetIPD(float ipd);
 	
 	virtual void RunFrame() override;

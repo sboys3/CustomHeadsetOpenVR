@@ -7,6 +7,18 @@
 // This class loads config files and watches for changes to them, updating the global config object as needed.
 class ConfigLoader{
 public:
+	// class to contain info from elsewhere in the driver to write to info.json
+	// this is not structured in the same way as the json file so check WriteInfo in ConfigLoader.cpp
+	class Info{
+	public:
+		uint32_t renderResolution1To1X = 0;
+		uint32_t renderResolution1To1Y = 0;
+		double renderResolution1To1Percent = 0;
+		uint32_t renderResolution100PercentX = 0;
+		uint32_t renderResolution100PercentY = 0;
+	};
+	Info info;
+
 	bool started = false;
 	// parse the config file into the global config object
 	void ParseConfig();
@@ -17,7 +29,7 @@ public:
 	// start the config parser
 	void Start();
 	// thread to write info
-	void WriteInfoThread();
+	// void WriteInfoThread();
 	// thread to watch for file changes
 	void WatcherThread();
 	// thread for watching distortions if enabled

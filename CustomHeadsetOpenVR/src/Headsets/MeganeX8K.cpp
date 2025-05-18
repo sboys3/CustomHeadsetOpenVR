@@ -3,6 +3,7 @@
 #include <cmath>
 #include "../Distortion/RadialBezierDistortionProfile.h"
 #include "../Config/Config.h"
+#include "../Config/ConfigLoader.h"
 
 
 void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
@@ -215,11 +216,26 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 	return false;
 };
 
+void MeganeX8KShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight){
+	distortionProfileConstructor.GetRecommendedRenderTargetSize(renderWidth, renderHeight);
+	*renderWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
+	*renderHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
+	// save to info
+	driverConfigLoader.info.renderResolution100PercentX = *renderWidth;
+	driverConfigLoader.info.renderResolution100PercentY = *renderHeight;
+	distortionProfileConstructor.profile->GetRecommendedRenderTargetSize(&driverConfigLoader.info.renderResolution1To1X, &driverConfigLoader.info.renderResolution1To1Y);
+	double requiredPercentX = (double)(driverConfigLoader.info.renderResolution1To1X * driverConfigLoader.info.renderResolution1To1X) / 
+		(double)(driverConfigLoader.info.renderResolution100PercentX * driverConfigLoader.info.renderResolution100PercentX);
+	double requiredPercentY = (double)(driverConfigLoader.info.renderResolution1To1Y * driverConfigLoader.info.renderResolution1To1Y) / 
+		(double)(driverConfigLoader.info.renderResolution100PercentY * driverConfigLoader.info.renderResolution100PercentY);
+	double requiredPercent = std::max(requiredPercentX, requiredPercentY);
+	driverConfigLoader.info.renderResolution1To1Percent = requiredPercent * 100.0;
+	driverConfigLoader.WriteInfo();
+}
+
 // this is the 100% resolution in steamvr settings
 bool MeganeX8KShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight){
-	distortionProfileConstructor.GetRecommendedRenderTargetSize(pnWidth, pnHeight);
-	*pnWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
-	*pnHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
+	GetRecommendedRenderTargetSize(pnWidth, pnHeight);
 	return false;
 }
 
@@ -310,12 +326,9 @@ void MeganeX8KShim::UpdateSettings(){
 		// this requires reallocations so only do it when a finalization is not queued
 		if(!needsDistortionFinalization){
 			// update render target size
-			uint32_t renderWidth;
-			uint32_t renderHeight;
-			distortionProfileConstructor.GetRecommendedRenderTargetSize(&renderWidth, &renderHeight);
-			renderWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
-			renderHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
-			vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(0, renderWidth, renderHeight);
+			uint32_t renderResolutionX, renderResolutionY;
+			GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);
+			vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(0, renderResolutionX, renderResolutionY);
 		}
 	}
 }
