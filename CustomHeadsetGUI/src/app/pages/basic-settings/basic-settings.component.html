@@ -190,7 +190,7 @@
                 (resetClick)="resetOption('renderResolutionMultiplierX')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="settings.renderResolutionMultiplierX" step="0.001" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.renderResolutionMultiplierX" step="0.05" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="2" min="0.1" step="0.05" showTickMarks>
                 <input matSliderThumb [(ngModel)]="settings.renderResolutionMultiplierX" (ngModelChange)="saveConfigSettings()">
@@ -204,7 +204,7 @@
                 (resetClick)="resetOption('renderResolutionMultiplierY')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="settings.renderResolutionMultiplierY" step="0.001" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.renderResolutionMultiplierY" step="0.05" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="2" min="0.1" step="0.05" showTickMarks>
                 <input matSliderThumb [(ngModel)]="settings.renderResolutionMultiplierY" (ngModelChange)="saveConfigSettings()">
