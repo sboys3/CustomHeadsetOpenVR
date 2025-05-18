@@ -29,7 +29,7 @@
     @if(isNewVersion(info.driverVersion,updateInfo.currentVersion)){
     <span>
         &nbsp;&nbsp;</span>
-    <button mat-stroked-button (click)="sds.installDriver()" [disabled]="sds.installingDriver()">
+    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Install {{updateInfo.currentVersion}}</span>
     </button>
     }

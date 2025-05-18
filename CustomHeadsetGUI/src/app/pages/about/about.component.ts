@@ -6,6 +6,7 @@ import { AppUpdateInfoSuccess, AppUpdateService } from '../../services/app-updat
 import { delay, isNewVersion } from '../../helpers';
 import { DriverInfoService } from '../../services/driver-info.service';
 import { SystemDiagnosticService } from '../../services/system-diagnostic.service';
+import { DialogService } from '../../services/dialog.service';
 @Component({
   selector: 'app-about',
   imports: [MatButtonModule, MatIconModule],
@@ -14,11 +15,11 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
   styleUrl: './about.component.scss'
 })
 export class AboutComponent {
-  
+
   public isNewVersion = isNewVersion;
   public checking = signal<boolean>(false)
   public updateInfo = signal<AppUpdateInfoSuccess | undefined>(undefined)
-  constructor(public aus: AppUpdateService, public dis: DriverInfoService, public sds: SystemDiagnosticService) {
+  constructor(public aus: AppUpdateService, public dis: DriverInfoService, public sds: SystemDiagnosticService, private dialog: DialogService) {
 
   }
   async openExternal(url: string) {
@@ -38,5 +39,9 @@ export class AboutComponent {
     } finally {
       this.checking.set(false)
     }
+  }
+  async installDriver() {
+    await this.sds.installDriver()
+    this.dialog.message($localize`Install success`, $localize`please launch SteamVR to finish the installation`)
   }
 }
