@@ -292,11 +292,11 @@
       </trans-unit>
       <trans-unit id="7605069838205533337" datatype="html">
         <source>Render Resolution Width Multiplier</source>
-        <target state="new">Render Resolution Width Multiplier</target>
+        <target state="translated">渲染解析度寬度倍率</target>
       </trans-unit>
       <trans-unit id="5798596559724188992" datatype="html">
         <source>Render Resolution Height Multiplier</source>
-        <target state="new">Render Resolution Height Multiplier</target>
+        <target state="translated">渲染解析度高度倍率</target>
       </trans-unit>
     </body>
   </file>
