@@ -34,6 +34,10 @@ public:
 		int distortionMeshResolution = 127;
 		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
 		bool fovBurnInPrevention = true;
+		// multiply 100% render resolution width
+		double renderResolutionMultiplierX = 1.0;
+		// multiply 100% render resolution height
+		double renderResolutionMultiplierY = 1.0;
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;

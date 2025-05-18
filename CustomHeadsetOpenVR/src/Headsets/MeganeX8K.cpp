@@ -218,6 +218,8 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 // this is the 100% resolution in steamvr settings
 bool MeganeX8KShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight){
 	distortionProfileConstructor.GetRecommendedRenderTargetSize(pnWidth, pnHeight);
+	*pnWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
+	*pnHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
 	return false;
 }
 
@@ -274,6 +276,8 @@ void MeganeX8KShim::UpdateSettings(){
 	bool shouldReInitializeDistortion = false;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovX != driverConfig.meganeX8K.maxFovX;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovY != driverConfig.meganeX8K.maxFovY;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.renderResolutionMultiplierX != driverConfig.meganeX8K.renderResolutionMultiplierX;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.renderResolutionMultiplierY != driverConfig.meganeX8K.renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.fovBurnInPrevention != driverConfig.meganeX8K.fovBurnInPrevention;
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
@@ -309,6 +313,8 @@ void MeganeX8KShim::UpdateSettings(){
 			uint32_t renderWidth;
 			uint32_t renderHeight;
 			distortionProfileConstructor.GetRecommendedRenderTargetSize(&renderWidth, &renderHeight);
+			renderWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
+			renderHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
 			vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(0, renderWidth, renderHeight);
 		}
 	}

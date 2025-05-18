@@ -77,6 +77,12 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["fovBurnInPrevention"].is_boolean()){
 				newConfig.meganeX8K.fovBurnInPrevention = meganeX8KData["fovBurnInPrevention"].get<bool>();
 			}
+			if(meganeX8KData["renderResolutionMultiplierX"].is_number()){
+				newConfig.meganeX8K.renderResolutionMultiplierX = meganeX8KData["renderResolutionMultiplierX"].get<double>();
+			}
+			if(meganeX8KData["renderResolutionMultiplierY"].is_number()){
+				newConfig.meganeX8K.renderResolutionMultiplierY = meganeX8KData["renderResolutionMultiplierY"].get<double>();
+			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
@@ -157,6 +163,8 @@ void ConfigLoader::WriteInfo(){
 				{"maxFovY", defaultSettings.meganeX8K.maxFovY},
 				{"distortionMeshResolution", defaultSettings.meganeX8K.distortionMeshResolution},
 				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
+				{"renderResolutionMultiplierX", defaultSettings.meganeX8K.renderResolutionMultiplierX},
+				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
 			}},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
