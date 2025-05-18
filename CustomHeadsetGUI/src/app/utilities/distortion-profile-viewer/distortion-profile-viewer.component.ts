@@ -32,7 +32,7 @@ export class DistortionProfileViewerComponent {
     [48.3073, 100.0],
   ];
   profiles = input<string[]>()
-  windowSize = signal<{ width: number, height: number }>({ width: window.innerWidth, height: window.innerHeight });
+  windowSize = signal<{ width: number, height: number } | undefined>(undefined);
   canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   constructor(private pathsService: PathsService, host: ElementRef<HTMLElement>) {
     let width = 0, height = 0;
@@ -60,11 +60,16 @@ export class DistortionProfileViewerComponent {
       }
       profileData.set(newData);
     });
+    setTimeout(() => {
+      this.onResize()
+    }, 50);
     effect(() => {
       let curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
       // resize element when window resizes
       let windowSize = this.windowSize();
+      //delay first draw so we can get real window size
+      if (!windowSize) return;
       const b = host.nativeElement.getBoundingClientRect()
       width = b.width - 1;
       height = Math.min(b.height - 20, windowSize.height * 0.8);
@@ -83,9 +88,8 @@ export class DistortionProfileViewerComponent {
     });
 
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-
+  @HostListener('window:resize')
+  onResize() {
     this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
   }
   chunkArrayInPairs(arr: number[]): number[][] {
