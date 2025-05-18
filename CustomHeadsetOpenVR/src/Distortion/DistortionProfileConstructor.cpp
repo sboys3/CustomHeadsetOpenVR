@@ -1,5 +1,6 @@
 #include "DistortionProfileConstructor.h"
 #include "RadialBezierDistortionProfile.h"
+#include <cmath>
 
 bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 	
@@ -113,6 +114,26 @@ void DistortionProfileConstructor::ReInitializeProfile(){
 	profile->maxFovY = distortionSettings.maxFovY;
 	// initialize new profile and replace old one
 	profile->Initialize();
+}
+
+void DistortionProfileConstructor::GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight){
+	uint32_t originalWidth = (uint32_t)distortionSettings.resolutionX;
+	uint32_t originalHeight = (uint32_t)distortionSettings.resolutionY;
+	uint32_t renderWidth = originalWidth;
+	uint32_t renderHeight = originalHeight;
+	if(profile != nullptr){
+		profile->GetRecommendedRenderTargetSize(&renderWidth, &renderHeight);
+	}
+	// keep total number of pixels the same but change aspect ratio
+	double targetPixels = originalWidth * originalHeight;
+	double renderPixels = renderWidth * renderHeight;
+	renderWidth = (uint32_t)(renderWidth * std::sqrt(targetPixels / renderPixels));
+	renderHeight = (uint32_t)(renderHeight * std::sqrt(targetPixels / renderPixels));
+	renderWidth = std::min(renderWidth, 65535u);
+	renderHeight = std::min(renderHeight, 65535u);
+	DriverLog("100% render target size: %d x %d", renderWidth, renderHeight);
+	*pnWidth = renderWidth;
+	*pnHeight = renderHeight;
 }
 
 DistortionProfileConstructor::~DistortionProfileConstructor(){

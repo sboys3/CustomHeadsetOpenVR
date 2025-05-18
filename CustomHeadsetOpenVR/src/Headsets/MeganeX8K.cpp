@@ -217,10 +217,7 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 
 // this is the 100% resolution in steamvr settings
 bool MeganeX8KShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* &pnWidth, uint32_t* &pnHeight){
-	*pnWidth = driverConfig.meganeX8K.resolutionX;
-	*pnHeight = driverConfig.meganeX8K.resolutionY;
-	// nWidth = 2880;
-	// nHeight = 2880;
+	distortionProfileConstructor.GetRecommendedRenderTargetSize(pnWidth, pnHeight);
 	return false;
 }
 
@@ -306,6 +303,14 @@ void MeganeX8KShim::UpdateSettings(){
 		float rightEyeLeft, rightEyeRight, rightEyeTop, rightEyeBottom;
 		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeTop, &rightEyeBottom);
 		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeTop}, {leftEyeRight, leftEyeBottom}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeTop}, {rightEyeRight, rightEyeBottom}});
+		// this requires reallocations so only do it when a finalization is not queued
+		if(!needsDistortionFinalization){
+			// update render target size
+			uint32_t renderWidth;
+			uint32_t renderHeight;
+			distortionProfileConstructor.GetRecommendedRenderTargetSize(&renderWidth, &renderHeight);
+			vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(0, renderWidth, renderHeight);
+		}
 	}
 }
 

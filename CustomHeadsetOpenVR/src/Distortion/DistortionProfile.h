@@ -38,4 +38,7 @@ public:
 	// the values are tangents of the half-angle from center axis
 	// the top and bottom seemed to be reversed in the official documentation so the order is different here to correct that
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) = 0;
+	// returns the resolution required for 1:1 distortion
+	// width and height will be set to the panel resolution by default but should be changed based on the distortion.
+	virtual void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight){};
 };

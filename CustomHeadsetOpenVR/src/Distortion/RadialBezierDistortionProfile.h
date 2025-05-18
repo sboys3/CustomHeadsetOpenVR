@@ -18,11 +18,11 @@ public:
 	};
 	// radial distortions from the input image in degrees to the output image in percent
 	// this will be used as the values for the green channel
-	std::vector<DistortionPoint> distortions ={{0, 0}, {47.5, 100}};
+	std::vector<DistortionPoint> distortions = {{0, 0}, {47.5, 100}};
 	// additional percent distortions for the red channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsRed ={{0, 0.5}, {47.5, 0.5}};
+	std::vector<DistortionPoint> distortionsRed = {{0, 0.5}, {47.5, 0.5}};
 	// additional percent distortions for the blue channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsBlue ={{0, -0.42}, {47.5, -0.42}};
+	std::vector<DistortionPoint> distortionsBlue = {{0, -0.42}, {47.5, -0.42}};
 	// amount to smooth the curve from 0 to 1
 	double smoothAmount = 0.66;
 private:
@@ -30,6 +30,9 @@ private:
 	// this is half the fov of the input image in degrees
 	float halfFovX = 0.0f;
 	float halfFovY = 0.0f;
+	// recommended render resolution
+	uint32_t recommendedRenderWidth = 0;
+	uint32_t recommendedRenderHeight = 0;
 	// radial maps computed from distortions, the index is the output radius and the values are the input radius
 	// these are ready to quickly compute the uv distortions
 	float* radialUVMapR = nullptr;
@@ -53,6 +56,8 @@ public:
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) override;
 	
 	virtual Point2D ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) override;
+	
+	virtual void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) override;
 	
 	virtual ~RadialBezierDistortionProfile();
 };

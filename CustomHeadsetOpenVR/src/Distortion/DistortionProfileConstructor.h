@@ -15,9 +15,14 @@ class DistortionProfileConstructor{
 		// load a distortion profile by name
 		// returns true if the profile was changed to indicate the distortion mesh must be refreshed
 		bool LoadDistortionProfile(std::string name);
+		// re-initialize the existing profile with the new distortionSettings
 		void ReInitializeProfile();
+		// get the 100% size for the distortion profile
+		// this will keep the total number of pixels similar to the actual panel resolution but will change the aspect ratio to match the distortion profile
+		void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight);
 		virtual ~DistortionProfileConstructor();
 	private:
+		// used for detecting profile changes
 		std::string profileName;
 		double profileModifiedTime;
 };

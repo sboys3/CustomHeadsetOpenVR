@@ -208,6 +208,8 @@ void RadialBezierDistortionProfile::Initialize(){
 	// calculate the required input resoltions required to get 1:1 distortion in the most distorted spot
 	float desiredInputResolutionX = maxInputOutputRatioX * usedOutputScreenResolutionX;
 	float desiredInputResolutionY = maxInputOutputRatioY * usedOutputScreenResolutionY;
+	recommendedRenderWidth = (uint32_t)(desiredInputResolutionX);
+	recommendedRenderHeight = (uint32_t)(desiredInputResolutionY);
 	
 	DriverLog("Max distortion ratio X: %f", maxInputOutputRatioX);
 	DriverLog("Max distortion ratio Y: %f", maxInputOutputRatioY);
@@ -303,6 +305,11 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	distortion.x /= tan(halfFovX * M_PI / 180.0f);
 	distortion.y /= tan(halfFovY * M_PI / 180.0f);
 	return distortion;
+}
+
+void RadialBezierDistortionProfile::GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight){
+	*pnWidth = recommendedRenderWidth;
+	*pnHeight = recommendedRenderHeight;
 }
 
 void RadialBezierDistortionProfile::Cleanup(){
