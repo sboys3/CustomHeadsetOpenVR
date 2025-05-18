@@ -58,6 +58,10 @@ export type MeganeX8KConfig = {
   distortionMeshResolution: number;
   
   fovBurnInPrevention: boolean;
+  
+  renderResolutionMultiplierX: number;
+  
+  renderResolutionMultiplierY: number;
 };
 
 export type AppSetting = {

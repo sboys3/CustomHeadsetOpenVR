@@ -109,7 +109,7 @@ export class SystemDiagnosticService implements OnDestroy {
     if (settings) {
       const driverSetting = settings[this.getDriverFieldName(driverName)]
       if (driverSetting) {
-        return !!driverSetting['enable']
+        return driverSetting['enable'] ?? true
       }
     }
     return true;
