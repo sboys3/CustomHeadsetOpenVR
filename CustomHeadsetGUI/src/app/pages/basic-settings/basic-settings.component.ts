@@ -1,4 +1,4 @@
-import { Component, computed, effect } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
@@ -15,6 +15,7 @@ import { AppSettingService } from '../../services/app-setting.service';
 import { DriverInfoService } from '../../services/driver-info.service';
 import { ResetButtonComponent } from '../../utilities/reset-button/reset-button.component';
 import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
+import { SystemDiagnosticService } from '../../services/system-diagnostic.service';
 
 
 
@@ -32,6 +33,7 @@ import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.
         ResetButtonComponent,
         SystemReadyComponent,
         CommonModule],
+    providers: [SystemDiagnosticService],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
 })
@@ -52,8 +54,8 @@ export class BasicSettingsComponent {
         255: $localize`High (${255})`
     }
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
-
-    constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService) {
+    driverWarning = signal(false)
+    constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService, public sds: SystemDiagnosticService) {
         effect(() => {
             const config = dss.values();
             this.config = config;
@@ -73,6 +75,17 @@ export class BasicSettingsComponent {
                     file: f
                 }))]
         });
+
+        effect(() => {
+            const steamVrConfig = sds.steamVrConfig();
+            const config = dss.values();
+            if (steamVrConfig) {
+                this.driverWarning.set(sds.getSteamVRDriverEnableState(steamVrConfig, 'MeganeXSuperlight') && (config?.meganeX8K?.enable ?? false));
+            }
+        })
+    }
+    async disableDriver() {
+        await this.sds.disableSteamVRDriver('MeganeXSuperlight');
     }
     resetOption(key: keyof MeganeX8KConfig) {
         if (this.settings && this.defaults) {
@@ -98,6 +111,9 @@ export class BasicSettingsComponent {
         if (this.config) {
             this.dss.save(this.config);
         }
+    }
+    checkShiftallDriverState() {
+
     }
     loading = false;
 }

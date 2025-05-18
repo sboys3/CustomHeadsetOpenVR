@@ -9,7 +9,15 @@
                 (resetClick)="resetOption('enable')"></app-reset-button>
         </div>
         <div class="control">
-            <mat-slide-toggle [(ngModel)]="settings.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="settings.enable"
+                (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+            @if(driverWarning()){
+            <div class="dirver-warning">
+                <mat-icon class="warn-color">warning</mat-icon>
+                <span i18n>Shiftall driver not disable</span>
+                <button mat-stroked-button i18n (click)="disableDriver()">Disable</button>
+            </div>
+            }
         </div>
     </div>
     <div class="field">

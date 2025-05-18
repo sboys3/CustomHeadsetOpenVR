@@ -282,6 +282,14 @@
         <source>Driver setting not valid</source>
         <target state="translated">ドライバー設定無効</target>
       </trans-unit>
+      <trans-unit id="1523417162831746928" datatype="html">
+        <source>Shiftall driver not disable</source>
+        <target state="translated">Shiftallドライバーが無効化されていません</target>
+      </trans-unit>
+      <trans-unit id="9187855490716817910" datatype="html">
+        <source>Disable</source>
+        <target state="translated">無効化</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -212,6 +212,12 @@
       <trans-unit id="7598169207760829172" datatype="html">
         <source>Driver setting not valid</source>
       </trans-unit>
+      <trans-unit id="1523417162831746928" datatype="html">
+        <source>Shiftall driver not disable</source>
+      </trans-unit>
+      <trans-unit id="9187855490716817910" datatype="html">
+        <source>Disable</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

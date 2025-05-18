@@ -14,3 +14,13 @@ h5 {
     font-weight: normal;
 
 }
+
+.dirver-warning {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+
+    >*:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+}
