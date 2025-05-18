@@ -29,10 +29,10 @@ export class DriverTroubleshooterComponent {
     sds.initTask.then(() => {
       this.wait.set(true);
       if (!sds.steamVRinstalled()) {
-        sds.startPullingSteamVRinstallState()
+        sds.pullingSteamVRinstall.start()
       }
       if (!sds.driverInstalled()) {
-        sds.startPullingDriverinstallState()
+        sds.PullingDriverinstall.start()
       }
     });
 

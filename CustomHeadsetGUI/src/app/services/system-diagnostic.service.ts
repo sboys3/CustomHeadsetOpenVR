@@ -7,6 +7,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { get_executable_path } from '../tauri_wrapper';
 import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
+import { PullingService } from './PullingService';
 @Injectable()
 export class SystemDiagnosticService implements OnDestroy {
   private _installingDriver = signal(false)
@@ -24,7 +25,8 @@ export class SystemDiagnosticService implements OnDestroy {
   public get initTask() {
     return this._initTask;
   }
-  private id = self.crypto.randomUUID()
+  public readonly pullingSteamVRinstall = new PullingService(() => this.checkSteamVrInstalled(), 'pullingSteamVRinstallk');
+  public readonly PullingDriverinstall = new PullingService(() => this.checkDriverInstalled(), 'PullingDriverinstall');
   constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService) {
     let readySetup = false
     effect(() => {
@@ -55,7 +57,7 @@ export class SystemDiagnosticService implements OnDestroy {
       watchImmediate(path, (e) => {
         subject.next()
       });
-       subject.next()
+      subject.next()
     }
   }
   ngOnDestroy(): void {
@@ -63,49 +65,14 @@ export class SystemDiagnosticService implements OnDestroy {
       cfn()
     }
   }
-  private pullingSteamVRinstallStateCleanUpFn?: () => void;
-  public startPullingSteamVRinstallState() {
-    if (this.pullingSteamVRinstallStateCleanUpFn) return;
-    const interval = setInterval(() => this.checkSteamVrInstalled(), 1000);
-    console.log('startPullingSteamVRinstallState', this.id)
-    const fn = this.pullingSteamVRinstallStateCleanUpFn = () => {
-      if (this.pullingSteamVRinstallStateCleanUpFn) {
-        this.cleanUp = this.cleanUp.filter(fn => fn !== this.pullingSteamVRinstallStateCleanUpFn)
-        console.log('stopPullingSteamVRinstallState', this.id)
-        clearInterval(interval);
-        this.pullingSteamVRinstallStateCleanUpFn = undefined;
-      }
-    }
-    this.cleanUp.push(fn)
-  }
-  public stopPullingSteamVRinstallState() {
-    this.pullingSteamVRinstallStateCleanUpFn?.();
-  }
-  private pullingDriverinstallStateFn?: () => void;
-  public startPullingDriverinstallState() {
-    if (this.pullingDriverinstallStateFn) return;
-    const interval = setInterval(() => this.checkDriverInstalled(), 1000);
-    console.log('startPullingDriverinstallState', this.id)
-    const fn = this.pullingDriverinstallStateFn = () => {
-      if (this.pullingDriverinstallStateFn) {
-        this.cleanUp = this.cleanUp.filter(fn => fn !== this.pullingDriverinstallStateFn)
-        console.log('stopPullingDriverinstallState', this.id)
-        clearInterval(interval);
-        this.pullingDriverinstallStateFn = undefined;
-      }
-    }
-    this.cleanUp.push(fn)
-  }
-  public stopPullingDriverinstallState() {
-    this.pullingDriverinstallStateFn?.();
-  }
+
   public async checkDriverInstalled() {
     const steamVrPath = await this.checkSteamVrInstalled();
     if (steamVrPath) {
       const driverPath = await join(steamVrPath, 'drivers', 'CustomHeadsetOpenVR', 'driver.vrdrivermanifest')
       if (await exists(driverPath)) {
         this._driverInstalled.set(true);
-        this.stopPullingDriverinstallState()
+        this.PullingDriverinstall.stop()
         return true;
       }
     }
@@ -243,7 +210,7 @@ export class SystemDiagnosticService implements OnDestroy {
       if (steamVrPath) {
         if (await exists(await join(steamVrPath, 'bin', 'version.txt'))) {
           this._steamVRinstalled.set(steamVrPath);
-          this.stopPullingSteamVRinstallState()
+          this.pullingSteamVRinstall.stop()
           return steamVrPath;
         }
       }
