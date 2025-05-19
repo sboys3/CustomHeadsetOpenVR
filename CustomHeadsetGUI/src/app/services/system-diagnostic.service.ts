@@ -8,13 +8,14 @@ import { get_executable_path } from '../tauri_wrapper';
 import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
+import { cleanJsonComments } from '../helpers';
 @Injectable()
 export class SystemDiagnosticService implements OnDestroy {
   private _installingDriver = signal(false)
   public readonly installingDriver = this._installingDriver.asReadonly()
   private _steamVRinstalled = signal<string | undefined>(undefined);
   public readonly steamVRinstalled = this._steamVRinstalled.asReadonly();
-  private _driverInstalled = signal(false);
+  private _driverInstalled = signal<string | undefined>(undefined);
   public readonly driverInstalled = this._driverInstalled.asReadonly();
   public readonly settingFileInited = computed(() => this.dss.values() && this.dis.values());
   public readonly systemReady = computed(() => this.steamVRinstalled() && this.driverInstalled() && this.settingFileInited())
@@ -71,12 +72,21 @@ export class SystemDiagnosticService implements OnDestroy {
     if (steamVrPath) {
       const driverPath = await join(steamVrPath, 'drivers', 'CustomHeadsetOpenVR', 'driver.vrdrivermanifest')
       if (await exists(driverPath)) {
-        this._driverInstalled.set(true);
+        let version = '0.0.0'
+        try {
+          const obj = JSON.parse(cleanJsonComments(await readTextFile(driverPath)))
+          if (obj['version']) {
+            version = obj['version']
+          }
+        } catch (ex) {
+          console.warn('read version failed')
+        }
+        this._driverInstalled.set(version);
         this.PullingDriverinstall.stop()
         return true;
       }
     }
-    this._driverInstalled.set(false);
+    this._driverInstalled.set(undefined);
     return false;
   }
   public async getOpenvrpaths() {
@@ -140,7 +150,11 @@ export class SystemDiagnosticService implements OnDestroy {
           await mkdir(steamVrDriverDir)
         }
         const driverPath = await join(steamVrDriverDir, 'CustomHeadsetOpenVR');
-        await this.copyRec(driverPath, driverDir)
+        try {
+          await this.copyRec(driverPath, driverDir)
+        } catch (e) {
+          await this.dialog.message($localize`Install Failed`, `${e}`)
+        }
         this.checkDriverInstalled()
       } else {
         await this.dialog.message($localize`Driver files not valid`, $localize`the folder seems not include driver file, please check again`)

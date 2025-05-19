@@ -310,6 +310,18 @@
         <source>Not installed</source>
         <target state="translated">未安裝</target>
       </trans-unit>
+      <trans-unit id="4422662750836022649" datatype="html">
+        <source>Install success</source>
+        <target state="translated">安裝成功</target>
+      </trans-unit>
+      <trans-unit id="651025109543030819" datatype="html">
+        <source>please launch SteamVR to finish the installation</source>
+        <target state="translated">請啟動 SteamVR 以完成安裝</target>
+      </trans-unit>
+      <trans-unit id="1422053103497449239" datatype="html">
+        <source>Install Failed</source>
+        <target state="translated">安裝失敗</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

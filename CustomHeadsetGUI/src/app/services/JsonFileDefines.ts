@@ -74,7 +74,6 @@ export type DriverInfo = {
   about: string;
   defaultSettings: Settings;
   builtInDistortionProfiles: BuiltInDistortionProfiles;
-  driverVersion: string;
 }
 
 export type BuiltInDistortionProfiles = {

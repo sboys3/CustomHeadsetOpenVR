@@ -23,10 +23,10 @@
 </p>
 <p>
     <span i18n>driver version</span>
-    @if(dis.values();as info){
+    @if(sds.driverInstalled();as verison){
     @if(aus.updateInfo();as updateInfo){
-    <span>&nbsp;:&nbsp;{{info.driverVersion}}</span>
-    @if(isNewVersion(info.driverVersion,updateInfo.currentVersion)){
+    <span>&nbsp;:&nbsp;{{verison}}</span>
+    @if(isNewVersion(verison,updateInfo.currentVersion)){
     <span>
         &nbsp;&nbsp;</span>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
