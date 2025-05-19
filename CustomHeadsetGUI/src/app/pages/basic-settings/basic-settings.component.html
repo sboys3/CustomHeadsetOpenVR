@@ -17,6 +17,13 @@
                 <button mat-stroked-button i18n (click)="disableDriver()">Disable</button>
             </div>
             }
+            @if(driverEnablePrompt()){
+            <div class="dirver-warning">
+                <mat-icon >info</mat-icon>
+                <span i18n>Shiftall driver is disabled</span>
+                <button mat-stroked-button i18n (click)="enableDriver()">Enable</button>
+            </div>
+            }
         </div>
     </div>
     <div class="field">

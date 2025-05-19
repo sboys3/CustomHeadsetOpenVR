@@ -56,6 +56,7 @@ export class BasicSettingsComponent {
     }
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
     driverWarning = signal(false)
+    driverEnablePrompt = signal(false)
     constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService, public sds: SystemDiagnosticService) {
         effect(() => {
             const config = dss.values();
@@ -81,7 +82,10 @@ export class BasicSettingsComponent {
             const steamVrConfig = sds.steamVrConfig();
             const config = dss.values();
             if (steamVrConfig) {
-                this.driverWarning.set(sds.getSteamVRDriverEnableState(steamVrConfig, 'MeganeXSuperlight') && (config?.meganeX8K?.enable ?? false));
+                let shiftallEnabled = sds.getSteamVRDriverEnableState(steamVrConfig, 'MeganeXSuperlight')
+                let customEnabled = sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
+                this.driverWarning.set((shiftallEnabled || !customEnabled) && (config?.meganeX8K?.enable ?? false));
+                this.driverEnablePrompt.set(!shiftallEnabled && !(config?.meganeX8K?.enable ?? true));
             }
         })
     }
@@ -90,6 +94,10 @@ export class BasicSettingsComponent {
     }
     async disableDriver() {
         await this.sds.disableSteamVRDriver('MeganeXSuperlight');
+        await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
+    }
+    async enableDriver() {
+        await this.sds.enableSteamVRDriver('MeganeXSuperlight');
     }
     resetOption(key: keyof MeganeX8KConfig) {
         if (this.settings && this.defaults) {

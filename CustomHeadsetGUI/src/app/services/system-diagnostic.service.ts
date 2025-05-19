@@ -111,6 +111,16 @@ export class SystemDiagnosticService implements OnDestroy {
       return true;
     })
   }
+  public async enableSteamVRDriver(driverName: string) {
+    await this.updateSteamVRSettings(settings => {
+      const name = this.getDriverFieldName(driverName);
+      if (!settings[name]) {
+        settings[name] = {}
+      }
+      settings[name]['enable'] = true
+      return true;
+    })
+  }
   public getSteamVRDriverEnableState(settings: any, driverName: string) {
     if (settings) {
       const driverSetting = settings[this.getDriverFieldName(driverName)]
