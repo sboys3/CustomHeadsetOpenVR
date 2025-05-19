@@ -310,7 +310,7 @@
         <source>Not installed</source>
         <target state="translated">インストールされていません</target>
       </trans-unit>
-     <trans-unit id="4422662750836022649" datatype="html">
+      <trans-unit id="4422662750836022649" datatype="html">
         <source>Install success</source>
         <target state="translated">インストール成功</target>
       </trans-unit>
@@ -321,6 +321,22 @@
       <trans-unit id="1422053103497449239" datatype="html">
         <source>Install Failed</source>
         <target state="translated">インストール失敗</target>
+      </trans-unit>
+      <trans-unit id="3099842785070530061" datatype="html">
+        <source>Resolution Info</source>
+        <target state="translated">解像度情報</target>
+      </trans-unit>
+      <trans-unit id="2109348818976292721" datatype="html">
+        <source>Show Details</source>
+        <target state="translated">詳細を表示</target>
+      </trans-unit>
+      <trans-unit id="6957891556134371559" datatype="html">
+        <source>Hide Details</source>
+        <target state="translated">詳細を非表示</target>
+      </trans-unit>
+      <trans-unit id="263013383242607256" datatype="html">
+        <source>Please launch SteamVR</source>
+        <target state="translated">SteamVRを起動してください</target>
       </trans-unit>
     </body>
   </file>

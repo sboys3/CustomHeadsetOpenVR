@@ -21,9 +21,11 @@
         display: flex;
         flex-shrink: 0;
         flex-direction: row;
-        height: 3rem;
+        min-height: 3rem;
         border-bottom: 1px solid var(--mat-sys-outline-variant);
-
+        button{
+            height: 2rem;
+        }
         &:last-child {
             border-bottom: none;
         }
@@ -66,6 +68,15 @@
 
         .value {
             width: 10%;
+        }
+
+        .note {
+            padding: 0.5rem 1rem;
+            font-size: 95%;
+
+            p {
+                margin: 0.5rem;
+            }
         }
 
         .control {

@@ -242,6 +242,18 @@
       <trans-unit id="651025109543030819" datatype="html">
         <source>please launch SteamVR to finish the installation</source>
       </trans-unit>
+      <trans-unit id="2109348818976292721" datatype="html">
+        <source>Show Details</source>
+      </trans-unit>
+      <trans-unit id="263013383242607256" datatype="html">
+        <source>Please launch SteamVR</source>
+      </trans-unit>
+      <trans-unit id="3099842785070530061" datatype="html">
+        <source>Resolution Info</source>
+      </trans-unit>
+      <trans-unit id="6957891556134371559" datatype="html">
+        <source>Hide Details</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

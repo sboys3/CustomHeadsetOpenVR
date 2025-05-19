@@ -43,6 +43,7 @@ export class BasicSettingsComponent {
     config?: Settings;
     defaults?: MeganeX8KConfig;
     subpixelShiftOptions = [0, 0.33];
+    resolutionInfoDisplay = signal(false)
     resolutionModel?: number;
     resolutionOptions = [
         { name: '4K', x: 3840, y: 3552 }, { name: '2K', x: 2880, y: 2664 }
@@ -83,6 +84,9 @@ export class BasicSettingsComponent {
                 this.driverWarning.set(sds.getSteamVRDriverEnableState(steamVrConfig, 'MeganeXSuperlight') && (config?.meganeX8K?.enable ?? false));
             }
         })
+    }
+    toggleResolutionDisplay() {
+        this.resolutionInfoDisplay.update(x => !x)
     }
     async disableDriver() {
         await this.sds.disableSteamVRDriver('MeganeXSuperlight');

@@ -322,6 +322,22 @@
         <source>Install Failed</source>
         <target state="translated">安裝失敗</target>
       </trans-unit>
+      <trans-unit id="3099842785070530061" datatype="html">
+        <source>Resolution Info</source>
+        <target state="translated">解析度資訊</target>
+      </trans-unit>
+      <trans-unit id="2109348818976292721" datatype="html">
+        <source>Show Details</source>
+        <target state="translated">顯示詳細資料</target>
+      </trans-unit>
+      <trans-unit id="6957891556134371559" datatype="html">
+        <source>Hide Details</source>
+        <target state="translated">隱藏詳細資料</target>
+      </trans-unit>
+      <trans-unit id="263013383242607256" datatype="html">
+        <source>Please launch SteamVR</source>
+        <target state="translated">請啟動 SteamVR</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

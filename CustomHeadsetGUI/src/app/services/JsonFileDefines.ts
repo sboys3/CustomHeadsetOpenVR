@@ -74,6 +74,14 @@ export type DriverInfo = {
   about: string;
   defaultSettings: Settings;
   builtInDistortionProfiles: BuiltInDistortionProfiles;
+  resolution: ResolutionInfo
+}
+export type ResolutionInfo = {
+  renderResolution1To1X: number,
+  renderResolution1To1Y: number,
+  renderResolution1To1Percent: number,
+  renderResolution100PercentX: number,
+  renderResolution100PercentY: number
 }
 
 export type BuiltInDistortionProfiles = {
