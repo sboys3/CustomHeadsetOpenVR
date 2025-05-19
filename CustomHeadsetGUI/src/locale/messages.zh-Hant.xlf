@@ -338,6 +338,14 @@
         <source>Please launch SteamVR</source>
         <target state="translated">請啟動 SteamVR</target>
       </trans-unit>
+      <trans-unit id="6150901173509410295" datatype="html">
+        <source>Shiftall driver is also disabled</source>
+        <target state="new">Shiftall driver is also disabled</target>
+      </trans-unit>
+      <trans-unit id="2180291763949669799" datatype="html">
+        <source>Enable</source>
+        <target state="new">Enable</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

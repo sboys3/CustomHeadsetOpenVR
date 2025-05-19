@@ -254,6 +254,12 @@
       <trans-unit id="6957891556134371559" datatype="html">
         <source>Hide Details</source>
       </trans-unit>
+      <trans-unit id="2180291763949669799" datatype="html">
+        <source>Enable</source>
+      </trans-unit>
+      <trans-unit id="6150901173509410295" datatype="html">
+        <source>Shiftall driver is also disabled</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
