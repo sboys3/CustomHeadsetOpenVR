@@ -53,6 +53,7 @@
     <ProjectGuid>{26835375-f0f0-40c0-bfeb-bace61043051}</ProjectGuid>
     <RootNamespace>CustomHeadsetOpenVR</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>MeganeXsuperlight8Knative</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -14,7 +14,7 @@ using ordered_json = nlohmann::ordered_json;
 
 std::string ConfigLoader::GetConfigFolder(){
 	char* appdataPath = std::getenv("APPDATA");
-	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/CustomHeadset/");
+	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/MeganeXsuperlight8Knative/");
 	return configPath;
 }
 
