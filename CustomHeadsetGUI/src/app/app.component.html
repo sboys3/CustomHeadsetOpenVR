@@ -6,7 +6,7 @@
   }
   <a mat-tab-link routerLink="about" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
     <span i18n>About</span>
-    @if(appUpdateService.updateInfo()?.updateAvailable){
+    @if(appUpdateService.updateInfo()?.updateAvailable || appUpdateService.updateInfo()?.installAvailable){
       <mat-icon class="warn-color">priority_high</mat-icon>
     }
   </a>

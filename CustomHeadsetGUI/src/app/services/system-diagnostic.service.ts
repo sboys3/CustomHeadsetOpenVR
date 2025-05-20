@@ -9,7 +9,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
 import { cleanJsonComments } from '../helpers';
-@Injectable()
+@Injectable({providedIn: "root", })
 export class SystemDiagnosticService implements OnDestroy {
   private _installingDriver = signal(false)
   public readonly installingDriver = this._installingDriver.asReadonly()

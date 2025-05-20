@@ -33,7 +33,7 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
         ResetButtonComponent,
         SystemReadyComponent,
         CommonModule],
-    providers: [SystemDiagnosticService],
+    providers: [],
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
 })

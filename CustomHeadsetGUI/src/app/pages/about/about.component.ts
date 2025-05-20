@@ -10,7 +10,7 @@ import { DialogService } from '../../services/dialog.service';
 @Component({
   selector: 'app-about',
   imports: [MatButtonModule, MatIconModule],
-  providers: [SystemDiagnosticService],
+  providers: [],
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss'
 })

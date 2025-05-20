@@ -26,7 +26,7 @@
     @if(sds.driverInstalled();as verison){
     @if(aus.updateInfo();as updateInfo){
     <span>&nbsp;:&nbsp;{{verison}}</span>
-    @if(isNewVersion(verison,updateInfo.currentVersion)){
+    @if(updateInfo.installAvailable){
     <span>
         &nbsp;&nbsp;</span>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
