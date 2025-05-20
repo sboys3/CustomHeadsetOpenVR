@@ -8,16 +8,13 @@ export type GitHubRelease = {
   html_url: string
 }
 export type AppUpdateInfoSuccess = {
-  fetchSuccess: true;
+  fetchSuccess: boolean;
   latestVersion: string;
   currentVersion: string;
   updateAvailable: boolean;
   url: string;
 };
-export type AppUpdateInfoErr = {
-  fetchSuccess: false
-}
-export type AppUpdateInfo = AppUpdateInfoSuccess | AppUpdateInfoErr;
+export type AppUpdateInfo = AppUpdateInfoSuccess;
 @Injectable({
   providedIn: 'root'
 
@@ -30,25 +27,27 @@ export class AppUpdateService {
   }
   private currentCheckTask?: Promise<AppUpdateInfo>;
   private async checkUpdateInternal(): Promise<AppUpdateInfo> {
+    
+    const current = await getVersion();
+    const result: AppUpdateInfoSuccess = {
+      fetchSuccess: false,
+      latestVersion: "Unknown",
+      currentVersion: current,
+      updateAvailable: false,
+      url: ""
+    }
     try {
       const request = firstValueFrom(this.http.get<GitHubRelease>('https://api.github.com/repos/sboys3/CustomHeadsetOpenVR/releases/latest'));
       const response = await request;
-      const current = await getVersion();
-      const result: AppUpdateInfoSuccess = {
-        fetchSuccess: true,
-        latestVersion: response.tag_name,
-        currentVersion: current,
-        updateAvailable: isNewVersion(current, response.tag_name),
-        url: response.html_url
-      }
+      result.latestVersion = response.tag_name
+      result.updateAvailable = isNewVersion(current, response.tag_name)
+      result.url = response.html_url
       this._updateInfo.set(result);
       return result;
     } catch (e) {
       console.warn(e)
-      this._updateInfo.set(undefined);
-      return {
-        fetchSuccess: false
-      }
+      this._updateInfo.set(result);
+      return result
     } finally {
       this.currentCheckTask = undefined;
     }

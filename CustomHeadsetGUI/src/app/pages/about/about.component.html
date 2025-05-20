@@ -8,7 +8,7 @@
         <span i18n>New version available!</span>
     </a>
     }@else{
-    @if(!checking()){
+    @if(!checking() && update.fetchSuccess){
     <span i18n>(Up to date)</span>
     }
     <button mat-icon-button [disabled]="checking()" (click)="checkUpdate()">
