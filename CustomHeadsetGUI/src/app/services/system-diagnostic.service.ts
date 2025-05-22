@@ -81,6 +81,10 @@ export class SystemDiagnosticService implements OnDestroy {
         } catch (ex) {
           console.warn('read version failed')
         }
+        let infoDriverVersion = this.dis.values()?.driverVersion
+        if (version === '0.0.0' && infoDriverVersion) {
+          version = infoDriverVersion
+        }
         this._driverInstalled.set(version);
         this.PullingDriverinstall.stop()
         return true;
