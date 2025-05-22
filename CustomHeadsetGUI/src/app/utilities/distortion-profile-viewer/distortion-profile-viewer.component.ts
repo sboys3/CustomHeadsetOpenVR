@@ -63,6 +63,10 @@ export class DistortionProfileViewerComponent {
     setTimeout(() => {
       this.onResize()
     }, 50);
+    setTimeout(() => {
+      // sometimes the labels are too large but can be fixed by running again later
+      this.onResize()
+    }, 200);
     effect(() => {
       let curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
