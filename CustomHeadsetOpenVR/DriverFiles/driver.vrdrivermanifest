@@ -1,12 +1,11 @@
 {
 	"alwaysActivate": true,
-	"name" : "CustomHeadsetOpenVR",
-	"directory" : "",
-	"resourceOnly" : false,
+	"name": "CustomHeadsetOpenVR",
+	"directory": "",
+	"resourceOnly": false,
 	"redirectsDisplay": true,
-	"hmd_presence" :
-	[
+	"hmd_presence": [
 		"*.*"
 	],
-	"version": "0.5.0"
+	"version": "0.5.1"
 }
