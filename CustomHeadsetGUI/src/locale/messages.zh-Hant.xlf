@@ -340,19 +340,19 @@
       </trans-unit>
       <trans-unit id="6150901173509410295" datatype="html">
         <source>Shiftall driver is also disabled</source>
-        <target state="new">Shiftall 驅動程式也已停用</target>
+        <target state="translated">Shiftall 驅動程式亦已停用</target>
       </trans-unit>
       <trans-unit id="2180291763949669799" datatype="html">
         <source>Enable</source>
-        <target state="new">啟用</target>
+        <target state="translated">啟用</target>
       </trans-unit>
       <trans-unit id="4651117059363790056" datatype="html">
         <source>100% Render resolution for SteamVR</source>
-        <target state="new">SteamVR 的 100% 渲染解析度</target>
+        <target state="translated">SteamVR 的 100% 渲染解析度</target>
       </trans-unit>
       <trans-unit id="8347767686698958660" datatype="html">
         <source>Render resolution for 1 sample per panel pixel</source>
-        <target state="new">每面板像素 1 個樣本的渲染解析度</target>
+        <target state="translated">每個面板像素 1 個取樣的渲染解析度</target>
       </trans-unit>
     </body>
   </file>
