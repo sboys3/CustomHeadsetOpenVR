@@ -340,11 +340,19 @@
       </trans-unit>
       <trans-unit id="6150901173509410295" datatype="html">
         <source>Shiftall driver is also disabled</source>
-        <target state="new">Shiftall driver is also disabled</target>
+        <target state="new">Shiftall ドライバーも無効になっています</target>
       </trans-unit>
       <trans-unit id="2180291763949669799" datatype="html">
         <source>Enable</source>
-        <target state="new">Enable</target>
+        <target state="new">有効にする</target>
+      </trans-unit>
+      <trans-unit id="4651117059363790056" datatype="html">
+        <source>100% Render resolution for SteamVR</source>
+        <target state="new">SteamVR の 100% レンダリング解像度</target>
+      </trans-unit>
+      <trans-unit id="8347767686698958660" datatype="html">
+        <source>Render resolution for 1 sample per panel pixel</source>
+        <target state="new">パネルピクセルあたり 1 サンプルのレンダリング解像度</target>
       </trans-unit>
     </body>
   </file>

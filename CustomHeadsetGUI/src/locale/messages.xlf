@@ -260,6 +260,12 @@
       <trans-unit id="6150901173509410295" datatype="html">
         <source>Shiftall driver is also disabled</source>
       </trans-unit>
+      <trans-unit id="4651117059363790056" datatype="html">
+        <source>100% Render resolution for SteamVR</source>
+      </trans-unit>
+      <trans-unit id="8347767686698958660" datatype="html">
+        <source>Render resolution for 1 sample per panel pixel</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
