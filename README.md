@@ -4,9 +4,17 @@ This is a custom headset driver for SteamVR that allows the MeganeX superlight 8
 
 ## Installing
 1. Download the latest release from the [releases page](https://github.com/sboys3/CustomHeadsetOpenVR/releases)
-2. Copy the `CustomHeadsetOpenVR` folder from inside the zip into `C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers` 
-3. Disable the MeganeXSuperlight driver in SteamVR
-4. Restart SteamVR
+2. Extract the whole folder within the zip to a place you want it.
+3. Run `custom-headset-gui.exe` in `CustomHeadsetGUI` to finish the installation and configure settings.
+![Installation Tutorial](Docs/Media/CustomHeadsetInstall.webp)
+<details>
+<summary>Manual Driver Installation</summary>
+You do not need to do this if you installed the driver with the GUI.
+
+1. Copy the `CustomHeadsetOpenVR` folder from inside the zip into `C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers` 
+2. Disable the MeganeXSuperlight driver in SteamVR
+3. Restart SteamVR
+</details>
 
 ## Configuring
 Run `custom-headset-gui.exe` to configure settings.
