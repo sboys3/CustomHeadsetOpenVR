@@ -174,6 +174,10 @@ export class SystemDiagnosticService implements OnDestroy {
         await this.dialog.message($localize`Driver files not valid`, $localize`the folder seems not include driver file, please check again`)
       }
     } finally {
+      if(!this.dss.values() || this.dss.values()?.meganeX8K?.enable){
+        await this.disableSteamVRDriver('MeganeXSuperlight');
+        await this.enableSteamVRDriver('CustomHeadsetOpenVR');
+      }
       this.installing = false
       this._installingDriver.set(false)
     }
