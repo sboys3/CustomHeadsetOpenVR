@@ -2,7 +2,25 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <tuple>
 
+struct HiddenAreaMeshConfig {
+	bool enable = false;
+	bool testMode = false;
+	int detailLevel = 16;
+	double radiusTopOuter = 0.25;
+	double radiusTopInner = 0.25;
+	double radiusBottomInner = 0.25;
+	double radiusBottomOuter = 0.25;
+
+	constexpr bool operator==(const HiddenAreaMeshConfig& other) const {
+		return std::tie(this->enable, this->testMode, this->detailLevel, this->radiusTopOuter, this->radiusTopInner, this->radiusBottomInner, this->radiusBottomOuter) ==
+		       std::tie(other.enable, other.testMode, other.detailLevel, other.radiusTopOuter, other.radiusTopInner, other.radiusBottomInner, other.radiusBottomOuter);
+	}
+	constexpr bool operator!=(const HiddenAreaMeshConfig& other) const {
+		return !(this->operator==(other));
+	}
+};
 
 class Config{
 public:
@@ -38,6 +56,8 @@ public:
 		double renderResolutionMultiplierX = 1.0;
 		// multiply 100% render resolution height
 		double renderResolutionMultiplierY = 1.0;
+		// Config struct for the hidden area mesh
+		HiddenAreaMeshConfig hiddenArea;
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;

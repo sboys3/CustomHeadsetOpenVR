@@ -83,6 +83,16 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["renderResolutionMultiplierY"].is_number()){
 				newConfig.meganeX8K.renderResolutionMultiplierY = meganeX8KData["renderResolutionMultiplierY"].get<double>();
 			}
+			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
+				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
+				if(hiddenAreaJson["enable"].is_boolean()){ newHiddenArea.enable = hiddenAreaJson["enable"].get<bool>(); }
+				if(hiddenAreaJson["testMode"].is_boolean()){ newHiddenArea.testMode = hiddenAreaJson["testMode"].get<bool>(); }
+				if(hiddenAreaJson["detailLevel"].is_number()){ newHiddenArea.detailLevel = hiddenAreaJson["detailLevel"].get<int>(); }
+				if(hiddenAreaJson["radiusTopOuter"].is_number()){ newHiddenArea.radiusTopOuter = hiddenAreaJson["radiusTopOuter"].get<double>(); }
+				if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
+				if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
+				if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
+			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
@@ -165,6 +175,15 @@ void ConfigLoader::WriteInfo(){
 				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
 				{"renderResolutionMultiplierX", defaultSettings.meganeX8K.renderResolutionMultiplierX},
 				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
+				{"hiddenArea", {
+					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
+					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},
+					{"detailLevel", defaultSettings.meganeX8K.hiddenArea.detailLevel},
+					{"radiusTopOuter", defaultSettings.meganeX8K.hiddenArea.radiusTopOuter},
+					{"radiusTopInner", defaultSettings.meganeX8K.hiddenArea.radiusTopInner},
+					{"radiusBottomInner", defaultSettings.meganeX8K.hiddenArea.radiusBottomInner},
+					{"radiusBottomOuter", defaultSettings.meganeX8K.hiddenArea.radiusBottomOuter},
+				}},
 			}},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},

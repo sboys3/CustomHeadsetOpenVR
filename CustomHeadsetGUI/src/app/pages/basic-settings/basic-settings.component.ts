@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
-import { Settings, MeganeX8KConfig, DriverInfo } from '../../services/JsonFileDefines';
+import { Settings, MeganeX8KConfig, DriverInfo, HiddenAreaMeshConfig } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 import { AppSettingService } from '../../services/app-setting.service';
 import { DriverInfoService } from '../../services/driver-info.service';
@@ -40,6 +40,7 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
 export class BasicSettingsComponent {
     profiles: DistortionProfileEntry[] = []
     settings?: MeganeX8KConfig
+    hiddenArea?: HiddenAreaMeshConfig
     config?: Settings;
     defaults?: MeganeX8KConfig;
     subpixelShiftOptions = [0, 0.33];
@@ -62,6 +63,7 @@ export class BasicSettingsComponent {
             const config = dss.values();
             this.config = config;
             this.settings = config?.meganeX8K;
+            this.hiddenArea = config?.meganeX8K?.hiddenArea
             this.resolutionModel = this.settings?.resolutionX;
         });
 
@@ -102,6 +104,12 @@ export class BasicSettingsComponent {
     resetOption(key: keyof MeganeX8KConfig) {
         if (this.settings && this.defaults) {
             (this.settings as any)[key] = this.defaults[key];
+            this.saveConfigSettings()
+        }
+    }
+    resetHiddenAreaOption(key: keyof HiddenAreaMeshConfig) {
+        if (this.hiddenArea && this.defaults && this.defaults.hiddenArea) {
+            (this.hiddenArea as any)[key] = this.defaults.hiddenArea[key];
             this.saveConfigSettings()
         }
     }
