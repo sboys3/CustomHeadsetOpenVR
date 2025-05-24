@@ -11,6 +11,39 @@ export type Settings = {
   watchDistortionProfiles: boolean,
   meganeX8K: MeganeX8KConfig
 }
+
+export type HiddenAreaMeshConfig = {
+  /**
+   * If hidden area meshes should be used.
+   */
+  enable: boolean;
+  /**
+   * "Inverts" the hidden area meshes and increases the black level.
+   * This makes it easy to see how large the hidden are mesh is.
+   */
+  testMode: boolean;
+  /**
+   * How many points should be used for each rounded corner.
+   */
+  detailLevel: number;
+  /**
+   * Top outer corner radius, as a fraction the cropped display area.
+   */
+  radiusTopOuter: number;
+  /**
+   * Top inner corner radius, as a fraction the cropped display area.
+   */
+  radiusTopInner: number;
+  /**
+   * Bottom inner corner radius, as a fraction the cropped display area.
+   */
+  radiusBottomInner: number;
+  /**
+   * Bottom outer corner radius, as a fraction the cropped display area.
+   */
+  radiusBottomOuter: number;
+};
+
 export type MeganeX8KConfig = {
   /**
    * if the MeganeX superlight 8K should be shimmed by this driver
@@ -62,6 +95,8 @@ export type MeganeX8KConfig = {
   renderResolutionMultiplierX: number;
 
   renderResolutionMultiplierY: number;
+
+  hiddenArea: HiddenAreaMeshConfig;
 };
 
 export type AppSetting = {
