@@ -4,7 +4,7 @@
 #include "../Distortion/RadialBezierDistortionProfile.h"
 #include "../Config/Config.h"
 #include "../Config/ConfigLoader.h"
-
+#include "../HiddenArea/HiddenArea.h"
 
 void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
 	DriverLog("PosTrackedDeviceActivate");
@@ -21,18 +21,24 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	}
 	
 	isActive = true;
-	// TODO: apply a propper hidden area mesh
-	vr::HmdVector2_t mesh[1];
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_Standard, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Standard, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_Inverse, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Inverse, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_LineLoop, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_LineLoop, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_Max, mesh, 0);
-	vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Max, mesh, 0);
-	
-	
+
+	if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
+		// Can be moved to `UpdateSettings` if anyone figures out how to reload the hidden area mesh during runtime.
+		// For now, hidden area changes require a SteamVR reboot to apply.
+		for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
+			auto mesh = HiddenArea::CreateLineLoopMesh(eye, haConf);
+			auto err = vr::VRHiddenArea()->SetHiddenArea(eye, vr::k_eHiddenAreaMesh_LineLoop, mesh.data(), (uint32_t)mesh.size());
+			if (err != vr::TrackedProp_Success) {
+				DriverLog("Failed to setHiddenArea with error %d", err);
+			} else {
+				DriverLog("setHiddenArea succeeded!");
+			}
+		}
+	} else {
+		vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  vr::k_eHiddenAreaMesh_Standard, nullptr, 0);
+		vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Standard, nullptr, 0);
+	}
+
 	// avoid "not fullscreen" warnings from vrmonitor
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_IsOnDesktop_Bool, false);
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_DisplayDebugMode_Bool, true);
@@ -277,8 +283,10 @@ void MeganeX8KShim::UpdateSettings(){
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
 	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
-	
-	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
+
+	const bool usingHiddenAreaTestMode = driverConfig.meganeX8K.hiddenArea.enable && driverConfig.meganeX8K.hiddenArea.testMode;
+	const float blackLevel = usingHiddenAreaTestMode ? 0.5f : (float)driverConfig.meganeX8K.blackLevel;
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, blackLevel);
 	
 	
 	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
