@@ -43,7 +43,7 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [X] Support for non square outputs to light edges of the display
 	- [ ] A near perfect default distortion profile
 	- [X] Multiple distortion profiles
-	- [ ] Hidden area mesh
+	- [X] Hidden area mesh
 - Config
 	- [ ] Define the structure of the config file
 	- [X] Create MeganeX section
