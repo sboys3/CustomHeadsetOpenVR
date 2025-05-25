@@ -8,7 +8,7 @@
         <app-distortion-profile-viewer [profiles]="displayedCurve"></app-distortion-profile-viewer>
         <div class="list">
             <cdk-virtual-scroll-viewport [itemSize]="50" class="viewport">
-                <div class="item" [class.alternate]="odd" *cdkVirtualFor="let profile of profiles;let odd = odd;">
+                <div class="item" [attr.index]="i " [class.alternate]="odd" *cdkVirtualFor="let profile of profiles(); let odd = odd;let i = index">
                     <span class="name"
                         [class.primary-color]="settings?.distortionProfile==profile.name">{{profile.name}}</span>
                     <button mat-icon-button matTooltip="Show" (click)="showProfile(profile)" i18n-matTooltip

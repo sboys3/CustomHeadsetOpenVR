@@ -1,8 +1,8 @@
-import { Component, effect } from '@angular/core';
+import { Component, computed, effect, AfterViewInit, OnDestroy, viewChild } from '@angular/core';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { open, save } from '@tauri-apps/plugin-dialog';
 import { copyFile } from '@tauri-apps/plugin-fs';
 import { basename } from '@tauri-apps/api/path';
@@ -29,28 +29,49 @@ import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.
   templateUrl: './distortion-profile.component.html',
   styleUrl: './distortion-profile.component.scss'
 })
-export class DistortionProfileComponent {
-  profiles: DistortionProfileEntry[] = [];
+export class DistortionProfileComponent implements AfterViewInit, OnDestroy {
+  profiles = computed(() => {
+    const localSettingFiles = this.dss.distortionProfileList();
+    return [
+      ...localSettingFiles.map(f => ({
+        name: f.name.split('.').slice(0, -1).join('.'),
+        isDefault: false,
+        file: f
+      }))].sort((a, b) => a.name.localeCompare(b.name))
+  })
+  viewport = viewChild.required(CdkVirtualScrollViewport)
+
   settings?: MeganeX8KConfig
   config?: Settings;
   displayedCurve: string[] = [];
   activedProfile?: string;
+
+  private resizeObserver!: ResizeObserver;
+
   constructor(public dss: DriverSettingService, private ps: PathsService, private dialog: DialogService) {
     effect(() => {
-      const config = dss.values();
+      const config = dss.values();;
       this.config = config;
       this.settings = config?.meganeX8K;
       this.updateDisplayCurve()
     });
-    effect(() => {
-      this.profiles = [
-        ...this.dss.distortionProfileList().map(f => ({
-          name: f.name.split('.').slice(0, -1).join('.'),
-          isDefault: false,
-          file: f
-        }))]
-    });
   }
+
+  ngAfterViewInit(): void {
+    // not very sure why cdk scroll need this to work correctly , it was ok last version , temporary fix
+    this.viewport().checkViewportSize();
+    this.resizeObserver = new ResizeObserver(() => {
+      this.viewport().checkViewportSize();
+    });
+    this.resizeObserver.observe(this.viewport().elementRef.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
   private updateDisplayCurve() {
     const n: string[] = []
     if (this.settings?.distortionProfile) {

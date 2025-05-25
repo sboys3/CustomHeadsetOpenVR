@@ -29,6 +29,7 @@ app-system-ready {
         display: flex;
         align-items: center;
         padding: 0 0.5rem;
+        box-sizing: border-box;
 
         &.alternate {
             background-color: var(--mat-sys-surface-container-low);
