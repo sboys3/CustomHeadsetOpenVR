@@ -266,6 +266,30 @@
       <trans-unit id="8347767686698958660" datatype="html">
         <source>Render resolution for 1 sample per panel pixel</source>
       </trans-unit>
+      <trans-unit id="1201696567241717027" datatype="html">
+        <source>Hidden Area Mesh Settings</source>
+      </trans-unit>
+      <trans-unit id="1889076648687767831" datatype="html">
+        <source>Radius Bottom Inner</source>
+      </trans-unit>
+      <trans-unit id="1916026066967398775" datatype="html">
+        <source>Test Mode</source>
+      </trans-unit>
+      <trans-unit id="2154451363318577354" datatype="html">
+        <source>Mesh Detail</source>
+      </trans-unit>
+      <trans-unit id="265959825807724821" datatype="html">
+        <source>Radius Bottom Outer</source>
+      </trans-unit>
+      <trans-unit id="6190895239365336532" datatype="html">
+        <source>Enable Hidden Area Meshes</source>
+      </trans-unit>
+      <trans-unit id="7233521999850639473" datatype="html">
+        <source>Radius Top Outer</source>
+      </trans-unit>
+      <trans-unit id="8838782636230653734" datatype="html">
+        <source>Radius Top Inner</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
