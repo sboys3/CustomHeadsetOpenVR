@@ -67,9 +67,7 @@ export class DistortionProfileComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
+      this.resizeObserver?.disconnect();
   }
 
   private updateDisplayCurve() {

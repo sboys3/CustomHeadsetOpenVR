@@ -3,16 +3,16 @@
 app-system-ready {
     @include sf.formStyle();
 }
-
 .italic {
     font-style: italic;
 }
 
 h5 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
     font-weight: normal;
-
+    margin: 0;
+    padding-bottom: 0.5rem;
+    z-index: 1;
+    background-color: var(--mat-sys-surface);
 }
 
 .dirver-warning {

@@ -19,7 +19,7 @@
             }
             @if(driverEnablePrompt()){
             <div class="dirver-warning">
-                <mat-icon >info</mat-icon>
+                <mat-icon>info</mat-icon>
                 <span i18n>Shiftall driver is also disabled</span>
                 <button mat-stroked-button i18n (click)="enableDriver()">Enable</button>
             </div>
@@ -111,7 +111,10 @@
         <div class="note">
             @if(dis.values();as info){
             @if(info.resolution;as res){
+            @if(steamVRRunning();as steamvr){
             <div class="note">
+                @if(steamvr.updated){
+                @if(res.renderResolution100PercentX &&steamvr.running){
                 <p>
                     <span i18n>100% Render resolution for SteamVR</span>
                     <span>&nbsp;:&nbsp;</span>
@@ -123,10 +126,14 @@
                     <span>{{res.renderResolution1To1X}}x{{res.renderResolution1To1Y}}</span>
                     <span>&nbsp;(&nbsp;{{res.renderResolution1To1Percent|number:'1.0-1'}}%&nbsp;)</span>
                 </p>
-
+                }@else {
+                <span i18n>Steam VR not running or headset not connected</span>
+                }
+                }
             </div>
             }@else {
             <h5 class="warn-color" i18n>Please launch SteamVR</h5>
+            }
             }
             }
         </div>
@@ -146,25 +153,26 @@
             </mat-slider>
         </div>
     </div>
-    @if(hiddenArea){
-        <div class="field">
-            <div class="title">
-                <span i18n class="required">Enable Hidden Area Meshes</span>
-                <app-reset-button [canReset]="hiddenArea.enable!=defaults?.hiddenArea?.enable"
+    <div class="field">
+        <div class="title">
+            <span i18n class="required">Enable Hidden Area Meshes</span>
+            <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
                 (resetClick)="resetHiddenAreaOption('enable')"></app-reset-button>
-            </div>
-            <div class="control">
-                <mat-slide-toggle [(ngModel)]="hiddenArea.enable"
-                (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
-            </div>
         </div>
-    @if(hiddenArea.enable){
+        <div class="control">
+            @if(hiddenArea){
+            <mat-slide-toggle [(ngModel)]="hiddenArea.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+            }@else {
+            <span i18n>Check driver update and launch SteamVR</span>
+            }
+        </div>
+    </div>
+    @if(hiddenArea&&hiddenArea.enable){
     <div class="field">
         <div class="section-title">
             <span i18n>Hidden Area Mesh Settings</span>
         </div>
     </div>
-
     <div class="field">
         <div class="title">
             <span i18n class="required">Test Mode</span>
@@ -246,8 +254,9 @@
             </mat-slider>
         </div>
     </div>
+
     }
-    }
+
     @if(advanceMode()){
 
     <div class="field">

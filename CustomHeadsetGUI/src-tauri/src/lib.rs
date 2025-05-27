@@ -25,6 +25,9 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             js_api::get_executable_path
         ])
+        .invoke_handler(tauri::generate_handler![
+            js_api::is_vrmonitor_running
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

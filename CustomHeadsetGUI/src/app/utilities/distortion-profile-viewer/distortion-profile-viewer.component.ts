@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, input, viewChild, HostListener, signal } from '@angular/core';
+import { Component, effect, ElementRef, input, viewChild, signal, OnDestroy } from '@angular/core';
 import { PathsService } from '../../services/paths.service';
 import { exists, readTextFile } from '@tauri-apps/plugin-fs';
 import { cleanJsonComments } from '../../helpers';
@@ -9,7 +9,7 @@ import { DistortionProfileConfig } from '../../services/JsonFileDefines';
   templateUrl: './distortion-profile-viewer.component.html',
   styleUrls: ['./distortion-profile-viewer.component.scss']
 })
-export class DistortionProfileViewerComponent {
+export class DistortionProfileViewerComponent implements OnDestroy {
   meganeXDefault = [
     [0.0, 0.0],
     [10.0, 24.7],
@@ -34,10 +34,16 @@ export class DistortionProfileViewerComponent {
   profiles = input<string[]>()
   windowSize = signal<{ width: number, height: number } | undefined>(undefined);
   canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
+
+  private resizeObserver: ResizeObserver;
   constructor(private pathsService: PathsService, host: ElementRef<HTMLElement>) {
     let width = 0, height = 0;
     const colors = ['green', 'orange', 'blueviolet', 'deeppink']
     const profileData = signal<DistortionProfileConfig[]>([]);
+    this.resizeObserver = new ResizeObserver(() => {
+      this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
+    })
+    this.resizeObserver.observe(host.nativeElement)
     effect(async () => {
       const profiles = this.profiles()
       let newData: DistortionProfileConfig[] = []
@@ -60,13 +66,6 @@ export class DistortionProfileViewerComponent {
       }
       profileData.set(newData);
     });
-    setTimeout(() => {
-      this.onResize()
-    }, 50);
-    setTimeout(() => {
-      // sometimes the labels are too large but can be fixed by running again later
-      this.onResize()
-    }, 200);
     effect(() => {
       let curveIdx = 0;
       const canvas = this.canvasRef().nativeElement;
@@ -92,9 +91,8 @@ export class DistortionProfileViewerComponent {
     });
 
   }
-  @HostListener('window:resize')
-  onResize() {
-    this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
+  ngOnDestroy(): void {
+    this.resizeObserver.disconnect()
   }
   chunkArrayInPairs(arr: number[]): number[][] {
     const result: number[][] = [];

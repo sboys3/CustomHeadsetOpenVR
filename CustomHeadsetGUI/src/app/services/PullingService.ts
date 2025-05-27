@@ -7,12 +7,15 @@ export class PullingService {
     constructor(private task: () => Promise<any> | void, private name: string | undefined = undefined, private interval = 1000) {
 
     }
+    public async update() {
+        await this.task();
+    }
     private async pulling() {
         if (this.name) {
             console.log('PullingService', this.name, this.id, 'start')
         }
         while (this.running) {
-            await this.task();
+            this.update()
             await delay(this.interval)
         }
         if (this.name) {

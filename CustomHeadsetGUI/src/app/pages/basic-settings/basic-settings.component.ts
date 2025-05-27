@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, OnDestroy, signal } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
@@ -16,6 +16,8 @@ import { DriverInfoService } from '../../services/driver-info.service';
 import { ResetButtonComponent } from '../../utilities/reset-button/reset-button.component';
 import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
 import { SystemDiagnosticService } from '../../services/system-diagnostic.service';
+import { PullingService } from '../../services/PullingService';
+import { is_vrmonitor_running } from '../../tauri_wrapper';
 
 
 
@@ -37,7 +39,7 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
     templateUrl: './basic-settings.component.html',
     styleUrl: './basic-settings.component.scss'
 })
-export class BasicSettingsComponent {
+export class BasicSettingsComponent implements OnDestroy {
     profiles: DistortionProfileEntry[] = []
     settings?: MeganeX8KConfig
     hiddenArea?: HiddenAreaMeshConfig
@@ -58,6 +60,10 @@ export class BasicSettingsComponent {
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
     driverWarning = signal(false)
     driverEnablePrompt = signal(false)
+    steamVRRunning = signal({ updated: false, running: false }, { equal: (a, b) => a.running === b.running && a.updated === b.updated })
+    steamVRStatePulling = new PullingService(async () => {
+        this.steamVRRunning.set({ updated: true, running: await is_vrmonitor_running() })
+    },'steamVRStatePulling');
     constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService, public sds: SystemDiagnosticService) {
         effect(() => {
             const config = dss.values();
@@ -66,7 +72,6 @@ export class BasicSettingsComponent {
             this.hiddenArea = config?.meganeX8K?.hiddenArea
             this.resolutionModel = this.settings?.resolutionX;
         });
-
         effect(() => {
             const info = (dis.values() ?? {}) as DriverInfo;
             const defaultProfiles = info?.builtInDistortionProfiles ?? {};
@@ -88,6 +93,14 @@ export class BasicSettingsComponent {
                 let customEnabled = sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
                 this.driverWarning.set((shiftallEnabled || !customEnabled) && (config?.meganeX8K?.enable ?? false));
                 this.driverEnablePrompt.set(!shiftallEnabled && !(config?.meganeX8K?.enable ?? true));
+            }
+        })
+        effect(() => {
+            this.steamVRRunning.set({ running: false, updated: false })
+            if (this.resolutionInfoDisplay()) {
+                this.steamVRStatePulling.start()
+            } else {
+                this.steamVRStatePulling.stop()
             }
         })
     }
@@ -136,4 +149,7 @@ export class BasicSettingsComponent {
 
     }
     loading = false;
+    ngOnDestroy(): void {
+        this.steamVRStatePulling.stop()
+    }
 }

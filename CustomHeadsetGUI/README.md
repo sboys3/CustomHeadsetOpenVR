@@ -23,7 +23,10 @@ CustomeHeadsetGUI
 │    ├────app
 │    │     ├───dialogs  //dialog , all components opened using MatDialog in here
 │    │     ├───pages    //app pages,all tabs main components
-│    │     └───services //services,all injectable service
+│    │     ├───services //services,all injectable service
+│    │     └───tauri_wrapper.ts // wrapper for native functions in js_api.rs
 │    └────locale //i18n strings
 └───src-tauri //tauri sources
+     └──src
+         └─js_api.rs // custom rust api for javascript
 ```
