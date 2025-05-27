@@ -388,11 +388,11 @@
       </trans-unit>
       <trans-unit id="6061938108548189229" datatype="html">
         <source>Steam VR not running or headset not connected</source>
-        <target state="translated">SteamVR 未執行或頭戴式裝置未連接</target>
+        <target state="translated">SteamVRが起動していないか、ヘッドセットが接続されていません</target>
       </trans-unit>
       <trans-unit id="6545003957463909662" datatype="html">
         <source>Check driver update and launch SteamVR</source>
-        <target state="translated">檢查驅動程式更新並啟動 SteamVR</target>
+        <target state="translated">ドライバーの更新を確認し、SteamVRを起動してください</target>
       </trans-unit>
     </body>
   </file>
