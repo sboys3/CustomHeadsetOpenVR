@@ -22,21 +22,21 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	isActive = true;
 
-	if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
-		// Can be moved to `UpdateSettings` if anyone figures out how to reload the hidden area mesh during runtime.
-		// For now, hidden area changes require a SteamVR reboot to apply.
-		for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
-			auto mesh = HiddenArea::CreateLineLoopMesh(eye, haConf);
-			auto err = vr::VRHiddenArea()->SetHiddenArea(eye, vr::k_eHiddenAreaMesh_LineLoop, mesh.data(), (uint32_t)mesh.size());
-			if (err != vr::TrackedProp_Success) {
-				DriverLog("Failed to setHiddenArea with error %d", err);
-			} else {
-				DriverLog("setHiddenArea succeeded!");
+	// Can be moved to `UpdateSettings` if anyone figures out how to reload the hidden area mesh during runtime.
+	// For now, hidden area changes require a SteamVR reboot to apply.
+	for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
+		if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
+			for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
+				auto mesh = HiddenArea::CreateHiddenAreaMesh(eye, meshType, haConf);
+				auto err = vr::VRHiddenArea()->SetHiddenArea(eye, meshType, mesh.data(), (uint32_t)mesh.size());
+				if (err != vr::TrackedProp_Success) {
+					DriverLog("Failed to setHiddenArea type %d with error %d", static_cast<int>(meshType), err);
+				}
 			}
+		} else {
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
 		}
-	} else {
-		vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  vr::k_eHiddenAreaMesh_Standard, nullptr, 0);
-		vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Standard, nullptr, 0);
 	}
 
 	// avoid "not fullscreen" warnings from vrmonitor
