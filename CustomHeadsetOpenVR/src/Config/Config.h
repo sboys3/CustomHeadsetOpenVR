@@ -7,7 +7,7 @@
 struct HiddenAreaMeshConfig {
 	bool enable = false;
 	bool testMode = false;
-	int detailLevel = 16;
+	int detailLevel = 8;
 	double radiusTopOuter = 0.25;
 	double radiusTopInner = 0.25;
 	double radiusBottomInner = 0.25;
