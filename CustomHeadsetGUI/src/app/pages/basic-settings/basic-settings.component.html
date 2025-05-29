@@ -186,34 +186,6 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Mesh Detail</span>
-            <app-reset-button [canReset]="hiddenArea.detailLevel!=defaults?.hiddenArea?.detailLevel"
-                (resetClick)="resetHiddenAreaOption('detailLevel')"></app-reset-button>
-        </div>
-        <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.detailLevel" step="1" (ngModelChange)="saveConfigSettings()"
-                type="number">
-            <mat-slider max="32" min="1" step="1">
-                <input matSliderThumb [(ngModel)]="hiddenArea.detailLevel" (ngModelChange)="saveConfigSettings()">
-            </mat-slider>
-        </div>
-    </div>
-    <div class="field">
-        <div class="title">
-            <span i18n class="required">Radius Top Outer</span>
-            <app-reset-button [canReset]="hiddenArea.radiusTopOuter!=defaults?.hiddenArea?.radiusTopOuter"
-                (resetClick)="resetHiddenAreaOption('radiusTopOuter')"></app-reset-button>
-        </div>
-        <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.radiusTopOuter" step="1" (ngModelChange)="saveConfigSettings()"
-                type="number">
-            <mat-slider max="0.5" min="0.0" step="0.05">
-                <input matSliderThumb [(ngModel)]="hiddenArea.radiusTopOuter" (ngModelChange)="saveConfigSettings()">
-            </mat-slider>
-        </div>
-    </div>
-    <div class="field">
-        <div class="title">
             <span i18n class="required">Radius Top Inner</span>
             <app-reset-button [canReset]="hiddenArea.radiusTopInner!=defaults?.hiddenArea?.radiusTopInner"
                 (resetClick)="resetHiddenAreaOption('radiusTopInner')"></app-reset-button>
@@ -242,6 +214,20 @@
     </div>
     <div class="field">
         <div class="title">
+            <span i18n class="required">Radius Top Outer</span>
+            <app-reset-button [canReset]="hiddenArea.radiusTopOuter!=defaults?.hiddenArea?.radiusTopOuter"
+                (resetClick)="resetHiddenAreaOption('radiusTopOuter')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="hiddenArea.radiusTopOuter" step="1" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="0.5" min="0.0" step="0.05">
+                <input matSliderThumb [(ngModel)]="hiddenArea.radiusTopOuter" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
             <span i18n class="required">Radius Bottom Outer</span>
             <app-reset-button [canReset]="hiddenArea.radiusBottomOuter!=defaults?.hiddenArea?.radiusBottomOuter"
                 (resetClick)="resetHiddenAreaOption('radiusBottomOuter')"></app-reset-button>
@@ -254,7 +240,20 @@
             </mat-slider>
         </div>
     </div>
-
+    <div class="field">
+        <div class="title">
+            <span i18n class="required">Mesh Detail</span>
+            <app-reset-button [canReset]="hiddenArea.detailLevel!=defaults?.hiddenArea?.detailLevel"
+                (resetClick)="resetHiddenAreaOption('detailLevel')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="hiddenArea.detailLevel" step="1" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="32" min="1" step="1">
+                <input matSliderThumb [(ngModel)]="hiddenArea.detailLevel" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
     }
 
     @if(advanceMode()){
