@@ -15,11 +15,23 @@ public:
 	
 	DistortionProfileConstructor distortionProfileConstructor;
 	std::mutex distortionProfileLock;
+	// time that last frame occurred
+	double lastFrameTime = 0;
+	// last time the distortion was changed
 	double lastDistortionChangeTime = 0;
 	// the distortion profile may be changed in the middle of reading, so do a final update
 	bool needsDistortionFinalization = true;
 	// the offset used for burn in prevention
 	float fovBurnInOffset = 0;
+	// last color multiplier applied
+	Config::Color lastColorMultiplier = {};
+	// last time the the headset was detected as moving
+	double lastMovementTime = 0;
+	// last rotation of the headset that was detected as movement
+	vr::HmdMatrix34_t lastMovementRotation = {};
+	// brightness multiplier from for dimming when the headset is not moving
+	double dimmingMultiplier = 1;
+	
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;

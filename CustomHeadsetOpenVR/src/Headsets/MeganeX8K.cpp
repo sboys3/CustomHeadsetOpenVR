@@ -265,16 +265,60 @@ void MeganeX8KShim::SetIPD(float ipd){
 
 void MeganeX8KShim::RunFrame(){
 	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
+	double frameTime = now - lastFrameTime;
+	if(lastFrameTime == 0){
+		frameTime = 0;
+	}
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	// float brightness = std::sin(now) * 0.5 + 0.5;
-	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultLeft_Vector3, {brightness, brightness, brightness});
-	// vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {brightness, brightness, brightness});
+	if(driverConfig.meganeX8K.stationaryDimming.enable){
+		vr::TrackedDevicePose_t hmdPos;
+		vr::VRServerDriverHost()->GetRawTrackedDevicePoses(0, &hmdPos, 1);
+		vr::HmdMatrix34_t rotation = hmdPos.mDeviceToAbsoluteTracking;
+		// calculate angle between last and current rotation acos((trace(A'*B)-1)/2)*360/2/pi
+		double angle = std::acos((rotation.m[0][0] * lastMovementRotation.m[0][0] + rotation.m[1][0] * lastMovementRotation.m[1][0] + rotation.m[2][0] * lastMovementRotation.m[2][0] +
+			rotation.m[0][1] * lastMovementRotation.m[0][1] + rotation.m[1][1] * lastMovementRotation.m[1][1] + rotation.m[2][1] * lastMovementRotation.m[2][1] +
+			rotation.m[0][2] * lastMovementRotation.m[0][2] + rotation.m[1][2] * lastMovementRotation.m[1][2] + rotation.m[2][2] * lastMovementRotation.m[2][2] - 1) / 2.0) * 360.0 / 2.0 / M_PI;
+		if(angle > driverConfig.meganeX8K.stationaryDimming.movementThreshold){
+			// moved past threshold
+			// DriverLog("angle: %f", angle);
+			lastMovementRotation = rotation;
+			lastMovementTime = now;
+		}
+		if(lastMovementTime > now - driverConfig.meganeX8K.stationaryDimming.movementTime){
+			// still moving
+			dimmingMultiplier += driverConfig.meganeX8K.stationaryDimming.brightenSpeed * frameTime;
+		}else{
+			// stationary
+			dimmingMultiplier -= driverConfig.meganeX8K.stationaryDimming.dimSpeed * frameTime;
+		}
+		dimmingMultiplier = std::max(driverConfig.meganeX8K.stationaryDimming.dimAmount, std::min(1.0, dimmingMultiplier));
+	}else{
+		dimmingMultiplier = 1;
+	}
+
+	
+	Config::Color color = driverConfig.meganeX8K.colorMultiplier;
+	double brightness = 1;
+	// brightness *= std::sin(now) * 0.5 + 0.5;
+	brightness *= dimmingMultiplier;
+	color.r *= brightness;
+	color.g *= brightness;
+	color.b *= brightness;
+	if(lastColorMultiplier.r != color.r || lastColorMultiplier.g != color.g || lastColorMultiplier.b != color.b){
+		lastColorMultiplier = color;
+		vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultLeft_Vector3, {(float)color.r, (float)color.g, (float)color.b});
+		vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {(float)color.r, (float)color.g, (float)color.b});
+	}
+	
 	
 	if(driverConfig.hasBeenUpdated || ((now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization)){
 		UpdateSettings();
 	}
+	
+	
+	lastFrameTime = now;
 }
 
 void MeganeX8KShim::UpdateSettings(){

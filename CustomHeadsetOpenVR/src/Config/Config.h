@@ -22,8 +22,30 @@ struct HiddenAreaMeshConfig {
 	}
 };
 
+struct StationaryDimmingConfig{
+	// if the display should be dimmed when the headset is stationary
+	bool enable = true;
+	// the angle that the headset has to rotate for it to be considered as moved
+	double movementThreshold = 0.5;
+	// the time in seconds that the headset has to be stationary for it to be dimmed
+	double movementTime = 5.0;
+	// the amount to dim the display when stationary
+	double dimAmount = 0.02;
+	// the amount per second to dim the display when stationary
+	double dimSpeed = 0.1;
+	// the amount per second to brighten the display when moving
+	double brightenSpeed = 0.2;
+};
+
+
 class Config{
 public:
+	class Color{
+	public:
+		double r = 1.0;
+		double g = 1.0;
+		double b = 1.0;
+	};
 	class MeganeX8KConfig{
 	public:
 		// if the MeganeX superlight 8K should be shimmed byt this driver
@@ -34,6 +56,8 @@ public:
 		double ipdOffset = 0.0;
 		// minimum black levels from 0 to 1
 		double blackLevel = 0;
+		// tint the display this color
+		Color colorMultiplier = {};
 		// distortion profile to use
 		std::string distortionProfile = "MeganeX8K Default";
 		// amount to zoom in the distortion profile
@@ -58,6 +82,8 @@ public:
 		double renderResolutionMultiplierY = 1.0;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
+		// config for dimming the display when stationary
+		StationaryDimmingConfig stationaryDimming = {};
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;

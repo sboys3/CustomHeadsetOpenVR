@@ -50,6 +50,12 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["blackLevel"].is_number()){
 				newConfig.meganeX8K.blackLevel = meganeX8KData["blackLevel"].get<double>();
 			}
+			if(meganeX8KData["colorMultiplier"].is_object()){
+				Config::Color &colorMultiplier = newConfig.meganeX8K.colorMultiplier;
+				if(meganeX8KData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = meganeX8KData["colorMultiplier"]["r"].get<double>(); }
+				if(meganeX8KData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = meganeX8KData["colorMultiplier"]["g"].get<double>(); }
+				if(meganeX8KData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = meganeX8KData["colorMultiplier"]["b"].get<double>(); }
+			}
 			if(meganeX8KData["distortionProfile"].is_string()){
 				newConfig.meganeX8K.distortionProfile = meganeX8KData["distortionProfile"].get<std::string>();
 			}
@@ -92,6 +98,15 @@ void ConfigLoader::ParseConfig(){
 				if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
 				if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
 				if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
+			}
+			if(json& stationaryDimmingJson = meganeX8KData["stationaryDimming"]; stationaryDimmingJson.is_object()){
+				auto& newStationaryDimming = newConfig.meganeX8K.stationaryDimming;
+				if(stationaryDimmingJson["enable"].is_boolean()){ newStationaryDimming.enable = stationaryDimmingJson["enable"].get<bool>(); }
+				if(stationaryDimmingJson["movementThreshold"].is_number()){ newStationaryDimming.movementThreshold = stationaryDimmingJson["movementThreshold"].get<double>(); }
+				if(stationaryDimmingJson["movementTime"].is_number()){ newStationaryDimming.movementTime = stationaryDimmingJson["movementTime"].get<double>(); }
+				if(stationaryDimmingJson["dimAmount"].is_number()){ newStationaryDimming.dimAmount = stationaryDimmingJson["dimAmount"].get<double>(); }
+				if(stationaryDimmingJson["dimSpeed"].is_number()){ newStationaryDimming.dimSpeed = stationaryDimmingJson["dimSpeed"].get<double>(); }
+				if(stationaryDimmingJson["brightenSpeed"].is_number()){ newStationaryDimming.brightenSpeed = stationaryDimmingJson["brightenSpeed"].get<double>(); }
 			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
@@ -164,6 +179,11 @@ void ConfigLoader::WriteInfo(){
 				{"ipd", defaultSettings.meganeX8K.ipd},
 				{"ipdOffset", defaultSettings.meganeX8K.ipdOffset},
 				{"blackLevel", defaultSettings.meganeX8K.blackLevel},
+				{"colorMultiplier", {
+					{"r", defaultSettings.meganeX8K.colorMultiplier.r},
+					{"g", defaultSettings.meganeX8K.colorMultiplier.g},
+					{"b", defaultSettings.meganeX8K.colorMultiplier.b},
+				}},
 				{"distortionProfile", defaultSettings.meganeX8K.distortionProfile},
 				{"distortionZoom", defaultSettings.meganeX8K.distortionZoom},
 				{"subpixelShift", defaultSettings.meganeX8K.subpixelShift},
@@ -183,6 +203,14 @@ void ConfigLoader::WriteInfo(){
 					{"radiusTopInner", defaultSettings.meganeX8K.hiddenArea.radiusTopInner},
 					{"radiusBottomInner", defaultSettings.meganeX8K.hiddenArea.radiusBottomInner},
 					{"radiusBottomOuter", defaultSettings.meganeX8K.hiddenArea.radiusBottomOuter},
+				}},
+				{"stationaryDimming", {
+					{"enable", defaultSettings.meganeX8K.stationaryDimming.enable},
+					{"movementThreshold", defaultSettings.meganeX8K.stationaryDimming.movementThreshold},
+					{"movementTime", defaultSettings.meganeX8K.stationaryDimming.movementTime},
+					{"dimAmount", defaultSettings.meganeX8K.stationaryDimming.dimAmount},
+					{"dimSpeed", defaultSettings.meganeX8K.stationaryDimming.dimSpeed},
+					{"brightenSpeed", defaultSettings.meganeX8K.stationaryDimming.brightenSpeed},
 				}},
 			}},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}

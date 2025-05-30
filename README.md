@@ -1,6 +1,6 @@
 # CustomHeadsetOpenVR
 This is a custom headset driver for SteamVR that allows the MeganeX superlight 8K to operate as a native SteamVR headset. In the future this will provide tools to modify any SteamVR device.  
-⚠️Be careful with high brightnesses to avoid burn in. This driver does not automatically dim the headset in bright scenes which may permanently dim the panel if viewed for many hours. Avoid falling asleep in the headset or other circumstances where the screen will say on and stationary as it may cause burn in.
+⚠️Be careful with high brightnesses to avoid burn in. This driver does not automatically dim the headset in bright scenes which may permanently dim the panel if viewed for many hours.
 
 ## Installing
 1. Download the latest release from the [releases page](https://github.com/sboys3/CustomHeadsetOpenVR/releases)
@@ -39,7 +39,7 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [x] Running as a native headset
 	- [x] Ignore other headsets
 	- [x] Code to generate the distortion mesh
-	- [ ] Darken the display when no motion is detected
+	- [X] Darken the display when no motion is detected
 	- [X] Support for non square outputs to light edges of the display
 	- [ ] A near perfect default distortion profile
 	- [X] Multiple distortion profiles
