@@ -22,23 +22,6 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	isActive = true;
 
-	// Can be moved to `UpdateSettings` if anyone figures out how to reload the hidden area mesh during runtime.
-	// For now, hidden area changes require a SteamVR reboot to apply.
-	for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
-		if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
-			for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
-				auto mesh = HiddenArea::CreateHiddenAreaMesh(eye, meshType, haConf);
-				auto err = vr::VRHiddenArea()->SetHiddenArea(eye, meshType, mesh.data(), (uint32_t)mesh.size());
-				if (err != vr::TrackedProp_Success) {
-					DriverLog("Failed to setHiddenArea type %d with error %d", static_cast<int>(meshType), err);
-				}
-			}
-		} else {
-			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
-			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
-		}
-	}
-
 	// avoid "not fullscreen" warnings from vrmonitor
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_IsOnDesktop_Bool, false);
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_DisplayDebugMode_Bool, true);
@@ -328,10 +311,28 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
 
-	const bool usingHiddenAreaTestMode = driverConfig.meganeX8K.hiddenArea.enable && driverConfig.meganeX8K.hiddenArea.testMode;
-	const float blackLevel = usingHiddenAreaTestMode ? 0.5f : (float)driverConfig.meganeX8K.blackLevel;
-	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, blackLevel);
-	
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
+
+	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea) { // This generally requires that you restart your game for it to update
+		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
+		}
+		// The compositor uses the LineLoop mesh but that seems to be impossible to set without the compositor running into issues at boot,
+		// so we just set the standard mesh that games use (it's the one that matters for performance)
+		if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
+			for (auto meshType : { vr::k_eHiddenAreaMesh_Standard }) {
+				for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
+					auto mesh = HiddenArea::CreateHiddenAreaMesh(eye, meshType, haConf);
+					auto err = vr::VRHiddenArea()->SetHiddenArea(eye, meshType, mesh.data(), (uint32_t)mesh.size());
+					if (err != vr::TrackedProp_Success) {
+						DriverLog("Failed to setHiddenArea type %d with error %d", static_cast<int>(meshType), err);
+					}
+				}
+			}
+		}
+	}
+
 	
 	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = driverConfig.meganeX8K.maxFovY;
