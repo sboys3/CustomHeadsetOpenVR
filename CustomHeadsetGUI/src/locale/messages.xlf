@@ -296,6 +296,27 @@
       <trans-unit id="6545003957463909662" datatype="html">
         <source>Check driver update and launch SteamVR</source>
       </trans-unit>
+      <trans-unit id="1186365723119026146" datatype="html">
+        <source>Brighten Speed</source>
+      </trans-unit>
+      <trans-unit id="3350600018161868456" datatype="html">
+        <source>Enable Stationary Dimming</source>
+      </trans-unit>
+      <trans-unit id="4286722712593722196" datatype="html">
+        <source>Dim Amount</source>
+      </trans-unit>
+      <trans-unit id="4733038853220235320" datatype="html">
+        <source>Dim Speed</source>
+      </trans-unit>
+      <trans-unit id="4869977764064716796" datatype="html">
+        <source>Movement Time</source>
+      </trans-unit>
+      <trans-unit id="6143633241125445579" datatype="html">
+        <source>Movement Threshold</source>
+      </trans-unit>
+      <trans-unit id="6494825378753268291" datatype="html">
+        <source>Stationary Dimming Settings</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

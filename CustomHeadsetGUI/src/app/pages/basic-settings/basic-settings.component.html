@@ -1,5 +1,6 @@
 <app-system-ready [class.page-disabled]="!settings?.enable">
     @if(settings){
+
     <h5 class="warn-color italic" i18n>Fields marked with * require restart SteamVR to apply changes.</h5>
     <mat-divider></mat-divider>
     <div class="field ignore-disable">
@@ -154,6 +155,108 @@
         </div>
     </div>
     <div class="field">
+        <div class="section-title">
+            <span i18n>Stationary Dimming Settings</span>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Enable Stationary Dimming</span>
+            <app-reset-button [canReset]="stationaryDimming?.enable!=defaults?.stationaryDimming?.enable"
+                (resetClick)="resetStationaryDimmingOption('enable')"></app-reset-button>
+        </div>
+        <div class="control">
+            @if(stationaryDimming){
+            <mat-slide-toggle [(ngModel)]="stationaryDimming.enable"
+                (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+            }@else {
+            <span i18n>Check driver update and launch SteamVR</span>
+            }
+        </div>
+    </div>
+    @if(stationaryDimming&&stationaryDimming.enable){
+
+    <div class="field">
+        <div class="title">
+            <span i18n>Movement Threshold</span>
+            <app-reset-button
+                [canReset]="stationaryDimming.movementThreshold!=defaults?.stationaryDimming?.movementThreshold"
+                (resetClick)="resetStationaryDimmingOption('movementThreshold')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="stationaryDimming.movementThreshold" step="0.1"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="10" min="0" step="0.1">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.movementThreshold"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Movement Time</span>
+            <app-reset-button [canReset]="stationaryDimming.movementTime!=defaults?.stationaryDimming?.movementTime"
+                (resetClick)="resetStationaryDimmingOption('movementTime')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="stationaryDimming.movementTime" step="1"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="10" min="1" step="1" showTickMarks>
+                <input matSliderThumb [(ngModel)]="stationaryDimming.movementTime"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Dim Amount</span>
+            <app-reset-button [canReset]="stationaryDimming.dimAmount!=defaults?.stationaryDimming?.dimAmount"
+                (resetClick)="resetStationaryDimmingOption('dimAmount')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="stationaryDimming.dimAmount" step="0.01" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="1" min="0" step="0.01">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.dimAmount" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Dim Speed</span>
+            <app-reset-button [canReset]="stationaryDimming.dimSpeed!=defaults?.stationaryDimming?.dimSpeed"
+                (resetClick)="resetStationaryDimmingOption('dimSpeed')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="stationaryDimming.dimSpeed" step="0.1" (ngModelChange)="saveConfigSettings()"
+                type="number">
+            <mat-slider max="10" min="0" step="0.1">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.dimSpeed" (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Brighten Speed</span>
+            <app-reset-button [canReset]="stationaryDimming.brightenSpeed!=defaults?.stationaryDimming?.brightenSpeed"
+                (resetClick)="resetStationaryDimmingOption('brightenSpeed')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="stationaryDimming.brightenSpeed" step="0.1"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="10" min="0" step="0.1">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.brightenSpeed"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    }
+    <div class="field">
+        <div class="section-title">
+            <span i18n>Hidden Area Mesh Settings</span>
+        </div>
+    </div>
+    <div class="field">
         <div class="title">
             <span i18n class="required">Enable Hidden Area Meshes</span>
             <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
@@ -167,12 +270,9 @@
             }
         </div>
     </div>
+
     @if(hiddenArea&&hiddenArea.enable){
-    <div class="field">
-        <div class="section-title">
-            <span i18n>Hidden Area Mesh Settings</span>
-        </div>
-    </div>
+
     <div class="field">
         <div class="title">
             <span i18n class="required">Test Mode</span>
@@ -255,7 +355,6 @@
         </div>
     </div>
     }
-
     @if(advanceMode()){
 
     <div class="field">

@@ -9,7 +9,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DistortionProfileEntry, DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
-import { Settings, MeganeX8KConfig, DriverInfo, HiddenAreaMeshConfig } from '../../services/JsonFileDefines';
+import { Settings, MeganeX8KConfig, DriverInfo, HiddenAreaMeshConfig, StationaryDimmingConfig } from '../../services/JsonFileDefines';
 import { FormsModule } from '@angular/forms';
 import { AppSettingService } from '../../services/app-setting.service';
 import { DriverInfoService } from '../../services/driver-info.service';
@@ -43,6 +43,7 @@ export class BasicSettingsComponent implements OnDestroy {
     profiles: DistortionProfileEntry[] = []
     settings?: MeganeX8KConfig
     hiddenArea?: HiddenAreaMeshConfig
+    stationaryDimming?: StationaryDimmingConfig
     config?: Settings;
     defaults?: MeganeX8KConfig;
     subpixelShiftOptions = [0, 0.33];
@@ -63,14 +64,15 @@ export class BasicSettingsComponent implements OnDestroy {
     steamVRRunning = signal({ updated: false, running: false }, { equal: (a, b) => a.running === b.running && a.updated === b.updated })
     steamVRStatePulling = new PullingService(async () => {
         this.steamVRRunning.set({ updated: true, running: await is_vrmonitor_running() })
-    },'steamVRStatePulling');
+    }, 'steamVRStatePulling');
     constructor(public dss: DriverSettingService, public dis: DriverInfoService, private ass: AppSettingService, public sds: SystemDiagnosticService) {
         effect(() => {
             const config = dss.values();
             this.config = config;
             this.settings = config?.meganeX8K;
             this.hiddenArea = config?.meganeX8K?.hiddenArea
-            this.resolutionModel = this.settings?.resolutionX;
+            this.resolutionModel = this.settings?.resolutionX
+            this.stationaryDimming = config?.meganeX8K?.stationaryDimming
         });
         effect(() => {
             const info = (dis.values() ?? {}) as DriverInfo;
@@ -117,6 +119,12 @@ export class BasicSettingsComponent implements OnDestroy {
     resetOption(key: keyof MeganeX8KConfig) {
         if (this.settings && this.defaults) {
             (this.settings as any)[key] = this.defaults[key];
+            this.saveConfigSettings()
+        }
+    }
+    resetStationaryDimmingOption(key: keyof StationaryDimmingConfig) {
+        if (this.stationaryDimming && this.defaults && this.defaults.stationaryDimming) {
+            (this.stationaryDimming as any)[key] = this.defaults.stationaryDimming[key];
             this.saveConfigSettings()
         }
     }

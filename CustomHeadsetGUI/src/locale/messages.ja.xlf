@@ -394,6 +394,38 @@
         <source>Check driver update and launch SteamVR</source>
         <target state="translated">ドライバーの更新を確認し、SteamVRを起動してください</target>
       </trans-unit>
+      <trans-unit id="6494825378753268291" datatype="html">
+        <source>Stationary Dimming Settings</source>
+        <target state="new">Stationary Dimming Settings</target>
+      </trans-unit>
+      <trans-unit id="6494825378753268291" datatype="html">
+        <source>Stationary Dimming Settings</source>
+        <target state="translated">静止時減光設定</target>
+      </trans-unit>
+      <trans-unit id="3350600018161868456" datatype="html">
+        <source>Enable Stationary Dimming</source>
+        <target state="translated">静止時減光の有効化</target>
+      </trans-unit>
+      <trans-unit id="6143633241125445579" datatype="html">
+        <source>Movement Threshold</source>
+        <target state="translated">移動しきい値</target>
+      </trans-unit>
+      <trans-unit id="4869977764064716796" datatype="html">
+        <source>Movement Time</source>
+        <target state="translated">静止時間</target>
+      </trans-unit>
+      <trans-unit id="4286722712593722196" datatype="html">
+        <source>Dim Amount</source>
+        <target state="translated">減光量</target>
+      </trans-unit>
+      <trans-unit id="4733038853220235320" datatype="html">
+        <source>Dim Speed</source>
+        <target state="translated">減光速度</target>
+      </trans-unit>
+      <trans-unit id="1186365723119026146" datatype="html">
+        <source>Brighten Speed</source>
+        <target state="translated">復光速度</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

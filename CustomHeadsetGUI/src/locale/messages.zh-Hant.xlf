@@ -394,6 +394,34 @@
         <source>Check driver update and launch SteamVR</source>
         <target state="translated">檢查驅動程式更新並啟動 SteamVR</target>
       </trans-unit>
+      <trans-unit id="6494825378753268291" datatype="html">
+        <source>Stationary Dimming Settings</source>
+        <target state="translated">靜止時變暗設定</target>
+      </trans-unit>
+      <trans-unit id="3350600018161868456" datatype="html">
+        <source>Enable Stationary Dimming</source>
+        <target state="translated">啟用靜止時變暗</target>
+      </trans-unit>
+      <trans-unit id="6143633241125445579" datatype="html">
+        <source>Movement Threshold</source>
+        <target state="translated">移動閾值</target>
+      </trans-unit>
+      <trans-unit id="4869977764064716796" datatype="html">
+        <source>Movement Time</source>
+        <target state="translated">靜置時間</target>
+      </trans-unit>
+      <trans-unit id="4286722712593722196" datatype="html">
+        <source>Dim Amount</source>
+        <target state="translated">變暗程度</target>
+      </trans-unit>
+      <trans-unit id="4733038853220235320" datatype="html">
+        <source>Dim Speed</source>
+        <target state="translated">變暗速度</target>
+      </trans-unit>
+      <trans-unit id="1186365723119026146" datatype="html">
+        <source>Brighten Speed</source>
+        <target state="translated">變亮速度</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

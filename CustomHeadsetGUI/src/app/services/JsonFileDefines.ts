@@ -11,7 +11,14 @@ export type Settings = {
   watchDistortionProfiles: boolean,
   meganeX8K: MeganeX8KConfig
 }
-
+export type StationaryDimmingConfig = {
+  enable: boolean,
+  movementThreshold: number,
+  movementTime: number,
+  dimAmount: number,
+  dimSpeed: number,
+  brightenSpeed: number
+}
 export type HiddenAreaMeshConfig = {
   /**
    * If hidden area meshes should be used.
@@ -97,6 +104,7 @@ export type MeganeX8KConfig = {
   renderResolutionMultiplierY: number;
 
   hiddenArea: HiddenAreaMeshConfig;
+  stationaryDimming: StationaryDimmingConfig;
 };
 
 export type AppSetting = {
