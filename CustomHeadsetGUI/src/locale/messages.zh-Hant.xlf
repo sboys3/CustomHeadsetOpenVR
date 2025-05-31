@@ -394,7 +394,7 @@
         <source>Check driver update and launch SteamVR</source>
         <target state="translated">檢查驅動程式更新並啟動 SteamVR</target>
       </trans-unit>
-      <trans-unit id="6494825378753268291" datatype="html">
+     <trans-unit id="6494825378753268291" datatype="html">
         <source>Stationary Dimming Settings</source>
         <target state="translated">靜止時變暗設定</target>
       </trans-unit>
@@ -421,6 +421,10 @@
       <trans-unit id="1186365723119026146" datatype="html">
         <source>Brighten Speed</source>
         <target state="translated">變亮速度</target>
+      </trans-unit>
+      <trans-unit id="7653815630536291994" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
+        <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。當裝置的旋轉角度在「靜置時間」內，持續小於設定的「移動閾值」，便會啟動變暗效果。</target>
       </trans-unit>
     </body>
   </file>

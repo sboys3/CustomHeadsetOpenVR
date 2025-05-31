@@ -317,6 +317,9 @@
       <trans-unit id="6494825378753268291" datatype="html">
         <source>Stationary Dimming Settings</source>
       </trans-unit>
+      <trans-unit id="7653815630536291994" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

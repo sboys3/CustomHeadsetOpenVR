@@ -18,6 +18,7 @@ import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.
 import { SystemDiagnosticService } from '../../services/system-diagnostic.service';
 import { PullingService } from '../../services/PullingService';
 import { is_vrmonitor_running } from '../../tauri_wrapper';
+import { FieldTipComponent } from '../../utilities/field-tip/field-tip.component';
 
 
 
@@ -34,6 +35,7 @@ import { is_vrmonitor_running } from '../../tauri_wrapper';
         MatTooltipModule,
         ResetButtonComponent,
         SystemReadyComponent,
+        FieldTipComponent,
         CommonModule],
     providers: [],
     templateUrl: './basic-settings.component.html',

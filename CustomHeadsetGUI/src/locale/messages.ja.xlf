@@ -396,10 +396,6 @@
       </trans-unit>
       <trans-unit id="6494825378753268291" datatype="html">
         <source>Stationary Dimming Settings</source>
-        <target state="new">Stationary Dimming Settings</target>
-      </trans-unit>
-      <trans-unit id="6494825378753268291" datatype="html">
-        <source>Stationary Dimming Settings</source>
         <target state="translated">静止時減光設定</target>
       </trans-unit>
       <trans-unit id="3350600018161868456" datatype="html">
@@ -425,6 +421,10 @@
       <trans-unit id="1186365723119026146" datatype="html">
         <source>Brighten Speed</source>
         <target state="translated">復光速度</target>
+      </trans-unit>
+      <trans-unit id="7653815630536291994" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
+        <target state="translated">ヘッドセットが静止している際に自動で画面を減光し、ディスプレイパネルを保護して「焼き付き」を防ぐ機能です。デバイスの回転が「静止時間」中、「移動しきい値」で設定した角度を下回ったままだと、減光が開始されます。</target>
       </trans-unit>
     </body>
   </file>
