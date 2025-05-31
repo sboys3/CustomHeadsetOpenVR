@@ -39,8 +39,10 @@
             width: 35%;
             position: relative;
             user-select: none;
-            justify-content: space-between;
 
+            app-reset-button {
+                margin-left: auto;
+            }
 
             &:ng-deep button {
                 margin: 0 0.5rem;
