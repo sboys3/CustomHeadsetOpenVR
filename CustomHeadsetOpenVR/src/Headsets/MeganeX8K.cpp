@@ -58,12 +58,12 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(unObjectId, 5000, 5000);
-	distortionProfileConstructor.distortionSettings.resolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
-	distortionProfileConstructor.distortionSettings.resolutionX = driverConfig.meganeX8K.resolutionX;
-	distortionProfileConstructor.distortionSettings.resolutionY = driverConfig.meganeX8K.resolutionY;
+	distortionProfileConstructor.distortionSettings.resolution = (float)std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+	distortionProfileConstructor.distortionSettings.resolutionX = (float)driverConfig.meganeX8K.resolutionX;
+	distortionProfileConstructor.distortionSettings.resolutionY = (float)driverConfig.meganeX8K.resolutionY;
 	
 	// initialize random value for session
-	fovBurnInOffset = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 10000) / 10000.0 * 3.0;
+	fovBurnInOffset = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 10000) / 10000.f * 3.f;
 	DriverLog("fovBurnInOffset: %f", fovBurnInOffset);
 	
 	
@@ -94,11 +94,11 @@ bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float 
 
 // run for each vertex of the distortion mesh and outputs the uv coordinates to sample for each color
 bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float &fU, float &fV, vr::DistortionCoordinates_t &coordinates){
-	
-	float minResolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+
+	float minResolution = (float)std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
 	// change range to -1 to 1 for coverage of the minResolution square
-	fU = (fU - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionY / minResolution;
-	fV = (fV - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionX / minResolution;
+	fU = (fU - 0.5f) * 2.0f * driverConfig.meganeX8K.resolutionY / minResolution;
+	fV = (fV - 0.5f) * 2.0f * driverConfig.meganeX8K.resolutionX / minResolution;
 	if(eEye == vr::Eye_Left){
 		float tmp = fU;
 		fU = -fV;
@@ -109,8 +109,8 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 		fV = -tmp;
 	}
 	
-	fU /= driverConfig.meganeX8K.distortionZoom;
-	fV /= driverConfig.meganeX8K.distortionZoom;
+	fU /= (float)driverConfig.meganeX8K.distortionZoom;
+	fV /= (float)driverConfig.meganeX8K.distortionZoom;
 	
 	float redV = fV;
 	float greenV = fV;
@@ -207,8 +207,8 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 
 void MeganeX8KShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight){
 	distortionProfileConstructor.GetRecommendedRenderTargetSize(renderWidth, renderHeight);
-	*renderWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
-	*renderHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
+	*renderWidth  = static_cast<uint32_t>(*renderWidth  * driverConfig.meganeX8K.renderResolutionMultiplierX);
+	*renderHeight = static_cast<uint32_t>(*renderHeight * driverConfig.meganeX8K.renderResolutionMultiplierY);
 	// save to info
 	driverConfigLoader.info.renderResolution100PercentX = *renderWidth;
 	driverConfigLoader.info.renderResolution100PercentY = *renderHeight;
@@ -309,7 +309,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
+	SetIPD((float)(driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.f);
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 
@@ -334,8 +334,8 @@ void MeganeX8KShim::UpdateSettings(){
 	}
 
 	
-	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
-	distortionProfileConstructor.distortionSettings.maxFovY = driverConfig.meganeX8K.maxFovY;
+	distortionProfileConstructor.distortionSettings.maxFovX = (float)driverConfig.meganeX8K.maxFovX;
+	distortionProfileConstructor.distortionSettings.maxFovY = (float)driverConfig.meganeX8K.maxFovY;
 	if(driverConfig.meganeX8K.fovBurnInPrevention){
 		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
 		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;

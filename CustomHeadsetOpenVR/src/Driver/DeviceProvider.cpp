@@ -41,7 +41,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			vr::VREvent_Reserved_t data = vrevent.data.reserved;
 			if(data.reserved0 == VREvent_VendorSpecific_ContextCollection_MagicDataNumber){
 				// add context based on the event data.
-				uint32_t id = data.reserved1;
+				uint32_t id = static_cast<uint32_t>(data.reserved1);
 				vr::IVRDriverContext* ctx = (vr::IVRDriverContext*)data.reserved2;
 				DriverLog("Received context collection event for device with ID: %d, Context: %p", id, ctx);	
 				driverContextsByDeviceId[id] = ctx;

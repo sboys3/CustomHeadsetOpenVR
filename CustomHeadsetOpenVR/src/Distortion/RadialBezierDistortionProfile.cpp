@@ -1,24 +1,28 @@
 #include "RadialBezierDistortionProfile.h"
 
+#include <cmath>
+
 typedef RadialBezierDistortionProfile::DistortionPoint DistortionPoint;
 
 // calculates a point on a cubic Bezier curve given a parameter t and a set of control points.
 DistortionPoint BezierPoint(float t, const std::vector<DistortionPoint>& controlPoints){
 	float tSquared = t * t;
+	float tCubed = t * t * t;
 	float oneMinusT = 1 - t;
 	float oneMinusTSquared = oneMinusT * oneMinusT;
-	
+	float oneMinusTCubed = oneMinusT * oneMinusT * oneMinusT;
+
 	float pointX = (
-		pow(oneMinusT, 3) * controlPoints[0].degree +
-		3 * oneMinusTSquared * t * controlPoints[1].degree +
-		3 * oneMinusT * tSquared * controlPoints[2].degree +
-		pow(t, 3) * controlPoints[3].degree
+		oneMinusTCubed * controlPoints[0].degree +
+		3.f * oneMinusTSquared * t * controlPoints[1].degree +
+		3.f * oneMinusT * tSquared * controlPoints[2].degree +
+		tCubed * controlPoints[3].degree
 	);
 	float pointY = (
-		pow(oneMinusT, 3) * controlPoints[0].position +
-		3 * oneMinusTSquared * t * controlPoints[1].position +
-		3 * oneMinusT * tSquared * controlPoints[2].position +
-		pow(t, 3) * controlPoints[3].position
+		oneMinusTCubed * controlPoints[0].position +
+		3.f * oneMinusTSquared * t * controlPoints[1].position +
+		3.f * oneMinusT * tSquared * controlPoints[2].position +
+		tCubed * controlPoints[3].position
 	);
 	
 	return DistortionPoint{pointX, pointY};
@@ -82,7 +86,7 @@ float SampleFromPoints(const std::vector<DistortionPoint>& points, float degree)
 		return points[0].position;
 	}else{
 		// interpolate between the last two points
-		int i = points.size() - 2;
+		auto i = points.size() - 2;
 		float t = (degree - points[i].degree) / (points[i + 1].degree - points[i].degree);
 		return lerp(points[i].position, points[i + 1].position, t);
 	}
@@ -103,7 +107,7 @@ float SampleFromPointsInverse(const std::vector<DistortionPoint>& points, float 
 		return points[0].degree;
 	}else{
 		// interpolate between the last two points
-		int i = points.size() - 2;
+		auto i = points.size() - 2;
 		float t = (position - points[i].position) / (points[i + 1].position - points[i].position);
 		return lerp(points[i].degree, points[i + 1].degree, t);
 	}
@@ -130,10 +134,10 @@ float RadialBezierDistortionProfile::ComputePPD(std::vector<DistortionPoint> dis
 
 void RadialBezierDistortionProfile::Initialize(){
 	Cleanup();
-	// smooth the points
-	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints, smoothAmount / 2.0f);
-	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints, smoothAmount / 2.0f);
-	std::vector<DistortionPoint> distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints, smoothAmount / 2.0f);
+		// smooth the points
+	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints, (float)smoothAmount / 2.0f);
+	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints, (float)smoothAmount / 2.0f);
+	std::vector<DistortionPoint> distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints, (float)smoothAmount / 2.0f);
 	
 	std::vector<DistortionPoint> distortionsSmoothRed = distortionsSmoothGreen;
 	std::vector<DistortionPoint> distortionsSmoothBlue = distortionsSmoothGreen;
@@ -176,14 +180,14 @@ void RadialBezierDistortionProfile::Initialize(){
 	// convert to input coordinates and flip the point values to sample from output to input
 	for (int i = 0; i < distortionsSmoothGreen.size(); i++){
 		// use tangent to convert from degrees into input screen space
-		distortionsSmoothRed[i].degree = tan(distortionsSmoothRed[i].degree * M_PI / 180.0f);
-		distortionsSmoothGreen[i].degree = tan(distortionsSmoothGreen[i].degree * M_PI / 180.0f);
-		distortionsSmoothBlue[i].degree = tan(distortionsSmoothBlue[i].degree * M_PI / 180.0f);
+		distortionsSmoothRed[i].degree   = std::tan(distortionsSmoothRed[i].degree   * (float)M_PI / 180.0f);
+		distortionsSmoothGreen[i].degree = std::tan(distortionsSmoothGreen[i].degree * (float)M_PI / 180.0f);
+		distortionsSmoothBlue[i].degree  = std::tan(distortionsSmoothBlue[i].degree  * (float)M_PI / 180.0f);
 	}
 	
 	// calculate tangents for the edges of the input screen
-	float edgeTanX = tan(halfFovX * M_PI / 180.0f);
-	float edgeTanY = tan(halfFovY * M_PI / 180.0f);
+	float edgeTanX = std::tan(halfFovX * (float)M_PI / 180.0f);
+	float edgeTanY = std::tan(halfFovY * (float)M_PI / 180.0f);
 	
 	// calculate the maximum output percentage for the edge of the output
 	float maxOutputPercentageX = SampleFromPoints(distortionsSmoothGreen, edgeTanX);
@@ -262,19 +266,19 @@ void RadialBezierDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfL
 	float hFovHalf = halfFovX;
 	float vFovHalf = halfFovY;
 	
-	hFovHalf = hFovHalf * M_PI / 180.0f;
-	vFovHalf = vFovHalf * M_PI / 180.0f;
+	hFovHalf = hFovHalf * (float)M_PI / 180.0f;
+	vFovHalf = vFovHalf * (float)M_PI / 180.0f;
 	
-	*pfLeft = tan(-hFovHalf);
-	*pfRight = tan(hFovHalf);
-	*pfTop = tan(vFovHalf);
-	*pfBottom = tan(-vFovHalf);
+	*pfLeft = std::tan(-hFovHalf);
+	*pfRight = std::tan(hFovHalf);
+	*pfTop = std::tan(vFovHalf);
+	*pfBottom = std::tan(-vFovHalf);
 }
 
 Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV){
 	
 	// convert to radius and unit vector
-	float radius = sqrt(fU * fU + fV * fV);
+	float radius = std::sqrt(fU * fU + fV * fV);
 	float unitU = fU / radius;
 	float unitV = fV / radius;
 	// fix NaNs
@@ -302,8 +306,8 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	Point2D distortion;
 	distortion.x = unitU * radius;
 	distortion.y = unitV * radius;
-	distortion.x /= tan(halfFovX * M_PI / 180.0f);
-	distortion.y /= tan(halfFovY * M_PI / 180.0f);
+	distortion.x /= std::tan(halfFovX * (float)M_PI / 180.0f);
+	distortion.y /= std::tan(halfFovY * (float)M_PI / 180.0f);
 	return distortion;
 }
 

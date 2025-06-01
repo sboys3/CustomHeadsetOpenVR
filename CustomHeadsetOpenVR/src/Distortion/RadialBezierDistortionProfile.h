@@ -18,11 +18,11 @@ public:
 	};
 	// radial distortions from the input image in degrees to the output image in percent
 	// this will be used as the values for the green channel
-	std::vector<DistortionPoint> distortions = {{0, 0}, {47.5, 100}};
+	std::vector<DistortionPoint> distortions = {{0.f, 0.f}, {47.5f, 100.f}};
 	// additional percent distortions for the red channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsRed = {{0, 0.5}, {47.5, 0.5}};
+	std::vector<DistortionPoint> distortionsRed = {{0.f, 0.5f}, {47.5f, 0.5f}};
 	// additional percent distortions for the blue channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsBlue = {{0, -0.42}, {47.5, -0.42}};
+	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.42f}, {47.5f, -0.42f}};
 	// amount to smooth the curve from 0 to 1
 	double smoothAmount = 0.66;
 private:
