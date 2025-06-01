@@ -6,6 +6,8 @@
 #include "../Config/ConfigLoader.h"
 #include "../HiddenArea/HiddenArea.h"
 
+constexpr float kPi{ 3.1415926535897932384626433832795028841971693993751058209749445f };
+
 void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
 	DriverLog("PosTrackedDeviceActivate");
 
@@ -262,7 +264,7 @@ void MeganeX8KShim::RunFrame(){
 		// calculate angle between last and current rotation acos((trace(A'*B)-1)/2)*360/2/pi
 		double angle = std::acos((rotation.m[0][0] * lastMovementRotation.m[0][0] + rotation.m[1][0] * lastMovementRotation.m[1][0] + rotation.m[2][0] * lastMovementRotation.m[2][0] +
 			rotation.m[0][1] * lastMovementRotation.m[0][1] + rotation.m[1][1] * lastMovementRotation.m[1][1] + rotation.m[2][1] * lastMovementRotation.m[2][1] +
-			rotation.m[0][2] * lastMovementRotation.m[0][2] + rotation.m[1][2] * lastMovementRotation.m[1][2] + rotation.m[2][2] * lastMovementRotation.m[2][2] - 1) / 2.0) * 360.0 / 2.0 / M_PI;
+			rotation.m[0][2] * lastMovementRotation.m[0][2] + rotation.m[1][2] * lastMovementRotation.m[1][2] + rotation.m[2][2] * lastMovementRotation.m[2][2] - 1) / 2.0) * 360.0 / 2.0 / kPi;
 		if(angle > driverConfig.meganeX8K.stationaryDimming.movementThreshold){
 			// moved past threshold
 			// DriverLog("angle: %f", angle);
@@ -351,7 +353,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
-	bool shouldUpdateDistortion = loadedNewDistortionProfile | shouldReInitializeDistortion;
+	bool shouldUpdateDistortion = loadedNewDistortionProfile || shouldReInitializeDistortion;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;

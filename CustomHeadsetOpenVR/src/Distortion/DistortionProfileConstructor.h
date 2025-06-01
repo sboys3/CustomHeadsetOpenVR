@@ -23,6 +23,6 @@ class DistortionProfileConstructor{
 		virtual ~DistortionProfileConstructor();
 	private:
 		// used for detecting profile changes
-		std::string profileName;
-		double profileModifiedTime;
+		std::string profileName = "";
+		double profileModifiedTime = 0.0;
 };

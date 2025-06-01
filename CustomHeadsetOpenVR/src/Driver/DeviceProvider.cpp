@@ -47,7 +47,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 				driverContextsByDeviceId[id] = ctx;
 				// send any queued events
 				if(queuedEvents.find(id) != queuedEvents.end()){
-					for(auto event : queuedEvents[id]){
+					for(const auto& event : queuedEvents[id]){
 						SendVendorEvent(id, event.eventType, event.eventData, event.eventTimeOffset);
 					}
 					queuedEvents.erase(id);

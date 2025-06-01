@@ -4,9 +4,6 @@
 #include "../Driver/DriverLog.h"
 
 
-#define M_PI 3.1415926535897932384626433832795028841971693993751058209749445
-
-
 class RadialBezierDistortionProfile : public DistortionProfile{
 public:
 	class DistortionPoint{
@@ -45,7 +42,7 @@ private:
 	// number of smoothed points to create between each distortion point
 	int inBetweenPoints = 20;
 	// sample points from the radial maps
-	inline float SampleFromMap(float* map, float radius);
+	inline float SampleFromMap(float* map, float radius) const;
 	// helper function to compute statistics on ppd
 	float ComputePPD(std::vector<DistortionPoint> distortion, float degreeStart, float degreeEnd);
 	// delete allocated resources

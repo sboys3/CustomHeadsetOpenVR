@@ -8,19 +8,19 @@ enum ColorChannel{
 };
 
 struct Point2D{
-	float x;
-	float y;
+	float x = 0.f;
+	float y = 0.f;
 };
 
 // An abstract class that all distortion profiles are derived from
 class DistortionProfile{
 public:
 	// the resolution from -1 to 1 in the output coordinates
-	float resolution;
+	float resolution = 0.f;
 	// total resolution in the horizontal direction
-	float resolutionX;
+	float resolutionX = 0.f;
 	// total resolution in the vertical direction
-	float resolutionY;
+	float resolutionY = 0.f;
 	// max fov to be displayed horizontally
 	float maxFovX = 175;
 	// max fov to be displayed vertically
