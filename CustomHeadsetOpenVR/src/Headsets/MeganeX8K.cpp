@@ -320,8 +320,9 @@ void MeganeX8KShim::UpdateSettings(){
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
 		}
-		// The compositor uses the LineLoop mesh but that seems to be impossible to set without the compositor running into issues at boot,
-		// so we just set the standard mesh that games use (it's the one that matters for performance)
+		// The compositor uses the LineLoop/Inverse mesh (depending on which is available),
+		// but I haven't been able to set those without causing issues for the compositor at boot.
+		// So for now we just set the Standard mesh that games seem to use (it's the one that matters for performance).
 		if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
 			for (auto meshType : { vr::k_eHiddenAreaMesh_Standard }) {
 				for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
