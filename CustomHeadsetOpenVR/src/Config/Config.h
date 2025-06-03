@@ -28,7 +28,7 @@ struct StationaryDimmingConfig{
 	// the angle that the headset has to rotate for it to be considered as moved
 	double movementThreshold = 0.3;
 	// the time in seconds that the headset has to be stationary for it to be dimmed
-	double movementTime = 5.0;
+	double movementTime = 15.0;
 	// the amount to dim the display when stationary
 	double dimAmount = 0.02;
 	// the amount per second to dim the display when stationary
