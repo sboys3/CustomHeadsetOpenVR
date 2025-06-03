@@ -2,7 +2,7 @@
 import { effect, Signal, signal } from '@angular/core';
 import { exists, mkdir, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
 import { cleanJsonComments, DebouncedFileWriter, debouncedFileWriter, deepCopy, deepMerge } from '../helpers';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, delay, filter, Subject } from 'rxjs';
 export enum FileReadErrorReason {
     NotExists = 'File not exists',
     ParsingFailed = 'Parsing failed'
@@ -12,7 +12,7 @@ export type FileReadError = {
     message?: string
 }
 export abstract class JsonSettingServiceBase<T> {
-    protected _values = signal<T | undefined>(undefined,{ });
+    protected _values = signal<T | undefined>(undefined, {});
     public values = this._values.asReadonly();
     protected readonly debouncedFileWriter: DebouncedFileWriter;
     protected _initTask: Promise<void>;
@@ -47,7 +47,7 @@ export abstract class JsonSettingServiceBase<T> {
         }
         if (this.watchFileforAutoReload) {
             const watchSubject = new Subject<void>();
-            watchSubject.pipe(debounceTime(20)).subscribe(() => {
+            watchSubject.pipe(filter(() => !this.debouncedFileWriter.isSavingFile()), debounceTime(25), delay(25)).subscribe(() => {
                 this.loadSetting();
             });
             watchImmediate(this._fileDir, ev => {
@@ -61,23 +61,29 @@ export abstract class JsonSettingServiceBase<T> {
         }
 
     }
-
+    loading = false
     async loadSetting() {
-        if (await exists(this._filePath)) {
-            try {
-                const copiedDefaults = deepCopy(this.defaults);
-                this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(await readTextFile(this._filePath)))));
-                this._readFileError.set(undefined);
-            } catch (e) {
-                this._readFileError.set({
-                    reason: FileReadErrorReason.ParsingFailed,
-                    message: `${e}`
-                });
-                this._values.set(undefined);
+        if (this.loading) return;
+        this.loading = true
+        try {
+            if (await exists(this._filePath)) {
+                try {
+                    const copiedDefaults = deepCopy(this.defaults);
+                    this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(await readTextFile(this._filePath)))));
+                    this._readFileError.set(undefined);
+                } catch (e) {
+                    this._readFileError.set({
+                        reason: FileReadErrorReason.ParsingFailed,
+                        message: `${e}`
+                    });
+                    this._values.set(undefined);
+                }
+            } else {
+                this._readFileError.set({ reason: FileReadErrorReason.NotExists });
+                this._values.set(undefined)
             }
-        } else {
-            this._readFileError.set({ reason: FileReadErrorReason.NotExists });
-            this._values.set(undefined)
+        } finally {
+            this.loading = false
         }
     }
 
