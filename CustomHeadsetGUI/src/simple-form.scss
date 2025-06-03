@@ -8,20 +8,13 @@
         margin: 0.5rem 0;
     }
 
-    .required {
-        &::after {
-            content: '*';
-            margin-left: 0.2rem;
-            color: var(--mat-sys-error);
-        }
-    }
 
 
     .field {
         position: relative;
-        display: flex;
+        display: grid;
         flex-shrink: 0;
-        flex-direction: row;
+        grid-template-columns: 22rem 1fr;
         min-height: 3rem;
         border-bottom: 1px solid var(--mat-sys-outline-variant);
 
@@ -36,7 +29,6 @@
         .title {
             display: flex;
             align-items: center;
-            width: 35%;
             position: relative;
             user-select: none;
 
@@ -64,7 +56,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            grid-column: span 2;
             position: relative;
             user-select: none;
             background: linear-gradient(90deg, transparent, var(--mat-sys-surface-container) 30% 70%, transparent);

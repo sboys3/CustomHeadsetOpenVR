@@ -59,9 +59,6 @@
       <trans-unit id="3119794609322363234" datatype="html">
         <source>Advanced Mode</source>
       </trans-unit>
-      <trans-unit id="1955403421668504940" datatype="html">
-        <source>Fields marked with * require restart SteamVR to apply changes.</source>
-      </trans-unit>
       <trans-unit id="3303629114160653296" datatype="html">
         <source>Enable MeganeX 8K Driver</source>
       </trans-unit>
@@ -319,6 +316,18 @@
       </trans-unit>
       <trans-unit id="7653815630536291994" datatype="html">
         <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
+      </trans-unit>
+      <trans-unit id="2421348343423477743" datatype="html">
+        <source>Inverts the meshes to only show the areas that will be hidden.</source>
+      </trans-unit>
+      <trans-unit id="4907691917396407663" datatype="html">
+        <source>Require restart SteamVR to apply changes.</source>
+      </trans-unit>
+      <trans-unit id="49266763300376978" datatype="html">
+        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
+      </trans-unit>
+      <trans-unit id="6510312666905899307" datatype="html">
+        <source>Require restart game to apply changes.</source>
       </trans-unit>
     </body>
   </file>

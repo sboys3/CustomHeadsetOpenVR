@@ -194,10 +194,6 @@
         <source>Github Page</source>
         <target state="translated">Githubページ</target>
       </trans-unit>
-      <trans-unit id="1955403421668504940" datatype="html">
-        <source>Fields marked with * require restart SteamVR to apply changes.</source>
-        <target state="translated">* が付いている項目は、変更を適用するためにSteamVRの再起動が必要です。</target>
-      </trans-unit>
       <trans-unit id="5551731962623384570" datatype="html">
         <source>New version available!</source>
         <target state="translated">新しいバージョンが利用可能です！</target>
@@ -425,6 +421,22 @@
       <trans-unit id="7653815630536291994" datatype="html">
         <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
         <target state="translated">ヘッドセットが静止している際に自動で画面を減光し、ディスプレイパネルを保護して「焼き付き」を防ぐ機能です。デバイスの回転が「静止時間」中、「移動しきい値」で設定した角度を下回ったままだと、減光が開始されます。</target>
+      </trans-unit>
+      <trans-unit id="49266763300376978" datatype="html">
+        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
+        <target state="translated">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。</target>
+      </trans-unit>
+      <trans-unit id="2421348343423477743" datatype="html">
+        <source>Inverts the meshes to only show the areas that will be hidden.</source>
+        <target state="translated">メッシュを反転させ、非表示になる領域のみを表示します。</target>
+      </trans-unit>
+      <trans-unit id="4907691917396407663" datatype="html">
+        <source>Require restart SteamVR to apply changes.</source>
+        <target state="translated">変更を適用するには、SteamVRの再起動が必要です。</target>
+      </trans-unit>
+      <trans-unit id="6510312666905899307" datatype="html">
+        <source>Require restart game to apply changes.</source>
+        <target state="translated">変更を適用するには、ゲームの再起動が必要です。</target>
       </trans-unit>
     </body>
   </file>
