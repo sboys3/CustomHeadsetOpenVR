@@ -1,8 +1,9 @@
 <app-system-ready [class.page-disabled]="!settings?.enable">
     @if(settings){
     <div class="field ignore-disable">
+        <app-field-note type="steamvrRestart" />
         <div class="title">
-            <span i18n appSettingNote="steamvrRestart">Enable MeganeX 8K Driver</span>
+            <span i18n>Enable MeganeX 8K Driver</span>
             <app-reset-button [canReset]="settings.enable!=defaults?.enable"
                 (resetClick)="resetOption('enable')"></app-reset-button>
         </div>
@@ -26,7 +27,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="steamvrRestart">Resolution</span>
+            <span i18n>Resolution</span>
+            <app-field-note type="steamvrRestart"/>
             <app-reset-button [canReset]="resolutionModel!=defaults?.resolutionX"
                 (resetClick)="resetResolution()"></app-reset-button>
         </div>
@@ -154,7 +156,8 @@
     <div class="field">
         <div class="section-title">
             <span i18n>Stationary Dimming Settings</span>
-            <app-field-tip i18n-info info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset's rotation remains under the 'Movement Threshold' for the duration of the 'Movement Time'."/>
+            <app-field-tip i18n-info
+                info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset's rotation remains under the 'Movement Threshold' for the duration of the 'Movement Time'." />
         </div>
     </div>
     <div class="field">
@@ -197,8 +200,8 @@
                 (resetClick)="resetStationaryDimmingOption('movementTime')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.movementTime" step="1"
-                (ngModelChange)="saveConfigSettings()" type="number">
+            <input matInput [(ngModel)]="stationaryDimming.movementTime" step="1" (ngModelChange)="saveConfigSettings()"
+                type="number">
             <mat-slider max="10" min="1" step="1" showTickMarks>
                 <input matSliderThumb [(ngModel)]="stationaryDimming.movementTime"
                     (ngModelChange)="saveConfigSettings()">
@@ -252,12 +255,14 @@
     <div class="field">
         <div class="section-title">
             <span i18n>Hidden Area Mesh Settings</span>
-            <app-field-tip i18n-info info="Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them."/>
+            <app-field-tip i18n-info
+                info="Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them." />
         </div>
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Enable Hidden Area Meshes</span>
+            <span i18n>Enable Hidden Area Meshes</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
                 (resetClick)="resetHiddenAreaOption('enable')"></app-reset-button>
         </div>
@@ -274,8 +279,9 @@
 
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Test Mode</span>
-            <app-field-tip i18n-info info="Inverts the meshes to only show the areas that will be hidden."/>
+            <span i18n>Test Mode</span>
+            <app-field-note type="gameRestart"/>
+            <app-field-tip i18n-info info="Inverts the meshes to only show the areas that will be hidden." />
             <app-reset-button [canReset]="hiddenArea.testMode!=defaults?.hiddenArea?.testMode"
                 (resetClick)="resetHiddenAreaOption('testMode')"></app-reset-button>
         </div>
@@ -286,7 +292,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Radius Top Inner</span>
+            <span i18n>Radius Top Inner</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea.radiusTopInner!=defaults?.hiddenArea?.radiusTopInner"
                 (resetClick)="resetHiddenAreaOption('radiusTopInner')"></app-reset-button>
         </div>
@@ -300,7 +307,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Radius Bottom Inner</span>
+            <span i18n>Radius Bottom Inner</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea.radiusBottomInner!=defaults?.hiddenArea?.radiusBottomInner"
                 (resetClick)="resetHiddenAreaOption('radiusBottomInner')"></app-reset-button>
         </div>
@@ -314,7 +322,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Radius Top Outer</span>
+            <span i18n>Radius Top Outer</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea.radiusTopOuter!=defaults?.hiddenArea?.radiusTopOuter"
                 (resetClick)="resetHiddenAreaOption('radiusTopOuter')"></app-reset-button>
         </div>
@@ -328,7 +337,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Radius Bottom Outer</span>
+            <span i18n>Radius Bottom Outer</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea.radiusBottomOuter!=defaults?.hiddenArea?.radiusBottomOuter"
                 (resetClick)="resetHiddenAreaOption('radiusBottomOuter')"></app-reset-button>
         </div>
@@ -342,7 +352,8 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n appSettingNote="gameRestart">Mesh Detail</span>
+            <span i18n>Mesh Detail</span>
+            <app-field-note type="gameRestart"/>
             <app-reset-button [canReset]="hiddenArea.detailLevel!=defaults?.hiddenArea?.detailLevel"
                 (resetClick)="resetHiddenAreaOption('detailLevel')"></app-reset-button>
         </div>

@@ -1,0 +1,21 @@
+:host {
+    font-size: 120%;
+    pointer-events: all;
+    content: '*';
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    left:-1rem;
+    top: 0.5rem;
+    user-select: none;
+
+    &.steamvrRestart {
+        color: var(--mat-sys-error);
+    }
+
+    &.gameRestart {
+        color: var(--mat-sys-tertiary);
+    }
+}
