@@ -40,6 +40,8 @@
                 margin: 0 0.5rem;
             }
 
+            pointer-events: none;
+
             &::after {
                 content: '';
                 top: 10%;

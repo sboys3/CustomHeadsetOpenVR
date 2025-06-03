@@ -54,17 +54,22 @@ body {
   background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
 }
+
 [appsettingnote] {
   &::after {
+    font-size: 120%;
+    pointer-events: all;
     content: '*';
     margin-left: 0.2rem;
   }
 }
+
 [appsettingnote="steamvrRestart"] {
   &::after {
     color: var(--mat-sys-error);
   }
 }
+
 [appsettingnote="gameRestart"] {
   &::after {
     color: var(--mat-sys-tertiary);
