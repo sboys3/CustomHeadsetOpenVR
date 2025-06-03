@@ -113,10 +113,11 @@ void ConfigLoader::ParseConfig(){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }
 		// write to global config
-		driverConfigLock.lock();
-		driverConfigOld = driverConfig;
-		driverConfig = newConfig;
-		driverConfigLock.unlock();
+		{
+			std::lock_guard<std::mutex> lock(driverConfigLock);
+			driverConfigOld = driverConfig;
+			driverConfig = newConfig;
+		}
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse config file: %s", e.what());
 		return;
@@ -277,7 +278,7 @@ void ConfigLoader::WatcherThread(){
 	}
 	while(started){
 		DWORD bytesReturned;
-		char buffer[1024];
+		char buffer[1024]{};
 		FILE_NOTIFY_INFORMATION* pNotify;
 		BOOL success = ReadDirectoryChangesW(hDir, buffer, sizeof(buffer), FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME, &bytesReturned, NULL, NULL);
 		if(!success){
@@ -321,7 +322,7 @@ void ConfigLoader::WatcherThreadDistortions(){
 	}
 	while(started){
 		DWORD bytesReturned;
-		char buffer[1024];
+		char buffer[1024]{};
 		FILE_NOTIFY_INFORMATION* pNotify;
 		BOOL success = ReadDirectoryChangesW(hDir, buffer, sizeof(buffer), FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME, &bytesReturned, NULL, NULL);
 		if(!success){

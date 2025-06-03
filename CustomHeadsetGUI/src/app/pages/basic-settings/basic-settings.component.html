@@ -1,11 +1,8 @@
 <app-system-ready [class.page-disabled]="!settings?.enable">
     @if(settings){
-
-    <h5 class="warn-color italic" i18n>Fields marked with * require restart SteamVR to apply changes.</h5>
-    <mat-divider></mat-divider>
     <div class="field ignore-disable">
         <div class="title">
-            <span i18n class="required">Enable MeganeX 8K Driver</span>
+            <span i18n appSettingNote="steamvrRestart">Enable MeganeX 8K Driver</span>
             <app-reset-button [canReset]="settings.enable!=defaults?.enable"
                 (resetClick)="resetOption('enable')"></app-reset-button>
         </div>
@@ -29,7 +26,7 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Resolution</span>
+            <span i18n appSettingNote="steamvrRestart">Resolution</span>
             <app-reset-button [canReset]="resolutionModel!=defaults?.resolutionX"
                 (resetClick)="resetResolution()"></app-reset-button>
         </div>
@@ -255,11 +252,12 @@
     <div class="field">
         <div class="section-title">
             <span i18n>Hidden Area Mesh Settings</span>
+            <app-field-tip i18n-info info="Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them."/>
         </div>
     </div>
     <div class="field">
-        <div class="title">
-            <span i18n class="required">Enable Hidden Area Meshes</span>
+        <div class="title" appSettingNote="gameRestart">
+            <span i18n appSettingNote="gameRestart">Enable Hidden Area Meshes</span>
             <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
                 (resetClick)="resetHiddenAreaOption('enable')"></app-reset-button>
         </div>
@@ -276,7 +274,8 @@
 
     <div class="field">
         <div class="title">
-            <span i18n class="required">Test Mode</span>
+            <span i18n appSettingNote="gameRestart">Test Mode</span>
+            <app-field-tip i18n-info info="Inverts the meshes to only show the areas that will be hidden."/>
             <app-reset-button [canReset]="hiddenArea.testMode!=defaults?.hiddenArea?.testMode"
                 (resetClick)="resetHiddenAreaOption('testMode')"></app-reset-button>
         </div>
@@ -287,7 +286,7 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Radius Top Inner</span>
+            <span i18n appSettingNote="gameRestart">Radius Top Inner</span>
             <app-reset-button [canReset]="hiddenArea.radiusTopInner!=defaults?.hiddenArea?.radiusTopInner"
                 (resetClick)="resetHiddenAreaOption('radiusTopInner')"></app-reset-button>
         </div>
@@ -301,7 +300,7 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Radius Bottom Inner</span>
+            <span i18n appSettingNote="gameRestart">Radius Bottom Inner</span>
             <app-reset-button [canReset]="hiddenArea.radiusBottomInner!=defaults?.hiddenArea?.radiusBottomInner"
                 (resetClick)="resetHiddenAreaOption('radiusBottomInner')"></app-reset-button>
         </div>
@@ -315,7 +314,7 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Radius Top Outer</span>
+            <span i18n appSettingNote="gameRestart">Radius Top Outer</span>
             <app-reset-button [canReset]="hiddenArea.radiusTopOuter!=defaults?.hiddenArea?.radiusTopOuter"
                 (resetClick)="resetHiddenAreaOption('radiusTopOuter')"></app-reset-button>
         </div>
@@ -328,8 +327,8 @@
         </div>
     </div>
     <div class="field">
-        <div class="title">
-            <span i18n class="required">Radius Bottom Outer</span>
+        <div class="title" appSettingNote="gameRestart">
+            <span i18n appSettingNote="gameRestart">Radius Bottom Outer</span>
             <app-reset-button [canReset]="hiddenArea.radiusBottomOuter!=defaults?.hiddenArea?.radiusBottomOuter"
                 (resetClick)="resetHiddenAreaOption('radiusBottomOuter')"></app-reset-button>
         </div>
@@ -343,7 +342,7 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n class="required">Mesh Detail</span>
+            <span i18n appSettingNote="gameRestart">Mesh Detail</span>
             <app-reset-button [canReset]="hiddenArea.detailLevel!=defaults?.hiddenArea?.detailLevel"
                 (resetClick)="resetHiddenAreaOption('detailLevel')"></app-reset-button>
         </div>

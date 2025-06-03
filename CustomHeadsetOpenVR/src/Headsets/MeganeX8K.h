@@ -11,7 +11,7 @@
 
 class MeganeX8KShim : public ShimDefinition{
 public:
-	CustomHeadsetDeviceProvider* deviceProvider;
+	CustomHeadsetDeviceProvider* deviceProvider = nullptr;
 	
 	DistortionProfileConstructor distortionProfileConstructor;
 	std::mutex distortionProfileLock;

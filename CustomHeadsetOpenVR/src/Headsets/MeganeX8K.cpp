@@ -6,6 +6,8 @@
 #include "../Config/ConfigLoader.h"
 #include "../HiddenArea/HiddenArea.h"
 
+constexpr float kPi{ 3.1415926535897932384626433832795028841971693993751058209749445f };
+
 void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
 	DriverLog("PosTrackedDeviceActivate");
 
@@ -58,12 +60,12 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(unObjectId, 5000, 5000);
-	distortionProfileConstructor.distortionSettings.resolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
-	distortionProfileConstructor.distortionSettings.resolutionX = driverConfig.meganeX8K.resolutionX;
-	distortionProfileConstructor.distortionSettings.resolutionY = driverConfig.meganeX8K.resolutionY;
+	distortionProfileConstructor.distortionSettings.resolution = (float)std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+	distortionProfileConstructor.distortionSettings.resolutionX = (float)driverConfig.meganeX8K.resolutionX;
+	distortionProfileConstructor.distortionSettings.resolutionY = (float)driverConfig.meganeX8K.resolutionY;
 	
 	// initialize random value for session
-	fovBurnInOffset = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 10000) / 10000.0 * 3.0;
+	fovBurnInOffset = (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() % 10000) / 10000.f * 3.f;
 	DriverLog("fovBurnInOffset: %f", fovBurnInOffset);
 	
 	
@@ -94,11 +96,11 @@ bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float 
 
 // run for each vertex of the distortion mesh and outputs the uv coordinates to sample for each color
 bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float &fU, float &fV, vr::DistortionCoordinates_t &coordinates){
-	
-	float minResolution = std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
+
+	float minResolution = (float)std::min(driverConfig.meganeX8K.resolutionX, driverConfig.meganeX8K.resolutionY);
 	// change range to -1 to 1 for coverage of the minResolution square
-	fU = (fU - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionY / minResolution;
-	fV = (fV - 0.5) * 2.0f * driverConfig.meganeX8K.resolutionX / minResolution;
+	fU = (fU - 0.5f) * 2.0f * driverConfig.meganeX8K.resolutionY / minResolution;
+	fV = (fV - 0.5f) * 2.0f * driverConfig.meganeX8K.resolutionX / minResolution;
 	if(eEye == vr::Eye_Left){
 		float tmp = fU;
 		fU = -fV;
@@ -109,8 +111,8 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 		fV = -tmp;
 	}
 	
-	fU /= driverConfig.meganeX8K.distortionZoom;
-	fV /= driverConfig.meganeX8K.distortionZoom;
+	fU /= (float)driverConfig.meganeX8K.distortionZoom;
+	fV /= (float)driverConfig.meganeX8K.distortionZoom;
 	
 	float redV = fV;
 	float greenV = fV;
@@ -208,8 +210,8 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 
 void MeganeX8KShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight){
 	distortionProfileConstructor.GetRecommendedRenderTargetSize(renderWidth, renderHeight);
-	*renderWidth *= driverConfig.meganeX8K.renderResolutionMultiplierX;
-	*renderHeight *= driverConfig.meganeX8K.renderResolutionMultiplierY;
+	*renderWidth  = static_cast<uint32_t>(*renderWidth  * driverConfig.meganeX8K.renderResolutionMultiplierX);
+	*renderHeight = static_cast<uint32_t>(*renderHeight * driverConfig.meganeX8K.renderResolutionMultiplierY);
 	// save to info
 	driverConfigLoader.info.renderResolution100PercentX = *renderWidth;
 	driverConfigLoader.info.renderResolution100PercentY = *renderHeight;
@@ -270,7 +272,7 @@ void MeganeX8KShim::RunFrame(){
 		// calculate angle between last and current rotation acos((trace(A'*B)-1)/2)*360/2/pi
 		double angle = std::acos((rotation.m[0][0] * lastMovementRotation.m[0][0] + rotation.m[1][0] * lastMovementRotation.m[1][0] + rotation.m[2][0] * lastMovementRotation.m[2][0] +
 			rotation.m[0][1] * lastMovementRotation.m[0][1] + rotation.m[1][1] * lastMovementRotation.m[1][1] + rotation.m[2][1] * lastMovementRotation.m[2][1] +
-			rotation.m[0][2] * lastMovementRotation.m[0][2] + rotation.m[1][2] * lastMovementRotation.m[1][2] + rotation.m[2][2] * lastMovementRotation.m[2][2] - 1) / 2.0) * 360.0 / 2.0 / M_PI;
+			rotation.m[0][2] * lastMovementRotation.m[0][2] + rotation.m[1][2] * lastMovementRotation.m[1][2] + rotation.m[2][2] * lastMovementRotation.m[2][2] - 1) / 2.0) * 360.0 / 2.0 / kPi;
 		if(angle > driverConfig.meganeX8K.stationaryDimming.movementThreshold){
 			// moved past threshold
 			// DriverLog("angle: %f", angle);
@@ -317,7 +319,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD((driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.0f);
+	SetIPD((float)(driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.f);
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 
@@ -326,8 +328,9 @@ void MeganeX8KShim::UpdateSettings(){
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
 		}
-		// The compositor uses the LineLoop mesh but that seems to be impossible to set without the compositor running into issues at boot,
-		// so we just set the standard mesh that games use (it's the one that matters for performance)
+		// The compositor uses the LineLoop/Inverse mesh (depending on which is available),
+		// but I haven't been able to set those without causing issues for the compositor at boot.
+		// So for now we just set the Standard mesh that games seem to use (it's the one that matters for performance).
 		if (const auto& haConf = driverConfig.meganeX8K.hiddenArea; haConf.enable) {
 			for (auto meshType : { vr::k_eHiddenAreaMesh_Standard }) {
 				for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
@@ -342,8 +345,8 @@ void MeganeX8KShim::UpdateSettings(){
 	}
 
 	
-	distortionProfileConstructor.distortionSettings.maxFovX = driverConfig.meganeX8K.maxFovX;
-	distortionProfileConstructor.distortionSettings.maxFovY = driverConfig.meganeX8K.maxFovY;
+	distortionProfileConstructor.distortionSettings.maxFovX = (float)driverConfig.meganeX8K.maxFovX;
+	distortionProfileConstructor.distortionSettings.maxFovY = (float)driverConfig.meganeX8K.maxFovY;
 	if(driverConfig.meganeX8K.fovBurnInPrevention){
 		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
 		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;
@@ -359,7 +362,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
-	bool shouldUpdateDistortion = loadedNewDistortionProfile | shouldReInitializeDistortion;
+	bool shouldUpdateDistortion = loadedNewDistortionProfile || shouldReInitializeDistortion;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;

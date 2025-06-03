@@ -4,9 +4,6 @@
 #include "../Driver/DriverLog.h"
 
 
-#define M_PI 3.1415926535897932384626433832795028841971693993751058209749445
-
-
 class RadialBezierDistortionProfile : public DistortionProfile{
 public:
 	class DistortionPoint{
@@ -18,11 +15,11 @@ public:
 	};
 	// radial distortions from the input image in degrees to the output image in percent
 	// this will be used as the values for the green channel
-	std::vector<DistortionPoint> distortions = {{0, 0}, {47.5, 100}};
+	std::vector<DistortionPoint> distortions = {{0.f, 0.f}, {47.5f, 100.f}};
 	// additional percent distortions for the red channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsRed = {{0, 0.5}, {47.5, 0.5}};
+	std::vector<DistortionPoint> distortionsRed = {{0.f, 0.5f}, {47.5f, 0.5f}};
 	// additional percent distortions for the blue channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsBlue = {{0, -0.42}, {47.5, -0.42}};
+	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.42f}, {47.5f, -0.42f}};
 	// amount to smooth the curve from 0 to 1
 	double smoothAmount = 0.66;
 private:
@@ -45,7 +42,7 @@ private:
 	// number of smoothed points to create between each distortion point
 	int inBetweenPoints = 20;
 	// sample points from the radial maps
-	inline float SampleFromMap(float* map, float radius);
+	inline float SampleFromMap(float* map, float radius) const;
 	// helper function to compute statistics on ppd
 	float ComputePPD(std::vector<DistortionPoint> distortion, float degreeStart, float degreeEnd);
 	// delete allocated resources

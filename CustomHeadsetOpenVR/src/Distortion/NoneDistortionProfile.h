@@ -1,7 +1,7 @@
 #pragma once
 #include "DistortionProfile.h"
 
-#define M_PI 3.1415926535897932384626433832795028841971693993751058209749445
+#include <cmath>
 
 // A distortion profile that does nothing
 class NoneDistortionProfile : public DistortionProfile{
@@ -15,16 +15,18 @@ public:
 	virtual void Initialize() override{};
 	
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) override{
+		constexpr float kPi{ 3.1415926535897932384626433832795028841971693993751058209749445f };
+
 		float hFovHalf = noneDistortionFovHorizontal / 2.0f;
 		float vFovHalf = noneDistortionFovVertical / 2.0f;
 		
-		hFovHalf = hFovHalf * (float)M_PI / 180.0f;
-		vFovHalf = vFovHalf * (float)M_PI / 180.0f;
+		hFovHalf = hFovHalf * kPi / 180.0f;
+		vFovHalf = vFovHalf * kPi / 180.0f;
 		
-		*pfLeft = (float)tan(-hFovHalf);
-		*pfRight = (float)tan(hFovHalf);
-		*pfTop = (float)tan(vFovHalf);
-		*pfBottom = (float)tan(-vFovHalf);
+		*pfLeft = std::tan(-hFovHalf);
+		*pfRight = std::tan(hFovHalf);
+		*pfTop = std::tan(vFovHalf);
+		*pfBottom = std::tan(-vFovHalf);
 	};
 	
 	virtual Point2D ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) override{

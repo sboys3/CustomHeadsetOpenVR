@@ -194,10 +194,6 @@
         <source>Github Page</source>
         <target state="translated">Github 頁面</target>
       </trans-unit>
-      <trans-unit id="1955403421668504940" datatype="html">
-        <source>Fields marked with * require restart SteamVR to apply changes.</source>
-        <target state="translated">標有 * 的欄位需要重新啟動 SteamVR 才能套用變更。</target>
-      </trans-unit>
       <trans-unit id="5551731962623384570" datatype="html">
         <source>New version available!</source>
         <target state="translated">有可用的新版本！</target>
@@ -394,7 +390,7 @@
         <source>Check driver update and launch SteamVR</source>
         <target state="translated">檢查驅動程式更新並啟動 SteamVR</target>
       </trans-unit>
-     <trans-unit id="6494825378753268291" datatype="html">
+      <trans-unit id="6494825378753268291" datatype="html">
         <source>Stationary Dimming Settings</source>
         <target state="translated">靜止時變暗設定</target>
       </trans-unit>
@@ -425,6 +421,22 @@
       <trans-unit id="7653815630536291994" datatype="html">
         <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
         <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。當裝置的旋轉角度在「靜置時間」內，持續小於設定的「移動閾值」，便會啟動變暗效果。</target>
+      </trans-unit>
+      <trans-unit id="49266763300376978" datatype="html">
+        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
+        <target state="translated">變更這些設定後，需重啟遊戲才會顯示效果。隱藏區域網格可用於遮蔽螢幕邊角，在有支援的遊戲中能提升效能。</target>
+      </trans-unit>
+      <trans-unit id="2421348343423477743" datatype="html">
+        <source>Inverts the meshes to only show the areas that will be hidden.</source>
+        <target state="translated">反轉網格，使其僅顯示將被隱藏的區域。</target>
+      </trans-unit>
+      <trans-unit id="4907691917396407663" datatype="html">
+        <source>Require restart SteamVR to apply changes.</source>
+        <target state="translated">需要重啟 SteamVR 以套用變更。</target>
+      </trans-unit>
+      <trans-unit id="6510312666905899307" datatype="html">
+        <source>Require restart game to apply changes.</source>
+        <target state="translated">需要重啟遊戲以套用變更。</target>
       </trans-unit>
     </body>
   </file>

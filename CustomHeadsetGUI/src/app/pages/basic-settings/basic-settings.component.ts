@@ -19,6 +19,7 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
 import { PullingService } from '../../services/PullingService';
 import { is_vrmonitor_running } from '../../tauri_wrapper';
 import { FieldTipComponent } from '../../utilities/field-tip/field-tip.component';
+import { SettingNoteDirective } from '../../utilities/setting-note.directive';
 
 
 
@@ -36,6 +37,7 @@ import { FieldTipComponent } from '../../utilities/field-tip/field-tip.component
         ResetButtonComponent,
         SystemReadyComponent,
         FieldTipComponent,
+        SettingNoteDirective,
         CommonModule],
     providers: [],
     templateUrl: './basic-settings.component.html',
