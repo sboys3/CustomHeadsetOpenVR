@@ -116,7 +116,8 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	float greenV = fV;
 	
 	// apply sub pixel offsets for super sampling
-	float subpixelOffset = (float)(driverConfig.meganeX8K.subpixelShift / minResolution);
+	// the resolution is hardcoded here because the physical pixel sizes remain constant regardless of resolution
+	float subpixelOffset = (float)(driverConfig.meganeX8K.subpixelShift / 3552);
 	// if(testToggle){
 	if(eEye == vr::Eye_Left){
 		redV -= subpixelOffset;
@@ -250,7 +251,14 @@ void MeganeX8KShim::RunFrame(){
 	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
 	double frameTime = now - lastFrameTime;
 	if(lastFrameTime == 0){
+		lastFrameTime = now;
 		frameTime = 0;
+	}
+	static int debugFrameCount = 0;
+	debugFrameCount++;
+	if(frameTime < 1.0 / 90.0){
+		// only run a maximum of 90 times a second
+		return;
 	}
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);

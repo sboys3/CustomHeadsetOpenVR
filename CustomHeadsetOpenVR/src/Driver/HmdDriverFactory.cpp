@@ -1,4 +1,6 @@
 #include "DeviceProvider.h"
+#include "../Config/ConfigLoader.h"
+// #include "CompositorPlugin.h"
 #include "openvr_driver.h"
 
 
@@ -12,15 +14,21 @@
 #error "Unsupported Platform."
 #endif
 
-CustomHeadsetDeviceProvider deviceProvider;
+CustomHeadsetDeviceProvider deviceProvider = {};
+// CompositorPlugin compositorPlugin = {};
 
 // this is the main entry point from vrserver
 HMD_DLL_EXPORT void *HmdDriverFactory(const char *pInterfaceName, int *pReturnCode){
+	// driverConfigLoader.info.debugLog += "HmdDriverFactory(" + std::string(pInterfaceName) + ")\n";
 	
 	// return CustomHeadsetDeviceProvider
-	if (0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName)){
+	if(0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName)){
 		return &deviceProvider;
 	}
+	// return CompositorPlugin
+	// if(0 == strcmp(vr::IVRCompositorPluginProvider_Version, pInterfaceName)){
+	// 	return &compositorPlugin;
+	// }
 	// Otherwise tell the runtime that we don't have this interface.
 	if(pReturnCode){
 		*pReturnCode = vr::VRInitError_Init_InterfaceNotFound;

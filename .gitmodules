@@ -11,3 +11,7 @@
 	url = https://github.com/nlohmann/json
 	branch = master
 	shallow = true
+[submodule "ThirdParty/easywsclient"]
+	path = ThirdParty/easywsclient
+	url = https://github.com/dhbaird/easywsclient
+	shallow = true

@@ -31,16 +31,19 @@
     <ClInclude Include="src\HiddenArea\HiddenArea.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ThirdParty\easywsclient\easywsclient.cpp" />
     <ClCompile Include="src\Config\Config.cpp" />
     <ClCompile Include="src\Config\ConfigLoader.cpp" />
     <ClCompile Include="src\Distortion\DistortionProfileConstructor.cpp" />
     <ClCompile Include="src\Distortion\RadialBezierDistortionProfile.cpp" />
+    <ClCompile Include="src\Driver\CompositorPlugin.cpp" />
     <ClCompile Include="src\Driver\DeviceProvider.cpp" />
     <ClCompile Include="src\Driver\DeviceShim.cpp" />
     <ClCompile Include="src\Driver\DriverLog.cpp" />
     <ClCompile Include="src\Driver\HmdDriverFactory.cpp" />
     <ClCompile Include="src\Driver\Hooking\Hooking.cpp" />
     <ClCompile Include="src\Driver\Hooking\InterfaceHookInjector.cpp" />
+    <ClCompile Include="src\Driver\ShaderReplacement.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>

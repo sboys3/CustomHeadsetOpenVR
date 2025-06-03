@@ -10,7 +10,7 @@
 
 /**
  * This class implements overrides for functions in SteamVR devices
- * Pre functions run before the original function and return false to prevent the original function from running.
+ * Pre functions run before the original function and can return false to prevent the original function from running or modify the parameters that will be passed to the original function.
  * Post functions run after the original function and can modify the return value or other parameters.
  * 
  * The shimActive flag can be used to disable the shim at runtime. 

@@ -13,6 +13,11 @@
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
 	// initialise this driver
 	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
+	char driverPath[2048];
+	vr::VRResources()->GetResourceFullPath("", "", driverPath, sizeof(driverPath));
+	driverConfigLoader.info.steamvrResources = driverPath;
+	vr::VRResources()->GetResourceFullPath("{CustomHeadsetOpenVR}", "", driverPath, sizeof(driverPath));
+	driverConfigLoader.info.driverResources = driverPath;
 	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
@@ -28,6 +33,14 @@ void CustomHeadsetDeviceProvider::Cleanup(){}
 void CustomHeadsetDeviceProvider::EnterStandby(){}
 void CustomHeadsetDeviceProvider::LeaveStandby(){}
 
+void DebugEventLog(const vr::VREvent_t& vrevent){
+	DriverLog("Event type: %d", vrevent.eventType);
+	switch(vrevent.eventType){
+		case vr::VREvent_PropertyChanged:
+			DriverLog("Property changed: %i", vrevent.data.property.prop);
+			break;
+	}
+}
 
 void CustomHeadsetDeviceProvider::RunFrame(){
 	// acquire driverConfig.configLock for the duration of this function
@@ -36,6 +49,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	// process events that were submitted for this frame.
 	vr::VREvent_t vrevent{};
 	while(vr::VRServerDriverHost()->PollNextEvent(&vrevent, sizeof(vr::VREvent_t))){
+		//DebugEventLog(vrevent);
 		if(vrevent.eventType == VREvent_VendorSpecific_ContextCollection){
 			// receive and store data from successful context collection events
 			vr::VREvent_Reserved_t data = vrevent.data.reserved;

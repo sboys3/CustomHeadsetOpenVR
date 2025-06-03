@@ -16,16 +16,23 @@ public:
 		double renderResolution1To1Percent = 0;
 		uint32_t renderResolution100PercentX = 0;
 		uint32_t renderResolution100PercentY = 0;
+		std::string debugLog = "";
+		std::string driverResources = "";
+		std::string steamvrResources = "";
 	};
 	Info info;
 
 	bool started = false;
+	// read from info. used in the compositor to get info from the main driver
+	bool watchInfo = false;
 	// parse the config file into the global config object
 	void ParseConfig();
 	// load a distortion profile config from disk
 	DistortionProfileConfig ParseDistortionConfig(std::string name);
 	// save the info.json file to disk
 	void WriteInfo();
+	// read the info.json file from disk
+	void ReadInfo();
 	// start the config parser
 	void Start();
 	// thread to write info

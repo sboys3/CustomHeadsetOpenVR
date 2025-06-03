@@ -213,6 +213,9 @@ void ConfigLoader::WriteInfo(){
 					{"brightenSpeed", defaultSettings.meganeX8K.stationaryDimming.brightenSpeed},
 				}},
 			}},
+			{"customShader", {
+				{"enable", defaultSettings.customShader.enable},
+			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
 		// eventually these will have the full distortion data in them
@@ -227,10 +230,34 @@ void ConfigLoader::WriteInfo(){
 			{"renderResolution100PercentX", info.renderResolution100PercentX},
 			{"renderResolution100PercentY", info.renderResolution100PercentY},
 		}},
+		{"debugLog", info.debugLog},
+		{"driverResources", info.driverResources},
+		{"steamvrResources", info.steamvrResources},
 		{"driverVersion", driverVersion}
 	};
 	infoFile << data.dump(1, '\t');
 	infoFile.close();
+}
+
+void ConfigLoader::ReadInfo(){
+	std::string infoPath = GetConfigFolder() + "info.json";
+	std::ifstream infoFile(infoPath);
+	if(!infoFile.is_open()){
+		DriverLog("Failed to open info.json for reading: %d", GetLastError());
+		return;
+	}
+	try{
+		json data = json::parse(infoFile, nullptr, true, true);
+		if(data["driverResources"].is_string()){
+			info.driverResources = data["driverResources"].get<std::string>();
+		}
+		if(data["steamvrResources"].is_string()){
+			info.steamvrResources = data["steamvrResources"].get<std::string>();
+		}
+	}catch(const std::exception& e){
+		DriverLog("Failed to parse info.json: %s", e.what());
+		return;
+	}
 }
 
 // void ConfigLoader::WriteInfoThread(){
@@ -258,9 +285,11 @@ void ConfigLoader::WatcherThread(){
 			break;
 		}
 		pNotify = (FILE_NOTIFY_INFORMATION*)buffer;
+		bool hasReloadedConfig = false;
+		bool hasReloadedInfo = false;
 		do{
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
-			if(fileName == L"settings.json" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
+			if(!hasReloadedConfig && fileName == L"settings.json" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
 				DriverLog("Config file changed, reloading...");
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				while(driverConfig.hasBeenUpdated){
@@ -268,7 +297,13 @@ void ConfigLoader::WatcherThread(){
 					std::this_thread::sleep_for(std::chrono::milliseconds(10)); 
 				}
 				ParseConfig();
-				break;
+				hasReloadedConfig = true;
+			}
+			if(watchInfo && !hasReloadedInfo && fileName == L"info.json" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
+				DriverLog("Info file changed, reloading...");
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				ReadInfo();
+				hasReloadedInfo = true;
 			}
 			pNotify = (FILE_NOTIFY_INFORMATION*)((char*)pNotify + pNotify->NextEntryOffset);
 		}while(pNotify->NextEntryOffset != 0);
@@ -342,10 +377,14 @@ void ConfigLoader::Start(){
 			configFile.close();
 		}
 		
-		// start info thread
-		WriteInfo();
-		// std::thread infoThread(&ConfigLoader::WriteInfoThread, this);
-		// infoThread.detach();
+		if(watchInfo){
+			ReadInfo();
+		}else{
+			WriteInfo();
+			// start info thread
+			// std::thread infoThread(&ConfigLoader::WriteInfoThread, this);
+			// infoThread.detach();
+		}
 	}catch(const std::exception& e){
 		DriverLog("Failed to create settings.json %s", e.what());
 	}

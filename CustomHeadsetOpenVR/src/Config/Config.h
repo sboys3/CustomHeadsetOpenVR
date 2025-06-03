@@ -38,6 +38,12 @@ struct StationaryDimmingConfig{
 };
 
 
+struct CustomShaderConfig{
+	// if shaders should be replaced in the compositor
+	bool enable = true;
+};
+
+
 class Config{
 public:
 	class Color{
@@ -87,6 +93,8 @@ public:
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;
+	
+	CustomShaderConfig customShader = {};
 	
 	// reload the config every time a file is changed in the distortions directory
 	// this is for manual json editing, utilities should touch the main settings file when done modifying distortions instead

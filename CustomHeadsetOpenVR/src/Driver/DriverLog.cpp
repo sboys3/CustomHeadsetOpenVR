@@ -8,12 +8,24 @@
 #define vsnprintf_s vsnprintf
 #endif
 
+#ifdef _WIN32
+#include "windows.h"
+#endif
+
 static void DriverLogVarArgs( const char *pMsgFormat, va_list args )
 {
 	char buf[ 1024 ];
 	vsnprintf_s( buf, sizeof( buf ), pMsgFormat, args );
-
-	vr::VRDriverLog()->Log( buf );
+	
+	if(vr::VRDriverContext() != nullptr){
+		vr::VRDriverLog()->Log( buf );
+	}else{
+		#ifdef _WIN32
+		// If there is not driver context output for a debugger
+		OutputDebugStringA( buf );
+		OutputDebugStringA( "\n" );
+		#endif
+	}
 }
 
 
