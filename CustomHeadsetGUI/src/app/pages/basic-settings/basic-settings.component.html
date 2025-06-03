@@ -256,7 +256,7 @@
         </div>
     </div>
     <div class="field">
-        <div class="title" appSettingNote="gameRestart">
+        <div class="title">
             <span i18n appSettingNote="gameRestart">Enable Hidden Area Meshes</span>
             <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
                 (resetClick)="resetHiddenAreaOption('enable')"></app-reset-button>
@@ -327,7 +327,7 @@
         </div>
     </div>
     <div class="field">
-        <div class="title" appSettingNote="gameRestart">
+        <div class="title">
             <span i18n appSettingNote="gameRestart">Radius Bottom Outer</span>
             <app-reset-button [canReset]="hiddenArea.radiusBottomOuter!=defaults?.hiddenArea?.radiusBottomOuter"
                 (resetClick)="resetHiddenAreaOption('radiusBottomOuter')"></app-reset-button>
