@@ -4,7 +4,8 @@
 
 // Manually inject into the compositor process
 // IVRCompositorPluginProvider requires a display redirect to work but that prevents video output.
-void InjectCompositorPlugin(); 
+// if forProcessId is specified it will only inject if forProcessId is vrcompositor.exe
+bool InjectCompositorPlugin(int forProcessId = 0); 
 
 
 class CompositorPlugin : public vr::IVRCompositorPluginProvider{

@@ -1,6 +1,7 @@
 #include "DeviceProvider.h"
 #include "DriverLog.h"
 #include "DeviceShim.h"
+#include "CompositorPlugin.h"
 
 #include "Hooking/InterfaceHookInjector.h"
 
@@ -39,6 +40,12 @@ void DebugEventLog(const vr::VREvent_t& vrevent){
 		case vr::VREvent_PropertyChanged:
 			DriverLog("Property changed: %i", vrevent.data.property.prop);
 			break;
+		case vr::VREvent_Compositor_DisplayReconnected:
+			DriverLog("Compositor display reconnected");
+			break;
+		case vr::VREvent_ProcessConnected:
+			DriverLog("Process connected %i", vrevent.data.process.pid);
+			break;
 	}
 }
 
@@ -49,7 +56,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	// process events that were submitted for this frame.
 	vr::VREvent_t vrevent{};
 	while(vr::VRServerDriverHost()->PollNextEvent(&vrevent, sizeof(vr::VREvent_t))){
-		//DebugEventLog(vrevent);
+		// DebugEventLog(vrevent);
 		if(vrevent.eventType == VREvent_VendorSpecific_ContextCollection){
 			// receive and store data from successful context collection events
 			vr::VREvent_Reserved_t data = vrevent.data.reserved;
@@ -67,6 +74,11 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 					queuedEvents.erase(id);
 				}
 			}
+		}
+		
+		if(vrevent.eventType == vr::VREvent_ProcessConnected){
+			// check new processes and inject if they are the compositor
+			InjectCompositorPlugin(vrevent.data.process.pid);
 		}
 	}
 	for(auto shim : shims){

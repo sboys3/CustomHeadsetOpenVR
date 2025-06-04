@@ -90,6 +90,7 @@ OutputStruct main(in InputStruct IN)
 	uint2 outputPixel = uint2(IN.Position.xy);
 	
 	// do subpixel offsets
+	// https://www.shadertoy.com/view/Wcd3D7
 	// only the y direction is done because the x direction is already done by global offsets in the UVs
 	int2 outputPixelOdd2D = int2(frac(outputPixel/2.0f)*2.0f) % 2;
 	bool outputPixelOdd = outputPixelOdd2D.x == 0;
@@ -97,13 +98,12 @@ OutputStruct main(in InputStruct IN)
 	// if(frac(g_flTime)>0.5){
 	// 	offsetAmountY = 100;
 	// }
-	// the signs on the red offsets seem like they should be opposite, but for some reason they are clearer like this
 	if(outputPixelOdd){
-		IN.uv1.xy += uvDy * -offsetAmountY;
+		IN.uv1.xy += uvDy *  offsetAmountY;
 		IN.uv2.xy += uvDy *  offsetAmountY;
 		IN.uv3.xy += uvDy * -offsetAmountY;
 	}else{
-		IN.uv1.xy += uvDy *  offsetAmountY;
+		IN.uv1.xy += uvDy * -offsetAmountY;
 		IN.uv2.xy += uvDy * -offsetAmountY;
 		IN.uv3.xy += uvDy *  offsetAmountY;
 	}
@@ -168,6 +168,10 @@ OutputStruct main(in InputStruct IN)
 	// col.rgb = outputPixelOdd2D.x != outputPixelOdd2D.y ? 0.9 : 0.1; 
 	// blocks of 20 pixels
 	// col.rg = float2(int2(IN.Position.xy) % 20) / 20.0;
+	
+	// eye-patch
+	//if(g_nEye == 1){col = 0;}
+		
 	
 	OUT.Target0 = col;
 	

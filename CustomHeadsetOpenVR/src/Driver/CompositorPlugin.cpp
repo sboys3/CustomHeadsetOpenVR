@@ -1,5 +1,6 @@
 #include "CompositorPlugin.h"
 #include "ShaderReplacement.h"
+#include "DriverLog.h"
 #include "../Config/ConfigLoader.h"
 #include <mutex>
 
@@ -20,6 +21,7 @@ void Initialize(){
 	driverConfigLoader.watchInfo = true;
 	driverConfigLoader.Start();
 	
+	// beware this blocks for a while to ensure shaders get reloaded
 	shaderReplacement.Initialize();
 }
 
@@ -46,13 +48,14 @@ void* CompositorPlugin::GetComponent(const char *pchComponentNameAndVersion){
 
 #include <thread>
 #include <windows.h>
+#include <TlHelp32.h>
 void winInit(){
 	if(initialized){
 		return;
 	}
 	
 	// check that the executable we are in is vrcompositor.exe
-	wchar_t buffer[MAX_PATH];
+	wchar_t buffer[MAX_PATH] = {};
 	GetModuleFileName(NULL, buffer, MAX_PATH);
 	std::wstring::size_type pos = std::wstring(buffer).find(L"vrcompositor.exe");
 	if (pos == std::wstring::npos){
@@ -79,4 +82,127 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved){
 			break;
 	}
 	return TRUE;
+}
+
+
+bool InjectCompositorPlugin(int forProcessId){
+	WCHAR* processName = (LPWSTR)L"vrcompositor.exe";
+	
+	WCHAR dllPath[1024] = {};
+	// get current dll path
+	HMODULE dllModule = NULL;
+	if(GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | 
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        (LPWSTR) &InjectCompositorPlugin, &dllModule) == 0){
+		DriverLog("failed to get dll module handle");
+		return false;
+	}
+	if(GetModuleFileName(dllModule, dllPath, sizeof(dllPath) / sizeof(WCHAR)) == 0){
+		DriverLog("failed to get dll path");
+		return false;
+	}
+	
+	
+
+	// get process id of vrcompositor.exe
+	DWORD processId{};
+	auto hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0); 
+	if(hSnapshot == INVALID_HANDLE_VALUE)
+	{
+		DriverLog("invalid process snapshot handle");
+		return false;
+	}
+	PROCESSENTRY32 process{};
+	process.dwSize = sizeof(PROCESSENTRY32);
+	BOOL isProcessFound = FALSE;
+	// iterate through all process entries in the snapshot and find process id of processName
+	if(Process32First(hSnapshot, &process) == FALSE){
+		CloseHandle(hSnapshot);
+		DriverLog("process list failure");
+		return false;
+	}
+	if(wcscmp(process.szExeFile, processName) == 0){
+		CloseHandle(hSnapshot);
+		processId = process.th32ProcessID;
+		isProcessFound = TRUE;
+	}
+	while(Process32Next(hSnapshot, &process)){
+		if (wcscmp(process.szExeFile, processName) == 0){
+			CloseHandle(hSnapshot);
+			processId = process.th32ProcessID;
+			isProcessFound = TRUE;
+			break;
+		}
+	}
+	
+	if(forProcessId != 0){
+		if(processId != forProcessId){
+			// don't log because this will be called for every process that connects
+			// DriverLog("process id mismatch %i %i", processId, forProcessId);
+			return false;
+		}
+	}
+	
+	
+	// Check if process was found
+	if(isProcessFound==FALSE){
+		DriverLog("process not found");
+		return false;
+	}
+	
+	// open process to inject into
+	auto size = wcslen(dllPath) * sizeof(TCHAR);
+	auto targetProcess = OpenProcess(PROCESS_ALL_ACCESS, 0, processId);
+	if(targetProcess == NULL){
+		DriverLog("process open failed %i", processId);
+		return false;
+	}
+	// allocate memory in the remote process
+	auto nameInTargetProcess = VirtualAllocEx(targetProcess, nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	if(nameInTargetProcess == NULL){
+		DriverLog("remote allocation failed");
+		return false;
+	}
+	// put data into memory of the remote process
+	auto bStatus = WriteProcessMemory(targetProcess, nameInTargetProcess, dllPath, size, nullptr);
+	if(bStatus == 0){
+		DriverLog("failed to write remote memory");
+		return false;
+	}
+	
+	// get the address of LoadLibraryW in the remote process
+	auto hKernel32 = GetModuleHandle(L"kernel32.dll");
+	if(hKernel32 == NULL){
+		DriverLog("can't get kernel32.dll");
+		return false;
+	}
+	FARPROC LoadLibraryAddress;
+	if ((LoadLibraryAddress = GetProcAddress(hKernel32, "LoadLibraryW")) == NULL){
+		DriverLog("failed to load kernel32.dll");
+		return false;
+	}
+
+	// LoadLibraryW((LPCWSTR)dllPath);
+	
+	// using the above objects execute the DLL in the remote process
+	auto hThreadId = CreateRemoteThread(targetProcess,
+		nullptr,
+		0,
+		reinterpret_cast<LPTHREAD_START_ROUTINE>(LoadLibraryAddress),
+		nameInTargetProcess,
+		NULL,
+		nullptr
+	);
+	if(hThreadId == NULL){
+		DriverLog("failed to execute dll in remote process");
+		return false;
+	}
+	// WaitForSingleObject(hThreadId, INFINITE);
+	
+	DriverLog("driver successfully injected into process %i", processId);
+
+	CloseHandle(targetProcess);
+	VirtualFreeEx(targetProcess, nameInTargetProcess, size, MEM_RELEASE);
+	
+	return true;
 }

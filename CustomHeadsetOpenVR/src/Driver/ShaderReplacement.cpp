@@ -6,16 +6,26 @@
 #include <map>
 #include <locale>
 #include <codecvt>
+#include <filesystem>
 
 #include "../../../ThirdParty/easywsclient/easywsclient.hpp"
-
-
 
 #include "d3d11.h"
 #include "d3dcompiler.h"
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
+// this could probably use macros to get the current project location instead of hard coding it for my computer
+std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
+
+std::string getShaderPath(){
+	std::string shaderPath = driverConfigLoader.info.driverResources + "shaders/d3d11/";
+	if(std::filesystem::exists(shaderDevPath)){
+		// pull from my dev path instead
+		shaderPath = shaderDevPath;
+	}
+	return shaderPath;
+}
 
 static Hook<void*(*)(ID3D11Device*, const void* pShaderBytecode, SIZE_T BytecodeLength, ID3D11ClassLinkage* pClassLinkage, ID3D11PixelShader** ppPixelShader)> 
 	CreatePixelShaderHook("ID3D11Device::CreatePixelShader");
@@ -88,8 +98,7 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 
 // compile the new distortion shader from source
 Bytecode DistortionShader(){
-	// read entire distort_ps_layered.fxo file from driverResources
-	std::string fullPath = driverConfigLoader.info.driverResources + "shaders/d3d11/" + "distort_ps_layered.hlsl";
+	std::string fullPath = getShaderPath() + "distort_ps_layered.hlsl";
 	// FILE* file = fopen(fullPath.c_str(), "rb");
 	// if(!file){
 	// 	DriverLog("Failed to open shader file: %s", fullPath.c_str());
@@ -127,8 +136,8 @@ Bytecode DistortionShader(){
 		}
 	}
 	
-	ID3DBlob* shaderBlob;
-	ID3DBlob* errorBlob;
+	ID3DBlob* shaderBlob = nullptr;
+	ID3DBlob* errorBlob = nullptr; 
 	if(FAILED(D3DCompileFromFile(
 		ConvertUtf8ToWide(fullPath).c_str(),
 		defines,
@@ -141,13 +150,15 @@ Bytecode DistortionShader(){
 		&errorBlob
 	))){
 		DriverLog("Failed to compile shader file: %s", fullPath.c_str());
-		DriverLog("Error: %s", (char*)errorBlob->GetBufferPointer());
-		// output to file beside shader
-		std::string errorPath = fullPath + "_error.txt";
-		FILE* errorFile = fopen(errorPath.c_str(), "wb+");
-		if(errorFile){
-			fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize(), errorFile);
-			fclose(errorFile);
+		if(errorBlob){
+			DriverLog("Error: %s", (char*)errorBlob->GetBufferPointer());
+			// output to file beside shader
+			std::string errorPath = fullPath + "_error.txt";
+			FILE* errorFile = fopen(errorPath.c_str(), "wb+");
+			if(errorFile){
+				fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize(), errorFile);
+				fclose(errorFile);
+			}
 		}
 		return {nullptr, 0};
 	}else{
@@ -254,6 +265,17 @@ void ShaderReplacement::Initialize(){
 	std::thread checkSettingsThread(&ShaderReplacement::CheckSettingsThread, this);
 	checkSettingsThread.detach();
 	
+	
+	// reloading shaders immediately does not seem to work so try a few times with delays
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	if(driverConfig.customShader.enable){
+		ReloadShaders();
+	}
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	if(driverConfig.customShader.enable){
+		ReloadShaders();
+	}
+	std::this_thread::sleep_for(std::chrono::seconds(5));
 	if(driverConfig.customShader.enable){
 		ReloadShaders();
 	}
@@ -272,8 +294,10 @@ void ShaderReplacement::ReloadShaders(){
 	delete websocket;
 }
 
+
+
 void ShaderReplacement::WatchShadersThread(){
-	std::string shaderPath = driverConfigLoader.info.driverResources + "shaders/d3d11/";
+	std::string shaderPath = getShaderPath();
 	HANDLE hDir = CreateFileA(shaderPath.c_str(), FILE_LIST_DIRECTORY, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
 	if(hDir == INVALID_HANDLE_VALUE){
 		DriverLog("Failed to open distortion shaders for watching: %d", GetLastError());
