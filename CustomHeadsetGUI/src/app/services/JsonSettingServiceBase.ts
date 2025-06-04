@@ -1,8 +1,9 @@
 
-import { effect, Signal, signal } from '@angular/core';
+import { effect, inject, Signal, signal } from '@angular/core';
 import { exists, mkdir, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
 import { cleanJsonComments, DebouncedFileWriter, debouncedFileWriter, deepCopy, deepMerge } from '../helpers';
 import { debounceTime, delay, filter, Subject } from 'rxjs';
+import { AppSettingAccessor } from './AppSettingAccessor';
 export enum FileReadErrorReason {
     NotExists = 'File not exists',
     ParsingFailed = 'Parsing failed'
@@ -31,8 +32,10 @@ export abstract class JsonSettingServiceBase<T> {
         private defaultValue: Signal<T | undefined>,
         private autoCreate: boolean,
         private watchFileforAutoReload: boolean) {
-        this.debouncedFileWriter = debouncedFileWriter(_filePath, _fileDir);
+        const appSettings = inject(AppSettingAccessor)
+        this.debouncedFileWriter = debouncedFileWriter(_filePath, _fileDir, () => appSettings.settings.updateMode == 'rewrite');
         this._initTask = this.init();
+
         effect(() => {
             this.defaults = (this.defaultValue() ?? {} as any)
             this.loadSetting()

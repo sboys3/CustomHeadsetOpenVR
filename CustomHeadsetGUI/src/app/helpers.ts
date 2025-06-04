@@ -178,12 +178,21 @@ export function debouncedFileWriter(path: string | Promise<string>, tempFileDir:
       savingFile = true;
       try {
         if (directWrite?.()) {
-          await writeTextFile(await path, content);
+          try {
+            await writeTextFile(await path, content);
+          } catch (er) {
+            console.error('write file error', await path)
+          }
         } else {
           const tempPath = await join(await tempFileDir, `${self.crypto.randomUUID()}`);
           await writeTextFile(tempPath, content);
-          await copyFile(tempPath, await path);
-          await remove(tempPath);
+          try {
+            await copyFile(tempPath, await path);
+          } catch (er) {
+            console.error('copy file error', tempPath, 'to', await path)
+          } finally {
+            await remove(tempPath);
+          }
         }
       } finally {
         savingFile = false;
@@ -208,10 +217,10 @@ export function isNewVersion(current: string, latest: string): boolean {
     const lNum = parseInt(lParts[i] || '0', 10);
 
     if (lNum > cNum) {
-      return true; 
+      return true;
     }
     if (cNum > lNum) {
-      return false; 
+      return false;
     }
   }
   return false;
