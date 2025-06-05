@@ -50,8 +50,8 @@ export abstract class JsonSettingServiceBase<T> {
         }
         if (this.watchFileforAutoReload) {
             const watchSubject = new Subject<void>();
-            watchSubject.pipe(filter(() => !this.debouncedFileWriter.isSavingFile()), debounceTime(25), delay(25)).subscribe(() => {
-                this.loadSetting();
+            watchSubject.pipe(filter(() => !this.debouncedFileWriter.isSavingFile()), debounceTime(50), delay(50)).subscribe(() => {
+                this.loadSetting()
             });
             watchImmediate(this._fileDir, ev => {
                 if (ev.paths.some(p => p == this._filePath)) {
@@ -64,30 +64,32 @@ export abstract class JsonSettingServiceBase<T> {
         }
 
     }
-    loading = false
-    async loadSetting() {
-        if (this.loading) return;
-        this.loading = true
-        try {
-            if (await exists(this._filePath)) {
-                try {
-                    const copiedDefaults = deepCopy(this.defaults);
-                    this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(await readTextFile(this._filePath)))));
-                    this._readFileError.set(undefined);
-                } catch (e) {
-                    this._readFileError.set({
-                        reason: FileReadErrorReason.ParsingFailed,
-                        message: `${e}`
-                    });
-                    this._values.set(undefined);
+    async loadSetting(): Promise<boolean> {
+        return await navigator.locks.request(`loadfile_${this._filePath}`, async () => {
+            try {
+                if (await exists(this._filePath)) {
+                    try {
+                        const copiedDefaults = deepCopy(this.defaults);
+                        this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(await readTextFile(this._filePath)))));
+                        this._readFileError.set(undefined);
+                        return true;
+                    } catch (e) {
+                        console.error('parsing setting error', this._filePath, e)
+                        this._readFileError.set({
+                            reason: FileReadErrorReason.ParsingFailed,
+                            message: `${e}`
+                        });
+                        this._values.set(undefined);
+                    }
+                } else {
+                    this._readFileError.set({ reason: FileReadErrorReason.NotExists });
+                    this._values.set(undefined)
                 }
-            } else {
-                this._readFileError.set({ reason: FileReadErrorReason.NotExists });
-                this._values.set(undefined)
+            } catch (e) {
+                console.error('load setting error', this._filePath, e);
             }
-        } finally {
-            this.loading = false
-        }
+            return false
+        });
     }
 
     async save(values: T) {

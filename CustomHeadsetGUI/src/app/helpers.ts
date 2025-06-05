@@ -166,15 +166,9 @@ export const deepMerge = <TX extends IObject, TY extends IObject, TR = TX & TY>(
 };
 export function debouncedFileWriter(path: string | Promise<string>, tempFileDir: string | Promise<string>, directWrite?: (() => boolean)): DebouncedFileWriter {
   const saveSbj = new Subject<string>();
-  let fileSaveTask: Promise<void> | undefined;
   let savingFile = false
-  saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe((content) => {
-    let task: Promise<void>
-    if (fileSaveTask) {
-      task = fileSaveTask;
-    }
-    fileSaveTask = new Promise(async done => {
-      await task;
+  saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe(async (content) => {
+    await navigator.locks.request(`saving file_${await path}`, async () => {
       savingFile = true;
       try {
         if (directWrite?.()) {
@@ -197,8 +191,7 @@ export function debouncedFileWriter(path: string | Promise<string>, tempFileDir:
       } finally {
         savingFile = false;
       }
-      done();
-    });
+    })
   });
   return {
     save: (content: string) => {
