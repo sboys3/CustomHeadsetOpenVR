@@ -329,6 +329,12 @@
       <trans-unit id="5289886362173436722" datatype="html">
         <source>Driver Settings</source>
       </trans-unit>
+      <trans-unit id="2831644384120596450" datatype="html">
+        <source>Custom Shader</source>
+      </trans-unit>
+      <trans-unit id="4717955562496113560" datatype="html">
+        <source>Enable Custom Shader</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

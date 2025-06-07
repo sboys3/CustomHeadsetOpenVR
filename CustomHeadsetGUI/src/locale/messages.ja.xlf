@@ -420,23 +420,31 @@
       </trans-unit>
       <trans-unit id="2856900395968306204" datatype="html">
         <source>Movement Threshold Degrees</source>
-        <target state="new">Movement Threshold Degrees</target>
+        <target state="translated">移動しきい値 (度)</target>
       </trans-unit>
       <trans-unit id="1969673185132484114" datatype="html">
         <source>Dim Brightness Percent</source>
-        <target state="new">Dim Brightness Percent</target>
+        <target state="translated">減光輝度 (%)</target>
       </trans-unit>
       <trans-unit id="910820366380932556" datatype="html">
         <source>Dim Seconds</source>
-        <target state="new">Dim Seconds</target>
+        <target state="translated">減光時間 (秒)</target>
       </trans-unit>
       <trans-unit id="3110314934124526458" datatype="html">
         <source>Brighten Seconds</source>
-        <target state="new">Brighten Seconds</target>
+        <target state="translated">復光時間 (秒)</target>
       </trans-unit>
       <trans-unit id="5289886362173436722" datatype="html">
         <source>Driver Settings</source>
-        <target state="new">Driver Settings</target>
+        <target state="translated">ドライバー設定</target>
+      </trans-unit>
+      <trans-unit id="2831644384120596450" datatype="html">
+        <source>Custom Shader</source>
+        <target state="translated">カスタムシェーダー</target>
+      </trans-unit>
+      <trans-unit id="4717955562496113560" datatype="html">
+        <source>Enable Custom Shader</source>
+        <target state="translated">カスタムシェーダーの有効化</target>
       </trans-unit>
     </body>
   </file>
