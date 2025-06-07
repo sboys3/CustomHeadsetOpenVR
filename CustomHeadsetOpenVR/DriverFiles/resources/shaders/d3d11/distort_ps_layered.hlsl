@@ -102,10 +102,19 @@ OutputStruct main(in InputStruct IN)
 		IN.uv1.xy += uvDy *  offsetAmountY;
 		IN.uv2.xy += uvDy *  offsetAmountY;
 		IN.uv3.xy += uvDy * -offsetAmountY;
+		
+		IN.uv1.zw += uvDy *  offsetAmountY;
+		IN.uv2.zw += uvDy *  offsetAmountY;
+		IN.uv3.zw += uvDy * -offsetAmountY;
 	}else{
 		IN.uv1.xy += uvDy * -offsetAmountY;
 		IN.uv2.xy += uvDy * -offsetAmountY;
 		IN.uv3.xy += uvDy *  offsetAmountY;
+		
+		
+		IN.uv1.zw += uvDy * -offsetAmountY;
+		IN.uv2.zw += uvDy * -offsetAmountY;
+		IN.uv3.zw += uvDy *  offsetAmountY;
 	}
 	#endif
 	

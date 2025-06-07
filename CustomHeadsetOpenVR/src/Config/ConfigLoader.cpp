@@ -109,6 +109,12 @@ void ConfigLoader::ParseConfig(){
 				if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
 			}
 		}
+		if(data["customShader"].is_object()){
+			json customShaderData = data["customShader"];
+			if(customShaderData["enable"].is_boolean()){
+				newConfig.customShader.enable = customShaderData["enable"].get<bool>();
+			}
+		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }

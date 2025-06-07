@@ -98,6 +98,12 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 
 // compile the new distortion shader from source
 Bytecode DistortionShader(){
+	if(!driverConfig.customShader.enable){
+		// don't replace
+		return {nullptr, 0};
+	}
+	
+	
 	std::string fullPath = getShaderPath() + "distort_ps_layered.hlsl";
 	// FILE* file = fopen(fullPath.c_str(), "rb");
 	// if(!file){
