@@ -41,6 +41,10 @@ struct StationaryDimmingConfig{
 struct CustomShaderConfig{
 	// if shaders should be replaced in the compositor
 	bool enable = true;
+	// contrast with 50 being normal
+	double contrast = 50;
+	// the point from 0-100% of white that the contrast is centered around
+	double contrastMidpoint = 50;
 };
 
 

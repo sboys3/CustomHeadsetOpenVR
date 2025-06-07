@@ -166,6 +166,12 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	// post processing
+	#ifdef CONTRAST_MULTIPLIER
+	col.rgb *= CONTRAST_MULTIPLIER;
+	#endif
+	#ifdef CONTRAST_OFFSET
+	col.rgb += CONTRAST_OFFSET;
+	#endif
 	col *= g_vColorPrescaleLinear;
 	col.rgb = lerp(col.rgb, 1, g_flBlackLevel);
 	// convert to gamma 2.2

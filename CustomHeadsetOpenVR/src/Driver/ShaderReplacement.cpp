@@ -141,6 +141,17 @@ Bytecode DistortionShader(){
 			defines[definesCount++] = {"MEGANEX8K_SUBPIXEL_SHIFT", "1"};
 		}
 	}
+	double contrastMultiplier = driverConfig.customShader.contrast / 50.0;
+	std::string contrastMultiplierString = std::to_string(contrastMultiplier);
+	if(contrastMultiplier != 1){
+		defines[definesCount++] = {"CONTRAST_MULTIPLIER", contrastMultiplierString.c_str()};
+	}
+	double contrastOffset = driverConfig.customShader.contrastMidpoint / 100.0;
+	contrastOffset = -contrastOffset  * contrastMultiplier + contrastOffset;
+	std::string contrastOffsetString = std::to_string(contrastOffset);
+	if(contrastOffset != 0){
+		defines[definesCount++] = {"CONTRAST_OFFSET", contrastOffsetString.c_str()};
+	}
 	
 	ID3DBlob* shaderBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr; 
@@ -346,6 +357,8 @@ void ShaderReplacement::CheckSettingsThread(){
 		if(driverConfig.meganeX8K.enable){
 			reloadShaders |= driverConfig.meganeX8K.subpixelShift != driverConfigOld.meganeX8K.subpixelShift;
 			reloadShaders |= driverConfig.customShader.enable != driverConfigOld.customShader.enable;
+			reloadShaders |= driverConfig.customShader.contrast != driverConfigOld.customShader.contrast;
+			reloadShaders |= driverConfig.customShader.contrastMidpoint != driverConfigOld.customShader.contrastMidpoint;
 		}
 		
 		if(reloadShaders){

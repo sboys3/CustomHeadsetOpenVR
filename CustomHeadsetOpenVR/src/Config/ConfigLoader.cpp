@@ -114,6 +114,12 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["enable"].is_boolean()){
 				newConfig.customShader.enable = customShaderData["enable"].get<bool>();
 			}
+			if(customShaderData["contrast"].is_number()){
+				newConfig.customShader.contrast = customShaderData["contrast"].get<double>();
+			}
+			if(customShaderData["contrastMidpoint"].is_number()){
+				newConfig.customShader.contrastMidpoint = customShaderData["contrastMidpoint"].get<double>();
+			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
@@ -222,6 +228,8 @@ void ConfigLoader::WriteInfo(){
 			}},
 			{"customShader", {
 				{"enable", defaultSettings.customShader.enable},
+				{"contrast", defaultSettings.customShader.contrast},
+				{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
 			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
