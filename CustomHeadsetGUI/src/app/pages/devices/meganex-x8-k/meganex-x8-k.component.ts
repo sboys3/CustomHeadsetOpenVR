@@ -35,7 +35,7 @@ import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
 })
 export class MeganexX8KComponent extends DeviceConfigComponentBase<MeganeX8KConfig> {
   subpixelShiftOptions = [0, 0.33];
-  
+
   resolutionModel?: number;
   resolutionOptions = [
     { name: '4K', x: 3840, y: 3552 }, { name: '2K', x: 2880, y: 2664 }
@@ -49,22 +49,11 @@ export class MeganexX8KComponent extends DeviceConfigComponentBase<MeganeX8KConf
   constructor() {
     super()
     effect(() => {
-      this.dss.values() 
+      this.dss.values()
       this.resolutionModel = this.settings?.resolutionX
     })
   }
-  resetStationaryDimmingOption(key: keyof StationaryDimmingConfig) {
-    if (this.settings?.stationaryDimming && this.defaults && this.defaults?.stationaryDimming) {
-      (this.settings?.stationaryDimming as any)[key] = this.defaults?.stationaryDimming[key];
-      this.saveConfigSettings()
-    }
-  }
-  resetHiddenAreaOption(key: keyof HiddenAreaMeshConfig) {
-    if (this.settings?.hiddenArea && this.defaults && this.defaults?.hiddenArea) {
-      (this.settings.hiddenArea as any)[key] = this.defaults?.hiddenArea[key];
-      this.saveConfigSettings()
-    }
-  }
+ 
   resetResolution() {
     this.resolutionModel = this.defaults?.resolutionX;
     this.setResolution();

@@ -1,4 +1,4 @@
-import { Component, computed, effect, HostBinding, inject, input, model, OnDestroy, signal } from "@angular/core";
+import { Component, computed, effect, HostBinding, inject, input, model, OnDestroy, output, signal } from "@angular/core";
 import { AppSettingService } from "../../services/app-setting.service";
 import { DriverInfoService } from "../../services/driver-info.service";
 import { DistortionProfileEntry, DriverSettingService } from "../../services/driver-setting.service";
@@ -6,6 +6,9 @@ import { SystemDiagnosticService } from "../../services/system-diagnostic.servic
 import { PullingService } from "../../services/PullingService";
 import { is_vrmonitor_running } from "../../tauri_wrapper";
 import { DriverInfo, Settings } from "../../services/JsonFileDefines";
+
+type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
+type ObjectKeys<T> = KeysMatching<T, Record<PropertyKey, any>>;
 @Component({
     selector: 'device-config-componentBase',
     template: ``
@@ -13,6 +16,7 @@ import { DriverInfo, Settings } from "../../services/JsonFileDefines";
 export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> implements OnDestroy {
     public settingField = input.required<string>()
     public driverName = input.required<string>()
+    public enabled = output<boolean>()
     public defaults?: T
     public settings?: T
     public rootSetting?: Settings;
@@ -26,19 +30,33 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     driverWarning = signal(false)
     driverEnablePrompt = signal(false)
     steamVRRunning = signal({ updated: false, running: false }, { equal: (a, b) => a.running === b.running && a.updated === b.updated })
-    steamVRStatePulling = new PullingService(async () => {
-        this.steamVRRunning.set({ updated: true, running: await is_vrmonitor_running() })
-    }, 'steamVRStatePulling');
+    static steamVRStatePulling = new PullingService(async () => await is_vrmonitor_running(), 'steamVRStatePulling').shared();
+    pullingRef = DeviceConfigComponentBase.steamVRStatePulling.createRef(value => {
+        this.steamVRRunning.set({ updated: true, running: value })
+    })
     @HostBinding('class.page-disabled') get pageDisabled() { return !this.settings?.enable }
     constructor() {
         effect(() => {
             this.rootSetting = this.dss.values()
-            this.settings = (this.rootSetting as any)?.[this.settingField()];
+            const field = this.settingField();
+            if (field) {
+                this.settings = (this.rootSetting as any)?.[field];
+            } else {
+                //special case : root settings
+                this.settings = (this.rootSetting as any)
+            }
+            this.enabled.emit(this.settings?.enable ?? false)
         });
         effect(() => {
             const info = (this.dis.values() ?? {}) as DriverInfo;
             const defaultProfiles = info?.builtInDistortionProfiles ?? {};
-            this.defaults = (info?.defaultSettings as any)?.[this.settingField()];
+            const field = this.settingField();
+            if (field) {
+                this.defaults = (info?.defaultSettings as any)?.[this.settingField()];
+            } else {
+                //special case : root settings
+                this.defaults = (info?.defaultSettings as any)
+            }
             this.profiles = [
                 ...Object.keys(defaultProfiles).map(name => ({ name, isDefault: true })),
                 ...this.dss.distortionProfileList().map(f => ({
@@ -52,7 +70,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
             const steamVrConfig = this.sds.steamVrConfig();
             const config = this.dss.values();
             const driverName = this.driverName();
-            if (steamVrConfig) {
+            if (steamVrConfig && driverName) {
                 let shiftallEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, driverName)
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
                 this.driverWarning.set((shiftallEnabled || !customEnabled) && (config?.meganeX8K?.enable ?? false));
@@ -62,9 +80,9 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
         effect(() => {
             this.steamVRRunning.set({ running: false, updated: false })
             if (this.resolutionInfoDisplay()) {
-                this.steamVRStatePulling.start()
+                this.pullingRef.start()
             } else {
-                this.steamVRStatePulling.stop()
+                this.pullingRef.stop()
             }
         })
     }
@@ -74,15 +92,42 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
             this.saveConfigSettings()
         }
     }
+    nested<U extends ObjectKeys<T>>(key: U) {
+        return this._nested(key, this.settings, this.defaults)
+    }
+    private _nested<K extends Record<PropertyKey, any>, U extends ObjectKeys<K>>(key: U, obj?: K, defaults?: K) {
+        const setting = obj ?? ({} as K);
+        const defaultsObj = defaults ?? ({} as K);
+        const scope = setting[key];
+        const scopeDefault = defaultsObj[key];
+        return {
+            nested: (nextKey: keyof K[U]) => {
+                // @ts-ignore
+                return this._nested(nextKey, scope, scopeDefault)
+            },
+            resetOption: (resetFieldKey: keyof K[U]) => {
+                if (scope && scopeDefault) {
+                    scope[resetFieldKey] = scopeDefault[resetFieldKey];
+                    this.saveConfigSettings();
+                }
+            }
+        }
+    }
     toggleResolutionDisplay() {
         this.resolutionInfoDisplay.update(x => !x)
     }
     async disableDriver() {
-        await this.sds.disableSteamVRDriver(this.driverName());
-        await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
+        const driverName = this.driverName();
+        if (driverName) {
+            await this.sds.disableSteamVRDriver(driverName);
+            await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
+        }
     }
     async enableDriver() {
-        await this.sds.enableSteamVRDriver(this.driverName());
+        const driverName = this.driverName();
+        if (driverName) {
+            await this.sds.enableSteamVRDriver(this.driverName());
+        }
     }
 
 
@@ -96,6 +141,6 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     }
     loading = false;
     ngOnDestroy(): void {
-        this.steamVRStatePulling.stop()
+        this.pullingRef.stop()
     }
 }
