@@ -5,9 +5,6 @@
       <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
       </trans-unit>
-      <trans-unit id="8643289769990675407" datatype="html">
-        <source>Basic</source>
-      </trans-unit>
       <trans-unit id="7944521161821675937" datatype="html">
         <source>Distortion Profile</source>
       </trans-unit>
@@ -328,6 +325,9 @@
       </trans-unit>
       <trans-unit id="910820366380932556" datatype="html">
         <source>Dim Seconds</source>
+      </trans-unit>
+      <trans-unit id="5289886362173436722" datatype="html">
+        <source>Driver Settings</source>
       </trans-unit>
     </body>
   </file>

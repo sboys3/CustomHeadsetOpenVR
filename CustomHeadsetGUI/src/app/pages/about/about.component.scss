@@ -2,3 +2,7 @@ p {
     display: flex;
     align-items: center;
 }
+
+:host {
+    padding: 1rem;
+}

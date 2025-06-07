@@ -2,7 +2,9 @@ app-system-ready {
     display: flex;
     flex-direction: column;
 }
-
+:host{
+     padding: 1rem;
+}
 .actions {
     flex-shrink: 0;
     margin: 0.2rem;

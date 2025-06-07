@@ -14,8 +14,8 @@ import { AppUpdateService } from './services/app-update.service';
 export class AppComponent {
   navigation = [
     {
-      name: $localize`Basic`,
-      route: '/basic-settings',
+      name: $localize`Driver Settings`,
+      route: '/driver-settings',
     },
     {
       name: $localize`Distortion Profile`,

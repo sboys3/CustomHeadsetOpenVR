@@ -12,7 +12,7 @@ mat-tab-nav-panel {
     flex: 1 1 auto;
     overflow: auto;
     min-height: 0;
-    padding: 1rem;
+    
 
     ::ng-deep>*:not(router-outlet) {
         flex: 1 1 auto;

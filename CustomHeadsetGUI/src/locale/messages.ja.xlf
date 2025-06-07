@@ -2,10 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" target-language="ja" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="8643289769990675407" datatype="html">
-        <source>Basic</source>
-        <target state="translated">基本</target>
-      </trans-unit>
       <trans-unit id="7944521161821675937" datatype="html">
         <source>Distortion Profile</source>
         <target state="translated">ディストーションプロファイル</target>
@@ -437,6 +433,10 @@
       <trans-unit id="3110314934124526458" datatype="html">
         <source>Brighten Seconds</source>
         <target state="new">Brighten Seconds</target>
+      </trans-unit>
+      <trans-unit id="5289886362173436722" datatype="html">
+        <source>Driver Settings</source>
+        <target state="new">Driver Settings</target>
       </trans-unit>
     </body>
   </file>

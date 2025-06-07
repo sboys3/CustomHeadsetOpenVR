@@ -1,10 +1,10 @@
-<app-system-ready [class.page-disabled]="!settings?.enable">
-    @if(settings){
+  @if(settings){
+  @if(defaults;as defaultValue){
     <div class="field ignore-disable">
         <app-field-note type="steamvrRestart" />
         <div class="title">
             <span i18n>Enable MeganeX 8K Driver</span>
-            <app-reset-button [canReset]="settings.enable!=defaults?.enable"
+            <app-reset-button [canReset]="settings.enable!=defaultValue.enable"
                 (resetClick)="resetOption('enable')"></app-reset-button>
         </div>
         <div class="control">
@@ -29,7 +29,7 @@
         <div class="title">
             <span i18n>Resolution</span>
             <app-field-note type="steamvrRestart"/>
-            <app-reset-button [canReset]="resolutionModel!=defaults?.resolutionX"
+            <app-reset-button [canReset]="resolutionModel!=defaultValue.resolutionX"
                 (resetClick)="resetResolution()"></app-reset-button>
         </div>
         <div class="control">
@@ -43,7 +43,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Distortion Profile</span>
-            <app-reset-button [canReset]="settings.distortionProfile!=defaults?.distortionProfile"
+            <app-reset-button [canReset]="settings.distortionProfile!=defaultValue.distortionProfile"
                 (resetClick)="resetOption('distortionProfile')"></app-reset-button>
         </div>
         <div class="control">
@@ -57,7 +57,7 @@
     <div class="field">
         <div class="title">
             <span i18n>IPD</span>
-            <app-reset-button [canReset]="settings.ipd!=defaults?.ipd"
+            <app-reset-button [canReset]="settings.ipd!=defaultValue.ipd"
                 (resetClick)="resetOption('ipd')"></app-reset-button>
         </div>
         <div class="control">
@@ -70,7 +70,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Max Fov Horizontal</span>
-            <app-reset-button [canReset]="settings.maxFovX!=defaults?.maxFovX"
+            <app-reset-button [canReset]="settings.maxFovX!=defaultValue.maxFovX"
                 (resetClick)="resetOption('maxFovX')"></app-reset-button>
         </div>
         <div class="control">
@@ -84,7 +84,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Max Fov Vertical</span>
-            <app-reset-button [canReset]="settings.maxFovY!=defaults?.maxFovY"
+            <app-reset-button [canReset]="settings.maxFovY!=defaultValue.maxFovY"
                 (resetClick)="resetOption('maxFovY')"></app-reset-button>
         </div>
         <div class="control">
@@ -142,7 +142,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Distortion Zoom</span>
-            <app-reset-button [canReset]="settings.distortionZoom!=defaults?.distortionZoom"
+            <app-reset-button [canReset]="settings.distortionZoom!=defaultValue.distortionZoom"
                 (resetClick)="resetOption('distortionZoom')"></app-reset-button>
         </div>
         <div class="control">
@@ -163,32 +163,32 @@
     <div class="field">
         <div class="title">
             <span i18n>Enable Stationary Dimming</span>
-            <app-reset-button [canReset]="stationaryDimming?.enable!=defaults?.stationaryDimming?.enable"
+            <app-reset-button [canReset]="settings.stationaryDimming.enable!=defaultValue.stationaryDimming.enable"
                 (resetClick)="resetStationaryDimmingOption('enable')"></app-reset-button>
         </div>
         <div class="control">
-            @if(stationaryDimming){
-            <mat-slide-toggle [(ngModel)]="stationaryDimming.enable"
+            @if(settings.stationaryDimming){
+            <mat-slide-toggle [(ngModel)]="settings.stationaryDimming.enable"
                 (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
             }@else {
             <span i18n>Check driver update and launch SteamVR</span>
             }
         </div>
     </div>
-    @if(stationaryDimming&&stationaryDimming.enable){
+    @if(settings.stationaryDimming&&settings.stationaryDimming.enable){
 
     <div class="field">
         <div class="title">
             <span i18n>Movement Threshold Degrees</span>
             <app-reset-button
-                [canReset]="stationaryDimming.movementThreshold!=defaults?.stationaryDimming?.movementThreshold"
+                [canReset]="settings.stationaryDimming.movementThreshold!=defaultValue.stationaryDimming.movementThreshold"
                 (resetClick)="resetStationaryDimmingOption('movementThreshold')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.movementThreshold" step="0.1"
+            <input matInput [(ngModel)]="settings.stationaryDimming.movementThreshold" step="0.1"
                 (ngModelChange)="saveConfigSettings()" type="number">
             <mat-slider max="10" min="0" step="0.1">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.movementThreshold"
+                <input matSliderThumb [(ngModel)]="settings.stationaryDimming.movementThreshold"
                     (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
@@ -196,14 +196,14 @@
     <div class="field">
         <div class="title">
             <span i18n>Movement Time</span>
-            <app-reset-button [canReset]="stationaryDimming.movementTime!=defaults?.stationaryDimming?.movementTime"
+            <app-reset-button [canReset]="settings.stationaryDimming.movementTime!=defaultValue.stationaryDimming.movementTime"
                 (resetClick)="resetStationaryDimmingOption('movementTime')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.movementTime" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.stationaryDimming.movementTime" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="30" min="1" step="0.5" showTickMarks>
-                <input matSliderThumb [(ngModel)]="stationaryDimming.movementTime"
+                <input matSliderThumb [(ngModel)]="settings.stationaryDimming.movementTime"
                     (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
@@ -211,42 +211,42 @@
     <div class="field">
         <div class="title">
             <span i18n>Dim Brightness Percent</span>
-            <app-reset-button [canReset]="stationaryDimming.dimBrightnessPercent!=defaults?.stationaryDimming?.dimBrightnessPercent"
+            <app-reset-button [canReset]="settings.stationaryDimming.dimBrightnessPercent!=defaultValue.stationaryDimming.dimBrightnessPercent"
                 (resetClick)="resetStationaryDimmingOption('dimBrightnessPercent')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.dimBrightnessPercent" step="0.1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.stationaryDimming.dimBrightnessPercent" step="0.1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="50" min="0" step="0.1">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.dimBrightnessPercent" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.stationaryDimming.dimBrightnessPercent" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
     <div class="field">
         <div class="title">
             <span i18n>Dim Seconds</span>
-            <app-reset-button [canReset]="stationaryDimming.dimSeconds!=defaults?.stationaryDimming?.dimSeconds"
+            <app-reset-button [canReset]="settings.stationaryDimming.dimSeconds!=defaultValue.stationaryDimming.dimSeconds"
                 (resetClick)="resetStationaryDimmingOption('dimSeconds')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.dimSeconds" step="0.5" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.stationaryDimming.dimSeconds" step="0.5" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="60" min="1" step="0.5">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.dimSeconds" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.stationaryDimming.dimSeconds" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
     <div class="field">
         <div class="title">
             <span i18n>Brighten Seconds</span>
-            <app-reset-button [canReset]="stationaryDimming.brightenSeconds!=defaults?.stationaryDimming?.brightenSeconds"
+            <app-reset-button [canReset]="settings.stationaryDimming.brightenSeconds!=defaultValue.stationaryDimming.brightenSeconds"
                 (resetClick)="resetStationaryDimmingOption('brightenSeconds')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.brightenSeconds" step="0.5"
+            <input matInput [(ngModel)]="settings.stationaryDimming.brightenSeconds" step="0.5"
                 (ngModelChange)="saveConfigSettings()" type="number">
             <mat-slider max="60" min="1" step="0.5">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.brightenSeconds"
+                <input matSliderThumb [(ngModel)]="settings.stationaryDimming.brightenSeconds"
                     (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
@@ -263,30 +263,30 @@
         <div class="title">
             <span i18n>Enable Hidden Area Meshes</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea?.enable!=defaults?.hiddenArea?.enable"
+            <app-reset-button [canReset]="settings.hiddenArea.enable!=defaultValue.hiddenArea.enable"
                 (resetClick)="resetHiddenAreaOption('enable')"></app-reset-button>
         </div>
         <div class="control">
-            @if(hiddenArea){
-            <mat-slide-toggle [(ngModel)]="hiddenArea.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+            @if(settings.hiddenArea){
+            <mat-slide-toggle [(ngModel)]="settings.hiddenArea.enable" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
             }@else {
             <span i18n>Check driver update and launch SteamVR</span>
             }
         </div>
     </div>
 
-    @if(hiddenArea&&hiddenArea.enable){
+    @if(settings.hiddenArea&&settings.hiddenArea.enable){
 
     <div class="field">
         <div class="title">
             <span i18n>Test Mode</span>
             <app-field-note type="gameRestart"/>
             <app-field-tip i18n-info info="Inverts the meshes to only show the areas that will be hidden." />
-            <app-reset-button [canReset]="hiddenArea.testMode!=defaults?.hiddenArea?.testMode"
+            <app-reset-button [canReset]="settings.hiddenArea.testMode!=defaultValue.hiddenArea.testMode"
                 (resetClick)="resetHiddenAreaOption('testMode')"></app-reset-button>
         </div>
         <div class="control">
-            <mat-slide-toggle [(ngModel)]="hiddenArea.testMode"
+            <mat-slide-toggle [(ngModel)]="settings.hiddenArea.testMode"
                 (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
         </div>
     </div>
@@ -294,14 +294,14 @@
         <div class="title">
             <span i18n>Radius Top Inner</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea.radiusTopInner!=defaults?.hiddenArea?.radiusTopInner"
+            <app-reset-button [canReset]="settings.hiddenArea.radiusTopInner!=defaultValue.hiddenArea.radiusTopInner"
                 (resetClick)="resetHiddenAreaOption('radiusTopInner')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.radiusTopInner" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.hiddenArea.radiusTopInner" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="0.5" min="0.0" step="0.05">
-                <input matSliderThumb [(ngModel)]="hiddenArea.radiusTopInner" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.hiddenArea.radiusTopInner" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -309,14 +309,14 @@
         <div class="title">
             <span i18n>Radius Bottom Inner</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea.radiusBottomInner!=defaults?.hiddenArea?.radiusBottomInner"
+            <app-reset-button [canReset]="settings.hiddenArea.radiusBottomInner!=defaultValue.hiddenArea.radiusBottomInner"
                 (resetClick)="resetHiddenAreaOption('radiusBottomInner')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.radiusBottomInner" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.hiddenArea.radiusBottomInner" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="0.5" min="0.0" step="0.05">
-                <input matSliderThumb [(ngModel)]="hiddenArea.radiusBottomInner" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.hiddenArea.radiusBottomInner" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -324,14 +324,14 @@
         <div class="title">
             <span i18n>Radius Top Outer</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea.radiusTopOuter!=defaults?.hiddenArea?.radiusTopOuter"
+            <app-reset-button [canReset]="settings.hiddenArea.radiusTopOuter!=defaultValue.hiddenArea.radiusTopOuter"
                 (resetClick)="resetHiddenAreaOption('radiusTopOuter')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.radiusTopOuter" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.hiddenArea.radiusTopOuter" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="0.5" min="0.0" step="0.05">
-                <input matSliderThumb [(ngModel)]="hiddenArea.radiusTopOuter" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.hiddenArea.radiusTopOuter" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -339,14 +339,14 @@
         <div class="title">
             <span i18n>Radius Bottom Outer</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea.radiusBottomOuter!=defaults?.hiddenArea?.radiusBottomOuter"
+            <app-reset-button [canReset]="settings.hiddenArea.radiusBottomOuter!=defaultValue.hiddenArea.radiusBottomOuter"
                 (resetClick)="resetHiddenAreaOption('radiusBottomOuter')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.radiusBottomOuter" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.hiddenArea.radiusBottomOuter" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="0.5" min="0.0" step="0.05">
-                <input matSliderThumb [(ngModel)]="hiddenArea.radiusBottomOuter" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.hiddenArea.radiusBottomOuter" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -354,14 +354,14 @@
         <div class="title">
             <span i18n>Mesh Detail</span>
             <app-field-note type="gameRestart"/>
-            <app-reset-button [canReset]="hiddenArea.detailLevel!=defaults?.hiddenArea?.detailLevel"
+            <app-reset-button [canReset]="settings.hiddenArea.detailLevel!=defaultValue.hiddenArea.detailLevel"
                 (resetClick)="resetHiddenAreaOption('detailLevel')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="hiddenArea.detailLevel" step="1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="settings.hiddenArea.detailLevel" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
             <mat-slider max="32" min="1" step="1">
-                <input matSliderThumb [(ngModel)]="hiddenArea.detailLevel" (ngModelChange)="saveConfigSettings()">
+                <input matSliderThumb [(ngModel)]="settings.hiddenArea.detailLevel" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
@@ -377,7 +377,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Black Level</span>
-            <app-reset-button [canReset]="settings.blackLevel!=defaults?.blackLevel"
+            <app-reset-button [canReset]="settings.blackLevel!=defaultValue.blackLevel"
                 (resetClick)="resetOption('blackLevel')"></app-reset-button>
         </div>
         <div class="control">
@@ -391,7 +391,7 @@
     <div class="field">
         <div class="title">
             <span i18n>IPD Offset</span>
-            <app-reset-button [canReset]="settings.ipdOffset!=defaults?.ipdOffset"
+            <app-reset-button [canReset]="settings.ipdOffset!=defaultValue.ipdOffset"
                 (resetClick)="resetOption('ipdOffset')"></app-reset-button>
         </div>
         <div class="control">
@@ -405,7 +405,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Subpixel Shift</span>
-            <app-reset-button [canReset]="settings.subpixelShift!=defaults?.subpixelShift"
+            <app-reset-button [canReset]="settings.subpixelShift!=defaultValue.subpixelShift"
                 (resetClick)="resetOption('subpixelShift')"></app-reset-button>
         </div>
         <div class="control">
@@ -421,7 +421,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Distortion Mesh Resolution</span>
-            <app-reset-button [canReset]="settings.distortionMeshResolution!=defaults?.distortionMeshResolution"
+            <app-reset-button [canReset]="settings.distortionMeshResolution!=defaultValue.distortionMeshResolution"
                 (resetClick)="resetOption('distortionMeshResolution')"></app-reset-button>
         </div>
         <div class="control">
@@ -437,7 +437,7 @@
     <div class="field">
         <div class="title">
             <span i18n>FOV Burn-In Prevention</span>
-            <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaults?.fovBurnInPrevention"
+            <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaultValue.fovBurnInPrevention"
                 (resetClick)="resetOption('fovBurnInPrevention')"></app-reset-button>
         </div>
         <div class="control">
@@ -448,7 +448,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Render Resolution Width Multiplier</span>
-            <app-reset-button [canReset]="settings.renderResolutionMultiplierX!=defaults?.renderResolutionMultiplierX"
+            <app-reset-button [canReset]="settings.renderResolutionMultiplierX!=defaultValue.renderResolutionMultiplierX"
                 (resetClick)="resetOption('renderResolutionMultiplierX')"></app-reset-button>
         </div>
         <div class="control">
@@ -463,7 +463,7 @@
     <div class="field">
         <div class="title">
             <span i18n>Render Resolution Height Multiplier</span>
-            <app-reset-button [canReset]="settings.renderResolutionMultiplierY!=defaults?.renderResolutionMultiplierY"
+            <app-reset-button [canReset]="settings.renderResolutionMultiplierY!=defaultValue.renderResolutionMultiplierY"
                 (resetClick)="resetOption('renderResolutionMultiplierY')"></app-reset-button>
         </div>
         <div class="control">
@@ -477,4 +477,4 @@
     </div>
     }
     }
-</app-system-ready>
+}
