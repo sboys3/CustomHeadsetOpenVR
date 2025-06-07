@@ -34,7 +34,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     pullingRef = DeviceConfigComponentBase.steamVRStatePulling.createRef(value => {
         this.steamVRRunning.set({ updated: true, running: value })
     })
-    @HostBinding('class.page-disabled') get pageDisabled() { return !this.settings?.enable }
+    @HostBinding('class.page-disabled') get pageDisabled() { return this.settingField()&& !this.settings?.enable }
     constructor() {
         effect(() => {
             this.rootSetting = this.dss.values()

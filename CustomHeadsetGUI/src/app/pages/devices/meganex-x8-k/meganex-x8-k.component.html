@@ -1,10 +1,10 @@
 @if(settings){
-@if(defaults;as defaultValue){
+@if(defaults){
 <div class="field ignore-disable">
     <app-field-note type="steamvrRestart" />
     <div class="title">
         <span i18n>Enable MeganeX 8K Driver</span>
-        <app-reset-button [canReset]="settings.enable!=defaultValue.enable"
+        <app-reset-button [canReset]="settings.enable!=defaults.enable"
             (resetClick)="resetOption('enable')"></app-reset-button>
     </div>
     <div class="control">
@@ -29,7 +29,7 @@
     <div class="title">
         <span i18n>Resolution</span>
         <app-field-note type="steamvrRestart" />
-        <app-reset-button [canReset]="resolutionModel!=defaultValue.resolutionX"
+        <app-reset-button [canReset]="resolutionModel!=defaults.resolutionX"
             (resetClick)="resetResolution()"></app-reset-button>
     </div>
     <div class="control">
@@ -43,7 +43,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Profile</span>
-        <app-reset-button [canReset]="settings.distortionProfile!=defaultValue.distortionProfile"
+        <app-reset-button [canReset]="settings.distortionProfile!=defaults.distortionProfile"
             (resetClick)="resetOption('distortionProfile')"></app-reset-button>
     </div>
     <div class="control">
@@ -57,7 +57,7 @@
 <div class="field">
     <div class="title">
         <span i18n>IPD</span>
-        <app-reset-button [canReset]="settings.ipd!=defaultValue.ipd"
+        <app-reset-button [canReset]="settings.ipd!=defaults.ipd"
             (resetClick)="resetOption('ipd')"></app-reset-button>
     </div>
     <div class="control">
@@ -70,7 +70,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Max Fov Horizontal</span>
-        <app-reset-button [canReset]="settings.maxFovX!=defaultValue.maxFovX"
+        <app-reset-button [canReset]="settings.maxFovX!=defaults.maxFovX"
             (resetClick)="resetOption('maxFovX')"></app-reset-button>
     </div>
     <div class="control">
@@ -83,7 +83,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Max Fov Vertical</span>
-        <app-reset-button [canReset]="settings.maxFovY!=defaultValue.maxFovY"
+        <app-reset-button [canReset]="settings.maxFovY!=defaults.maxFovY"
             (resetClick)="resetOption('maxFovY')"></app-reset-button>
     </div>
     <div class="control">
@@ -140,7 +140,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Zoom</span>
-        <app-reset-button [canReset]="settings.distortionZoom!=defaultValue.distortionZoom"
+        <app-reset-button [canReset]="settings.distortionZoom!=defaults.distortionZoom"
             (resetClick)="resetOption('distortionZoom')"></app-reset-button>
     </div>
     <div class="control">
@@ -161,7 +161,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Enable Stationary Dimming</span>
-        <app-reset-button [canReset]="settings.stationaryDimming.enable!=defaultValue.stationaryDimming.enable"
+        <app-reset-button [canReset]="settings.stationaryDimming.enable!=defaults.stationaryDimming.enable"
             (resetClick)="nested('stationaryDimming').resetOption('enable')"></app-reset-button>
     </div>
     <div class="control">
@@ -179,7 +179,7 @@
     <div class="title">
         <span i18n>Movement Threshold Degrees</span>
         <app-reset-button
-            [canReset]="settings.stationaryDimming.movementThreshold!=defaultValue.stationaryDimming.movementThreshold"
+            [canReset]="settings.stationaryDimming.movementThreshold!=defaults.stationaryDimming.movementThreshold"
             (resetClick)="nested('stationaryDimming').resetOption('movementThreshold')"></app-reset-button>
     </div>
     <div class="control">
@@ -195,7 +195,7 @@
     <div class="title">
         <span i18n>Movement Time</span>
         <app-reset-button
-            [canReset]="settings.stationaryDimming.movementTime!=defaultValue.stationaryDimming.movementTime"
+            [canReset]="settings.stationaryDimming.movementTime!=defaults.stationaryDimming.movementTime"
             (resetClick)="nested('stationaryDimming').resetOption('movementTime')"></app-reset-button>
     </div>
     <div class="control">
@@ -211,7 +211,7 @@
     <div class="title">
         <span i18n>Dim Brightness Percent</span>
         <app-reset-button
-            [canReset]="settings.stationaryDimming.dimBrightnessPercent!=defaultValue.stationaryDimming.dimBrightnessPercent"
+            [canReset]="settings.stationaryDimming.dimBrightnessPercent!=defaults.stationaryDimming.dimBrightnessPercent"
             (resetClick)="nested('stationaryDimming').resetOption('dimBrightnessPercent')"></app-reset-button>
     </div>
     <div class="control">
@@ -226,7 +226,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Dim Seconds</span>
-        <app-reset-button [canReset]="settings.stationaryDimming.dimSeconds!=defaultValue.stationaryDimming.dimSeconds"
+        <app-reset-button [canReset]="settings.stationaryDimming.dimSeconds!=defaults.stationaryDimming.dimSeconds"
             (resetClick)="nested('stationaryDimming').resetOption('dimSeconds')"></app-reset-button>
     </div>
     <div class="control">
@@ -242,7 +242,7 @@
     <div class="title">
         <span i18n>Brighten Seconds</span>
         <app-reset-button
-            [canReset]="settings.stationaryDimming.brightenSeconds!=defaultValue.stationaryDimming.brightenSeconds"
+            [canReset]="settings.stationaryDimming.brightenSeconds!=defaults.stationaryDimming.brightenSeconds"
             (resetClick)="nested('stationaryDimming').resetOption('brightenSeconds')"></app-reset-button>
     </div>
     <div class="control">
@@ -266,7 +266,7 @@
     <div class="title">
         <span i18n>Enable Hidden Area Meshes</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.enable!=defaultValue.hiddenArea.enable"
+        <app-reset-button [canReset]="settings.hiddenArea.enable!=defaults.hiddenArea.enable"
             (resetClick)="nested('hiddenArea').resetOption('enable')"></app-reset-button>
     </div>
     <div class="control">
@@ -286,7 +286,7 @@
         <span i18n>Test Mode</span>
         <app-field-note type="gameRestart" />
         <app-field-tip i18n-info info="Inverts the meshes to only show the areas that will be hidden." />
-        <app-reset-button [canReset]="settings.hiddenArea.testMode!=defaultValue.hiddenArea.testMode"
+        <app-reset-button [canReset]="settings.hiddenArea.testMode!=defaults.hiddenArea.testMode"
             (resetClick)="nested('hiddenArea').resetOption('testMode')"></app-reset-button>
     </div>
     <div class="control">
@@ -298,7 +298,7 @@
     <div class="title">
         <span i18n>Radius Top Inner</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.radiusTopInner!=defaultValue.hiddenArea.radiusTopInner"
+        <app-reset-button [canReset]="settings.hiddenArea.radiusTopInner!=defaults.hiddenArea.radiusTopInner"
             (resetClick)="nested('hiddenArea').resetOption('radiusTopInner')"></app-reset-button>
     </div>
     <div class="control">
@@ -314,7 +314,7 @@
     <div class="title">
         <span i18n>Radius Bottom Inner</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.radiusBottomInner!=defaultValue.hiddenArea.radiusBottomInner"
+        <app-reset-button [canReset]="settings.hiddenArea.radiusBottomInner!=defaults.hiddenArea.radiusBottomInner"
             (resetClick)="nested('hiddenArea').resetOption('radiusBottomInner')"></app-reset-button>
     </div>
     <div class="control">
@@ -330,7 +330,7 @@
     <div class="title">
         <span i18n>Radius Top Outer</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.radiusTopOuter!=defaultValue.hiddenArea.radiusTopOuter"
+        <app-reset-button [canReset]="settings.hiddenArea.radiusTopOuter!=defaults.hiddenArea.radiusTopOuter"
             (resetClick)="nested('hiddenArea').resetOption('radiusTopOuter')"></app-reset-button>
     </div>
     <div class="control">
@@ -346,7 +346,7 @@
     <div class="title">
         <span i18n>Radius Bottom Outer</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.radiusBottomOuter!=defaultValue.hiddenArea.radiusBottomOuter"
+        <app-reset-button [canReset]="settings.hiddenArea.radiusBottomOuter!=defaults.hiddenArea.radiusBottomOuter"
             (resetClick)="nested('hiddenArea').resetOption('radiusBottomOuter')"></app-reset-button>
     </div>
     <div class="control">
@@ -362,7 +362,7 @@
     <div class="title">
         <span i18n>Mesh Detail</span>
         <app-field-note type="gameRestart" />
-        <app-reset-button [canReset]="settings.hiddenArea.detailLevel!=defaultValue.hiddenArea.detailLevel"
+        <app-reset-button [canReset]="settings.hiddenArea.detailLevel!=defaults.hiddenArea.detailLevel"
             (resetClick)="nested('hiddenArea').resetOption('detailLevel')"></app-reset-button>
     </div>
     <div class="control">
@@ -385,7 +385,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Black Level</span>
-        <app-reset-button [canReset]="settings.blackLevel!=defaultValue.blackLevel"
+        <app-reset-button [canReset]="settings.blackLevel!=defaults.blackLevel"
             (resetClick)="resetOption('blackLevel')"></app-reset-button>
     </div>
     <div class="control">
@@ -399,7 +399,7 @@
 <div class="field">
     <div class="title">
         <span i18n>IPD Offset</span>
-        <app-reset-button [canReset]="settings.ipdOffset!=defaultValue.ipdOffset"
+        <app-reset-button [canReset]="settings.ipdOffset!=defaults.ipdOffset"
             (resetClick)="resetOption('ipdOffset')"></app-reset-button>
     </div>
     <div class="control">
@@ -413,7 +413,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Subpixel Shift</span>
-        <app-reset-button [canReset]="settings.subpixelShift!=defaultValue.subpixelShift"
+        <app-reset-button [canReset]="settings.subpixelShift!=defaults.subpixelShift"
             (resetClick)="resetOption('subpixelShift')"></app-reset-button>
     </div>
     <div class="control">
@@ -429,7 +429,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Mesh Resolution</span>
-        <app-reset-button [canReset]="settings.distortionMeshResolution!=defaultValue.distortionMeshResolution"
+        <app-reset-button [canReset]="settings.distortionMeshResolution!=defaults.distortionMeshResolution"
             (resetClick)="resetOption('distortionMeshResolution')"></app-reset-button>
     </div>
     <div class="control">
@@ -445,7 +445,7 @@
 <div class="field">
     <div class="title">
         <span i18n>FOV Burn-In Prevention</span>
-        <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaultValue.fovBurnInPrevention"
+        <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaults.fovBurnInPrevention"
             (resetClick)="resetOption('fovBurnInPrevention')"></app-reset-button>
     </div>
     <div class="control">
@@ -456,7 +456,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Render Resolution Width Multiplier</span>
-        <app-reset-button [canReset]="settings.renderResolutionMultiplierX!=defaultValue.renderResolutionMultiplierX"
+        <app-reset-button [canReset]="settings.renderResolutionMultiplierX!=defaults.renderResolutionMultiplierX"
             (resetClick)="resetOption('renderResolutionMultiplierX')"></app-reset-button>
     </div>
     <div class="control">
@@ -471,7 +471,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Render Resolution Height Multiplier</span>
-        <app-reset-button [canReset]="settings.renderResolutionMultiplierY!=defaultValue.renderResolutionMultiplierY"
+        <app-reset-button [canReset]="settings.renderResolutionMultiplierY!=defaults.renderResolutionMultiplierY"
             (resetClick)="resetOption('renderResolutionMultiplierY')"></app-reset-button>
     </div>
     <div class="control">

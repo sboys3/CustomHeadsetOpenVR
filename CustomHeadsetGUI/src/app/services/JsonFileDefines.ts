@@ -9,7 +9,8 @@ export type DistortionProfileConfig = {
 };
 export type Settings = {
   watchDistortionProfiles: boolean,
-  meganeX8K: MeganeX8KConfig
+  meganeX8K: MeganeX8KConfig,
+  customShader: CustomShaderConfig
 }
 export type StationaryDimmingConfig = {
   enable: boolean,
@@ -50,6 +51,9 @@ export type HiddenAreaMeshConfig = {
    */
   radiusBottomOuter: number;
 };
+export type CustomShaderConfig = {
+  enable: boolean;
+}
 
 export type MeganeX8KConfig = {
   /**

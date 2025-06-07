@@ -1,0 +1,24 @@
+@if(settings){
+@if(defaults){
+<div class="field">
+    <div class="section-title">
+        <span i18n>Custom Shader</span>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Enable Custom Shader</span>
+        <app-reset-button [canReset]="settings.customShader.enable!=defaults.customShader.enable"
+            (resetClick)="nested('customShader').resetOption('enable')"></app-reset-button>
+    </div>
+    <div class="control">
+        @if(settings.customShader){
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enable"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+        }@else {
+        <span i18n>Check driver update and launch SteamVR</span>
+        }
+    </div>
+</div>
+}
+}
