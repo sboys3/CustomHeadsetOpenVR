@@ -15,9 +15,9 @@ export type StationaryDimmingConfig = {
   enable: boolean,
   movementThreshold: number,
   movementTime: number,
-  dimAmount: number,
-  dimSpeed: number,
-  brightenSpeed: number
+  dimBrightnessPercent: number,
+  dimSeconds: number,
+  brightenSeconds: number
 }
 export type HiddenAreaMeshConfig = {
   /**

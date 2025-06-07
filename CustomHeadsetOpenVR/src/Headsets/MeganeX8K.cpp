@@ -277,14 +277,15 @@ void MeganeX8KShim::RunFrame(){
 				lastMovementRotation = rotation;
 				lastMovementTime = now;
 			}
+			double dimmingAmount = 1 - driverConfig.meganeX8K.stationaryDimming.dimBrightnessPercent / 100.0;
 			if(lastMovementTime > now - driverConfig.meganeX8K.stationaryDimming.movementTime){
 				// still moving
-				dimmingMultiplier += driverConfig.meganeX8K.stationaryDimming.brightenSpeed * frameTime;
+				dimmingMultiplier += dimmingAmount / driverConfig.meganeX8K.stationaryDimming.brightenSeconds * frameTime;
 			}else{
 				// stationary
-				dimmingMultiplier -= driverConfig.meganeX8K.stationaryDimming.dimSpeed * frameTime;
+				dimmingMultiplier -= dimmingAmount / driverConfig.meganeX8K.stationaryDimming.dimSeconds * frameTime;
 			}
-			dimmingMultiplier = std::max(driverConfig.meganeX8K.stationaryDimming.dimAmount, std::min(1.0, dimmingMultiplier));
+			dimmingMultiplier = std::max(driverConfig.meganeX8K.stationaryDimming.dimBrightnessPercent / 100.0, std::min(1.0, dimmingMultiplier));
 		}else{
 			dimmingMultiplier = 1;
 		}

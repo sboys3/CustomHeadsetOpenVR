@@ -104,9 +104,9 @@ void ConfigLoader::ParseConfig(){
 				if(stationaryDimmingJson["enable"].is_boolean()){ newStationaryDimming.enable = stationaryDimmingJson["enable"].get<bool>(); }
 				if(stationaryDimmingJson["movementThreshold"].is_number()){ newStationaryDimming.movementThreshold = stationaryDimmingJson["movementThreshold"].get<double>(); }
 				if(stationaryDimmingJson["movementTime"].is_number()){ newStationaryDimming.movementTime = stationaryDimmingJson["movementTime"].get<double>(); }
-				if(stationaryDimmingJson["dimAmount"].is_number()){ newStationaryDimming.dimAmount = stationaryDimmingJson["dimAmount"].get<double>(); }
-				if(stationaryDimmingJson["dimSpeed"].is_number()){ newStationaryDimming.dimSpeed = stationaryDimmingJson["dimSpeed"].get<double>(); }
-				if(stationaryDimmingJson["brightenSpeed"].is_number()){ newStationaryDimming.brightenSpeed = stationaryDimmingJson["brightenSpeed"].get<double>(); }
+				if(stationaryDimmingJson["dimBrightnessPercent"].is_number()){ newStationaryDimming.dimBrightnessPercent = stationaryDimmingJson["dimBrightnessPercent"].get<double>(); }
+				if(stationaryDimmingJson["dimSeconds"].is_number()){ newStationaryDimming.dimSeconds = stationaryDimmingJson["dimSeconds"].get<double>(); }
+				if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
 			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
@@ -209,9 +209,9 @@ void ConfigLoader::WriteInfo(){
 					{"enable", defaultSettings.meganeX8K.stationaryDimming.enable},
 					{"movementThreshold", defaultSettings.meganeX8K.stationaryDimming.movementThreshold},
 					{"movementTime", defaultSettings.meganeX8K.stationaryDimming.movementTime},
-					{"dimAmount", defaultSettings.meganeX8K.stationaryDimming.dimAmount},
-					{"dimSpeed", defaultSettings.meganeX8K.stationaryDimming.dimSpeed},
-					{"brightenSpeed", defaultSettings.meganeX8K.stationaryDimming.brightenSpeed},
+					{"dimBrightnessPercent", defaultSettings.meganeX8K.stationaryDimming.dimBrightnessPercent},
+					{"dimSeconds", defaultSettings.meganeX8K.stationaryDimming.dimSeconds},
+					{"brightenSeconds", defaultSettings.meganeX8K.stationaryDimming.brightenSeconds},
 				}},
 			}},
 			{"customShader", {

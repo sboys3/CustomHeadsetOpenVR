@@ -179,7 +179,7 @@
 
     <div class="field">
         <div class="title">
-            <span i18n>Movement Threshold</span>
+            <span i18n>Movement Threshold Degrees</span>
             <app-reset-button
                 [canReset]="stationaryDimming.movementThreshold!=defaults?.stationaryDimming?.movementThreshold"
                 (resetClick)="resetStationaryDimmingOption('movementThreshold')"></app-reset-button>
@@ -202,7 +202,7 @@
         <div class="control">
             <input matInput [(ngModel)]="stationaryDimming.movementTime" step="1" (ngModelChange)="saveConfigSettings()"
                 type="number">
-            <mat-slider max="10" min="1" step="1" showTickMarks>
+            <mat-slider max="30" min="1" step="0.5" showTickMarks>
                 <input matSliderThumb [(ngModel)]="stationaryDimming.movementTime"
                     (ngModelChange)="saveConfigSettings()">
             </mat-slider>
@@ -210,43 +210,43 @@
     </div>
     <div class="field">
         <div class="title">
-            <span i18n>Dim Amount</span>
-            <app-reset-button [canReset]="stationaryDimming.dimAmount!=defaults?.stationaryDimming?.dimAmount"
-                (resetClick)="resetStationaryDimmingOption('dimAmount')"></app-reset-button>
+            <span i18n>Dim Brightness Percent</span>
+            <app-reset-button [canReset]="stationaryDimming.dimBrightnessPercent!=defaults?.stationaryDimming?.dimBrightnessPercent"
+                (resetClick)="resetStationaryDimmingOption('dimBrightnessPercent')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.dimAmount" step="0.01" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="stationaryDimming.dimBrightnessPercent" step="0.1" (ngModelChange)="saveConfigSettings()"
                 type="number">
-            <mat-slider max="1" min="0" step="0.01">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.dimAmount" (ngModelChange)="saveConfigSettings()">
+            <mat-slider max="50" min="0" step="0.1">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.dimBrightnessPercent" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
     <div class="field">
         <div class="title">
-            <span i18n>Dim Speed</span>
-            <app-reset-button [canReset]="stationaryDimming.dimSpeed!=defaults?.stationaryDimming?.dimSpeed"
-                (resetClick)="resetStationaryDimmingOption('dimSpeed')"></app-reset-button>
+            <span i18n>Dim Seconds</span>
+            <app-reset-button [canReset]="stationaryDimming.dimSeconds!=defaults?.stationaryDimming?.dimSeconds"
+                (resetClick)="resetStationaryDimmingOption('dimSeconds')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.dimSpeed" step="0.1" (ngModelChange)="saveConfigSettings()"
+            <input matInput [(ngModel)]="stationaryDimming.dimSeconds" step="0.5" (ngModelChange)="saveConfigSettings()"
                 type="number">
-            <mat-slider max="10" min="0" step="0.1">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.dimSpeed" (ngModelChange)="saveConfigSettings()">
+            <mat-slider max="60" min="1" step="0.5">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.dimSeconds" (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>
     </div>
     <div class="field">
         <div class="title">
-            <span i18n>Brighten Speed</span>
-            <app-reset-button [canReset]="stationaryDimming.brightenSpeed!=defaults?.stationaryDimming?.brightenSpeed"
-                (resetClick)="resetStationaryDimmingOption('brightenSpeed')"></app-reset-button>
+            <span i18n>Brighten Seconds</span>
+            <app-reset-button [canReset]="stationaryDimming.brightenSeconds!=defaults?.stationaryDimming?.brightenSeconds"
+                (resetClick)="resetStationaryDimmingOption('brightenSeconds')"></app-reset-button>
         </div>
         <div class="control">
-            <input matInput [(ngModel)]="stationaryDimming.brightenSpeed" step="0.1"
+            <input matInput [(ngModel)]="stationaryDimming.brightenSeconds" step="0.5"
                 (ngModelChange)="saveConfigSettings()" type="number">
-            <mat-slider max="10" min="0" step="0.1">
-                <input matSliderThumb [(ngModel)]="stationaryDimming.brightenSpeed"
+            <mat-slider max="60" min="1" step="0.5">
+                <input matSliderThumb [(ngModel)]="stationaryDimming.brightenSeconds"
                     (ngModelChange)="saveConfigSettings()">
             </mat-slider>
         </div>

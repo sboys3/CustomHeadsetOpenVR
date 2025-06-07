@@ -398,25 +398,9 @@
         <source>Enable Stationary Dimming</source>
         <target state="translated">静止時減光の有効化</target>
       </trans-unit>
-      <trans-unit id="6143633241125445579" datatype="html">
-        <source>Movement Threshold</source>
-        <target state="translated">移動しきい値</target>
-      </trans-unit>
       <trans-unit id="4869977764064716796" datatype="html">
         <source>Movement Time</source>
         <target state="translated">静止時間</target>
-      </trans-unit>
-      <trans-unit id="4286722712593722196" datatype="html">
-        <source>Dim Amount</source>
-        <target state="translated">減光量</target>
-      </trans-unit>
-      <trans-unit id="4733038853220235320" datatype="html">
-        <source>Dim Speed</source>
-        <target state="translated">減光速度</target>
-      </trans-unit>
-      <trans-unit id="1186365723119026146" datatype="html">
-        <source>Brighten Speed</source>
-        <target state="translated">復光速度</target>
       </trans-unit>
       <trans-unit id="7653815630536291994" datatype="html">
         <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
@@ -437,6 +421,22 @@
       <trans-unit id="6510312666905899307" datatype="html">
         <source>Require restart game to apply changes.</source>
         <target state="translated">変更を適用するには、ゲームの再起動が必要です。</target>
+      </trans-unit>
+      <trans-unit id="2856900395968306204" datatype="html">
+        <source>Movement Threshold Degrees</source>
+        <target state="new">Movement Threshold Degrees</target>
+      </trans-unit>
+      <trans-unit id="1969673185132484114" datatype="html">
+        <source>Dim Brightness Percent</source>
+        <target state="new">Dim Brightness Percent</target>
+      </trans-unit>
+      <trans-unit id="910820366380932556" datatype="html">
+        <source>Dim Seconds</source>
+        <target state="new">Dim Seconds</target>
+      </trans-unit>
+      <trans-unit id="3110314934124526458" datatype="html">
+        <source>Brighten Seconds</source>
+        <target state="new">Brighten Seconds</target>
       </trans-unit>
     </body>
   </file>

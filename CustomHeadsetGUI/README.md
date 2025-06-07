@@ -14,6 +14,10 @@
 4. run `npm run build` in `CustomHeadsetGUI`
 5. output to `..\output\CustomHeadsetGUI`
 
+## Localization
+Run `npx ng extract-i18n` to extract i18n strings.  
+Translations are located in `src/locale` folder.
+
 ## Project Structure
 
 ```

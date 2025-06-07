@@ -26,15 +26,15 @@ struct StationaryDimmingConfig{
 	// if the display should be dimmed when the headset is stationary
 	bool enable = true;
 	// the angle that the headset has to rotate for it to be considered as moved
-	double movementThreshold = 0.3;
+	double movementThreshold = 0.4;
 	// the time in seconds that the headset has to be stationary for it to be dimmed
 	double movementTime = 15.0;
-	// the amount to dim the display when stationary
-	double dimAmount = 0.02;
+	// the amount to dim the display to when stationary
+	double dimBrightnessPercent = 2;
 	// the amount per second to dim the display when stationary
-	double dimSpeed = 0.1;
+	double dimSeconds = 10;
 	// the amount per second to brighten the display when moving
-	double brightenSpeed = 0.2;
+	double brightenSeconds = 5;
 };
 
 
