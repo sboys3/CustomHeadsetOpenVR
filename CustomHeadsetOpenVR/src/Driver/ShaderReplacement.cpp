@@ -98,7 +98,7 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 
 // compile the new distortion shader from source
 Bytecode DistortionShader(){
-	if(!driverConfig.customShader.enable){
+	if(!IsCustomShaderEnabled()){
 		// don't replace
 		return {nullptr, 0};
 	}
@@ -132,13 +132,13 @@ Bytecode DistortionShader(){
 	
 	// compile shader from hlsl using D3DCompileFromFile
 	
-	D3D_SHADER_MACRO defines[10] = {};
+	D3D_SHADER_MACRO defines[20] = {};
 	int definesCount = 0;
 	// TODO: check that the MeganeX is actually running
-	if(driverConfig.meganeX8K.enable){
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
-		if(driverConfig.meganeX8K.subpixelShift != 0){
-			defines[definesCount++] = {"MEGANEX8K_SUBPIXEL_SHIFT", "1"};
+		if(driverConfig.customShader.subpixelShift && driverConfig.meganeX8K.subpixelShift != 0){
+			defines[definesCount++] = {"SUBPIXEL_SHIFT_MEGANEX8K", "1"};
 		}
 	}
 	double contrastMultiplier = driverConfig.customShader.contrast / 50.0;
@@ -152,6 +152,22 @@ Bytecode DistortionShader(){
 	if(contrastOffset != 0){
 		defines[definesCount++] = {"CONTRAST_OFFSET", contrastOffsetString.c_str()};
 	}
+	if(driverConfig.customShader.contrastLinear){
+		defines[definesCount++] = {"CONTRAST_LINEAR", "1"};
+	}
+	double chroma = driverConfig.customShader.chroma / 50.0;
+	std::string chromaString = std::to_string(chroma);
+	if(chroma != 1){
+		defines[definesCount++] = {"CHROMA", chromaString.c_str()};
+	}
+	std::string gammaString = std::to_string(driverConfig.customShader.gamma);
+	if(driverConfig.customShader.gamma != 2.2){
+		defines[definesCount++] = {"GAMMA", gammaString.c_str()};
+	}
+	
+	
+	defines[definesCount++] = {nullptr, nullptr}; // end of array
+	
 	
 	ID3DBlob* shaderBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr; 
@@ -347,23 +363,32 @@ void ShaderReplacement::WatchShadersThread(){
 void ShaderReplacement::CheckSettingsThread(){
 	while(started){
 		std::this_thread::sleep_for(std::chrono::milliseconds(300));
-		std::lock_guard<std::mutex> lock(driverConfigLock);
-		if(!driverConfig.hasBeenUpdated){
-			continue;
-		}
-		driverConfig.hasBeenUpdated = false;
-		bool reloadShaders = false;
-		reloadShaders |= driverConfig.meganeX8K.enable != driverConfigOld.meganeX8K.enable;
-		if(driverConfig.meganeX8K.enable){
-			reloadShaders |= driverConfig.meganeX8K.subpixelShift != driverConfigOld.meganeX8K.subpixelShift;
-			reloadShaders |= driverConfig.customShader.enable != driverConfigOld.customShader.enable;
-			reloadShaders |= driverConfig.customShader.contrast != driverConfigOld.customShader.contrast;
-			reloadShaders |= driverConfig.customShader.contrastMidpoint != driverConfigOld.customShader.contrastMidpoint;
-		}
-		
-		if(reloadShaders){
-			DriverLog("Shader settings changed, reloading...");
-			ReloadShaders();
+		{
+			std::lock_guard<std::mutex> lock(driverConfigLock);
+			if(!driverConfig.hasBeenUpdated && !driverConfigLoader.info.hasBeenUpdated){
+				continue;
+			}
+			driverConfig.hasBeenUpdated = false;
+			driverConfigLoader.info.hasBeenUpdated = false;
+			bool reloadShaders = false;
+			bool isNowEnabled = IsCustomShaderEnabled();
+			reloadShaders |= isNowEnabled != enabled;
+			enabled = isNowEnabled;
+			if(isNowEnabled){
+				reloadShaders |= driverConfig.meganeX8K.subpixelShift != driverConfigOld.meganeX8K.subpixelShift;
+				reloadShaders |= driverConfig.customShader.enable != driverConfigOld.customShader.enable;
+				reloadShaders |= driverConfig.customShader.contrast != driverConfigOld.customShader.contrast;
+				reloadShaders |= driverConfig.customShader.contrastMidpoint != driverConfigOld.customShader.contrastMidpoint;
+				reloadShaders |= driverConfig.customShader.contrastLinear != driverConfigOld.customShader.contrastLinear;
+				reloadShaders |= driverConfig.customShader.chroma != driverConfigOld.customShader.chroma;
+				reloadShaders |= driverConfig.customShader.gamma != driverConfigOld.customShader.gamma;
+				reloadShaders |= driverConfig.customShader.subpixelShift != driverConfigOld.customShader.subpixelShift;
+			}
+			
+			if(reloadShaders){
+				DriverLog("Shader settings changed, reloading...");
+				ReloadShaders();
+			}
 		}
 	}
 }

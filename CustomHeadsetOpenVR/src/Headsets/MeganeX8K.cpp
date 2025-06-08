@@ -21,6 +21,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 		shimActive = false;
 		return;
 	}
+	driverConfigLoader.info.connectedHeadset = ConfigLoader::HeadsetType::MeganeX8K;
 	
 	isActive = true;
 

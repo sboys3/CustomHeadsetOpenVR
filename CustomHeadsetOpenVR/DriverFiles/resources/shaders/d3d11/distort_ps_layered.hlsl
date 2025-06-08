@@ -77,15 +77,27 @@ struct OutputStruct {
 	float4 Target0 : SV_Target0;
 };
 
+// effects that involve multiple channels must be done on the input image, not on the output image.
+// this is because each channel in the output gos to different locations on the display.
+// instead the effects must be processed on each input image sample.
+float4 inputColorProcessor(float4 color){
+	#ifdef CHROMA
+	float grayScale = dot(color.rgb, float3(0.299, 0.587, 0.114));
+	color.rgb = lerp(grayScale, color.rgb, CHROMA);
+	#endif
+	return color;
+}
+
 OutputStruct main(in InputStruct IN)
 {
 	OutputStruct OUT = (OutputStruct)0;
 	
 	
 	
-	#ifdef MEGANEX8K_SUBPIXEL_SHIFT
+	#ifdef SUBPIXEL_SHIFT_MEGANEX8K
 	//float2 uvDx = ddx(IN.uv2.xy);
-	float2 uvDy = ddy(IN.uv2.xy);
+	// IN.uv2.xy will be zero if no game is running so use the overlay UVs if the game UVs are zero
+	float2 uvDy = ddy(IN.uv2.x > 0 ? IN.uv2.xy : IN.uv2.zw);
 	
 	uint2 outputPixel = uint2(IN.Position.xy);
 	
@@ -94,27 +106,26 @@ OutputStruct main(in InputStruct IN)
 	// only the y direction is done because the x direction is already done by global offsets in the UVs
 	int2 outputPixelOdd2D = int2(frac(outputPixel/2.0f)*2.0f) % 2;
 	bool outputPixelOdd = outputPixelOdd2D.x == 0;
-	float offsetAmountY = 0.25f;
+	float2 offsetAmountY = uvDy * 0.25f;
 	// if(frac(g_flTime)>0.5){
 	// 	offsetAmountY = 100;
 	// }
 	if(outputPixelOdd){
-		IN.uv1.xy += uvDy *  offsetAmountY;
-		IN.uv2.xy += uvDy *  offsetAmountY;
-		IN.uv3.xy += uvDy * -offsetAmountY;
+		IN.uv1.xy +=  offsetAmountY;
+		IN.uv2.xy +=  offsetAmountY;
+		IN.uv3.xy += -offsetAmountY;
 		
-		IN.uv1.zw += uvDy *  offsetAmountY;
-		IN.uv2.zw += uvDy *  offsetAmountY;
-		IN.uv3.zw += uvDy * -offsetAmountY;
+		IN.uv1.zw +=  offsetAmountY;
+		IN.uv2.zw +=  offsetAmountY;
+		IN.uv3.zw += -offsetAmountY;
 	}else{
-		IN.uv1.xy += uvDy * -offsetAmountY;
-		IN.uv2.xy += uvDy * -offsetAmountY;
-		IN.uv3.xy += uvDy *  offsetAmountY;
+		IN.uv1.xy += -offsetAmountY;
+		IN.uv2.xy += -offsetAmountY;
+		IN.uv3.xy +=  offsetAmountY;
 		
-		
-		IN.uv1.zw += uvDy * -offsetAmountY;
-		IN.uv2.zw += uvDy * -offsetAmountY;
-		IN.uv3.zw += uvDy *  offsetAmountY;
+		IN.uv1.zw += -offsetAmountY;
+		IN.uv2.zw += -offsetAmountY;
+		IN.uv3.zw +=  offsetAmountY;
 	}
 	#endif
 	
@@ -123,24 +134,25 @@ OutputStruct main(in InputStruct IN)
 	// 	return OUT;
 	// }
 	
+	
 	float4 col = 1;
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col.x = g_tScene0.Sample(g_sScene, IN.uv1.xy).x;
-			col.y = g_tScene0.Sample(g_sScene, IN.uv2.xy).y;
-			col.z = g_tScene0.Sample(g_sScene, IN.uv3.xy).z;
+			col.x = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv1.xy)).x;
+			col.y = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv2.xy)).y;
+			col.z = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv3.xy)).z;
 			break;
 		}
 		case 1:{
-			col.x = g_tScene1.Sample(g_sScene, IN.uv1.xy).x;
-			col.y = g_tScene1.Sample(g_sScene, IN.uv2.xy).y;
-			col.z = g_tScene1.Sample(g_sScene, IN.uv3.xy).z;
+			col.x = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv1.xy)).x;
+			col.y = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv2.xy)).y;
+			col.z = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv3.xy)).z;
 			break;
 		}
 		default:{
-			col.x = g_tScene2.Sample(g_sScene, IN.uv1.xy).x;
-			col.y = g_tScene2.Sample(g_sScene, IN.uv2.xy).y;
-			col.z = g_tScene2.Sample(g_sScene, IN.uv3.xy).z;
+			col.x = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv1.xy)).x;
+			col.y = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv2.xy)).y;
+			col.z = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv3.xy)).z;
 		break;
 	}}
 	
@@ -152,9 +164,9 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	// sample and combine existing overlay
-	float2 layerRA = g_tLayer.Sample(g_sScene, IN.uv1.zw).ra;
-	float2 layerGA = g_tLayer.Sample(g_sScene, IN.uv2.zw).ga;
-	float2 layerBA = g_tLayer.Sample(g_sScene, IN.uv3.zw).ba;
+	float2 layerRA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv1.zw)).ra;
+	float2 layerGA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv2.zw)).ga;
+	float2 layerBA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv3.zw)).ba;
 	
 	// col.r = lerp(col.r, layerRA.x, layerRA.y);
 	// col.g = lerp(col.g, layerGA.x, layerGA.y);
@@ -164,18 +176,50 @@ OutputStruct main(in InputStruct IN)
 	col.g = col.g * (1 - layerGA.y) + layerGA.x;
 	col.b = col.b * (1 - layerBA.y) + layerBA.x;
 	
-	
-	// post processing
+	// contrast before gamma
+	#ifdef CONTRAST_LINEAR
 	#ifdef CONTRAST_MULTIPLIER
 	col.rgb *= CONTRAST_MULTIPLIER;
 	#endif
 	#ifdef CONTRAST_OFFSET
 	col.rgb += CONTRAST_OFFSET;
 	#endif
+	#endif
+	
+	// post processing
 	col *= g_vColorPrescaleLinear;
 	col.rgb = lerp(col.rgb, 1, g_flBlackLevel);
-	// convert to gamma 2.2
-	col.rgb = pow(col.rgb, 1.0 / 2.2);
+	
+	#ifndef GAMMA
+	#define GAMMA 2.2
+	#endif
+	// convert to gamma
+	col.rgb = pow(col.rgb, 1.0 / GAMMA);
+	
+	// contrast after gamma
+	#ifndef CONTRAST_LINEAR
+	#ifdef CONTRAST_MULTIPLIER
+	col.rgb *= CONTRAST_MULTIPLIER;
+	#endif
+	#ifdef CONTRAST_OFFSET
+	col.rgb += CONTRAST_OFFSET;
+	#endif
+	#endif
+	
+	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
+	// prefer the game uvs if they are non zero
+	float2 uv = IN.uv1.zw;
+	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+		col.r = 0;
+	}
+	uv = IN.uv2.zw;
+	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+		col.g = 0;
+	}
+	uv = IN.uv3.zw;
+	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+		col.b = 0;
+	}
 	
 	// odd pixels
 	// col.rgb = outputPixelOdd ? 0.5 : 0.2;

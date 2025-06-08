@@ -45,6 +45,7 @@
     <ClCompile Include="src\Driver\Hooking\InterfaceHookInjector.cpp" />
     <ClCompile Include="src\Driver\ShaderReplacement.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
+    <ClCompile Include="src\Headsets\GenericHeadset.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>
   <ItemGroup>

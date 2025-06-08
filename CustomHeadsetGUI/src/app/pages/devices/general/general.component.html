@@ -20,5 +20,105 @@
         }
     </div>
 </div>
+@if(settings.customShader.enable){
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrast!=defaults.customShader.contrast"
+            (resetClick)="nested('customShader').resetOption('contrast')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrast" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrast"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast Midpoint</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastMidpoint!=defaults.customShader.contrastMidpoint"
+            (resetClick)="nested('customShader').resetOption('contrastMidpoint')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrastMidpoint" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrastMidpoint"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Linear Contrast</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastLinear!=defaults.customShader.contrastLinear"
+            (resetClick)="nested('customShader').resetOption('contrastLinear')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.contrastLinear"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Chroma</span>
+        <app-reset-button [canReset]="settings.customShader.chroma!=defaults.customShader.chroma"
+            (resetClick)="nested('customShader').resetOption('chroma')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.chroma" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.chroma"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Gamma</span>
+        <app-reset-button [canReset]="settings.customShader.gamma!=defaults.customShader.gamma"
+            (resetClick)="nested('customShader').resetOption('gamma')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.gamma" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="4" min="0.1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.gamma"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Enable for MeganeX 8K</span>
+        <app-reset-button
+            [canReset]="settings.customShader.enableForMeganeX8K!=defaults.customShader.enableForMeganeX8K"
+            (resetClick)="nested('customShader').resetOption('enableForMeganeX8K')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableForMeganeX8K"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Enable for Other HMDs</span>
+        <app-reset-button
+            [canReset]="settings.customShader.enableForOther!=defaults.customShader.enableForOther"
+            (resetClick)="nested('customShader').resetOption('enableForOther')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableForOther"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
 }
 }

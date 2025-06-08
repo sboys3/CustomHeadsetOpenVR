@@ -92,5 +92,8 @@
     <ClCompile Include="..\ThirdParty\easywsclient\easywsclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Headsets\GenericHeadset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include "Hooking/InterfaceHookInjector.h"
 
 #include "../Headsets/MeganeX8K.h"
+#include "../Headsets/GenericHeadset.h"
 
 #include "../Config/ConfigLoader.h"
 
@@ -132,6 +133,11 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 			meganeX8KShim->deviceProvider = this;
 			shims.insert(meganeX8KShim);
 			pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver);
+			
+			GenericHeadsetShim* genericHeadsetShim = new GenericHeadsetShim();
+			genericHeadsetShim->deviceProvider = this;
+			shims.insert(genericHeadsetShim);
+			pDriver = new ShimTrackedDeviceDriver(genericHeadsetShim, pDriver);
 		}
 	}
 	// you can change eDeviceClass to change what an existing device shows up as

@@ -41,10 +41,20 @@ struct StationaryDimmingConfig{
 struct CustomShaderConfig{
 	// if shaders should be replaced in the compositor
 	bool enable = true;
+	bool enableForMeganeX8K = true;
+	bool enableForOther = false;
 	// contrast with 50 being normal
 	double contrast = 50;
 	// the point from 0-100% of white that the contrast is centered around
 	double contrastMidpoint = 50;
+	// if the contrast should be done in linear space instead of gamma
+	bool contrastLinear = false;
+	// increase or decrease the variation of the colors
+	double chroma = 50;
+	// gamma of the output
+	double gamma = 2.2;
+	// if the subpixels should be offset
+	bool subpixelShift = true;
 };
 
 

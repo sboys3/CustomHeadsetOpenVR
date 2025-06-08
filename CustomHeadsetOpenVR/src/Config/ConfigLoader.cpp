@@ -114,11 +114,29 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["enable"].is_boolean()){
 				newConfig.customShader.enable = customShaderData["enable"].get<bool>();
 			}
+			if(customShaderData["enableForMeganeX8K"].is_boolean()){
+				newConfig.customShader.enableForMeganeX8K = customShaderData["enableForMeganeX8K"].get<bool>();
+			}
+			if(customShaderData["enableForOther"].is_boolean()){
+				newConfig.customShader.enableForOther = customShaderData["enableForOther"].get<bool>();
+			}
 			if(customShaderData["contrast"].is_number()){
 				newConfig.customShader.contrast = customShaderData["contrast"].get<double>();
 			}
 			if(customShaderData["contrastMidpoint"].is_number()){
 				newConfig.customShader.contrastMidpoint = customShaderData["contrastMidpoint"].get<double>();
+			}
+			if(customShaderData["contrastLinear"].is_boolean()){
+				newConfig.customShader.contrastLinear = customShaderData["contrastLinear"].get<bool>();
+			}
+			if(customShaderData["chroma"].is_number()){
+				newConfig.customShader.chroma = customShaderData["chroma"].get<double>();
+			}
+			if(customShaderData["gamma"].is_number()){
+				newConfig.customShader.gamma = customShaderData["gamma"].get<double>();
+			}
+			if(customShaderData["subpixelShift"].is_number()){
+				newConfig.customShader.subpixelShift = customShaderData["subpixelShift"].get<double>();
 			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
@@ -228,8 +246,14 @@ void ConfigLoader::WriteInfo(){
 			}},
 			{"customShader", {
 				{"enable", defaultSettings.customShader.enable},
+				{"enableForMeganeX8K", defaultSettings.customShader.enableForMeganeX8K},
+				{"enableForOther", defaultSettings.customShader.enableForOther},
 				{"contrast", defaultSettings.customShader.contrast},
 				{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
+				{"contrastLinear", defaultSettings.customShader.contrastLinear},
+				{"chroma", defaultSettings.customShader.chroma},
+				{"gamma", defaultSettings.customShader.gamma},
+				{"subpixelShift", defaultSettings.customShader.subpixelShift},
 			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
@@ -245,6 +269,7 @@ void ConfigLoader::WriteInfo(){
 			{"renderResolution100PercentX", info.renderResolution100PercentX},
 			{"renderResolution100PercentY", info.renderResolution100PercentY},
 		}},
+		{"connectedHeadset", (int)info.connectedHeadset},
 		{"debugLog", info.debugLog},
 		{"driverResources", info.driverResources},
 		{"steamvrResources", info.steamvrResources},
@@ -262,6 +287,7 @@ void ConfigLoader::ReadInfo(){
 		return;
 	}
 	try{
+		std::lock_guard<std::mutex> lock(driverConfigLock);
 		json data = json::parse(infoFile, nullptr, true, true);
 		if(data["driverResources"].is_string()){
 			info.driverResources = data["driverResources"].get<std::string>();
@@ -269,6 +295,10 @@ void ConfigLoader::ReadInfo(){
 		if(data["steamvrResources"].is_string()){
 			info.steamvrResources = data["steamvrResources"].get<std::string>();
 		}
+		if(data["connectedHeadset"].is_number()){
+			info.connectedHeadset = (HeadsetType)data["connectedHeadset"].get<int>();
+		}
+		info.hasBeenUpdated = true; 
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse info.json: %s", e.what());
 		return;

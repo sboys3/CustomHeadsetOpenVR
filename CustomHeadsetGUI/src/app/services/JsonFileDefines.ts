@@ -53,6 +53,13 @@ export type HiddenAreaMeshConfig = {
 };
 export type CustomShaderConfig = {
   enable: boolean;
+  enableForMeganeX8K: boolean,
+  enableForOther: boolean,
+  contrast: number;
+  contrastMidpoint: number;
+  contrastLinear: boolean;
+  chroma: number;
+  gamma: number;
 }
 
 export type MeganeX8KConfig = {

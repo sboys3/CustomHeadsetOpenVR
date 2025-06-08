@@ -4,6 +4,8 @@
 class ShaderReplacement{
 public:
 	bool started = false;
+	// if it has been enabled
+	bool enabled = false;
 	// create hooks for shader loading
 	void Initialize();
 	// reload steamvr shaders
