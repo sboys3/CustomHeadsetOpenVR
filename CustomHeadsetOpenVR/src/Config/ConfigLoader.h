@@ -11,6 +11,7 @@ public:
 		None = 0,
 		Other = 1,
 		MeganeX8K = 2,
+		Vive = 3,
 	};
 	// class to contain info from elsewhere in the driver to write to info.json
 	// this is not structured in the same way as the json file so check WriteInfo in ConfigLoader.cpp

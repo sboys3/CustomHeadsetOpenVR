@@ -58,6 +58,11 @@ Texture2D<float4> g_tScene1 : register(t1);
 Texture2D<float4> g_tScene2 : register(t2);
 Texture2D<float4> g_tLayer : register(t4);
 
+#ifdef MURA_CORRECTION
+Texture2D<float4> g_tMC : register(t5);
+Texture2D<float4> g_tLastFrameUncorrected : register(t6);
+Texture2D<float4> g_tGhostCorrectionTable : register(t7);
+#endif
 
 
 
@@ -94,19 +99,21 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	
-	#ifdef SUBPIXEL_SHIFT_MEGANEX8K
-	//float2 uvDx = ddx(IN.uv2.xy);
-	// IN.uv2.xy will be zero if no game is running so use the overlay UVs if the game UVs are zero
-	float2 uvDy = ddy(IN.uv2.x > 0 ? IN.uv2.xy : IN.uv2.zw);
 	
+	float2 uvDx = ddx(IN.uv2.xy);
+	float2 uvDy = ddy(IN.uv2.xy);
+	float2 uvDxOverlay = ddx(IN.uv2.zw);
+	float2 uvDyOverlay = ddy(IN.uv2.zw);
 	uint2 outputPixel = uint2(IN.Position.xy);
+	int2 outputPixelOdd2D = uint2(frac(outputPixel/2.0f)*2.0f) % 2;
 	
+	#ifdef SUBPIXEL_SHIFT_MEGANEX8K
 	// do subpixel offsets
 	// https://www.shadertoy.com/view/Wcd3D7
 	// only the y direction is done because the x direction is already done by global offsets in the UVs
-	int2 outputPixelOdd2D = int2(frac(outputPixel/2.0f)*2.0f) % 2;
 	bool outputPixelOdd = outputPixelOdd2D.x == 0;
 	float2 offsetAmountY = uvDy * 0.25f;
+	float2 offsetAmountYOverlay = uvDyOverlay * 0.25f;
 	// if(frac(g_flTime)>0.5){
 	// 	offsetAmountY = 100;
 	// }
@@ -115,17 +122,42 @@ OutputStruct main(in InputStruct IN)
 		IN.uv2.xy +=  offsetAmountY;
 		IN.uv3.xy += -offsetAmountY;
 		
-		IN.uv1.zw +=  offsetAmountY;
-		IN.uv2.zw +=  offsetAmountY;
-		IN.uv3.zw += -offsetAmountY;
+		IN.uv1.zw +=  offsetAmountYOverlay;
+		IN.uv2.zw +=  offsetAmountYOverlay;
+		IN.uv3.zw += -offsetAmountYOverlay;
 	}else{
 		IN.uv1.xy += -offsetAmountY;
 		IN.uv2.xy += -offsetAmountY;
 		IN.uv3.xy +=  offsetAmountY;
 		
-		IN.uv1.zw += -offsetAmountY;
-		IN.uv2.zw += -offsetAmountY;
-		IN.uv3.zw +=  offsetAmountY;
+		IN.uv1.zw += -offsetAmountYOverlay;
+		IN.uv2.zw += -offsetAmountYOverlay;
+		IN.uv3.zw +=  offsetAmountYOverlay;
+	}
+	#endif
+	
+	#ifdef SUBPIXEL_SHIFT_VIVE
+	// do subpixel offsets
+	// https://www.shadertoy.com/view/Wcd3D7
+	// only the x direction is done because the y direction is already done by global offsets in the UVs
+	bool outputPixelOdd = outputPixelOdd2D.x != outputPixelOdd2D.y;
+	float2 offsetAmountX = uvDx * 0.5f;
+	float2 offsetAmountXOverlay = uvDxOverlay * 0.5f;
+	// if(frac(g_flTime)>0.5){
+	// 	offsetAmountY = 100;
+	// }
+	if(outputPixelOdd){
+		IN.uv1.xy +=  offsetAmountX;
+		IN.uv3.xy += -offsetAmountX;
+		
+		IN.uv1.zw +=  offsetAmountXOverlay;
+		IN.uv3.zw += -offsetAmountXOverlay;
+	}else{
+		IN.uv1.xy += -offsetAmountX;
+		IN.uv3.xy +=  offsetAmountX;
+		
+		IN.uv1.zw += -offsetAmountXOverlay;
+		IN.uv3.zw +=  offsetAmountXOverlay;
 	}
 	#endif
 	
@@ -188,13 +220,33 @@ OutputStruct main(in InputStruct IN)
 	
 	// post processing
 	col *= g_vColorPrescaleLinear;
-	col.rgb = lerp(col.rgb, 1, g_flBlackLevel);
 	
-	#ifndef GAMMA
-	#define GAMMA 2.2
+	
+	// srgb has a small linear section at the beginning that decreases the resolution of black colors
+	float3 linearColor = col.rgb;
+	bool3 cutoff = linearColor > 0.0031308;
+    float3 linearSection = linearColor * 12.92;
+    float3 gammaSection = pow(linearColor, 1.0 / 2.4) * 1.055 - 0.055;
+	col.rgb = lerp(linearSection, gammaSection, cutoff);
+	
+	// allow GAMMA to modify the srgb curve
+	#ifdef GAMMA
+	col.rgb *= pow(col.rgb, 1.0 / GAMMA - 1.0 / 2.2);
 	#endif
-	// convert to gamma
-	col.rgb = pow(col.rgb, 1.0 / GAMMA);
+	
+	
+	
+	#ifdef MURA_CORRECTION
+	if(g_bMCEnabled != 0){
+		float muraOffset = (g_tMC.SampleLevel(g_sScene, IN.Position.xy * g_vMCInvSize, float(0)).x + g_flMCOffset) * g_flMCScale;
+		// this is my own tweak to make the correction better in dark scenes
+		col.rgb += muraOffset * sqrt(col.rgb);
+		// I think this is what the default is
+		// col.g += muraOffset;
+	}
+	// TODO: ghost correction
+	#endif
+	
 	
 	// contrast after gamma
 	#ifndef CONTRAST_LINEAR
@@ -205,6 +257,14 @@ OutputStruct main(in InputStruct IN)
 	col.rgb += CONTRAST_OFFSET;
 	#endif
 	#endif
+	
+	
+	
+	// does not crunch blacks
+	// col.rgb = lerp(max(0, col.rgb), 1, g_flBlackLevel);
+	// this is how it is in the default shader but it crushes blacks
+	col.rgb = max(col.rgb, g_flBlackLevel);
+
 	
 	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
 	// prefer the game uvs if they are non zero

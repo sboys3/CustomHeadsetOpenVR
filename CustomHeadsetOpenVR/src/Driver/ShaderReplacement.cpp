@@ -48,7 +48,7 @@ int dumpId = 0;
 
 // function that hooks the CreatePixelShader function of the ID3D11Device interface
 static void DetourCreatePixelShader(ID3D11Device* _this, const void* pShaderBytecode, SIZE_T BytecodeLength, ID3D11ClassLinkage* pClassLinkage, ID3D11PixelShader** ppPixelShader){
- 	DriverLog("DetourCreatePixelShader Called");
+ 	// DriverLog("DetourCreatePixelShader Called");
 	if(pShaderBytecode == nullptr || BytecodeLength < 32){
 		CreatePixelShaderHook.originalFunc(_this, pShaderBytecode, BytecodeLength, pClassLinkage, ppPixelShader);
 		return;
@@ -97,7 +97,7 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 }
 
 // compile the new distortion shader from source
-Bytecode DistortionShader(){
+Bytecode DistortionShader(bool muraCorrection = false){
 	if(!IsCustomShaderEnabled()){
 		// don't replace
 		return {nullptr, 0};
@@ -134,11 +134,16 @@ Bytecode DistortionShader(){
 	
 	D3D_SHADER_MACRO defines[20] = {};
 	int definesCount = 0;
-	// TODO: check that the MeganeX is actually running
 	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
 		if(driverConfig.customShader.subpixelShift && driverConfig.meganeX8K.subpixelShift != 0){
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_MEGANEX8K", "1"};
+		}
+	}
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
+		defines[definesCount++] = {"VIVE", "1"};
+		if(driverConfig.customShader.subpixelShift){
+			defines[definesCount++] = {"SUBPIXEL_SHIFT_VIVE", "1"};
 		}
 	}
 	double contrastMultiplier = driverConfig.customShader.contrast / 50.0;
@@ -163,6 +168,9 @@ Bytecode DistortionShader(){
 	std::string gammaString = std::to_string(driverConfig.customShader.gamma);
 	if(driverConfig.customShader.gamma != 2.2){
 		defines[definesCount++] = {"GAMMA", gammaString.c_str()};
+	}
+	if(muraCorrection){
+		defines[definesCount++] = {"MURA_CORRECTION", "1"};
 	}
 	
 	
@@ -205,6 +213,23 @@ Bytecode DistortionShader(){
 		return bytecode;
 	}
 }
+
+
+// same as DistortionShader
+Bytecode DistortionShaderPlain(){ 
+	return DistortionShader();
+}
+
+// same as DistortionShader but with mura correction enabled
+Bytecode DistortionShaderMuraCorrection(){
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
+		// don't compile for headsets that will not use it
+		return {nullptr, 0};
+	}
+	return DistortionShader(true);
+}
+
+
 
 // get first 32 bytes of an existing shader for identification
 std::string GetExistingShaderIdentifier(std::string name){
@@ -279,7 +304,8 @@ void ShaderReplacement::Initialize(){
 	
 	DriverLog("ShaderReplacement::Initialize loading shader replacement table");
 	// LogShaderIdentifier(GetExistingShaderIdentifier("distort_ps_layered.fxo"), 32);
-	shaderReplacements[GetExistingShaderIdentifier("distort_ps_layered.fxo")] = DistortionShader;
+	shaderReplacements[GetExistingShaderIdentifier("distort_ps_layered.fxo")] = DistortionShaderPlain;
+	shaderReplacements[GetExistingShaderIdentifier("distort_ps_layered_mc.fxo")] = DistortionShaderMuraCorrection;
 	
 	#ifdef _WIN32
 		// startup winsock for websocket connections

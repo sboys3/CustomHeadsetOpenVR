@@ -133,12 +133,12 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 			meganeX8KShim->deviceProvider = this;
 			shims.insert(meganeX8KShim);
 			pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver);
-			
-			GenericHeadsetShim* genericHeadsetShim = new GenericHeadsetShim();
-			genericHeadsetShim->deviceProvider = this;
-			shims.insert(genericHeadsetShim);
-			pDriver = new ShimTrackedDeviceDriver(genericHeadsetShim, pDriver);
 		}
+		
+		GenericHeadsetShim* genericHeadsetShim = new GenericHeadsetShim();
+		genericHeadsetShim->deviceProvider = this;
+		shims.insert(genericHeadsetShim);
+		pDriver = new ShimTrackedDeviceDriver(genericHeadsetShim, pDriver);
 	}
 	// you can change eDeviceClass to change what an existing device shows up as
 	
