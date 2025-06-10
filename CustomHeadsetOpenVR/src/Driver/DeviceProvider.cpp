@@ -77,7 +77,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			}
 		}
 		
-		if(vrevent.eventType == vr::VREvent_ProcessConnected){
+		if(vrevent.eventType == vr::VREvent_ProcessConnected && customShaderEnabled){
 			// check new processes and inject if they are the compositor
 			InjectCompositorPlugin(vrevent.data.process.pid);
 		}
@@ -86,6 +86,11 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		if(shim->shimActive){
 			shim->RunFrame();
 		}
+	}
+	if(!customShaderEnabled && IsCustomShaderEnabled()){
+		// try to inject when it is first enabled
+		InjectCompositorPlugin();
+		customShaderEnabled = true;
 	}
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;

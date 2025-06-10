@@ -71,4 +71,5 @@ inline bool IsCustomShaderEnabled(){
 	if(driverConfigLoader.info.connectedHeadset != ConfigLoader::HeadsetType::None){
 		return driverConfig.customShader.enableForOther;
 	}
+	return false;
 }

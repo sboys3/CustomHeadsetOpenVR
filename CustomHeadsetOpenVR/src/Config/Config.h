@@ -40,7 +40,7 @@ struct StationaryDimmingConfig{
 
 struct CustomShaderConfig{
 	// if shaders should be replaced in the compositor
-	bool enable = true;
+	bool enable = false;
 	bool enableForMeganeX8K = true;
 	bool enableForOther = false;
 	// contrast with 50 being normal

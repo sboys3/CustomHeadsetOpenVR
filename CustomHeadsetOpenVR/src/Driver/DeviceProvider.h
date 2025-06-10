@@ -54,5 +54,6 @@ private:
 		double eventTimeOffset;
 	};
 	// events that are waiting for a context to be found
-	std::map<uint32_t, std::vector<QueuedEvent>> queuedEvents = {}; 
+	std::map<uint32_t, std::vector<QueuedEvent>> queuedEvents = {};
+	bool customShaderEnabled = false;
 };

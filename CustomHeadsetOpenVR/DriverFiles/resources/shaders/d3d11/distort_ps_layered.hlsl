@@ -236,17 +236,6 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	
-	#ifdef MURA_CORRECTION
-	if(g_bMCEnabled != 0){
-		float muraOffset = (g_tMC.SampleLevel(g_sScene, IN.Position.xy * g_vMCInvSize, float(0)).x + g_flMCOffset) * g_flMCScale;
-		// this is my own tweak to make the correction better in dark scenes
-		col.rgb += muraOffset * sqrt(col.rgb);
-		// I think this is what the default is
-		// col.g += muraOffset;
-	}
-	// TODO: ghost correction
-	#endif
-	
 	
 	// contrast after gamma
 	#ifndef CONTRAST_LINEAR
@@ -259,6 +248,17 @@ OutputStruct main(in InputStruct IN)
 	#endif
 	
 	
+	
+	#ifdef MURA_CORRECTION
+	if(g_bMCEnabled != 0){
+		float muraOffset = (g_tMC.SampleLevel(g_sScene, IN.Position.xy * g_vMCInvSize, float(0)).x + g_flMCOffset) * g_flMCScale;
+		// this is my own tweak to make the correction better in dark scenes
+		// col.rgb += muraOffset * sqrt(col.rgb);
+		// I think this is what the default is
+		col.g += muraOffset;
+	}
+	// TODO: ghost correction
+	#endif
 	
 	// does not crunch blacks
 	// col.rgb = lerp(max(0, col.rgb), 1, g_flBlackLevel);

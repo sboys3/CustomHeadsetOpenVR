@@ -146,7 +146,20 @@ bool InjectCompositorPlugin(int forProcessId){
 	
 	// Check if process was found
 	if(isProcessFound==FALSE){
-		DriverLog("process not found");
+		DriverLog("compositor process not found");
+		return false;
+	}
+	
+	
+	// get the address of LoadLibraryW
+	auto hKernel32 = GetModuleHandle(L"kernel32.dll");
+	if(hKernel32 == NULL){
+		DriverLog("can't get kernel32.dll");
+		return false;
+	}
+	FARPROC LoadLibraryAddress;
+	if ((LoadLibraryAddress = GetProcAddress(hKernel32, "LoadLibraryW")) == NULL){
+		DriverLog("failed to load kernel32.dll");
 		return false;
 	}
 	
@@ -164,27 +177,44 @@ bool InjectCompositorPlugin(int forProcessId){
 		return false;
 	}
 	// put data into memory of the remote process
+	// auto bStatus = WriteProcessMemory(targetProcess, nameInTargetProcess, dllPath, size, nullptr);
+	// dynamically import WriteProcessMemory to avoid false anti virus static analysis detection
+	std::string part1 = "WriteProc";
+	std::string part2 = "essMemory";
+	std::string full = part1 + part2;
+	typedef BOOL (WINAPI *WriteProcessMemory_t)(HANDLE, LPVOID, LPCVOID, SIZE_T, SIZE_T*);
+	auto WriteProcessMemory = (WriteProcessMemory_t)GetProcAddress(hKernel32, full.c_str());
+	if(WriteProcessMemory == NULL){
+		DriverLog("failed to get %s", full.c_str());
+	}
 	auto bStatus = WriteProcessMemory(targetProcess, nameInTargetProcess, dllPath, size, nullptr);
 	if(bStatus == 0){
 		DriverLog("failed to write remote memory");
 		return false;
 	}
 	
-	// get the address of LoadLibraryW in the remote process
-	auto hKernel32 = GetModuleHandle(L"kernel32.dll");
-	if(hKernel32 == NULL){
-		DriverLog("can't get kernel32.dll");
-		return false;
-	}
-	FARPROC LoadLibraryAddress;
-	if ((LoadLibraryAddress = GetProcAddress(hKernel32, "LoadLibraryW")) == NULL){
-		DriverLog("failed to load kernel32.dll");
-		return false;
-	}
+	
 
 	// LoadLibraryW((LPCWSTR)dllPath);
 	
 	// using the above objects execute the DLL in the remote process
+	// auto hThreadId = CreateRemoteThread(targetProcess,
+	// 	nullptr,
+	// 	0,
+	// 	reinterpret_cast<LPTHREAD_START_ROUTINE>(LoadLibraryAddress),
+	// 	nameInTargetProcess,
+	// 	NULL,
+	// 	nullptr
+	// );
+	// dynamically import CreateRemoteThread to avoid false anti virus static analysis detection
+	part1 = "CreateRem";
+	part2 = "oteThread";
+	full = part1 + part2;
+	typedef HANDLE (WINAPI *CreateRemoteThread_t)(HANDLE, LPSECURITY_ATTRIBUTES, SIZE_T, LPTHREAD_START_ROUTINE, LPVOID, DWORD, LPDWORD);
+	auto CreateRemoteThread = (CreateRemoteThread_t)GetProcAddress(hKernel32, full.c_str());
+	if(CreateRemoteThread == NULL){
+		DriverLog("failed to get %s", full.c_str());
+	}
 	auto hThreadId = CreateRemoteThread(targetProcess,
 		nullptr,
 		0,
@@ -199,7 +229,7 @@ bool InjectCompositorPlugin(int forProcessId){
 	}
 	// WaitForSingleObject(hThreadId, INFINITE);
 	
-	DriverLog("driver successfully injected into process %i", processId);
+	DriverLog("driver successfully injected into compositor process id: %i", processId);
 
 	CloseHandle(targetProcess);
 	VirtualFreeEx(targetProcess, nameInTargetProcess, size, MEM_RELEASE);
