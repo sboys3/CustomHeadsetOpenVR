@@ -5,6 +5,7 @@
         <span i18n>Custom Shader</span>
     </div>
 </div>
+@if(defaults.customShader){
 <div class="field">
     <div class="title">
         <span i18n>Enable Custom Shader</span>
@@ -253,6 +254,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
 }
 }
 }
