@@ -49,12 +49,29 @@ struct CustomShaderConfig{
 	double contrastMidpoint = 50;
 	// if the contrast should be done in linear space instead of gamma
 	bool contrastLinear = false;
+	// if per eye contrast should be applied
+	bool contrastPerEye = false;
+	bool contrastPerEyeLinear = false;
+	double contrastLeft = 50;
+	double contrastMidpointLeft = 50;
+	double contrastRight = 50;
+	double contrastMidpointRight = 50;
 	// increase or decrease the variation of the colors
 	double chroma = 50;
 	// gamma of the output
 	double gamma = 2.2;
 	// if the subpixels should be offset
 	bool subpixelShift = true;
+	// if the mura correction should be skipped
+	bool disableMuraCorrection = false;
+	// if the black levels should be skipped
+	bool disableBlackLevels = false;
+	// if the colors should be corrected to display the srgb input as srgb on the display
+	bool srgbColorCorrection = false;
+	// a 3x3 matrix to apply to the linear colors
+	// if this is an array of 9 flat elements it will override the headset's default matrix
+	std::vector<double> srgbColorCorrectionMatrix = {};
+	
 };
 
 

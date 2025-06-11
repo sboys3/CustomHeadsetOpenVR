@@ -37,7 +37,7 @@ struct Bytecode{
 };
 
 // map of functions to replace shader bytecode with based on the first 32 bytes of the shader bytecode
-static std::map<std::string, Bytecode(*)()> shaderReplacements;  //
+static std::map<std::string, Bytecode(*)()> shaderReplacements;
 
 // debug shaders by logging the first 32 bytes of the shader bytecode
 void LogShaderIdentifier(std::string identifierString, size_t length){
@@ -96,6 +96,15 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
     return wstr;
 }
 
+
+static std::map<ConfigLoader::HeadsetType, std::vector<double>> srgbColorCorrectionMatrices = {
+	{ConfigLoader::HeadsetType::MeganeX8K, {
+		0.8224619687143621, 0.17753803128563772, 0.0, 
+		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
+		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
+	}},
+};
+
 // compile the new distortion shader from source
 Bytecode DistortionShader(bool muraCorrection = false){
 	if(!IsCustomShaderEnabled()){
@@ -130,9 +139,9 @@ Bytecode DistortionShader(bool muraCorrection = false){
 	// size_t length = blob->GetBufferSize();
 	// blob->Release();
 	
-	// compile shader from hlsl using D3DCompileFromFile
 	
-	D3D_SHADER_MACRO defines[20] = {};
+	// create defines for shader settings
+	D3D_SHADER_MACRO defines[30] = {};
 	int definesCount = 0;
 	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
@@ -160,6 +169,37 @@ Bytecode DistortionShader(bool muraCorrection = false){
 	if(driverConfig.customShader.contrastLinear){
 		defines[definesCount++] = {"CONTRAST_LINEAR", "1"};
 	}
+	std::string contrastMultiplierLeft = "";
+	std::string contrastOffsetLeft = "";
+	std::string contrastMultiplierRight = "";
+	std::string contrastOffsetRight = "";
+	if(driverConfig.customShader.contrastPerEye){
+		double contrastMultiplierLeftValue = driverConfig.customShader.contrastLeft / 50.0;
+		double contrastOffsetLeftValue = driverConfig.customShader.contrastMidpointLeft / 100.0;
+		contrastOffsetLeftValue = -contrastOffsetLeftValue  * contrastMultiplierLeftValue + contrastOffsetLeftValue;
+		double contrastMultiplierRightValue = driverConfig.customShader.contrastRight / 50.0;
+		double contrastOffsetRightValue = driverConfig.customShader.contrastMidpointRight / 100.0;
+		contrastOffsetRightValue = -contrastOffsetRightValue  * contrastMultiplierRightValue + contrastOffsetRightValue;
+		if(contrastMultiplierLeftValue != 1){
+			contrastMultiplierLeft = std::to_string(contrastMultiplierLeftValue);
+			defines[definesCount++] = {"CONTRAST_MULTIPLIER_LEFT", contrastMultiplierLeft.c_str()};
+		}
+		if(contrastOffsetLeftValue != 0){
+			contrastOffsetLeft = std::to_string(contrastOffsetLeftValue);
+			defines[definesCount++] = {"CONTRAST_OFFSET_LEFT", contrastOffsetLeft.c_str()};
+		}
+		if(contrastMultiplierRightValue != 1){
+			contrastMultiplierRight = std::to_string(contrastMultiplierRightValue);
+			defines[definesCount++] = {"CONTRAST_MULTIPLIER_RIGHT", contrastMultiplierRight.c_str()};
+		}
+		if(contrastOffsetRightValue != 0){
+			contrastOffsetRight = std::to_string(contrastOffsetRightValue);
+			defines[definesCount++] = {"CONTRAST_OFFSET_RIGHT", contrastOffsetRight.c_str()};
+		}
+		if(driverConfig.customShader.contrastPerEyeLinear){
+			defines[definesCount++] = {"CONTRAST_PER_EYE_LINEAR", "1"};
+		}
+	}
 	double chroma = driverConfig.customShader.chroma / 50.0;
 	std::string chromaString = std::to_string(chroma);
 	if(chroma != 1){
@@ -171,12 +211,37 @@ Bytecode DistortionShader(bool muraCorrection = false){
 	}
 	if(muraCorrection){
 		defines[definesCount++] = {"MURA_CORRECTION", "1"};
+		if(driverConfig.customShader.disableMuraCorrection){
+			defines[definesCount++] = {"DISABLE_MURA_CORRECTION", "1"};
+		}
 	}
-	
+	if(driverConfig.customShader.disableBlackLevels){
+		defines[definesCount++] = {"DISABLE_BLACK_LEVELS", "1"};
+	}
+	std::string colorMatrixString = "";
+	if(driverConfig.customShader.srgbColorCorrection){
+		std::vector<double>* colorMatrix = nullptr;
+		if(srgbColorCorrectionMatrices.find(driverConfigLoader.info.connectedHeadset) != srgbColorCorrectionMatrices.end()){
+			colorMatrix = &srgbColorCorrectionMatrices[driverConfigLoader.info.connectedHeadset];
+		}
+		if(driverConfig.customShader.srgbColorCorrectionMatrix.size() == 9){
+			colorMatrix = &driverConfig.customShader.srgbColorCorrectionMatrix;
+		}
+		if(colorMatrix){
+			for(int i = 0; i < 9; i++){
+				colorMatrixString += std::to_string((*colorMatrix)[i]);
+				if(i < 8){
+					colorMatrixString += ", ";
+				}
+			}
+			defines[definesCount++] = {"COLOR_CORRECTION_MATRIX", colorMatrixString.c_str()};
+		}
+	}
 	
 	defines[definesCount++] = {nullptr, nullptr}; // end of array
 	
 	
+	// compile shader from hlsl using D3DCompileFromFile
 	ID3DBlob* shaderBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr; 
 	if(FAILED(D3DCompileFromFile(
@@ -197,7 +262,7 @@ Bytecode DistortionShader(bool muraCorrection = false){
 			std::string errorPath = fullPath + "_error.txt";
 			FILE* errorFile = fopen(errorPath.c_str(), "wb+");
 			if(errorFile){
-				fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize(), errorFile);
+				fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize() - 1, errorFile);
 				fclose(errorFile);
 			}
 		}
@@ -406,9 +471,24 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.contrast != driverConfigOld.customShader.contrast;
 				reloadShaders |= driverConfig.customShader.contrastMidpoint != driverConfigOld.customShader.contrastMidpoint;
 				reloadShaders |= driverConfig.customShader.contrastLinear != driverConfigOld.customShader.contrastLinear;
+				reloadShaders |= driverConfig.customShader.contrastPerEye != driverConfigOld.customShader.contrastPerEye;
+				reloadShaders |= driverConfig.customShader.contrastPerEyeLinear != driverConfigOld.customShader.contrastPerEyeLinear;
+				reloadShaders |= driverConfig.customShader.contrastLeft != driverConfigOld.customShader.contrastLeft;
+				reloadShaders |= driverConfig.customShader.contrastMidpointLeft != driverConfigOld.customShader.contrastMidpointLeft;
+				reloadShaders |= driverConfig.customShader.contrastRight != driverConfigOld.customShader.contrastRight;
+				reloadShaders |= driverConfig.customShader.contrastMidpointRight != driverConfigOld.customShader.contrastMidpointRight;
 				reloadShaders |= driverConfig.customShader.chroma != driverConfigOld.customShader.chroma;
 				reloadShaders |= driverConfig.customShader.gamma != driverConfigOld.customShader.gamma;
 				reloadShaders |= driverConfig.customShader.subpixelShift != driverConfigOld.customShader.subpixelShift;
+				reloadShaders |= driverConfig.customShader.disableMuraCorrection != driverConfigOld.customShader.disableMuraCorrection;
+				reloadShaders |= driverConfig.customShader.disableBlackLevels != driverConfigOld.customShader.disableBlackLevels;
+				reloadShaders |= driverConfig.customShader.srgbColorCorrection != driverConfigOld.customShader.srgbColorCorrection;
+				reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix.size() != driverConfigOld.customShader.srgbColorCorrectionMatrix.size();
+				if(driverConfig.customShader.srgbColorCorrectionMatrix.size() == 9 && driverConfigOld.customShader.srgbColorCorrectionMatrix.size() == 9){
+					for(int i = 0; i < 9; i++){
+						reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix[i] != driverConfigOld.customShader.srgbColorCorrectionMatrix[i];
+					}
+				}
 			}
 			
 			if(reloadShaders){

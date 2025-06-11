@@ -90,6 +90,12 @@ float4 inputColorProcessor(float4 color){
 	float grayScale = dot(color.rgb, float3(0.299, 0.587, 0.114));
 	color.rgb = lerp(grayScale, color.rgb, CHROMA);
 	#endif
+	#ifdef COLOR_CORRECTION_MATRIX
+	// this matrix converts from linear srgb to linear display p3 on the MeganeX
+	// it can also be used for any additional color corrections
+	color.rgb = mul(float3x3(COLOR_CORRECTION_MATRIX), color.rgb);
+	// the display p3 curve is the same as srgb curve so the gamma correction is also correct
+	#endif
 	return color;
 }
 
@@ -218,6 +224,24 @@ OutputStruct main(in InputStruct IN)
 	#endif
 	#endif
 	
+	#ifdef CONTRAST_PER_EYE_LINEAR
+	if(g_nEye == 0){
+		#ifdef CONTRAST_MULTIPLIER_LEFT
+		col.rgb *= CONTRAST_MULTIPLIER_LEFT;
+		#endif
+		#ifdef CONTRAST_OFFSET_LEFT
+		col.rgb += CONTRAST_OFFSET_LEFT;
+		#endif
+	}else{
+		#ifdef CONTRAST_MULTIPLIER_RIGHT
+		col.rgb *= CONTRAST_MULTIPLIER_RIGHT;
+		#endif
+		#ifdef CONTRAST_OFFSET_RIGHT
+		col.rgb += CONTRAST_OFFSET_RIGHT;
+		#endif
+	}
+	#endif
+	
 	// post processing
 	col *= g_vColorPrescaleLinear;
 	
@@ -247,9 +271,27 @@ OutputStruct main(in InputStruct IN)
 	#endif
 	#endif
 	
+	#ifndef CONTRAST_PER_EYE_LINEAR
+	if(g_nEye == 0){
+		#ifdef CONTRAST_MULTIPLIER_LEFT
+		col.rgb *= CONTRAST_MULTIPLIER_LEFT;
+		#endif
+		#ifdef CONTRAST_OFFSET_LEFT
+		col.rgb += CONTRAST_OFFSET_LEFT;
+		#endif
+	}else{
+		#ifdef CONTRAST_MULTIPLIER_RIGHT
+		col.rgb *= CONTRAST_MULTIPLIER_RIGHT;
+		#endif
+		#ifdef CONTRAST_OFFSET_RIGHT
+		col.rgb += CONTRAST_OFFSET_RIGHT;
+		#endif
+	}
+	#endif
 	
 	
 	#ifdef MURA_CORRECTION
+	#ifndef DISABLE_MURA_CORRECTION
 	if(g_bMCEnabled != 0){
 		float muraOffset = (g_tMC.SampleLevel(g_sScene, IN.Position.xy * g_vMCInvSize, float(0)).x + g_flMCOffset) * g_flMCScale;
 		// this is my own tweak to make the correction better in dark scenes
@@ -259,11 +301,14 @@ OutputStruct main(in InputStruct IN)
 	}
 	// TODO: ghost correction
 	#endif
+	#endif
 	
+	#ifndef DISABLE_BLACK_LEVELS
 	// does not crunch blacks
 	// col.rgb = lerp(max(0, col.rgb), 1, g_flBlackLevel);
 	// this is how it is in the default shader but it crushes blacks
 	col.rgb = max(col.rgb, g_flBlackLevel);
+	#endif
 
 	
 	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
@@ -289,7 +334,7 @@ OutputStruct main(in InputStruct IN)
 	// col.rg = float2(int2(IN.Position.xy) % 20) / 20.0;
 	
 	// eye-patch
-	//if(g_nEye == 1){col = 0;}
+	// if(g_nEye == 1){col = 0;}
 		
 	
 	OUT.Target0 = col;

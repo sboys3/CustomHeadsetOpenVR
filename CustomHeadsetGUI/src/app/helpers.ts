@@ -61,18 +61,27 @@ const areValuesEqual = (val1: any, val2: any): boolean => {
  */
 export const deepCopy = <T>(obj: T, excludeObj: Partial<T> = {}): T => {
   if (typeof obj !== 'object' || obj === null) {
+    if(areValuesEqual(obj, excludeObj)){
+      return undefined as unknown as T;
+    }
     return obj;
   }
 
   if (Array.isArray(obj)) {
-    if (Array.isArray(excludeObj) && areValuesEqual(obj, excludeObj)) {
-      return obj;
+    if (Array.isArray(excludeObj)) {
+      if (areValuesEqual(obj, excludeObj)) {
+        return undefined as unknown as T;
+      }
+      let outputArray = [];
+      for (let i = 0; i < obj.length && i < excludeObj.length; i++) {
+        outputArray.push(deepCopy(obj[i], excludeObj[i]));
+      }
+      return outputArray as unknown as T;
     }
-    return obj.map(item => deepCopy(item, excludeObj)) as unknown as T;
+    return obj;
   }
 
   const copy = {} as { [K in keyof T]: T[K] };
-
   Object.keys(obj).forEach(key => {
     const objValue = (obj as { [key: string]: any })[key];
     const excludeValue = (excludeObj as { [key: string]: any })[key];
@@ -152,7 +161,13 @@ export const deepMerge = <TX extends IObject, TY extends IObject, TR = TX & TY>(
               deepMerge(result[key], elm[key]);
             } else {
               if (Array.isArray(result[key]) && Array.isArray(elm[key])) {
-                result[key] = Array.from(new Set(result[key].concat(elm[key])));
+                if(typeof elm[key][0] === 'string'){
+                  // merge arrays of strings
+                  result[key] = Array.from(new Set(result[key].concat(elm[key])));
+                }else{
+                  // overwrite if the array otherwise as numbers likely won't merge
+                  result[key] = elm[key];
+                }
               } else {
                 result[key] = elm[key];
               }

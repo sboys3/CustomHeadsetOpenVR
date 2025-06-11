@@ -58,8 +58,19 @@ export type CustomShaderConfig = {
   contrast: number;
   contrastMidpoint: number;
   contrastLinear: boolean;
+  contrastPerEye: boolean;
+  contrastPerEyeLinear: boolean;
+  contrastLeft: number;
+  contrastMidpointLeft: number;
+  contrastRight: number;
+  contrastMidpointRight: number;
   chroma: number;
   gamma: number;
+  subpixelShift: boolean;
+  disableMuraCorrection: boolean;
+  disableBlackLevels: boolean;
+  srgbColorCorrection: boolean;
+  srgbColorCorrectionMatrix: number[]; // 3x3 matrix as a flat array of 9 elements
 }
 
 export type MeganeX8KConfig = {

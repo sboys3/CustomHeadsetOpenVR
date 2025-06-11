@@ -67,6 +67,96 @@
 </div>
 <div class="field">
     <div class="title">
+        <span i18n>Per Eye Contrast</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastPerEye!=defaults.customShader.contrastPerEye"
+            (resetClick)="nested('customShader').resetOption('contrastPerEye')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.contrastPerEye"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+@if(settings.customShader.contrastPerEye){
+<div class="field">
+    <div class="title">
+        <span i18n>Linear Per Eye Contrast</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastPerEyeLinear!=defaults.customShader.contrastPerEyeLinear"
+            (resetClick)="nested('customShader').resetOption('contrastPerEyeLinear')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.contrastPerEyeLinear"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast Left Eye</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastLeft!=defaults.customShader.contrastLeft"
+            (resetClick)="nested('customShader').resetOption('contrastLeft')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrastLeft" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrastLeft"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast Midpoint Left Eye</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastMidpointLeft!=defaults.customShader.contrastMidpointLeft"
+            (resetClick)="nested('customShader').resetOption('contrastMidpointLeft')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrastMidpointLeft" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrastMidpointLeft"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast Right Eye</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastRight!=defaults.customShader.contrastRight"
+            (resetClick)="nested('customShader').resetOption('contrastRight')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrastRight" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrastRight"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Contrast Midpoint Right Eye</span>
+        <app-reset-button
+            [canReset]="settings.customShader.contrastMidpointRight!=defaults.customShader.contrastMidpointRight"
+            (resetClick)="nested('customShader').resetOption('contrastMidpointRight')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.contrastMidpointRight" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.contrastMidpointRight"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+}
+<div class="field">
+    <div class="title">
         <span i18n>Chroma</span>
         <app-reset-button [canReset]="settings.customShader.chroma!=defaults.customShader.chroma"
             (resetClick)="nested('customShader').resetOption('chroma')"></app-reset-button>
@@ -93,6 +183,50 @@
             <input matSliderThumb [(ngModel)]="settings.customShader.gamma"
                 (ngModelChange)="saveConfigSettings()">
         </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Subpixel Shift</span>
+        <app-reset-button [canReset]="settings.customShader.subpixelShift!=defaults.customShader.subpixelShift"
+            (resetClick)="nested('customShader').resetOption('subpixelShift')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.subpixelShift"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Disable Mura Correction</span>
+        <app-reset-button [canReset]="settings.customShader.disableMuraCorrection!=defaults.customShader.disableMuraCorrection"
+            (resetClick)="nested('customShader').resetOption('disableMuraCorrection')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.disableMuraCorrection"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Disable Black Levels</span>
+        <app-reset-button [canReset]="settings.customShader.disableBlackLevels!=defaults.customShader.disableBlackLevels"
+            (resetClick)="nested('customShader').resetOption('disableBlackLevels')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.disableBlackLevels"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>sRGB Color Correction</span>
+        <app-reset-button [canReset]="settings.customShader.srgbColorCorrection!=defaults.customShader.srgbColorCorrection"
+            (resetClick)="nested('customShader').resetOption('srgbColorCorrection')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.srgbColorCorrection"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
 <div class="field">

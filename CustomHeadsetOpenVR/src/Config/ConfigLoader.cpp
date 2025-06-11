@@ -129,6 +129,24 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["contrastLinear"].is_boolean()){
 				newConfig.customShader.contrastLinear = customShaderData["contrastLinear"].get<bool>();
 			}
+			if(customShaderData["contrastPerEye"].is_boolean()){
+				newConfig.customShader.contrastPerEye = customShaderData["contrastPerEye"].get<bool>();
+			}
+			if(customShaderData["contrastPerEyeLinear"].is_boolean()){
+				newConfig.customShader.contrastPerEyeLinear = customShaderData["contrastPerEyeLinear"].get<bool>();
+			}
+			if(customShaderData["contrastLeft"].is_number()){
+				newConfig.customShader.contrastLeft = customShaderData["contrastLeft"].get<double>();
+			}
+			if(customShaderData["contrastMidpointLeft"].is_number()){
+				newConfig.customShader.contrastMidpointLeft = customShaderData["contrastMidpointLeft"].get<double>();
+			}
+			if(customShaderData["contrastRight"].is_number()){
+				newConfig.customShader.contrastRight = customShaderData["contrastRight"].get<double>();
+			}
+			if(customShaderData["contrastMidpointRight"].is_number()){
+				newConfig.customShader.contrastMidpointRight = customShaderData["contrastMidpointRight"].get<double>();
+			}
 			if(customShaderData["chroma"].is_number()){
 				newConfig.customShader.chroma = customShaderData["chroma"].get<double>();
 			}
@@ -137,6 +155,18 @@ void ConfigLoader::ParseConfig(){
 			}
 			if(customShaderData["subpixelShift"].is_number()){
 				newConfig.customShader.subpixelShift = customShaderData["subpixelShift"].get<double>();
+			}
+			if(customShaderData["disableMuraCorrection"].is_boolean()){
+				newConfig.customShader.disableMuraCorrection = customShaderData["disableMuraCorrection"].get<bool>();
+			}
+			if(customShaderData["disableBlackLevels"].is_boolean()){
+				newConfig.customShader.disableBlackLevels = customShaderData["disableBlackLevels"].get<bool>();
+			}
+			if(customShaderData["srgbColorCorrection"].is_boolean()){
+				newConfig.customShader.srgbColorCorrection = customShaderData["srgbColorCorrection"].get<bool>();
+			}
+			if(customShaderData["srgbColorCorrectionMatrix"].is_array()){
+				newConfig.customShader.srgbColorCorrectionMatrix = customShaderData["srgbColorCorrectionMatrix"].get<std::vector<double>>();
 			}
 		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
@@ -251,9 +281,19 @@ void ConfigLoader::WriteInfo(){
 				{"contrast", defaultSettings.customShader.contrast},
 				{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
 				{"contrastLinear", defaultSettings.customShader.contrastLinear},
+				{"contrastPerEye", defaultSettings.customShader.contrastPerEye},
+				{"contrastPerEyeLinear", defaultSettings.customShader.contrastPerEyeLinear},
+				{"contrastLeft", defaultSettings.customShader.contrastLeft},
+				{"contrastMidpointLeft", defaultSettings.customShader.contrastMidpointLeft},
+				{"contrastRight", defaultSettings.customShader.contrastRight},
+				{"contrastMidpointRight", defaultSettings.customShader.contrastMidpointRight},
 				{"chroma", defaultSettings.customShader.chroma},
 				{"gamma", defaultSettings.customShader.gamma},
 				{"subpixelShift", defaultSettings.customShader.subpixelShift},
+				{"disableMuraCorrection", defaultSettings.customShader.disableMuraCorrection},
+				{"disableBlackLevels", defaultSettings.customShader.disableBlackLevels},
+				{"srgbColorCorrection", defaultSettings.customShader.srgbColorCorrection},
+				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
 			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
