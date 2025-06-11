@@ -335,6 +335,54 @@
       <trans-unit id="4717955562496113560" datatype="html">
         <source>Enable Custom Shader</source>
       </trans-unit>
+      <trans-unit id="1098681868292389579" datatype="html">
+        <source>Disable Black Levels</source>
+      </trans-unit>
+      <trans-unit id="1840263869596556199" datatype="html">
+        <source>Gamma</source>
+      </trans-unit>
+      <trans-unit id="2277196544119208763" datatype="html">
+        <source>Contrast Midpoint Right Eye</source>
+      </trans-unit>
+      <trans-unit id="2761180419597232621" datatype="html">
+        <source>Contrast Right Eye</source>
+      </trans-unit>
+      <trans-unit id="2807925758192464215" datatype="html">
+        <source>Contrast Midpoint</source>
+      </trans-unit>
+      <trans-unit id="5168298581436514754" datatype="html">
+        <source>Chroma</source>
+      </trans-unit>
+      <trans-unit id="6253449614235080530" datatype="html">
+        <source>sRGB Color Correction</source>
+      </trans-unit>
+      <trans-unit id="6308223444121977948" datatype="html">
+        <source>Linear Per Eye Contrast</source>
+      </trans-unit>
+      <trans-unit id="6895974779798464285" datatype="html">
+        <source>Linear Contrast</source>
+      </trans-unit>
+      <trans-unit id="7175389924106202454" datatype="html">
+        <source>Contrast Midpoint Left Eye</source>
+      </trans-unit>
+      <trans-unit id="7561913857043610583" datatype="html">
+        <source>Contrast Left Eye</source>
+      </trans-unit>
+      <trans-unit id="837218066212754994" datatype="html">
+        <source>Per Eye Contrast</source>
+      </trans-unit>
+      <trans-unit id="8390407398188435348" datatype="html">
+        <source>Enable for Other HMDs</source>
+      </trans-unit>
+      <trans-unit id="8550993829997950174" datatype="html">
+        <source>Enable for MeganeX 8K</source>
+      </trans-unit>
+      <trans-unit id="8803107143135131768" datatype="html">
+        <source>Disable Mura Correction</source>
+      </trans-unit>
+      <trans-unit id="9099744393311106892" datatype="html">
+        <source>Contrast</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

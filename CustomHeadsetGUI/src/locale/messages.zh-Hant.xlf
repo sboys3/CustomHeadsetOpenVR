@@ -418,7 +418,7 @@
         <source>Require restart game to apply changes.</source>
         <target state="translated">需要重啟遊戲以套用變更。</target>
       </trans-unit>
-     <trans-unit id="2856900395968306204" datatype="html">
+      <trans-unit id="2856900395968306204" datatype="html">
         <source>Movement Threshold Degrees</source>
         <target state="translated">移動閾值 (度)</target>
       </trans-unit>
@@ -445,6 +445,70 @@
       <trans-unit id="4717955562496113560" datatype="html">
         <source>Enable Custom Shader</source>
         <target state="translated">啟用自訂著色器</target>
+      </trans-unit>
+      <trans-unit id="9099744393311106892" datatype="html">
+        <source>Contrast</source>
+        <target state="translated">對比度</target>
+      </trans-unit>
+      <trans-unit id="2807925758192464215" datatype="html">
+        <source>Contrast Midpoint</source>
+        <target state="translated">對比度中點</target>
+      </trans-unit>
+      <trans-unit id="6895974779798464285" datatype="html">
+        <source>Linear Contrast</source>
+        <target state="translated">線性對比度</target>
+      </trans-unit>
+      <trans-unit id="837218066212754994" datatype="html">
+        <source>Per Eye Contrast</source>
+        <target state="translated">各眼對比度</target>
+      </trans-unit>
+      <trans-unit id="6308223444121977948" datatype="html">
+        <source>Linear Per Eye Contrast</source>
+        <target state="translated">各眼線性對比度</target>
+      </trans-unit>
+      <trans-unit id="7561913857043610583" datatype="html">
+        <source>Contrast Left Eye</source>
+        <target state="translated">左眼對比度</target>
+      </trans-unit>
+      <trans-unit id="7175389924106202454" datatype="html">
+        <source>Contrast Midpoint Left Eye</source>
+        <target state="translated">左眼對比度中點</target>
+      </trans-unit>
+      <trans-unit id="2761180419597232621" datatype="html">
+        <source>Contrast Right Eye</source>
+        <target state="translated">右眼對比度</target>
+      </trans-unit>
+      <trans-unit id="2277196544119208763" datatype="html">
+        <source>Contrast Midpoint Right Eye</source>
+        <target state="translated">右眼對比度中點</target>
+      </trans-unit>
+      <trans-unit id="5168298581436514754" datatype="html">
+        <source>Chroma</source>
+        <target state="translated">色度</target>
+      </trans-unit>
+      <trans-unit id="1840263869596556199" datatype="html">
+        <source>Gamma</source>
+        <target state="translated">Gamma</target>
+      </trans-unit>
+      <trans-unit id="8803107143135131768" datatype="html">
+        <source>Disable Mura Correction</source>
+        <target state="translated">停用 Mura 校正</target>
+      </trans-unit>
+      <trans-unit id="1098681868292389579" datatype="html">
+        <source>Disable Black Levels</source>
+        <target state="translated">停用黑階調整</target>
+      </trans-unit>
+      <trans-unit id="6253449614235080530" datatype="html">
+        <source>sRGB Color Correction</source>
+        <target state="translated">sRGB 色彩校正</target>
+      </trans-unit>
+      <trans-unit id="8550993829997950174" datatype="html">
+        <source>Enable for MeganeX 8K</source>
+        <target state="translated">為 MeganeX 8K 啟用</target>
+      </trans-unit>
+      <trans-unit id="8390407398188435348" datatype="html">
+        <source>Enable for Other HMDs</source>
+        <target state="translated">為其他 HMD 啟用</target>
       </trans-unit>
     </body>
   </file>
