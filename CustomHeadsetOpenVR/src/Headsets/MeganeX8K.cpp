@@ -51,8 +51,6 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDR10_Bool, true);
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDCP14LegacyCompat_Bool, false);
 	
-	// This may need to be tweaked slightly to improve tracking for quick motions
-	// vr::VRProperties()->SetFloatProperty( container, vr::Prop_SecondsFromVsyncToPhotons_Float, 0.011f );
 	
 	
 	// set ipd
@@ -327,6 +325,7 @@ void MeganeX8KShim::UpdateSettings(){
 	SetIPD((float)(driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.f);
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, driverConfig.meganeX8K.secondsFromVsyncToPhotons);
 
 	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea) { // This generally requires that you restart your game for it to update
 		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {

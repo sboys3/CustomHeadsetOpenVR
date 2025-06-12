@@ -89,6 +89,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["renderResolutionMultiplierY"].is_number()){
 				newConfig.meganeX8K.renderResolutionMultiplierY = meganeX8KData["renderResolutionMultiplierY"].get<double>();
 			}
+			if(meganeX8KData["secondsFromVsyncToPhotons"].is_number()){
+				newConfig.meganeX8K.secondsFromVsyncToPhotons = meganeX8KData["secondsFromVsyncToPhotons"].get<double>();
+			}
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
 				if(hiddenAreaJson["enable"].is_boolean()){ newHiddenArea.enable = hiddenAreaJson["enable"].get<bool>(); }
@@ -256,6 +259,7 @@ void ConfigLoader::WriteInfo(){
 				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
 				{"renderResolutionMultiplierX", defaultSettings.meganeX8K.renderResolutionMultiplierX},
 				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
+				{"secondsFromVsyncToPhotons", defaultSettings.meganeX8K.secondsFromVsyncToPhotons},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},

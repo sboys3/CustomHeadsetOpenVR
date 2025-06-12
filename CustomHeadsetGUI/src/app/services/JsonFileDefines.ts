@@ -124,6 +124,8 @@ export type MeganeX8KConfig = {
   renderResolutionMultiplierX: number;
 
   renderResolutionMultiplierY: number;
+  
+  secondsFromVsyncToPhotons: number
 
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;

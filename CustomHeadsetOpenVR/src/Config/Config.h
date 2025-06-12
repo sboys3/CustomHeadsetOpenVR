@@ -117,6 +117,8 @@ public:
 		double renderResolutionMultiplierX = 1.0;
 		// multiply 100% render resolution height
 		double renderResolutionMultiplierY = 1.0;
+		// seconds of latency to the display
+		double secondsFromVsyncToPhotons = 0.011;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
