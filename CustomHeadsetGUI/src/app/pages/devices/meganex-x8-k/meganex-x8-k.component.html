@@ -4,6 +4,8 @@
     <app-field-note type="steamvrRestart" />
     <div class="title">
         <span i18n>Enable MeganeX 8K Driver</span>
+        <app-field-tip i18n-info
+            info="When enabled, the Custom Headset driver will run the MeganeX superlight 8K." />
         <app-reset-button [canReset]="settings.enable!=defaults.enable"
             (resetClick)="resetOption('enable')"></app-reset-button>
     </div>
@@ -29,6 +31,8 @@
     <div class="title">
         <span i18n>Resolution</span>
         <app-field-note type="steamvrRestart" />
+        <app-field-tip i18n-info
+            info="The resolution to run the DisplayPort connection at." />
         <app-reset-button [canReset]="resolutionModel!=defaults.resolutionX"
             (resetClick)="resetResolution()"></app-reset-button>
     </div>
@@ -43,6 +47,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Profile</span>
+        <app-field-tip i18n-info
+            info="The distortion profile to use for the headset. See the distortion tab for more options." />
         <app-reset-button [canReset]="settings.distortionProfile!=defaults.distortionProfile"
             (resetClick)="resetOption('distortionProfile')"></app-reset-button>
     </div>
@@ -57,6 +63,8 @@
 <div class="field">
     <div class="title">
         <span i18n>IPD</span>
+        <app-field-tip i18n-info
+            info="The inter pupillary distance of the virtual cameras in SteamVR applications." />
         <app-reset-button [canReset]="settings.ipd!=defaults.ipd"
             (resetClick)="resetOption('ipd')"></app-reset-button>
     </div>
@@ -70,6 +78,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Max Fov Horizontal</span>
+        <app-field-tip i18n-info
+            info="The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can't fit on the screen after distortion." />
         <app-reset-button [canReset]="settings.maxFovX!=defaults.maxFovX"
             (resetClick)="resetOption('maxFovX')"></app-reset-button>
     </div>
@@ -83,6 +93,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Max Fov Vertical</span>
+        <app-field-tip i18n-info
+            info="The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can't fit on the screen after distortion." />
         <app-reset-button [canReset]="settings.maxFovY!=defaults.maxFovY"
             (resetClick)="resetOption('maxFovY')"></app-reset-button>
     </div>
@@ -96,6 +108,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Resolution Info</span>
+        <app-field-tip i18n-info
+            info="Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver." />
     </div>
     <div class="control">
         <button mat-raised-button (click)="toggleResolutionDisplay()">
@@ -140,6 +154,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Zoom</span>
+        <app-field-tip i18n-info
+            info="Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping." />
         <app-reset-button [canReset]="settings.distortionZoom!=defaults.distortionZoom"
             (resetClick)="resetOption('distortionZoom')"></app-reset-button>
     </div>
@@ -155,13 +171,15 @@
     <div class="section-title">
         <span i18n>Stationary Dimming Settings</span>
         <app-field-tip i18n-info
-            info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset's rotation remains under the 'Movement Threshold' for the duration of the 'Movement Time'." />
+            info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold'." />
     </div>
 </div>
 @if(defaults.stationaryDimming){
 <div class="field">
     <div class="title">
         <span i18n>Enable Stationary Dimming</span>
+        <app-field-tip i18n-info
+            info="Enables or disables the stationary dimming feature." />
         <app-reset-button [canReset]="settings.stationaryDimming.enable!=defaults.stationaryDimming.enable"
             (resetClick)="nested('stationaryDimming').resetOption('enable')"></app-reset-button>
     </div>
@@ -179,6 +197,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Movement Threshold Degrees</span>
+        <app-field-tip i18n-info
+            info="The minimum amount of rotation in degrees that will reset the stationary dimming timer." />
         <app-reset-button
             [canReset]="settings.stationaryDimming.movementThreshold!=defaults.stationaryDimming.movementThreshold"
             (resetClick)="nested('stationaryDimming').resetOption('movementThreshold')"></app-reset-button>
@@ -195,6 +215,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Movement Time</span>
+        <app-field-tip i18n-info
+            info="The amount of time in seconds that the display will remain bright after movement." />
         <app-reset-button
             [canReset]="settings.stationaryDimming.movementTime!=defaults.stationaryDimming.movementTime"
             (resetClick)="nested('stationaryDimming').resetOption('movementTime')"></app-reset-button>
@@ -211,6 +233,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Dim Brightness Percent</span>
+        <app-field-tip i18n-info
+            info="The minimum brightness percentage that the display will dim to when stationary." />
         <app-reset-button
             [canReset]="settings.stationaryDimming.dimBrightnessPercent!=defaults.stationaryDimming.dimBrightnessPercent"
             (resetClick)="nested('stationaryDimming').resetOption('dimBrightnessPercent')"></app-reset-button>
@@ -227,6 +251,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Dim Seconds</span>
+        <app-field-tip i18n-info
+            info="The amount of time it takes to go from bright to dim." />
         <app-reset-button [canReset]="settings.stationaryDimming.dimSeconds!=defaults.stationaryDimming.dimSeconds"
             (resetClick)="nested('stationaryDimming').resetOption('dimSeconds')"></app-reset-button>
     </div>
@@ -242,6 +268,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Brighten Seconds</span>
+        <app-field-tip i18n-info
+            info="The amount of time it takes to go from dim to bright." />
         <app-reset-button
             [canReset]="settings.stationaryDimming.brightenSeconds!=defaults.stationaryDimming.brightenSeconds"
             (resetClick)="nested('stationaryDimming').resetOption('brightenSeconds')"></app-reset-button>
@@ -269,6 +297,8 @@
     <div class="title">
         <span i18n>Enable Hidden Area Meshes</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="Enables or disables the hidden area meshes." />
         <app-reset-button [canReset]="settings.hiddenArea.enable!=defaults.hiddenArea.enable"
             (resetClick)="nested('hiddenArea').resetOption('enable')"></app-reset-button>
     </div>
@@ -301,6 +331,8 @@
     <div class="title">
         <span i18n>Radius Top Inner</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="The radius of the visible area at the top of the hidden area mesh near your nose." />
         <app-reset-button [canReset]="settings.hiddenArea.radiusTopInner!=defaults.hiddenArea.radiusTopInner"
             (resetClick)="nested('hiddenArea').resetOption('radiusTopInner')"></app-reset-button>
     </div>
@@ -317,6 +349,8 @@
     <div class="title">
         <span i18n>Radius Bottom Inner</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="The radius of the visible area at the bottom of the hidden area mesh near your nose." />
         <app-reset-button [canReset]="settings.hiddenArea.radiusBottomInner!=defaults.hiddenArea.radiusBottomInner"
             (resetClick)="nested('hiddenArea').resetOption('radiusBottomInner')"></app-reset-button>
     </div>
@@ -333,6 +367,8 @@
     <div class="title">
         <span i18n>Radius Top Outer</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="The radius of the visible area at the top of the hidden area mesh near your ears." />
         <app-reset-button [canReset]="settings.hiddenArea.radiusTopOuter!=defaults.hiddenArea.radiusTopOuter"
             (resetClick)="nested('hiddenArea').resetOption('radiusTopOuter')"></app-reset-button>
     </div>
@@ -349,6 +385,8 @@
     <div class="title">
         <span i18n>Radius Bottom Outer</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="The radius of the visible area at the bottom of the hidden area mesh near your ears." />
         <app-reset-button [canReset]="settings.hiddenArea.radiusBottomOuter!=defaults.hiddenArea.radiusBottomOuter"
             (resetClick)="nested('hiddenArea').resetOption('radiusBottomOuter')"></app-reset-button>
     </div>
@@ -365,6 +403,8 @@
     <div class="title">
         <span i18n>Mesh Detail</span>
         <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="The number of vertices used to create each section of the hidden area mesh. Higher values increase the smoothness of the mesh." />
         <app-reset-button [canReset]="settings.hiddenArea.detailLevel!=defaults.hiddenArea.detailLevel"
             (resetClick)="nested('hiddenArea').resetOption('detailLevel')"></app-reset-button>
     </div>
@@ -383,12 +423,16 @@
 <div class="field">
     <div class="section-title">
         <span i18n>Advanced Settings</span>
+        <app-field-tip i18n-info
+            info="These settings have defaults that should not need to be changed but are provided for experimentation." />
     </div>
 </div>
 
 <div class="field">
     <div class="title">
         <span i18n>Black Level</span>
+        <app-field-tip i18n-info
+            info="The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets." />
         <app-reset-button [canReset]="settings.blackLevel!=defaults.blackLevel"
             (resetClick)="resetOption('blackLevel')"></app-reset-button>
     </div>
@@ -403,6 +447,8 @@
 <div class="field">
     <div class="title">
         <span i18n>IPD Offset</span>
+        <app-field-tip i18n-info
+            info="This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon." />
         <app-reset-button [canReset]="settings.ipdOffset!=defaults.ipdOffset"
             (resetClick)="resetOption('ipdOffset')"></app-reset-button>
     </div>
@@ -417,6 +463,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Subpixel Shift</span>
+        <app-field-tip i18n-info
+            info="Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel." />
         <app-reset-button [canReset]="settings.subpixelShift!=defaults.subpixelShift"
             (resetClick)="resetOption('subpixelShift')"></app-reset-button>
     </div>
@@ -433,6 +481,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Distortion Mesh Resolution</span>
+        <app-field-tip i18n-info
+            info="The resolution of the distortion mesh. Higher values prevent small wavy artifacts in the corners of the lenses but makes other settings laggier. The default pretty much eliminates the artifacts." />
         <app-reset-button [canReset]="settings.distortionMeshResolution!=defaults.distortionMeshResolution"
             (resetClick)="resetOption('distortionMeshResolution')"></app-reset-button>
     </div>
@@ -449,6 +499,8 @@
 <div class="field">
     <div class="title">
         <span i18n>FOV Burn-In Prevention</span>
+        <app-field-tip i18n-info
+            info="Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov." />
         <app-reset-button [canReset]="settings.fovBurnInPrevention!=defaults.fovBurnInPrevention"
             (resetClick)="resetOption('fovBurnInPrevention')"></app-reset-button>
     </div>
@@ -460,6 +512,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Render Resolution Width Multiplier</span>
+        <app-field-tip i18n-info
+            info="The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider." />
         <app-reset-button [canReset]="settings.renderResolutionMultiplierX!=defaults.renderResolutionMultiplierX"
             (resetClick)="resetOption('renderResolutionMultiplierX')"></app-reset-button>
     </div>
@@ -475,6 +529,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Render Resolution Height Multiplier</span>
+        <app-field-tip i18n-info
+            info="The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider." />
         <app-reset-button [canReset]="settings.renderResolutionMultiplierY!=defaults.renderResolutionMultiplierY"
             (resetClick)="resetOption('renderResolutionMultiplierY')"></app-reset-button>
     </div>
@@ -490,6 +546,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Seconds From VSync to Photons</span>
+        <app-field-tip i18n-info
+            info="The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction." />
         <app-reset-button [canReset]="settings.secondsFromVsyncToPhotons!=defaults.secondsFromVsyncToPhotons"
             (resetClick)="resetOption('secondsFromVsyncToPhotons')"></app-reset-button>
     </div>

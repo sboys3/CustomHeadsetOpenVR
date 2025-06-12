@@ -3,12 +3,16 @@
 <div class="field">
     <div class="section-title">
         <span i18n>Custom Shader</span>
+        <app-field-tip i18n-info
+            info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization." />
     </div>
 </div>
 @if(defaults.customShader){
 <div class="field">
     <div class="title">
         <span i18n>Enable Custom Shader</span>
+        <app-field-tip i18n-info
+            info="Enables the custom shader. This will replace shaders in SteamVR." />
         <app-reset-button [canReset]="settings.customShader.enable!=defaults.customShader.enable"
             (resetClick)="nested('customShader').resetOption('enable')"></app-reset-button>
     </div>
@@ -25,6 +29,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Contrast</span>
+        <app-field-tip i18n-info
+            info="Adjusts the contrast of the image. When higher than 50, the colors in the image will be expanded away from the midpoint. When lower than 50, the colors in the image will be contracted towards the midpoint." />
         <app-reset-button
             [canReset]="settings.customShader.contrast!=defaults.customShader.contrast"
             (resetClick)="nested('customShader').resetOption('contrast')"></app-reset-button>
@@ -41,6 +47,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Contrast Midpoint</span>
+        <app-field-tip i18n-info
+            info="Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect." />
         <app-reset-button
             [canReset]="settings.customShader.contrastMidpoint!=defaults.customShader.contrastMidpoint"
             (resetClick)="nested('customShader').resetOption('contrastMidpoint')"></app-reset-button>
@@ -57,6 +65,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Linear Contrast</span>
+        <app-field-tip i18n-info
+            info="Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects." />
         <app-reset-button
             [canReset]="settings.customShader.contrastLinear!=defaults.customShader.contrastLinear"
             (resetClick)="nested('customShader').resetOption('contrastLinear')"></app-reset-button>
@@ -69,6 +79,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Per Eye Contrast</span>
+        <app-field-tip i18n-info
+            info="Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast." />
         <app-reset-button
             [canReset]="settings.customShader.contrastPerEye!=defaults.customShader.contrastPerEye"
             (resetClick)="nested('customShader').resetOption('contrastPerEye')"></app-reset-button>
@@ -159,6 +171,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Chroma</span>
+        <app-field-tip i18n-info
+            info="Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale." />
         <app-reset-button [canReset]="settings.customShader.chroma!=defaults.customShader.chroma"
             (resetClick)="nested('customShader').resetOption('chroma')"></app-reset-button>
     </div>
@@ -174,6 +188,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Gamma</span>
+        <app-field-tip i18n-info
+            info="Adjusts the gamma of the image. This controls brightness is mapped to the display's brightness. Higher gamma values make darker areas of the image brighter." />
         <app-reset-button [canReset]="settings.customShader.gamma!=defaults.customShader.gamma"
             (resetClick)="nested('customShader').resetOption('gamma')"></app-reset-button>
     </div>
@@ -189,6 +205,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Subpixel Shift</span>
+        <app-field-tip i18n-info
+            info="Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable." />
         <app-reset-button [canReset]="settings.customShader.subpixelShift!=defaults.customShader.subpixelShift"
             (resetClick)="nested('customShader').resetOption('subpixelShift')"></app-reset-button>
     </div>
@@ -200,6 +218,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Disable Mura Correction</span>
+        <app-field-tip i18n-info
+            info="This forcibly disables the mura correction on any headset that has it like the Vive." />
         <app-reset-button [canReset]="settings.customShader.disableMuraCorrection!=defaults.customShader.disableMuraCorrection"
             (resetClick)="nested('customShader').resetOption('disableMuraCorrection')"></app-reset-button>
     </div>
@@ -211,6 +231,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Disable Black Levels</span>
+        <app-field-tip i18n-info
+            info="Forces the black level clamp to be disabled. This can make headsets like the Vive darker at the expense of more smearing." />
         <app-reset-button [canReset]="settings.customShader.disableBlackLevels!=defaults.customShader.disableBlackLevels"
             (resetClick)="nested('customShader').resetOption('disableBlackLevels')"></app-reset-button>
     </div>
@@ -222,6 +244,8 @@
 <div class="field">
     <div class="title">
         <span i18n>sRGB Color Correction</span>
+        <app-field-tip i18n-info
+            info="Enables sRGB color correction. The MeganeX is a Display-P3 display and normally colors are oversaturated by mapping the srgb outputs of applications to the full color space. When this is enabled, only the srgb portion of the display is used, which can make colors look more accurate." />
         <app-reset-button [canReset]="settings.customShader.srgbColorCorrection!=defaults.customShader.srgbColorCorrection"
             (resetClick)="nested('customShader').resetOption('srgbColorCorrection')"></app-reset-button>
     </div>
@@ -233,6 +257,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Enable for MeganeX 8K</span>
+        <app-field-tip i18n-info
+            info="Enables the custom shader for the MeganeX 8K." />
         <app-reset-button
             [canReset]="settings.customShader.enableForMeganeX8K!=defaults.customShader.enableForMeganeX8K"
             (resetClick)="nested('customShader').resetOption('enableForMeganeX8K')"></app-reset-button>
@@ -245,6 +271,8 @@
 <div class="field">
     <div class="title">
         <span i18n>Enable for Other HMDs</span>
+        <app-field-tip i18n-info
+            info="Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won't work yet." />
         <app-reset-button
             [canReset]="settings.customShader.enableForOther!=defaults.customShader.enableForOther"
             (resetClick)="nested('customShader').resetOption('enableForOther')"></app-reset-button>
