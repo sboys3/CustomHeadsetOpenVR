@@ -44,10 +44,12 @@ cbuffer DistortConstantBuffer_t : register(b0) {
 	uint g_nEye : packoffset(c16.x);
 };
 
+#ifndef NO_DISTORTION 
 cbuffer SceneTextureIndexConstantBuffer_t : register(b2) {
 	uint g_nSceneTextureIndex : packoffset(c0.x);
 	Unnamed g_SceneTextureData[3] : packoffset(c1.x);
 };
+#endif
 
 
 SamplerState g_sScene : register(s0); // can't disambiguate
@@ -56,7 +58,9 @@ SamplerState g_sScene : register(s0); // can't disambiguate
 Texture2D<float4> g_tScene0 : register(t0);
 Texture2D<float4> g_tScene1 : register(t1);
 Texture2D<float4> g_tScene2 : register(t2);
+#ifndef NO_LAYER
 Texture2D<float4> g_tLayer : register(t4);
+#endif
 
 #ifdef MURA_CORRECTION
 Texture2D<float4> g_tMC : register(t5);
@@ -68,13 +72,18 @@ Texture2D<float4> g_tGhostCorrectionTable : register(t7);
 
 
 
-
+#define UV_TYPE float4
+#ifdef NO_LAYER
+#define UV_TYPE float2
+#endif
 
 struct InputStruct {
 	float4 Position : SV_Position;
-	float4 uv1 : TEXCOORD0;
-	float4 uv2 : TEXCOORD1;
-	float4 uv3 : TEXCOORD2;
+	UV_TYPE uv1 : TEXCOORD0;
+	#ifndef NO_DISTORTION 
+	UV_TYPE uv2 : TEXCOORD1;
+	UV_TYPE uv3 : TEXCOORD2;
+	#endif
 	uint param4 : BLENDINDICES;
 };
 
@@ -105,6 +114,7 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	
+	#ifndef NO_DISTORTION
 	
 	float2 uvDx = ddx(IN.uv2.xy);
 	float2 uvDy = ddy(IN.uv2.xy);
@@ -167,6 +177,9 @@ OutputStruct main(in InputStruct IN)
 	}
 	#endif
 	
+	#endif // NO_DISTORTION
+	
+	
 	// if(IN.uv1.x < 0 || IN.uv1.x > 1 || IN.uv1.y < 0 || IN.uv1.y > 1 || IN.uv2.x < 0 || IN.uv2.x > 1 || IN.uv2.y < 0 || IN.uv2.y > 1 || IN.uv3.x < 0 || IN.uv3.x > 1 || IN.uv3.y < 0 || IN.uv3.y > 1){
 	// 	OUT.Target0 = float4(0,0,0,1);
 	// 	return OUT;
@@ -174,6 +187,7 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	float4 col = 1;
+	#ifndef NO_DISTORTION
 	[forcecase] switch (IN.param4){
 		case 0:{
 			col.x = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv1.xy)).x;
@@ -193,26 +207,66 @@ OutputStruct main(in InputStruct IN)
 			col.z = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv3.xy)).z;
 		break;
 	}}
+	#else
+	[forcecase] switch (IN.param4){
+		case 0:{
+			col = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv1.xy));
+			break;
+		}
+		case 1:{
+			col = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv1.xy));
+			break;
+		}
+		default:{
+			col = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv1.xy));
+		break;
+	}}
+	#endif
 	
 	if(g_bSceneTextureRequiresGammaToLinearConversion != 0){
 		// gamma to linear conversion
 		col.rgb = pow(col.rgb, 2.2); 
 	}
 	
+	#ifndef NO_DISTORTION 
+	// clip the edges of the texture as sometimes the UVs only cover a section of a larger texture
+	float4 textureRange = g_SceneTextureData[IN.param4].eye[g_nEye].matTexDetails._m20_m21_m22_m23;
+	float2 redInRange = abs(IN.uv1.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
+	float2 greenInRange = abs(IN.uv2.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
+	float2 blueInRange = abs(IN.uv3.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
+	float3 inRangeMultiplier = float3(redInRange.x * redInRange.y, greenInRange.x * greenInRange.y, blueInRange.x * blueInRange.y);
+	// col.rgb = col.rgb * inRangeMultiplier;
+	inRangeMultiplier = 1 - inRangeMultiplier;
+	#endif
 	
 	
+	#ifndef NO_LAYER
 	// sample and combine existing overlay
 	float2 layerRA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv1.zw)).ra;
 	float2 layerGA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv2.zw)).ga;
 	float2 layerBA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv3.zw)).ba;
+	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
+	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);
 	
 	// col.r = lerp(col.r, layerRA.x, layerRA.y);
 	// col.g = lerp(col.g, layerGA.x, layerGA.y);
 	// col.b = lerp(col.b, layerBA.x, layerBA.y);
 	// alpha might be premultiplied
-	col.r = col.r * (1 - layerRA.y) + layerRA.x;
-	col.g = col.g * (1 - layerGA.y) + layerGA.x;
-	col.b = col.b * (1 - layerBA.y) + layerBA.x;
+	// col.r = col.r * (1 - layerRA.y) + layerRA.x;
+	// col.g = col.g * (1 - layerGA.y) + layerGA.x;
+	// col.b = col.b * (1 - layerBA.y) + layerBA.x;
+	col.rgb = col.rgb * (1 - layerAlphas) + layerColors;
+	#endif
+	
+	#ifndef NO_DISTORTION 
+	#ifndef NO_LAYER
+	// make the color very black if there is no overlay and it is outside the uv range
+	// this prevents effects from brightening up the outside of the texture.
+	col.rgb += layerAlphas > 0 ? 0 : -1000 * inRangeMultiplier;
+	#else
+	col.rgb += -1000 * inRangeMultiplier
+	#endif
+	#endif
 	
 	// contrast before gamma
 	#ifdef CONTRAST_LINEAR
@@ -246,12 +300,15 @@ OutputStruct main(in InputStruct IN)
 	col *= g_vColorPrescaleLinear;
 	
 	
+	// gamma is not done if this is not a layer shader
+	#ifndef NO_LAYER
 	// srgb has a small linear section at the beginning that decreases the resolution of black colors
 	float3 linearColor = col.rgb;
 	bool3 cutoff = linearColor > 0.0031308;
-    float3 linearSection = linearColor * 12.92;
-    float3 gammaSection = pow(linearColor, 1.0 / 2.4) * 1.055 - 0.055;
+	float3 linearSection = linearColor * 12.92;
+	float3 gammaSection = pow(linearColor, 1.0 / 2.4) * 1.055 - 0.055;
 	col.rgb = lerp(linearSection, gammaSection, cutoff);
+	#endif
 	
 	// allow GAMMA to modify the srgb curve
 	#ifdef GAMMA
@@ -312,19 +369,18 @@ OutputStruct main(in InputStruct IN)
 
 	
 	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
-	// prefer the game uvs if they are non zero
-	float2 uv = IN.uv1.zw;
-	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
-		col.r = 0;
-	}
-	uv = IN.uv2.zw;
-	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
-		col.g = 0;
-	}
-	uv = IN.uv3.zw;
-	if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
-		col.b = 0;
-	}
+	// float2 uv = IN.uv1.zw;
+	// if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+	// 	col.r = 0;
+	// }
+	// uv = IN.uv2.zw;
+	// if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+	// 	col.g = 0;
+	// }
+	// uv = IN.uv3.zw;
+	// if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){
+	// 	col.b = 0;
+	// }
 	
 	// odd pixels
 	// col.rgb = outputPixelOdd ? 0.5 : 0.2;

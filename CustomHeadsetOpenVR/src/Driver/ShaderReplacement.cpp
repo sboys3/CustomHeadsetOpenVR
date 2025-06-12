@@ -106,7 +106,7 @@ static std::map<ConfigLoader::HeadsetType, std::vector<double>> srgbColorCorrect
 };
 
 // compile the new distortion shader from source
-Bytecode DistortionShader(bool muraCorrection = false){
+Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false){
 	if(!IsCustomShaderEnabled()){
 		// don't replace
 		return {nullptr, 0};
@@ -237,9 +237,15 @@ Bytecode DistortionShader(bool muraCorrection = false){
 			defines[definesCount++] = {"COLOR_CORRECTION_MATRIX", colorMatrixString.c_str()};
 		}
 	}
+	if(noDistortion){
+		defines[definesCount++] = {"NO_DISTORTION", "1"};
+		defines[definesCount++] = {"NO_LAYER", "1"};
+	}
 	
 	defines[definesCount++] = {nullptr, nullptr}; // end of array
 	
+	
+	std::string errorPath = fullPath + "_error" + (muraCorrection ? "_mura" : "") + (noDistortion ? "_nd" : "") + ".txt";
 	
 	// compile shader from hlsl using D3DCompileFromFile
 	ID3DBlob* shaderBlob = nullptr;
@@ -259,7 +265,6 @@ Bytecode DistortionShader(bool muraCorrection = false){
 		if(errorBlob){
 			DriverLog("Error: %s", (char*)errorBlob->GetBufferPointer());
 			// output to file beside shader
-			std::string errorPath = fullPath + "_error.txt";
 			FILE* errorFile = fopen(errorPath.c_str(), "wb+");
 			if(errorFile){
 				fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize() - 1, errorFile);
@@ -273,7 +278,6 @@ Bytecode DistortionShader(bool muraCorrection = false){
 		memcpy(bytecode.data, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
 		shaderBlob->Release();
 		// delete error file
-		std::string errorPath = fullPath + "_error.txt";;
 		remove(errorPath.c_str());
 		return bytecode;
 	}
@@ -292,6 +296,11 @@ Bytecode DistortionShaderMuraCorrection(){
 		return {nullptr, 0};
 	}
 	return DistortionShader(true);
+}
+
+// same as DistortionShader but with no distortion enabled
+Bytecode DistortionShaderNoDistortion(){
+	return DistortionShader(false, true);
 }
 
 
@@ -371,6 +380,10 @@ void ShaderReplacement::Initialize(){
 	// LogShaderIdentifier(GetExistingShaderIdentifier("distort_ps_layered.fxo"), 32);
 	shaderReplacements[GetExistingShaderIdentifier("distort_ps_layered.fxo")] = DistortionShaderPlain;
 	shaderReplacements[GetExistingShaderIdentifier("distort_ps_layered_mc.fxo")] = DistortionShaderMuraCorrection;
+	// this is for headsets with custom compositors
+	// this only works for games when there is an overlay open, otherwise there the textures never seem to pass through a shader
+	// a transparent overlay could be opened to force this
+	shaderReplacements[GetExistingShaderIdentifier("distort_ps_achromatic_nd.fxo")] = DistortionShaderNoDistortion;
 	
 	#ifdef _WIN32
 		// startup winsock for websocket connections
