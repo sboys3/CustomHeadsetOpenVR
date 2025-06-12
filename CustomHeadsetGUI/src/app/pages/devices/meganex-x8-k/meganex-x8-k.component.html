@@ -395,7 +395,7 @@
     <div class="control">
         <input matInput [(ngModel)]="settings.blackLevel" step="0.001" (ngModelChange)="saveConfigSettings()"
             type="number">
-        <mat-slider max="1" min="0" step="0.001" showTickMarks>
+        <mat-slider max="1" min="0" step="0.001" >
             <input matSliderThumb [(ngModel)]="settings.blackLevel" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
