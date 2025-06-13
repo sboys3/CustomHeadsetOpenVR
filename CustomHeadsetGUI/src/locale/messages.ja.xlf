@@ -398,10 +398,6 @@
         <source>Movement Time</source>
         <target state="translated">静止時間</target>
       </trans-unit>
-      <trans-unit id="7653815630536291994" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
-        <target state="translated">ヘッドセットが静止している際に自動で画面を減光し、ディスプレイパネルを保護して「焼き付き」を防ぐ機能です。デバイスの回転が「静止時間」中、「移動しきい値」で設定した角度を下回ったままだと、減光が開始されます。</target>
-      </trans-unit>
       <trans-unit id="49266763300376978" datatype="html">
         <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
         <target state="translated">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。</target>
@@ -510,6 +506,85 @@
         <source>Enable for Other HMDs</source>
         <target state="translated">その他のHMD向けに有効化</target>
       </trans-unit>
+<trans-unit id="5832230287995382782" datatype="html">
+        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
+        <target state="translated">SteamVRのコンポジターにある歪みシェーダーを、より多くのカスタマイズを可能にするカスタムシェーダーに置き換えます。</target>
+      </trans-unit>
+      <trans-unit id="7634542220919712546" datatype="html">
+        <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
+        <target state="translated">カスタムシェーダーを有効にします。これはSteamVR内のシェーダーを置き換えます。</target>
+      </trans-unit>
+      <trans-unit id="4398666323666535983" datatype="html">
+        <source>Adjusts the contrast of the image. When higher than 50, the colors in the image will be expanded away from the midpoint. When lower than 50, the colors in the image will be contracted towards the midpoint.</source>
+        <target state="translated">画像のコントラストを調整します。50より大きい場合、色は中点から離れるように拡張されます。50より小さい場合、色は中点に向かって収縮します。</target>
+      </trans-unit>
+      <trans-unit id="7562807646184458622" datatype="html">
+        <source>Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect.</source>
+        <target state="translated">コントラストの中点を調整します。これはコントラスト調整の中心点を制御します。例えば、この値を100にすると全ての色が白を基準に変化し、0にすると黒を基準に変化するため、全体を明るくしたり暗くしたりする効果が得られます。</target>
+      </trans-unit>
+      <trans-unit id="6143642524180911701" datatype="html">
+        <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
+        <target state="translated">ガンマ補正の後ではなく前に、リニアコントラストを画像に適用します。通常、このオプションをオフにした方がコントラストの見栄えは良くなりますが、一部のエフェクトには役立つ場合があります。</target>
+      </trans-unit>
+      <trans-unit id="1771517419511821401" datatype="html">
+        <source>Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast.</source>
+        <target state="translated">ディスプレイの個体差を補正するために、左右の目それぞれに個別のコントラストを適用します。この設定は上記のコントラスト設定に加えて適用されます。</target>
+      </trans-unit>
+      <trans-unit id="273263793213207360" datatype="html">
+        <source>Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
+        <target state="translated">画像の彩度を調整します。50より高い場合、色がより強調されます。0まで下げると、画像はグレースケールになります。</target>
+      </trans-unit>
+      <trans-unit id="1101953333251248565" datatype="html">
+        <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
+        <target state="translated">画像のガンマを調整します。これは輝度がディスプレイの明るさにどのようにマッピングされるかを制御します。ガンマ値が高いほど、画像の暗い部分が明るくなります。</target>
+      </trans-unit>
+      <trans-unit id="1324452384340955807" datatype="html">
+        <source>Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
+        <target state="translated">対応するヘッドセットディスプレイのサブピクセルをずらし、シャープネスを向上させます。MeganeXでは特に効果が大きく、1:1解像度の300%以上のディテールを引き出すことができます。Viveも対応していますが、改善効果はそれほど目立ちません。</target>
+      </trans-unit>
+      <trans-unit id="5868413981442823243" datatype="html">
+        <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
+        <target state="translated">Viveなど、ムラ補正機能を搭載しているヘッドセットで、その機能を強制的に無効化します。</target>
+      </trans-unit>
+      <trans-unit id="3158413943708140326" datatype="html">
+        <source>Forces the black level clamp to be disabled. This can make headsets like the Vive darker at the expense of more smearing.</source>
+        <target state="translated">黒レベルのクランプを強制的に無効にします。これにより、Viveのようなヘッドセットでは、より多くのスミア（引きずり）が発生する代わりに、黒をより暗く表現できます。</target>
+      </trans-unit>
+      <trans-unit id="5106755418798621895" datatype="html">
+        <source>Enables sRGB color correction. The MeganeX is a Display-P3 display and normally colors are oversaturated by mapping the srgb outputs of applications to the full color space. When this is enabled, only the srgb portion of the display is used, which can make colors look more accurate.</source>
+        <target state="translated">sRGB色補正を有効にします。MeganeXはDisplay-P3対応ディスプレイであり、通常、アプリケーションのsRGB出力をフルカラースペースにマッピングするため、色が過飽和になります。これを有効にすると、ディスプレイのsRGB部分のみが使用され、色がより正確に見えるようになります。</target>
+      </trans-unit>
+      <trans-unit id="2336565079874618391" datatype="html">
+        <source>Enables the custom shader for the MeganeX 8K.</source>
+        <target state="translated">MeganeX 8K用のカスタムシェーダーを有効にします。</target>
+      </trans-unit>
+      <trans-unit id="7080815701953186727" datatype="html">
+        <source>Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won&apos;t work yet.</source>
+        <target state="translated">その他すべてのHMD用のカスタムシェーダーを有効にします。SteamVRにネイティブ対応していないヘッドセットは、まだ動作しない可能性があります。</target>
+      </trans-unit>
+      <trans-unit id="2210953895431071691" datatype="html">
+        <source>When enabled, the Custom Headset driver will run the MeganeX superlight 8K.</source>
+        <target state="translated">有効にすると、カスタムヘッドセットドライバーがMeganeX superlight 8Kとして動作します。</target>
+      </trans-unit>
+      <trans-unit id="8242705724014165192" datatype="html">
+        <source>The resolution to run the DisplayPort connection at.</source>
+        <target state="translated">DisplayPort接続で実行する解像度。</target>
+      </trans-unit>
+      <trans-unit id="7471123579619673182" datatype="html">
+        <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
+        <target state="translated">ヘッドセットに使用する歪みプロファイル。「歪み」タブで他のオプションを確認できます。</target>
+      </trans-unit>
+      <trans-unit id="3918842139353452154" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications.</source>
+        <target state="translated">SteamVRアプリケーションにおける仮想カメラの瞳孔間距離（IPD）。</target>
+      </trans-unit>
+      <trans-unit id="5943615683012338742" datatype="html">
+        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+        <target state="translated">ヘッドセットで水平方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。</target>
+      </trans-unit>
+      <trans-unit id="2236616074560208736" datatype="html">
+        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+        <target state="translated">ヘッドセットで垂直方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。</target>
     </body>
   </file>
 </xliff>

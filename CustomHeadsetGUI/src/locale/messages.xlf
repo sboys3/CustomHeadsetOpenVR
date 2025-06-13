@@ -299,9 +299,6 @@
       <trans-unit id="6494825378753268291" datatype="html">
         <source>Stationary Dimming Settings</source>
       </trans-unit>
-      <trans-unit id="7653815630536291994" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
-      </trans-unit>
       <trans-unit id="2421348343423477743" datatype="html">
         <source>Inverts the meshes to only show the areas that will be hidden.</source>
       </trans-unit>
@@ -382,6 +379,141 @@
       </trans-unit>
       <trans-unit id="9099744393311106892" datatype="html">
         <source>Contrast</source>
+      </trans-unit>
+      <trans-unit id="1013018539656511103" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your nose.</source>
+      </trans-unit>
+      <trans-unit id="1101953333251248565" datatype="html">
+        <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
+      </trans-unit>
+      <trans-unit id="1293521252153505574" datatype="html">
+        <source>The minimum amount of rotation in degrees that will reset the stationary dimming timer.</source>
+      </trans-unit>
+      <trans-unit id="1324452384340955807" datatype="html">
+        <source>Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
+      </trans-unit>
+      <trans-unit id="1488156220085285219" datatype="html">
+        <source>The amount of time it takes to go from bright to dim.</source>
+      </trans-unit>
+      <trans-unit id="1651122445619194508" datatype="html">
+        <source>These settings have defaults that should not need to be changed but are provided for experimentation.</source>
+      </trans-unit>
+      <trans-unit id="1771517419511821401" datatype="html">
+        <source>Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast.</source>
+      </trans-unit>
+      <trans-unit id="1865011951137718165" datatype="html">
+        <source>The amount of time in seconds that the display will remain bright after movement.</source>
+      </trans-unit>
+      <trans-unit id="2210953895431071691" datatype="html">
+        <source>When enabled, the Custom Headset driver will run the MeganeX superlight 8K.</source>
+      </trans-unit>
+      <trans-unit id="2236616074560208736" datatype="html">
+        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+      </trans-unit>
+      <trans-unit id="2261913743249257236" datatype="html">
+        <source>The minimum brightness percentage that the display will dim to when stationary.</source>
+      </trans-unit>
+      <trans-unit id="2336565079874618391" datatype="html">
+        <source>Enables the custom shader for the MeganeX 8K.</source>
+      </trans-unit>
+      <trans-unit id="273263793213207360" datatype="html">
+        <source>Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
+      </trans-unit>
+      <trans-unit id="2846574612210787191" datatype="html">
+        <source>The resolution of the distortion mesh. Higher values prevent small wavy artifacts in the corners of the lenses but makes other settings laggier. The default pretty much eliminates the artifacts.</source>
+      </trans-unit>
+      <trans-unit id="2861813522442601500" datatype="html">
+        <source>Enables or disables the stationary dimming feature.</source>
+      </trans-unit>
+      <trans-unit id="300522424104416983" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your ears.</source>
+      </trans-unit>
+      <trans-unit id="3158413943708140326" datatype="html">
+        <source>Forces the black level clamp to be disabled. This can make headsets like the Vive darker at the expense of more smearing.</source>
+      </trans-unit>
+      <trans-unit id="347583554594702753" datatype="html">
+        <source>Enables or disables the hidden area meshes.</source>
+      </trans-unit>
+      <trans-unit id="3918842139353452154" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications.</source>
+      </trans-unit>
+      <trans-unit id="4398666323666535983" datatype="html">
+        <source>Adjusts the contrast of the image. When higher than 50, the colors in the image will be expanded away from the midpoint. When lower than 50, the colors in the image will be contracted towards the midpoint.</source>
+      </trans-unit>
+      <trans-unit id="4446503733054332206" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your ears.</source>
+      </trans-unit>
+      <trans-unit id="4595919550679720902" datatype="html">
+        <source>The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets.</source>
+      </trans-unit>
+      <trans-unit id="4891791018896428318" datatype="html">
+        <source>The number of vertices used to create each section of the hidden area mesh. Higher values increase the smoothness of the mesh.</source>
+      </trans-unit>
+      <trans-unit id="5106755418798621895" datatype="html">
+        <source>Enables sRGB color correction. The MeganeX is a Display-P3 display and normally colors are oversaturated by mapping the srgb outputs of applications to the full color space. When this is enabled, only the srgb portion of the display is used, which can make colors look more accurate.</source>
+      </trans-unit>
+      <trans-unit id="5518205125788028902" datatype="html">
+        <source>Seconds From VSync to Photons</source>
+      </trans-unit>
+      <trans-unit id="563695625550992951" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
+      </trans-unit>
+      <trans-unit id="5832230287995382782" datatype="html">
+        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
+      </trans-unit>
+      <trans-unit id="5868413981442823243" datatype="html">
+        <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
+      </trans-unit>
+      <trans-unit id="5943615683012338742" datatype="html">
+        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+      </trans-unit>
+      <trans-unit id="6143642524180911701" datatype="html">
+        <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
+      </trans-unit>
+      <trans-unit id="6792221707733687579" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
+      </trans-unit>
+      <trans-unit id="6936171169309236513" datatype="html">
+        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+      </trans-unit>
+      <trans-unit id="6958907557549298899" datatype="html">
+        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
+      </trans-unit>
+      <trans-unit id="7080815701953186727" datatype="html">
+        <source>Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won&apos;t work yet.</source>
+      </trans-unit>
+      <trans-unit id="715138922561408923" datatype="html">
+        <source>The amount of time it takes to go from dim to bright.</source>
+      </trans-unit>
+      <trans-unit id="7471123579619673182" datatype="html">
+        <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
+      </trans-unit>
+      <trans-unit id="7562807646184458622" datatype="html">
+        <source>Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect.</source>
+      </trans-unit>
+      <trans-unit id="7634542220919712546" datatype="html">
+        <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
+      </trans-unit>
+      <trans-unit id="794141015200109027" datatype="html">
+        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+      </trans-unit>
+      <trans-unit id="7975741758736447642" datatype="html">
+        <source>Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov.</source>
+      </trans-unit>
+      <trans-unit id="8045582904723345362" datatype="html">
+        <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
+      </trans-unit>
+      <trans-unit id="8242705724014165192" datatype="html">
+        <source>The resolution to run the DisplayPort connection at.</source>
+      </trans-unit>
+      <trans-unit id="85559335853494335" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your nose.</source>
+      </trans-unit>
+      <trans-unit id="9103482387790094220" datatype="html">
+        <source>This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon.</source>
+      </trans-unit>
+      <trans-unit id="9157492168132046017" datatype="html">
+        <source>Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel.</source>
       </trans-unit>
     </body>
   </file>

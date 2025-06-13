@@ -398,10 +398,6 @@
         <source>Movement Time</source>
         <target state="translated">靜置時間</target>
       </trans-unit>
-      <trans-unit id="7653815630536291994" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. Dimming is activated when the headset&apos;s rotation remains under the &apos;Movement Threshold&apos; for the duration of the &apos;Movement Time&apos;.</source>
-        <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。當裝置的旋轉角度在「靜置時間」內，持續小於設定的「移動閾值」，便會啟動變暗效果。</target>
-      </trans-unit>
       <trans-unit id="49266763300376978" datatype="html">
         <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
         <target state="translated">變更這些設定後，需重啟遊戲才會顯示效果。隱藏區域網格可用於遮蔽螢幕邊角，在有支援的遊戲中能提升效能。</target>
@@ -509,6 +505,186 @@
       <trans-unit id="8390407398188435348" datatype="html">
         <source>Enable for Other HMDs</source>
         <target state="translated">為其他 HMD 啟用</target>
+      </trans-unit>
+     <trans-unit id="5832230287995382782" datatype="html">
+        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
+        <target state="translated">以一個可提供更多自訂選項的著色器，取代 SteamVR 合成器中的預設失真著色器。</target>
+      </trans-unit>
+      <trans-unit id="7634542220919712546" datatype="html">
+        <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
+        <target state="translated">啟用自訂著色器。此選項將會取代 SteamVR 中的著色器。</target>
+      </trans-unit>
+      <trans-unit id="4398666323666535983" datatype="html">
+        <source>Adjusts the contrast of the image. When higher than 50, the colors in the image will be expanded away from the midpoint. When lower than 50, the colors in the image will be contracted towards the midpoint.</source>
+        <target state="translated">調整影像的對比度。高於 50 時，顏色會遠離中點擴張；低於 50 時，顏色會朝向中點收縮。</target>
+      </trans-unit>
+      <trans-unit id="7562807646184458622" datatype="html">
+        <source>Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect.</source>
+        <target state="translated">調整對比度的中點，此設定控制對比度調整的基準顏色。例如：當設為 100，所有顏色會朝向白色或遠離白色變化；當設為 0，所有顏色則會朝向黑色或遠離黑色變化，進而產生整體變亮或變暗的效果。</target>
+      </trans-unit>
+      <trans-unit id="6143642524180911701" datatype="html">
+        <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
+        <target state="translated">在 Gamma 校正前而非之後，對影像套用線性對比度。一般來說，關閉此選項的對比度效果較佳，但它對某些特殊效果可能有用。</target>
+      </trans-unit>
+      <trans-unit id="1771517419511821401" datatype="html">
+        <source>Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast.</source>
+        <target state="translated">分別對左右眼套用對比度，讓您能校正兩眼顯示器的差異。此設定會附加在上述的通用對比度設定之上。</target>
+      </trans-unit>
+      <trans-unit id="273263793213207360" datatype="html">
+        <source>Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
+        <target state="translated">調整影像的色度。高於 50 時，顏色會變得更鮮豔；一路降至 0 時，影像會變成灰階。</target>
+      </trans-unit>
+      <trans-unit id="1101953333251248565" datatype="html">
+        <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
+        <target state="translated">調整影像的 Gamma 值。它控制輸入亮度與顯示器亮度之間的映射關係。較高的 Gamma 值會使影像的暗部區域變得更亮。</target>
+      </trans-unit>
+      <trans-unit id="1324452384340955807" datatype="html">
+        <source>Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
+        <target state="translated">對支援的頭戴式顯示器進行子像素位移以提升銳利度。這在 MeganeX 上的效果尤其顯著，能從 1:1 解析度中提取超過 300% 的細節。Vive 也支援此功能，但改善效果較不明顯。</target>
+      </trans-unit>
+      <trans-unit id="5868413981442823243" datatype="html">
+        <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
+        <target state="translated">在任何具備 Mura 校正的頭戴式顯示器（如 Vive）上強制停用該功能。</target>
+      </trans-unit>
+      <trans-unit id="3158413943708140326" datatype="html">
+        <source>Forces the black level clamp to be disabled. This can make headsets like the Vive darker at the expense of more smearing.</source>
+        <target state="translated">強制停用黑階箝位。這能讓像 Vive 這類頭戴式顯示器的黑色變得更深，但代價是會增加拖影。</target>
+      </trans-unit>
+      <trans-unit id="5106755418798621895" datatype="html">
+        <source>Enables sRGB color correction. The MeganeX is a Display-P3 display and normally colors are oversaturated by mapping the srgb outputs of applications to the full color space. When this is enabled, only the srgb portion of the display is used, which can make colors look more accurate.</source>
+        <target state="translated">啟用 sRGB 色彩校正。MeganeX 是一部 Display-P3 顯示器，一般情況下，應用程式的 sRGB 輸出會被直接映射到其完整色域上，造成顏色過飽和。啟用此選項後，將僅使用顯示器的 sRGB 部分，讓顏色看起來更準確。</target>
+      </trans-unit>
+      <trans-unit id="2336565079874618391" datatype="html">
+        <source>Enables the custom shader for the MeganeX 8K.</source>
+        <target state="translated">為 MeganeX 8K 啟用自訂著色器。</target>
+      </trans-unit>
+      <trans-unit id="7080815701953186727" datatype="html">
+        <source>Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won&apos;t work yet.</source>
+        <target state="translated">為所有其他 HMD 啟用自訂著色器。非原生支援 SteamVR 的頭戴式顯示器可能尚無法運作。</target>
+      </trans-unit>
+      <trans-unit id="2210953895431071691" datatype="html">
+        <source>When enabled, the Custom Headset driver will run the MeganeX superlight 8K.</source>
+        <target state="translated">啟用後，自訂頭戴式顯示器驅動程式將會以 MeganeX superlight 8K 模式運作。</target>
+      </trans-unit>
+      <trans-unit id="8242705724014165192" datatype="html">
+        <source>The resolution to run the DisplayPort connection at.</source>
+        <target state="translated">設定 DisplayPort 連線的運作解析度。</target>
+      </trans-unit>
+      <trans-unit id="7471123579619673182" datatype="html">
+        <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
+        <target state="translated">選擇頭戴式顯示器要使用的失真設定檔。請參閱「失真」分頁以獲得更多選項。</target>
+      </trans-unit>
+      <trans-unit id="3918842139353452154" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications.</source>
+        <target state="translated">設定 SteamVR 應用程式中虛擬攝影機的瞳孔間距 (IPD)。</target>
+      </trans-unit>
+      <trans-unit id="5943615683012338742" datatype="html">
+        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+        <target state="translated">頭戴式顯示器將顯示的最大水平視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。</target>
+      </trans-unit>
+      <trans-unit id="2236616074560208736" datatype="html">
+        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
+        <target state="translated">頭戴式顯示器將顯示的最大垂直視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。</target>
+      </trans-unit>
+      <trans-unit id="6958907557549298899" datatype="html">
+        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
+        <target state="translated">顯示 SteamVR 的運作解析度以及最佳解析度的相關資訊。視野 (FOV) 等設定會影響此結果。此資訊僅會在 MeganeX 以本驅動程式主動運作時更新。</target>
+      </trans-unit>
+      <trans-unit id="8045582904723345362" datatype="html">
+        <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
+        <target state="translated">調整失真設定檔的縮放程度。此功能可用於校正屈光度，較高的屈光度設定需要正值的縮放。然而，這也會導致一定程度的影像扭曲。</target>
+      </trans-unit>
+      <trans-unit id="6792221707733687579" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
+        <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。每當移動幅度超過閾值時，顯示器將在「移動時間」內保持明亮。</target>
+      </trans-unit>
+      <trans-unit id="2861813522442601500" datatype="html">
+        <source>Enables or disables the stationary dimming feature.</source>
+        <target state="translated">啟用或停用靜止時變暗功能。</target>
+      </trans-unit>
+      <trans-unit id="1293521252153505574" datatype="html">
+        <source>The minimum amount of rotation in degrees that will reset the stationary dimming timer.</source>
+        <target state="translated">重設靜止變暗計時器所需的最小旋轉角度 (度)。</target>
+      </trans-unit>
+      <trans-unit id="1865011951137718165" datatype="html">
+        <source>The amount of time in seconds that the display will remain bright after movement.</source>
+        <target state="translated">偵測到移動後，顯示器將保持明亮的時間長度 (秒)。</target>
+      </trans-unit>
+      <trans-unit id="2261913743249257236" datatype="html">
+        <source>The minimum brightness percentage that the display will dim to when stationary.</source>
+        <target state="translated">靜止時，顯示器會變暗至的最低亮度百分比。</target>
+      </trans-unit>
+      <trans-unit id="1488156220085285219" datatype="html">
+        <source>The amount of time it takes to go from bright to dim.</source>
+        <target state="translated">從明亮狀態轉為變暗狀態所需的時間。</target>
+      </trans-unit>
+      <trans-unit id="715138922561408923" datatype="html">
+        <source>The amount of time it takes to go from dim to bright.</source>
+        <target state="translated">從變暗狀態恢復為明亮狀態所需的時間。</target>
+      </trans-unit>
+      <trans-unit id="347583554594702753" datatype="html">
+        <source>Enables or disables the hidden area meshes.</source>
+        <target state="translated">啟用或停用隱藏區域網格。</target>
+      </trans-unit>
+      <trans-unit id="1013018539656511103" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your nose.</source>
+        <target state="translated">隱藏區域網格中，靠近鼻子之上方可見區域的半徑。</target>
+      </trans-unit>
+      <trans-unit id="85559335853494335" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your nose.</source>
+        <target state="translated">隱藏區域網格中，靠近鼻子之下方可見區域的半徑。</target>
+      </trans-unit>
+      <trans-unit id="300522424104416983" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your ears.</source>
+        <target state="translated">隱藏區域網格中，靠近耳朵之上方可見區域的半徑。</target>
+      </trans-unit>
+      <trans-unit id="4446503733054332206" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your ears.</source>
+        <target state="translated">隱藏區域網格中，靠近耳朵之下方可見區域的半徑。</target>
+      </trans-unit>
+      <trans-unit id="4891791018896428318" datatype="html">
+        <source>The number of vertices used to create each section of the hidden area mesh. Higher values increase the smoothness of the mesh.</source>
+        <target state="translated">用於建立各部分隱藏區域網格的頂點數量。較高的數值會增加網格的平滑度。</target>
+      </trans-unit>
+      <trans-unit id="1651122445619194508" datatype="html">
+        <source>These settings have defaults that should not need to be changed but are provided for experimentation.</source>
+        <target state="translated">這些設定具有預設值，通常不需變更，但我們仍提供這些選項供您實驗。</target>
+      </trans-unit>
+      <trans-unit id="4595919550679720902" datatype="html">
+        <source>The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets.</source>
+        <target state="translated">顯示器將達到的最低亮度級別。如果您喜愛 LCD 頭戴式顯示器那種帶有拖影的灰色，可以提高此值。</target>
+      </trans-unit>
+      <trans-unit id="9103482387790094220" datatype="html">
+        <source>This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon.</source>
+        <target state="translated">此數值會被加到 IPD 值上。請直接使用主 IPD 滑桿並將此處保持為 0。此選項可能很快會被移除。</target>
+      </trans-unit>
+      <trans-unit id="9157492168132046017" datatype="html">
+        <source>Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel.</source>
+        <target state="translated">利用 UV 失真來位移顯示器的子像素，以改善色邊和銳利度。預設值適用於 OLED 面板。</target>
+      </trans-unit>
+      <trans-unit id="2846574612210787191" datatype="html">
+        <source>The resolution of the distortion mesh. Higher values prevent small wavy artifacts in the corners of the lenses but makes other settings laggier. The default pretty much eliminates the artifacts.</source>
+        <target state="translated">失真網格的解析度。較高的數值可防止鏡片邊角出現微小的波浪狀瑕疵，但會使其他設定反應變慢。預設值基本上已可消除此類瑕疵。</target>
+      </trans-unit>
+      <trans-unit id="7975741758736447642" datatype="html">
+        <source>Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov.</source>
+        <target state="translated">每次執行時隨機增加最多 3 度的視野 (FOV)，以防止顯示器在視野邊緣產生清晰的烙印。為預防您或下一位使用者想要增加視野，建議您不要關閉此功能。</target>
+      </trans-unit>
+      <trans-unit id="794141015200109027" datatype="html">
+        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+        <target state="translated">100% 渲染解析度寬度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。</target>
+      </trans-unit>
+      <trans-unit id="6936171169309236513" datatype="html">
+        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+        <target state="translated">100% 渲染解析度高度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。</target>
+      </trans-unit>
+      <trans-unit id="5518205125788028902" datatype="html">
+        <source>Seconds From VSync to Photons</source>
+        <target state="translated">從 VSync 到光子產生的秒數</target>
+      </trans-unit>
+      <trans-unit id="563695625550992951" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
+        <target state="translated">指 GPU 完成渲染後，顯示器更新所需的時間。此數值用於計算時間扭曲校正。</target>
       </trans-unit>
     </body>
   </file>
