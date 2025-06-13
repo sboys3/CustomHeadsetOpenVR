@@ -206,7 +206,7 @@
     <div class="title">
         <span i18n>Subpixel Shift</span>
         <app-field-tip i18n-info
-            info="Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable." />
+            info="Samples subpixels from the correct locations in the image to improve sharpness by lighting up individual subpixels. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable." />
         <app-reset-button [canReset]="settings.customShader.subpixelShift!=defaults.customShader.subpixelShift"
             (resetClick)="nested('customShader').resetOption('subpixelShift')"></app-reset-button>
     </div>

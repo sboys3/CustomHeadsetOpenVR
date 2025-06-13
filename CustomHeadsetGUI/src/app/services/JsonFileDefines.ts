@@ -125,6 +125,8 @@ export type MeganeX8KConfig = {
 
   renderResolutionMultiplierY: number;
   
+  superSamplingFilterPercent: number
+  
   secondsFromVsyncToPhotons: number
 
   hiddenArea: HiddenAreaMeshConfig;

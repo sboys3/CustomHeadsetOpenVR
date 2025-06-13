@@ -117,6 +117,8 @@ public:
 		double renderResolutionMultiplierX = 1.0;
 		// multiply 100% render resolution height
 		double renderResolutionMultiplierY = 1.0;
+		// percent of 1:1 resolution to apply the super sampling downscale filter at, this is really high to allow for subpixel sampling
+		double superSamplingFilterPercent = 500;
 		// seconds of latency to the display
 		double secondsFromVsyncToPhotons = 0.011;
 		// Config struct for the hidden area mesh

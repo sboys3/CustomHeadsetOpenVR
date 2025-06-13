@@ -212,6 +212,12 @@ void MeganeX8KShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32
 	*renderWidth  = static_cast<uint32_t>(*renderWidth  * driverConfig.meganeX8K.renderResolutionMultiplierX);
 	*renderHeight = static_cast<uint32_t>(*renderHeight * driverConfig.meganeX8K.renderResolutionMultiplierY);
 	// save to info
+	float projectionLeft, projectionRight, projectionTop, projectionBottom;
+	distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &projectionLeft, &projectionRight, &projectionBottom, &projectionTop);
+	double fovX = (std::atan(projectionRight) - std::atan(projectionLeft)) * 180.0 / kPi;
+	double fovY = (std::atan(projectionTop) - std::atan(projectionBottom)) * 180.0 / kPi;
+	driverConfigLoader.info.renderFovX = fovX;
+	driverConfigLoader.info.renderFovY = fovY;
 	driverConfigLoader.info.renderResolution100PercentX = *renderWidth;
 	driverConfigLoader.info.renderResolution100PercentY = *renderHeight;
 	distortionProfileConstructor.profile->GetRecommendedRenderTargetSize(&driverConfigLoader.info.renderResolution1To1X, &driverConfigLoader.info.renderResolution1To1Y);
@@ -222,6 +228,11 @@ void MeganeX8KShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32
 	double requiredPercent = std::max(requiredPercentX, requiredPercentY);
 	driverConfigLoader.info.renderResolution1To1Percent = requiredPercent * 100.0;
 	driverConfigLoader.WriteInfo();
+	
+	// write advanced super sampling resolution, this won't apply until the game is relaunched
+	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
+	vr::VRProperties()->SetInt32Property(container, vr::Prop_Hmd_MaxDistortedTextureWidth_Int32, (int)(driverConfigLoader.info.renderResolution1To1X * std::sqrt(driverConfig.meganeX8K.superSamplingFilterPercent / 100.0)));
+	vr::VRProperties()->SetInt32Property(container, vr::Prop_Hmd_MaxDistortedTextureHeight_Int32, (int)(driverConfigLoader.info.renderResolution1To1Y * std::sqrt(driverConfig.meganeX8K.superSamplingFilterPercent / 100.0)));
 }
 
 // this is the 100% resolution in steamvr settings
@@ -374,6 +385,10 @@ void MeganeX8KShim::UpdateSettings(){
 
 	
 	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, std::min(1024, driverConfig.meganeX8K.distortionMeshResolution));
+	if(driverConfigOld.meganeX8K.superSamplingFilterPercent != driverConfig.meganeX8K.superSamplingFilterPercent){
+		uint32_t renderResolutionX, renderResolutionY;
+		GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);
+	}
 	
 	if(shouldReInitializeDistortion && !loadedNewDistortionProfile){
 		distortionProfileConstructor.ReInitializeProfile();

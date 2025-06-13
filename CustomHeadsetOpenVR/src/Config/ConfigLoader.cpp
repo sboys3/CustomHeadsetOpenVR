@@ -89,6 +89,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["renderResolutionMultiplierY"].is_number()){
 				newConfig.meganeX8K.renderResolutionMultiplierY = meganeX8KData["renderResolutionMultiplierY"].get<double>();
 			}
+			if(meganeX8KData["superSamplingFilterPercent"].is_number()){
+				newConfig.meganeX8K.superSamplingFilterPercent = meganeX8KData["superSamplingFilterPercent"].get<double>();
+			}
 			if(meganeX8KData["secondsFromVsyncToPhotons"].is_number()){
 				newConfig.meganeX8K.secondsFromVsyncToPhotons = meganeX8KData["secondsFromVsyncToPhotons"].get<double>();
 			}
@@ -259,6 +262,7 @@ void ConfigLoader::WriteInfo(){
 				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
 				{"renderResolutionMultiplierX", defaultSettings.meganeX8K.renderResolutionMultiplierX},
 				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
+				{"superSamplingFilterPercent", defaultSettings.meganeX8K.superSamplingFilterPercent},
 				{"secondsFromVsyncToPhotons", defaultSettings.meganeX8K.secondsFromVsyncToPhotons},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
@@ -307,6 +311,8 @@ void ConfigLoader::WriteInfo(){
 			{"MeganeX8K Original", emptyObject},
 		}},
 		{"resolution", {
+			{"fovX", info.renderFovX},
+			{"fovY", info.renderFovY},
 			{"renderResolution1To1X", info.renderResolution1To1X},
 			{"renderResolution1To1Y", info.renderResolution1To1Y},
 			{"renderResolution1To1Percent", info.renderResolution1To1Percent},

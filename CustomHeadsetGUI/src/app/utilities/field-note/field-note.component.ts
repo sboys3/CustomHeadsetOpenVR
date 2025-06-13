@@ -20,7 +20,7 @@ export class FieldNoteComponent {
     return this.type()
   }
   static messages: Record<noteType, string> = {
-    'steamvrRestart': $localize`Require restart SteamVR to apply changes.`,
-    'gameRestart': $localize`Require restart game to apply changes.`
+    'steamvrRestart': $localize`Requires restarting SteamVR to apply changes.`,
+    'gameRestart': $localize`Requires restarting the game to apply changes.`
   }
 }
