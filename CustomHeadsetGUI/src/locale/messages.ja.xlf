@@ -585,6 +585,7 @@
       <trans-unit id="2236616074560208736" datatype="html">
         <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
         <target state="translated">ヘッドセットで垂直方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。</target>
+         </trans-unit>
     </body>
   </file>
 </xliff>
