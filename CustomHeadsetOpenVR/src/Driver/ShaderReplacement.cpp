@@ -143,16 +143,16 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	// create defines for shader settings
 	D3D_SHADER_MACRO defines[30] = {};
 	int definesCount = 0;
-	if(driverConfig.customShader.subpixelShift){
-		if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
-			defines[definesCount++] = {"MEGANEX8K", "1"};
-			if(driverConfig.meganeX8K.subpixelShift != 0 && driverConfig.meganeX8K.resolutionY == 3552){
-				// only do this if the subpixel shift is not zero and it is running at full resolution
-				defines[definesCount++] = {"SUBPIXEL_SHIFT_MEGANEX8K", "1"};
-			}
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
+		defines[definesCount++] = {"MEGANEX8K", "1"};
+		if(driverConfig.customShader.subpixelShift && driverConfig.meganeX8K.subpixelShift != 0 && driverConfig.meganeX8K.resolutionY == 3552){
+			// only do this if the subpixel shift is not zero and it is running at full resolution
+			defines[definesCount++] = {"SUBPIXEL_SHIFT_MEGANEX8K", "1"};
 		}
-		if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
-			defines[definesCount++] = {"VIVE", "1"};
+	}
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
+		defines[definesCount++] = {"VIVE", "1"};
+		if(driverConfig.customShader.subpixelShift){
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_VIVE", "1"};
 		}
 	}

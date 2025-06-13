@@ -159,8 +159,8 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["gamma"].is_number()){
 				newConfig.customShader.gamma = customShaderData["gamma"].get<double>();
 			}
-			if(customShaderData["subpixelShift"].is_number()){
-				newConfig.customShader.subpixelShift = customShaderData["subpixelShift"].get<double>();
+			if(customShaderData["subpixelShift"].is_boolean()){
+				newConfig.customShader.subpixelShift = customShaderData["subpixelShift"].get<bool>();
 			}
 			if(customShaderData["disableMuraCorrection"].is_boolean()){
 				newConfig.customShader.disableMuraCorrection = customShaderData["disableMuraCorrection"].get<bool>();
