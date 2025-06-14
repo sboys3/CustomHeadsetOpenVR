@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { getVersion } from '@tauri-apps/api/app';
 import { DriverSettingService } from '../../services/driver-setting.service';
 import { DriverInfoService } from '../../services/driver-info.service';
@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class DriverTroubleshooterComponent {
   public appVersion = signal('')
   public wait = signal(false);
+  public driverEnablePrompt = signal(false);
   constructor(
     public dss: DriverSettingService,
     public dis: DriverInfoService,
@@ -35,7 +36,16 @@ export class DriverTroubleshooterComponent {
         sds.PullingDriverinstall.start()
       }
     });
-
+    effect(() => {
+      const steamVrConfig = sds.steamVrConfig();
+      if(steamVrConfig){
+          let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR');
+          this.driverEnablePrompt.set(!customEnabled);
+      }
+    })
+  }
+  async enableDriver(){
+    await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
   }
   async installSteamVR() {
     await openUrl('steam://install/250820')

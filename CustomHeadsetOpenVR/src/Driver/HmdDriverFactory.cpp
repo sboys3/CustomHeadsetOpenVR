@@ -20,6 +20,7 @@ CustomHeadsetDeviceProvider deviceProvider = {};
 // this is the main entry point from vrserver
 HMD_DLL_EXPORT void *HmdDriverFactory(const char *pInterfaceName, int *pReturnCode){
 	// driverConfigLoader.info.debugLog += "HmdDriverFactory(" + std::string(pInterfaceName) + ")\n";
+	// return (void*)1; // crash SteamVR if uncommented
 	
 	// return CustomHeadsetDeviceProvider
 	if(0 == strcmp(vr::IServerTrackedDeviceProvider_Version, pInterfaceName)){

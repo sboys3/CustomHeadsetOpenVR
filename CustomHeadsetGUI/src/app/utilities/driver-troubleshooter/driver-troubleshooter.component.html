@@ -30,6 +30,21 @@
     </div>
 </div>
 <div class="field">
+    <div class="title" i18n>Driver enabled</div>
+    <div class="control">
+        @if(driverEnablePrompt()){
+        <mat-icon class="warn-color">warning</mat-icon>
+        <span i18n>Driver not enabled</span>
+        @if(this.sds.steamVRinstalled()){
+        <button mat-stroked-button i18n (click)="enableDriver()" [disabled]="sds.installingDriver()">Enable
+            Driver</button>
+        }
+        }@else {
+        <mat-icon class="primary-color">check</mat-icon>
+        }
+    </div>
+</div>
+<div class="field">
     <div class="title" i18n>Driver setting initialization</div>
     <div class="control">
         @if(!dss.values || !dis.values()){

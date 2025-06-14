@@ -147,6 +147,8 @@ export type DriverInfo = {
   driverVersion: string
 }
 export type ResolutionInfo = {
+  fovX: number,
+  fovY: number,
   renderResolution1To1X: number,
   renderResolution1To1Y: number,
   renderResolution1To1Percent: number,

@@ -343,8 +343,8 @@
         <target state="translated">SteamVR用レンダリング解像度100%</target>
       </trans-unit>
       <trans-unit id="8347767686698958660" datatype="html">
-        <source>Render resolution for 1 sample per panel pixel</source>
-        <target state="translated">パネルピクセルあたり1サンプルのレンダリング解像度</target>
+        <source>Render resolution for 1:1 sample per panel pixel</source>
+        <target state="translated">パネルピクセルあたり1:1サンプルのレンダリング解像度</target>
       </trans-unit>
       <trans-unit id="6190895239365336532" datatype="html">
         <source>Enable Hidden Area Meshes</source>

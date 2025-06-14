@@ -31,6 +31,7 @@ export class SystemDiagnosticService implements OnDestroy {
   constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService) {
     let readySetup = false
     effect(() => {
+      this.watchSteamVRSettings();
       const ready = this.systemReady()
       if (ready && !readySetup) {
         readySetup = true;
@@ -43,7 +44,7 @@ export class SystemDiagnosticService implements OnDestroy {
       await this.checkDriverInstalled()
     })();
   }
-  async readySetup() {
+  async watchSteamVRSettings(){
     const subject = new Subject<void>();
     const usub = subject.pipe(debounceTime(50)).subscribe(async () => {
       const value = await this.getSteamVRSettings();
@@ -60,6 +61,9 @@ export class SystemDiagnosticService implements OnDestroy {
       });
       subject.next()
     }
+  }
+  async readySetup() {
+    
   }
   ngOnDestroy(): void {
     for (const cfn of this.cleanUp) {
@@ -122,6 +126,7 @@ export class SystemDiagnosticService implements OnDestroy {
         settings[name] = {}
       }
       settings[name]['enable'] = true
+      delete settings[name]['blocked_by_safe_mode']
       return true;
     })
   }
@@ -129,7 +134,7 @@ export class SystemDiagnosticService implements OnDestroy {
     if (settings) {
       const driverSetting = settings[this.getDriverFieldName(driverName)]
       if (driverSetting) {
-        return driverSetting['enable'] ?? true
+        return (driverSetting['enable'] ?? true) && !(driverSetting['blocked_by_safe_mode'] ?? false);
       }
     }
     return true;

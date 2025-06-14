@@ -126,14 +126,21 @@
         @if(steamVRRunning();as steamvr){
         <div class="note">
             @if(steamvr.updated){
-            @if(res.renderResolution100PercentX &&steamvr.running){
+            @if(res.renderResolution100PercentX && steamvr.running){
+            @if(res.fovX != undefined){
+            <p>
+                <span i18n>Current rendered FOV</span>
+                <span>&nbsp;:&nbsp;</span>
+                <span>{{res.fovX.toFixed(1)}}x{{res.fovY.toFixed(1)}}</span>
+            </p>
+            }
             <p>
                 <span i18n>100% Render resolution for SteamVR</span>
                 <span>&nbsp;:&nbsp;</span>
                 <span>{{res.renderResolution100PercentX}}x{{res.renderResolution100PercentY}}</span>
             </p>
             <p>
-                <span i18n>Render resolution for 1 sample per panel pixel</span>
+                <span i18n>Render resolution for 1:1 sample per panel pixel</span>
                 <span>&nbsp;:&nbsp;</span>
                 <span>{{res.renderResolution1To1X}}x{{res.renderResolution1To1Y}}</span>
                 <span>&nbsp;(&nbsp;{{res.renderResolution1To1Percent|number:'1.0-1'}}%&nbsp;)</span>

@@ -258,7 +258,7 @@
         <source>100% Render resolution for SteamVR</source>
       </trans-unit>
       <trans-unit id="8347767686698958660" datatype="html">
-        <source>Render resolution for 1 sample per panel pixel</source>
+        <source>Render resolution for 1:1 sample per panel pixel</source>
       </trans-unit>
       <trans-unit id="1201696567241717027" datatype="html">
         <source>Hidden Area Mesh Settings</source>
