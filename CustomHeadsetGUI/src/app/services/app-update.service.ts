@@ -54,7 +54,7 @@ export class AppUpdateService {
       const request = firstValueFrom(this.http.get<GitHubRelease>('https://api.github.com/repos/sboys3/CustomHeadsetOpenVR/releases/latest'));
       const response = await request;
       result.latestVersion = response.tag_name
-      result.updateAvailable = isNewVersion(current, response.tag_name)
+      result.updateAvailable = isNewVersion(current, result.latestVersion)
       result.url = response.html_url
     } catch (e) {
       console.warn(e)

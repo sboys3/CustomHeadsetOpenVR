@@ -5,7 +5,7 @@
     <span>&nbsp;:&nbsp;{{update.currentVersion}}&nbsp;</span>
     @if(update.updateAvailable){
     <a (click)="openExternal(update.url)" href="javascript:;">
-        <span i18n>New version available!</span>
+        <span i18n>New version available</span><mat-icon class="warn-color" style="vertical-align: middle;">priority_high</mat-icon>
     </a>
     }@else{
     @if(!checking() && update.fetchSuccess){
@@ -22,17 +22,35 @@
     }
 </p>
 <p>
-    <span i18n>driver version</span>
+    <span i18n>installed driver version</span>
     @if(sds.driverInstalled();as verison){
     @if(aus.updateInfo();as updateInfo){
     <span>&nbsp;:&nbsp;{{verison}}</span>
     @if(updateInfo.installAvailable){
     <span>
         &nbsp;&nbsp;</span>
+    <mat-icon class="warn-color">priority_high</mat-icon>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Install {{updateInfo.currentVersion}}</span>
     </button>
     }
+    }
+    }@else {
+    <span>
+        &nbsp;:&nbsp;</span>
+    <span i18n>Not installed</span>
+    }
+</p>
+<p>
+    <span i18n>last run driver version</span>
+    @if(dis.values();as info){
+    @if(aus.updateInfo();as updateInfo){
+    <span>&nbsp;:&nbsp;{{info.driverVersion}}</span>
+    <span>
+        &nbsp;&nbsp;</span>
+    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+        <span i18n>Re-Install Driver</span>
+    </button>
     }
     }@else {
     <span>
