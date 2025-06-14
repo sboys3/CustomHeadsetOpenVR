@@ -771,7 +771,7 @@ dependencies = [
 
 [[package]]
 name = "custom-headset-gui"
-version = "0.5.1"
+version = "1.0.0-beta.0"
 dependencies = [
  "locale_config",
  "log",

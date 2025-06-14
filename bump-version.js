@@ -2,8 +2,8 @@ let fs = require("fs")
 let path = require("path")
 
 let version = process.argv[2]
-if(!version || /^\d+\.\d+\.\d+$/.test(version) === false){
-	console.error("Invalid version format. Please provide a version in the format x.x.x")
+if(!version || /^\d+\.\d+\.\d+(\-[a-z0-9\.]+)?$/.test(version) === false){
+	console.error("Invalid version format. Please provide a version in the format x.x.x or x.x.x-tag.x")
 	process.exit(1)
 }else{
 	console.log(`Updating version to ${version}`)
@@ -20,7 +20,7 @@ tauriConfigData.version = version
 fs.writeFileSync(tauriConfig, JSON.stringify(tauriConfigData, null, 2))
 
 let tauriConfigCargoData = fs.readFileSync(tauriConfigCargo, "utf8")
-let tauriConfigCargoVersionRegex = /^version\s*=\s*"(\d+\.\d+\.\d+)"$/m
+let tauriConfigCargoVersionRegex = /^version\s*=\s*"(\d+\.\d+\.\d+(\-[a-z0-9\.]+)?)"$/m
 let tauriConfigCargoVersion = tauriConfigCargoData.match(tauriConfigCargoVersionRegex)
 if(tauriConfigCargoVersion){
 	tauriConfigCargoData = tauriConfigCargoData.replace(tauriConfigCargoVersionRegex, `version = "${version}"`)
@@ -30,7 +30,7 @@ if(tauriConfigCargoVersion){
 }
 
 let driverConfigCppData = fs.readFileSync(driverConfigCpp, "utf8")
-let driverConfigCppVersionRegex = /std::string\s*driverVersion\s*=\s*"(\d+\.\d+\.\d+)"/g
+let driverConfigCppVersionRegex = /std::string\s*driverVersion\s*=\s*"(\d+\.\d+\.\d+(\-[a-z0-9\.]+)?)"/g
 let driverConfigCppVersion = driverConfigCppData.match(driverConfigCppVersionRegex)
 if(driverConfigCppVersion){
 	driverConfigCppData = driverConfigCppData.replace(driverConfigCppVersionRegex, `std::string driverVersion = "${version}"`)
