@@ -19,7 +19,7 @@ public:
 	// additional percent distortions for the red channel to be done after the main distortion
 	std::vector<DistortionPoint> distortionsRed = {{0.f, 0.5f}, {47.5f, 0.5f}};
 	// additional percent distortions for the blue channel to be done after the main distortion
-	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.42f}, {47.5f, -0.42f}};
+	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.7f}, {47.5f, -0.7f}};
 	// amount to smooth the curve from 0 to 1
 	double smoothAmount = 0.66;
 private:

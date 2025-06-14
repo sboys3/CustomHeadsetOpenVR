@@ -120,7 +120,7 @@ public:
 		// percent of 1:1 resolution to apply the super sampling downscale filter at, this is really high to allow for subpixel sampling
 		double superSamplingFilterPercent = 500;
 		// seconds of latency to the display
-		double secondsFromVsyncToPhotons = 0.011;
+		double secondsFromVsyncToPhotons = 0.009;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
@@ -147,8 +147,14 @@ class DistortionProfileConfig{
 public:
 	// name of distortion profile, this will be it's filename
 	std::string name = "None";
+	// the headset device this profile is for, empty for all devices, or "MeganeX8K" for the MeganeX superlight 8K
+	std::string device = "";
 	// description to display
 	std::string description = "";
+	// author of the distortion profile
+	std::string author = "";
+	// the date when it was created
+	double creationDate = 0;
 	// last time it was modified, used for reloading if changed
 	double modifiedTime = 0;
 	// type of distortion, None or RadialBezier

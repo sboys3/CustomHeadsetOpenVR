@@ -2,6 +2,7 @@
 #include "../Config/ConfigLoader.h"
 #include "DistortionProfile.h"
 #include "NoneDistortionProfile.h"
+#include <unordered_map>
 
 // this class is responsible for loading distortion profiles based on names
 class DistortionProfileConstructor{
@@ -26,3 +27,4 @@ class DistortionProfileConstructor{
 		std::string profileName = "";
 		double profileModifiedTime = 0.0;
 };
+extern std::unordered_map<std::string, DistortionProfileConfig> builtInDistortionProfiles;

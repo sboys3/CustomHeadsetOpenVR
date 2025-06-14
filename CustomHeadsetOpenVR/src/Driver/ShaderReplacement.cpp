@@ -301,6 +301,10 @@ Bytecode DistortionShaderMuraCorrection(){
 
 // same as DistortionShader but with no distortion enabled
 Bytecode DistortionShaderNoDistortion(){
+	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K || driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
+		// don't compile for headsets that will not use it
+		return {nullptr, 0};
+	}
 	return DistortionShader(false, true);
 }
 

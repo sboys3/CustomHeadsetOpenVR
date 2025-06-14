@@ -5,12 +5,14 @@
 #include <filesystem>
 #include "nlohmann/json.hpp"
 #include "../Driver/DriverLog.h"
+#include "../Distortion/DistortionProfileConstructor.h"
 #include "Windows.h"
 
 
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
+
 
 std::string ConfigLoader::GetConfigFolder(){
 	char* appdataPath = std::getenv("APPDATA");
@@ -305,11 +307,7 @@ void ConfigLoader::WriteInfo(){
 			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
-		// eventually these will have the full distortion data in them
-		{"builtInDistortionProfiles", {
-			{"MeganeX8K Default", emptyObject},
-			{"MeganeX8K Original", emptyObject},
-		}},
+		{"builtInDistortionProfiles", emptyObject},
 		{"resolution", {
 			{"fovX", info.renderFovX},
 			{"fovY", info.renderFovY},
@@ -325,6 +323,22 @@ void ConfigLoader::WriteInfo(){
 		{"steamvrResources", info.steamvrResources},
 		{"driverVersion", driverVersion}
 	};
+	ordered_json& distortionProfilesJson = data["builtInDistortionProfiles"];
+	for(auto profilePair : builtInDistortionProfiles){
+		auto profile = profilePair.second;
+		ordered_json profileJson = {
+			{"device", profile.device},
+			{"description", profile.description},
+			{"author", profile.author},
+			{"creationDate", profile.creationDate},
+			{"type", profile.type},
+			{"distortions", profile.distortions},
+			{"distortionsRed", profile.distortionsRed},
+			{"distortionsBlue", profile.distortionsBlue},
+			{"smoothAmount", profile.smoothAmount},
+		};
+		distortionProfilesJson[profile.name] = profileJson;
+	}
 	infoFile << data.dump(1, '\t');
 	infoFile.close();
 }
