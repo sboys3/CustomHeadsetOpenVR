@@ -6,6 +6,7 @@ import { SystemDiagnosticService } from "../../services/system-diagnostic.servic
 import { PullingService } from "../../services/PullingService";
 import { is_vrmonitor_running } from "../../tauri_wrapper";
 import { DriverInfo, Settings } from "../../services/JsonFileDefines";
+import { deepCopy } from "../../helpers";
 
 type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
 type ObjectKeys<T> = KeysMatching<T, Record<PropertyKey, any>>;
@@ -34,7 +35,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     pullingRef = DeviceConfigComponentBase.steamVRStatePulling.createRef(value => {
         this.steamVRRunning.set({ updated: true, running: value })
     })
-    @HostBinding('class.page-disabled') get pageDisabled() { return this.settingField()&& !this.settings?.enable }
+    @HostBinding('class.page-disabled') get pageDisabled() { return this.settingField() && !this.settings?.enable }
     constructor() {
         effect(() => {
             this.rootSetting = this.dss.values()
@@ -75,7 +76,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
                 this.driverWarning.set((shiftallEnabled || !customEnabled) && (config?.meganeX8K?.enable ?? false));
                 this.driverEnablePrompt.set(!shiftallEnabled && !(config?.meganeX8K?.enable ?? true));
-            }else if(steamVrConfig){
+            } else if (steamVrConfig) {
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR');
                 this.driverWarning.set(!customEnabled);
                 this.driverEnablePrompt.set(false);
@@ -92,9 +93,9 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     }
     resetOption(key: keyof T) {
         if (this.settings && this.defaults) {
-            if(typeof this.defaults?.[key] === 'object'){
-                (this.settings as any)[key] = JSON.parse(JSON.stringify(this.defaults?.[key]));
-            }else{ 
+            if (this.defaults?.[key] && typeof this.defaults[key] === 'object') {
+                (this.settings as any)[key] = deepCopy(this.defaults[key]);
+            } else {
                 (this.settings as any)[key] = this.defaults?.[key];
             }
             this.saveConfigSettings()
