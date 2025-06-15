@@ -548,6 +548,9 @@
       <trans-unit id="8988091250221469673" datatype="html">
         <source>installed driver version</source>
       </trans-unit>
+      <trans-unit id="6439365426343089851" datatype="html">
+        <source>General</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

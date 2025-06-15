@@ -730,6 +730,10 @@
         <source>Enable Driver</source>
         <target state="translated">ドライバーを有効化</target>
       </trans-unit>
+      <trans-unit id="6439365426343089851" datatype="html">
+        <source>General</source>
+        <target state="translated">一般</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

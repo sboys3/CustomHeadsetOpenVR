@@ -652,11 +652,11 @@
       </trans-unit>
       <trans-unit id="7819125323126809048" datatype="html">
         <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
-        <target state="new">100% 渲染解析度寬度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。</target>
+        <target state="translated">100% 渲染解析度寬度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。此設定可能需要重新啟動才能套用。</target>
       </trans-unit>
       <trans-unit id="3656135147187301413" datatype="html">
         <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
-        <target state="new">100% 渲染解析度高度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。</target>
+        <target state="translated">100% 渲染解析度高度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。此設定可能需要重新啟動才能套用。</target>
       </trans-unit>
       <trans-unit id="5518205125788028902" datatype="html">
         <source>Seconds From VSync to Photons</source>
@@ -829,6 +829,10 @@
       <trans-unit id="4131031938144074766" datatype="html">
         <source>Enable Driver</source>
         <target state="translated">啟用驅動程式</target>
+      </trans-unit>
+      <trans-unit id="6439365426343089851" datatype="html">
+        <source>General</source>
+        <target state="translated">通用</target>
       </trans-unit>
     </body>
   </file>
