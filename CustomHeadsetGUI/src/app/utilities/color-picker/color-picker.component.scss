@@ -18,10 +18,11 @@ input[type=number] {
 }
 
 input[type=range] {
-	height: 1.4rem;
+	height: 1.6rem;
 	vertical-align: middle;
 	appearance: none;
 	-webkit-appearance: none;
+	border: 0.1em solid #2e2e2e;
 	flex-grow: 1
 }
 input[type=range]::-webkit-slider-thumb {
