@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="3377187322102407397" datatype="html">
         <source>Color Tint</source>
-        <target state="translated">色彩渲染</target>
+        <target state="translated">色調</target>
       </trans-unit>
       <trans-unit id="6691168530218751172" datatype="html">
         <source>Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene.</source>
