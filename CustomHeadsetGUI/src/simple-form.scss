@@ -1,3 +1,10 @@
+@mixin simpleInput() {
+    background-color: var(--mat-sys-surface-container-high);
+    border: 0.1rem solid var(--mat-sys-outline);
+    border-radius: 0.25rem;
+    height: 1.8rem;
+}
+
 @mixin formStyle() {
 
     display: flex;
@@ -83,9 +90,10 @@
             flex: 1 1 auto;
 
             input[type=number] {
-                width: 7rem;
+                @include simpleInput();
+                width: 8rem;
                 font-size: 130%;
-                margin-right: 1rem;
+                margin-right: 0.5rem;
                 text-align: right;
             }
 

@@ -23,8 +23,8 @@
       <trans-unit id="765305289258005204" datatype="html">
         <source>app version</source>
       </trans-unit>
-      <trans-unit id="5551731962623384570" datatype="html">
-        <source>New version available!</source>
+      <trans-unit id="7047036364814348431" datatype="html">
+        <source>New version available</source>
       </trans-unit>
       <trans-unit id="8491984279391991305" datatype="html">
         <source>(Up to date)</source>
@@ -221,9 +221,6 @@
       <trans-unit id="3051991385923492490" datatype="html">
         <source>Not installed</source>
       </trans-unit>
-      <trans-unit id="5555679852113886646" datatype="html">
-        <source>driver version</source>
-      </trans-unit>
       <trans-unit id="5696123826602687537" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></source>
       </trans-unit>
@@ -257,7 +254,7 @@
       <trans-unit id="4651117059363790056" datatype="html">
         <source>100% Render resolution for SteamVR</source>
       </trans-unit>
-      <trans-unit id="8347767686698958660" datatype="html">
+      <trans-unit id="6195061204627290703" datatype="html">
         <source>Render resolution for 1:1 sample per panel pixel</source>
       </trans-unit>
       <trans-unit id="1201696567241717027" datatype="html">
@@ -302,14 +299,14 @@
       <trans-unit id="2421348343423477743" datatype="html">
         <source>Inverts the meshes to only show the areas that will be hidden.</source>
       </trans-unit>
-      <trans-unit id="4907691917396407663" datatype="html">
-        <source>Require restart SteamVR to apply changes.</source>
+      <trans-unit id="5294445514709130519" datatype="html">
+        <source>Requires restarting SteamVR to apply changes.</source>
       </trans-unit>
-      <trans-unit id="49266763300376978" datatype="html">
-        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
+      <trans-unit id="2548696539154999507" datatype="html">
+        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them. Click for more information.</source>
       </trans-unit>
-      <trans-unit id="6510312666905899307" datatype="html">
-        <source>Require restart game to apply changes.</source>
+      <trans-unit id="6569858061936517894" datatype="html">
+        <source>Requires restarting the game to apply changes.</source>
       </trans-unit>
       <trans-unit id="1969673185132484114" datatype="html">
         <source>Dim Brightness Percent</source>
@@ -389,9 +386,6 @@
       <trans-unit id="1293521252153505574" datatype="html">
         <source>The minimum amount of rotation in degrees that will reset the stationary dimming timer.</source>
       </trans-unit>
-      <trans-unit id="1324452384340955807" datatype="html">
-        <source>Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
-      </trans-unit>
       <trans-unit id="1488156220085285219" datatype="html">
         <source>The amount of time it takes to go from bright to dim.</source>
       </trans-unit>
@@ -406,9 +400,6 @@
       </trans-unit>
       <trans-unit id="2210953895431071691" datatype="html">
         <source>When enabled, the Custom Headset driver will run the MeganeX superlight 8K.</source>
-      </trans-unit>
-      <trans-unit id="2236616074560208736" datatype="html">
-        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
       </trans-unit>
       <trans-unit id="2261913743249257236" datatype="html">
         <source>The minimum brightness percentage that the display will dim to when stationary.</source>
@@ -433,9 +424,6 @@
       </trans-unit>
       <trans-unit id="347583554594702753" datatype="html">
         <source>Enables or disables the hidden area meshes.</source>
-      </trans-unit>
-      <trans-unit id="3918842139353452154" datatype="html">
-        <source>The inter pupillary distance of the virtual cameras in SteamVR applications.</source>
       </trans-unit>
       <trans-unit id="4398666323666535983" datatype="html">
         <source>Adjusts the contrast of the image. When higher than 50, the colors in the image will be expanded away from the midpoint. When lower than 50, the colors in the image will be contracted towards the midpoint.</source>
@@ -464,17 +452,14 @@
       <trans-unit id="5868413981442823243" datatype="html">
         <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
       </trans-unit>
-      <trans-unit id="5943615683012338742" datatype="html">
-        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
-      </trans-unit>
       <trans-unit id="6143642524180911701" datatype="html">
         <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
       </trans-unit>
       <trans-unit id="6792221707733687579" datatype="html">
         <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
       </trans-unit>
-      <trans-unit id="6936171169309236513" datatype="html">
-        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+      <trans-unit id="3656135147187301413" datatype="html">
+        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
       </trans-unit>
       <trans-unit id="6958907557549298899" datatype="html">
         <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
@@ -494,8 +479,8 @@
       <trans-unit id="7634542220919712546" datatype="html">
         <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
       </trans-unit>
-      <trans-unit id="794141015200109027" datatype="html">
-        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider.</source>
+      <trans-unit id="7819125323126809048" datatype="html">
+        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
       </trans-unit>
       <trans-unit id="7975741758736447642" datatype="html">
         <source>Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov.</source>
@@ -514,6 +499,54 @@
       </trans-unit>
       <trans-unit id="9157492168132046017" datatype="html">
         <source>Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel.</source>
+      </trans-unit>
+      <trans-unit id="2384844509787586912" datatype="html">
+        <source>Driver not enabled</source>
+      </trans-unit>
+      <trans-unit id="238553294014386856" datatype="html">
+        <source>Re-Install Driver</source>
+      </trans-unit>
+      <trans-unit id="3023147292772911329" datatype="html">
+        <source>last run driver version</source>
+      </trans-unit>
+      <trans-unit id="3377187322102407397" datatype="html">
+        <source>Color Tint</source>
+      </trans-unit>
+      <trans-unit id="3874277521893641331" datatype="html">
+        <source>Current rendered FOV</source>
+      </trans-unit>
+      <trans-unit id="4131031938144074766" datatype="html">
+        <source>Enable Driver</source>
+      </trans-unit>
+      <trans-unit id="5251436848651467180" datatype="html">
+        <source>Driver enabled</source>
+      </trans-unit>
+      <trans-unit id="5683939155976813564" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications. You set the headset&apos;s physical IPD in the Shiftall Configurator. This IPD should be matched with what you set in the Shiftall Configurator to get the correct world scale.</source>
+      </trans-unit>
+      <trans-unit id="5955149998366331673" datatype="html">
+        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+      </trans-unit>
+      <trans-unit id="6265350536077157049" datatype="html">
+        <source>The percentage of the 1:1 resolution that the super sampling downscale area filter is applied. The subpixel shifts with the custom shader can make use of the 500% resolution above 1:1. Without subpixel sampling this value can be lowered to downscale the input so that all pixels contribute to the output. Toggling off advanced supersample filtering in SteamVR will disable this.</source>
+      </trans-unit>
+      <trans-unit id="6691168530218751172" datatype="html">
+        <source>Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene.</source>
+      </trans-unit>
+      <trans-unit id="6835956377369507232" datatype="html">
+        <source>Samples subpixels from the correct locations in the image to improve sharpness by lighting up individual subpixels. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
+      </trans-unit>
+      <trans-unit id="7005778905519445414" datatype="html">
+        <source>This custom shader has the possibility to completely break SteamVR after a future SteamVR update. Valve has no obligation to maintain compatibility with this modification. Disable it if you have issues or compatibility problems.</source>
+      </trans-unit>
+      <trans-unit id="7681727633925076580" datatype="html">
+        <source>Super Sampling Filter Percent</source>
+      </trans-unit>
+      <trans-unit id="8207031890218332522" datatype="html">
+        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+      </trans-unit>
+      <trans-unit id="8988091250221469673" datatype="html">
+        <source>installed driver version</source>
       </trans-unit>
     </body>
   </file>

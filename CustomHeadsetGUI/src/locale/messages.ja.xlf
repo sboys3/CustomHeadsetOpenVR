@@ -190,9 +190,9 @@
         <source>Github Page</source>
         <target state="translated">Githubページ</target>
       </trans-unit>
-      <trans-unit id="5551731962623384570" datatype="html">
-        <source>New version available!</source>
-        <target state="translated">新しいバージョンが利用可能です！</target>
+      <trans-unit id="7047036364814348431" datatype="html">
+        <source>New version available</source>
+        <target state="new">新しいバージョンが利用可能です！</target>
       </trans-unit>
       <trans-unit id="8491984279391991305" datatype="html">
         <source>(Up to date)</source>
@@ -290,10 +290,6 @@
         <source>Render Resolution Height Multiplier</source>
         <target state="translated">レンダリング解像度 縦倍率</target>
       </trans-unit>
-      <trans-unit id="5555679852113886646" datatype="html">
-        <source>driver version</source>
-        <target state="translated">ドライバーバージョン</target>
-      </trans-unit>
       <trans-unit id="5696123826602687537" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></source>
         <target state="translated"><x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/> をインストール</target>
@@ -342,7 +338,7 @@
         <source>100% Render resolution for SteamVR</source>
         <target state="translated">SteamVR用レンダリング解像度100%</target>
       </trans-unit>
-      <trans-unit id="8347767686698958660" datatype="html">
+      <trans-unit id="6195061204627290703" datatype="html">
         <source>Render resolution for 1:1 sample per panel pixel</source>
         <target state="translated">パネルピクセルあたり1:1サンプルのレンダリング解像度</target>
       </trans-unit>
@@ -398,21 +394,21 @@
         <source>Movement Time</source>
         <target state="translated">静止時間</target>
       </trans-unit>
-      <trans-unit id="49266763300376978" datatype="html">
-        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them.</source>
-        <target state="translated">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。</target>
+      <trans-unit id="2548696539154999507" datatype="html">
+        <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them. Click for more information.</source>
+        <target state="new">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。</target>
       </trans-unit>
       <trans-unit id="2421348343423477743" datatype="html">
         <source>Inverts the meshes to only show the areas that will be hidden.</source>
         <target state="translated">メッシュを反転させ、非表示になる領域のみを表示します。</target>
       </trans-unit>
-      <trans-unit id="4907691917396407663" datatype="html">
-        <source>Require restart SteamVR to apply changes.</source>
-        <target state="translated">変更を適用するには、SteamVRの再起動が必要です。</target>
+      <trans-unit id="5294445514709130519" datatype="html">
+        <source>Requires restarting SteamVR to apply changes.</source>
+        <target state="new">変更を適用するには、SteamVRの再起動が必要です。</target>
       </trans-unit>
-      <trans-unit id="6510312666905899307" datatype="html">
-        <source>Require restart game to apply changes.</source>
-        <target state="translated">変更を適用するには、ゲームの再起動が必要です。</target>
+      <trans-unit id="6569858061936517894" datatype="html">
+        <source>Requires restarting the game to apply changes.</source>
+        <target state="new">変更を適用するには、ゲームの再起動が必要です。</target>
       </trans-unit>
       <trans-unit id="2856900395968306204" datatype="html">
         <source>Movement Threshold Degrees</source>
@@ -506,7 +502,7 @@
         <source>Enable for Other HMDs</source>
         <target state="translated">その他のHMD向けに有効化</target>
       </trans-unit>
-<trans-unit id="5832230287995382782" datatype="html">
+      <trans-unit id="5832230287995382782" datatype="html">
         <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
         <target state="translated">SteamVRのコンポジターにある歪みシェーダーを、より多くのカスタマイズを可能にするカスタムシェーダーに置き換えます。</target>
       </trans-unit>
@@ -537,10 +533,6 @@
       <trans-unit id="1101953333251248565" datatype="html">
         <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
         <target state="translated">画像のガンマを調整します。これは輝度がディスプレイの明るさにどのようにマッピングされるかを制御します。ガンマ値が高いほど、画像の暗い部分が明るくなります。</target>
-      </trans-unit>
-      <trans-unit id="1324452384340955807" datatype="html">
-        <source>Shifts the subpixels of supported headset displays to improve sharpness. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
-        <target state="translated">対応するヘッドセットディスプレイのサブピクセルをずらし、シャープネスを向上させます。MeganeXでは特に効果が大きく、1:1解像度の300%以上のディテールを引き出すことができます。Viveも対応していますが、改善効果はそれほど目立ちません。</target>
       </trans-unit>
       <trans-unit id="5868413981442823243" datatype="html">
         <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
@@ -574,18 +566,170 @@
         <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
         <target state="translated">ヘッドセットに使用する歪みプロファイル。「歪み」タブで他のオプションを確認できます。</target>
       </trans-unit>
-      <trans-unit id="3918842139353452154" datatype="html">
-        <source>The inter pupillary distance of the virtual cameras in SteamVR applications.</source>
-        <target state="translated">SteamVRアプリケーションにおける仮想カメラの瞳孔間距離（IPD）。</target>
+      <trans-unit id="8988091250221469673" datatype="html">
+        <source>installed driver version</source>
+        <target state="translated">インストール済みのドライバーバージョン</target>
       </trans-unit>
-      <trans-unit id="5943615683012338742" datatype="html">
-        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
-        <target state="translated">ヘッドセットで水平方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。</target>
+      <trans-unit id="3023147292772911329" datatype="html">
+        <source>last run driver version</source>
+        <target state="translated">最終実行時のドライバーバージョン</target>
       </trans-unit>
-      <trans-unit id="2236616074560208736" datatype="html">
-        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion.</source>
-        <target state="translated">ヘッドセットで垂直方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。</target>
-         </trans-unit>
+      <trans-unit id="238553294014386856" datatype="html">
+        <source>Re-Install Driver</source>
+        <target state="translated">ドライバーを再インストール</target>
+      </trans-unit>
+      <trans-unit id="7005778905519445414" datatype="html">
+        <source>This custom shader has the possibility to completely break SteamVR after a future SteamVR update. Valve has no obligation to maintain compatibility with this modification. Disable it if you have issues or compatibility problems.</source>
+        <target state="translated">このカスタムシェーダーは、将来のSteamVRアップデート後にSteamVRを完全に破損させる可能性があります。Valveには、この改造との互換性を維持する義務はありません。問題や互換性の問題が発生した場合は、この機能を無効にしてください。</target>
+      </trans-unit>
+      <trans-unit id="6835956377369507232" datatype="html">
+        <source>Samples subpixels from the correct locations in the image to improve sharpness by lighting up individual subpixels. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
+        <target state="translated">画像内の正しい位置からサブピクセルをサンプリングし、個々のサブピクセルを点灯させることでシャープネスを向上させます。MeganeXでは特に効果が大きく、1:1解像度の300%以上のディテールを引き出すことができます。Viveも対応していますが、改善効果はそれほど目立ちません。</target>
+      </trans-unit>
+      <trans-unit id="5683939155976813564" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications. You set the headset&apos;s physical IPD in the Shiftall Configurator. This IPD should be matched with what you set in the Shiftall Configurator to get the correct world scale.</source>
+        <target state="translated">SteamVRアプリケーションにおける仮想カメラの瞳孔間距離（IPD）です。ヘッドセットの物理的なIPDは「Shiftall設定ツール」で設定します。正しいワールドスケールを得るためには、このIPDを「Shiftall設定ツール」で設定した値と一致させる必要があります。</target>
+      </trans-unit>
+      <trans-unit id="8207031890218332522" datatype="html">
+        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+        <target state="translated">ヘッドセットで水平方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。この設定を完全に適用するには、ゲームの再起動が必要な場合があります。</target>
+      </trans-unit>
+      <trans-unit id="5955149998366331673" datatype="html">
+        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+        <target state="translated">ヘッドセットで垂直方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。この設定を完全に適用するには、ゲームの再起動が必要な場合があります。</target>
+      </trans-unit>
+      <trans-unit id="6958907557549298899" datatype="html">
+        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
+        <target state="translated">SteamVRが実行される解像度と最適な解像度に関する情報を表示します。視野角（FOV）などの設定がこれに影響します。この情報は、MeganeXがこのドライバーでアクティブに実行されている間のみ更新されます。</target>
+      </trans-unit>
+      <trans-unit id="3874277521893641331" datatype="html">
+        <source>Current rendered FOV</source>
+        <target state="translated">現在のレンダリングFOV</target>
+      </trans-unit>
+      <trans-unit id="8045582904723345362" datatype="html">
+        <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
+        <target state="translated">歪みプロファイルのズームレベルを調整します。これは視度（ディオプター）を補正するために使用でき、より高い視度設定ではプラスのズームが必要になります。ただし、これによりある程度の画像の歪みが発生します。</target>
+      </trans-unit>
+      <trans-unit id="3377187322102407397" datatype="html">
+        <source>Color Tint</source>
+        <target state="translated">カラーティント</target>
+      </trans-unit>
+      <trans-unit id="6691168530218751172" datatype="html">
+        <source>Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene.</source>
+        <target state="translated">ヘッドセットの色を調整します。シーンの明るさを増減させるためにも使用できます。</target>
+      </trans-unit>
+      <trans-unit id="6792221707733687579" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
+        <target state="translated">この機能は、ヘッドセットが静止しているときに自動的にディスプレイを減光し、パネルを焼き付きから保護します。しきい値を超えて動くたびに、ディスプレイは「移動時間」の間、明るいままになります。</target>
+      </trans-unit>
+      <trans-unit id="2861813522442601500" datatype="html">
+        <source>Enables or disables the stationary dimming feature.</source>
+        <target state="translated">静止時減光機能を有効または無効にします。</target>
+      </trans-unit>
+      <trans-unit id="1293521252153505574" datatype="html">
+        <source>The minimum amount of rotation in degrees that will reset the stationary dimming timer.</source>
+        <target state="translated">静止時減光タイマーをリセットするのに必要な最小回転量（度）。</target>
+      </trans-unit>
+      <trans-unit id="1865011951137718165" datatype="html">
+        <source>The amount of time in seconds that the display will remain bright after movement.</source>
+        <target state="translated">動きが検出された後、ディスプレイが明るい状態を維持する時間（秒）。</target>
+      </trans-unit>
+      <trans-unit id="2261913743249257236" datatype="html">
+        <source>The minimum brightness percentage that the display will dim to when stationary.</source>
+        <target state="translated">静止時にディスプレイが減光する最小輝度（パーセント）。</target>
+      </trans-unit>
+      <trans-unit id="1488156220085285219" datatype="html">
+        <source>The amount of time it takes to go from bright to dim.</source>
+        <target state="translated">明るい状態から暗い状態に移行するのにかかる時間。</target>
+      </trans-unit>
+      <trans-unit id="715138922561408923" datatype="html">
+        <source>The amount of time it takes to go from dim to bright.</source>
+        <target state="translated">暗い状態から明るい状態に移行するのにかかる時間。</target>
+      </trans-unit>
+      <trans-unit id="347583554594702753" datatype="html">
+        <source>Enables or disables the hidden area meshes.</source>
+        <target state="translated">非表示領域メッシュを有効または無効にします。</target>
+      </trans-unit>
+      <trans-unit id="1013018539656511103" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your nose.</source>
+        <target state="translated">非表示領域メッシュの、鼻に近い上部の可視領域の半径。</target>
+      </trans-unit>
+      <trans-unit id="85559335853494335" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your nose.</source>
+        <target state="translated">非表示領域メッシュの、鼻に近い下部の可視領域の半径。</target>
+      </trans-unit>
+      <trans-unit id="300522424104416983" datatype="html">
+        <source>The radius of the visible area at the top of the hidden area mesh near your ears.</source>
+        <target state="translated">非表示領域メッシュの、耳に近い上部の可視領域の半径。</target>
+      </trans-unit>
+      <trans-unit id="4446503733054332206" datatype="html">
+        <source>The radius of the visible area at the bottom of the hidden area mesh near your ears.</source>
+        <target state="translated">非表示領域メッシュの、耳に近い下部の可視領域の半径。</target>
+      </trans-unit>
+      <trans-unit id="4891791018896428318" datatype="html">
+        <source>The number of vertices used to create each section of the hidden area mesh. Higher values increase the smoothness of the mesh.</source>
+        <target state="translated">非表示領域メッシュの各セクションを作成するために使用される頂点の数。値が高いほど、メッシュの滑らかさが増します。</target>
+      </trans-unit>
+      <trans-unit id="1651122445619194508" datatype="html">
+        <source>These settings have defaults that should not need to be changed but are provided for experimentation.</source>
+        <target state="translated">これらの設定にはデフォルト値があり、変更する必要はありませんが、実験のために提供されています。</target>
+      </trans-unit>
+      <trans-unit id="4595919550679720902" datatype="html">
+        <source>The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets.</source>
+        <target state="translated">ディスプレイが到達する最小輝度レベル。LCDヘッドセットのスミアがかった灰色がお好きなら、この値を上げてください。</target>
+      </trans-unit>
+      <trans-unit id="9103482387790094220" datatype="html">
+        <source>This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon.</source>
+        <target state="translated">この値はIPD値に加算されます。メインのIPDスライダーを使用し、ここは0のままにしておいてください。この設定はおそらく近日中に削除されます。</target>
+      </trans-unit>
+      <trans-unit id="9157492168132046017" datatype="html">
+        <source>Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel.</source>
+        <target state="translated">UV歪みを利用してディスプレイのサブピクセルをずらし、色収差とシャープネスを改善します。デフォルト値はOLEDパネルに最適化されています。</target>
+      </trans-unit>
+      <trans-unit id="2846574612210787191" datatype="html">
+        <source>The resolution of the distortion mesh. Higher values prevent small wavy artifacts in the corners of the lenses but makes other settings laggier. The default pretty much eliminates the artifacts.</source>
+        <target state="translated">歪みメッシュの解像度。値を高くすると、レンズの隅にある小さな波状のアーティファクトを防ぎますが、他の設定の反応が遅くなります。デフォルト値でアーティファクトはほぼ解消されます。</target>
+      </trans-unit>
+      <trans-unit id="7975741758736447642" datatype="html">
+        <source>Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov.</source>
+        <target state="translated">実行のたびに視野角（FOV）に最大3度をランダムに追加し、ディスプレイのFOV端での急な焼き付きを防ぎます。あなたや次の所有者がFOVを広げたい場合に備え、この機能をオフにしないことをお勧めします。</target>
+      </trans-unit>
+      <trans-unit id="7819125323126809048" datatype="html">
+        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
+        <target state="translated">100%レンダリング解像度の幅に対する乗数。これにより、解像度のアスペクト比を変更したり、SteamVRスライダーの20%〜500%の範囲外の解像度に到達したりできます。適用には再起動が必要な場合があります。</target>
+      </trans-unit>
+      <trans-unit id="3656135147187301413" datatype="html">
+        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
+        <target state="translated">100%レンダリング解像度の高さに対する乗数。これにより、解像度のアスペクト比を変更したり、SteamVRスライダーの20%〜500%の範囲外の解像度に到達したりできます。適用には再起動が必要な場合があります。</target>
+      </trans-unit>
+      <trans-unit id="7681727633925076580" datatype="html">
+        <source>Super Sampling Filter Percent</source>
+        <target state="translated">スーパーサンプリングフィルター (%)</target>
+      </trans-unit>
+      <trans-unit id="6265350536077157049" datatype="html">
+        <source>The percentage of the 1:1 resolution that the super sampling downscale area filter is applied. The subpixel shifts with the custom shader can make use of the 500% resolution above 1:1. Without subpixel sampling this value can be lowered to downscale the input so that all pixels contribute to the output. Toggling off advanced supersample filtering in SteamVR will disable this.</source>
+        <target state="translated">スーパーサンプリングのダウンスケールエリアフィルターが適用される、1:1解像度に対するパーセンテージ。カスタムシェーダーによるサブピクセルシフトは、1:1を超える500%の解像度を活用できます。サブピクセルサンプリングがない場合、この値を下げて入力をダウンスケールし、すべてのピクセルが出力に寄与するようにできます。SteamVRの高度なスーパーサンプルフィルタリングをオフにすると、これは無効になります。</target>
+      </trans-unit>
+      <trans-unit id="5518205125788028902" datatype="html">
+        <source>Seconds From VSync to Photons</source>
+        <target state="translated">VSyncから光子までの秒数</target>
+      </trans-unit>
+      <trans-unit id="563695625550992951" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
+        <target state="translated">GPUがレンダリングを完了してからディスプレイが更新されるまでの時間。これはタイムワープ補正の計算に使用されます。</target>
+      </trans-unit>
+      <trans-unit id="5251436848651467180" datatype="html">
+        <source>Driver enabled</source>
+        <target state="translated">ドライバーは有効です</target>
+      </trans-unit>
+      <trans-unit id="2384844509787586912" datatype="html">
+        <source>Driver not enabled</source>
+        <target state="translated">ドライバーは有効ではありません</target>
+      </trans-unit>
+      <trans-unit id="4131031938144074766" datatype="html">
+        <source>Enable Driver</source>
+        <target state="translated">ドライバーを有効化</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

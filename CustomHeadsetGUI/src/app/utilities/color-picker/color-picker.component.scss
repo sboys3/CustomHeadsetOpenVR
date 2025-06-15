@@ -1,20 +1,47 @@
-.color-picker-component{
-	// height: 2em;
+@use '../../../simple-form.scss' as sf;
+
+:host {
+	--component-height: 2.3rem;
+}
+
+.color-picker-component {
+	height: var(--component-height);
 	display: flex;
 	align-items: center;
 	width: 100%;
-}
-.color-picker-label{
-	display: inline-block;
-	width: 1em;
+	position: relative;
 }
 
+.color-picker-label {
+	display: block;
+	position: absolute;
+	font-weight: bold;
+	left: 0;
+	top: calc((var(--component-height) - 1.8rem) / 2);
+	width: 1.1rem;
+
+	height: 1.8rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--mat-sys-secondary-container);
+	border: 0.1rem solid var(--mat-sys-outline);
+	border-right: 0;
+	border-radius: 0.25rem 0 0 0.25rem;
+
+}
+
+:host {
+	margin: 0.5rem 0;
+}
 
 input[type=number] {
-	width: 7rem;
+	@include sf.simpleInput();
+	width: 8rem;
 	font-size: 130%;
-	margin-right: 1rem;
+	margin-right: 0.7rem;
 	text-align: right;
+	padding-left: 1.2rem;
 }
 
 input[type=range] {
@@ -22,46 +49,42 @@ input[type=range] {
 	vertical-align: middle;
 	appearance: none;
 	-webkit-appearance: none;
-	border: 0.1em solid #2e2e2e;
-	flex-grow: 1
+	border: 0.1rem solid #2e2e2e;
+	flex: 1 1 auto;
+	border-radius: 0.4rem;
 }
+
 input[type=range]::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	width: 1.5em;
 	height: 1.5em;
-	background: #dadada;
+	background: #eaeaea;
 	cursor: pointer;
-	border: 0.2em solid #2e2e2e;
-	border-radius: 25%;
+	border: 0.15rem solid #333;
+	border-radius: 0.4rem;
 }
 
-input[type=range]::-moz-range-thumb {
-	appearance: none;
-	width: 1.5em;
-	height: 1.5em;
-	background: #dadada;
-	cursor: pointer;
-	border: 0.2em solid #2e2e2e;
-	border-radius: 25%;
-}
-
-.slider-red{
+.slider-red {
 	background: linear-gradient(to right, #000000, #ff0000, #ffaaaa);
 }
-.slider-green{
+
+.slider-green {
 	background: linear-gradient(to right, #000000, #00ff00, #aaffaa);
 }
-.slider-blue{
+
+.slider-blue {
 	background: linear-gradient(to right, #000000, #0000ff, #aaaaff);
 }
 
-.slider-hue{
+.slider-hue {
 	background: linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 16.66%, rgb(0, 255, 0) 33.33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 66.66%, rgb(255, 0, 255) 83.33%, rgb(255, 0, 0) 100%);
 }
-.slider-saturation{
+
+.slider-saturation {
 	background: linear-gradient(to right, #ffffff, #000000);
 }
-.slider-brightness{
+
+.slider-brightness {
 	background: linear-gradient(to right, #000000, #ffffff, #ffffff, #ffffff);
 }
