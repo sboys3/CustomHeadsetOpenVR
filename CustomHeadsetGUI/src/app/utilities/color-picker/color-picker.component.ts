@@ -1,55 +1,52 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, effect, ElementRef, EventEmitter, input, Input, model, Output } from '@angular/core';
 import { LinearColor } from '../../services/JsonFileDefines'
-import {MatInputModule} from '@angular/material/input'
-import {FormsModule} from '@angular/forms'
-import {MatSlider} from '@angular/material/slider'
+import { MatInputModule } from '@angular/material/input'
+import { FormsModule } from '@angular/forms'
+import { MatSlider } from '@angular/material/slider'
 
 @Component({
   selector: 'app-color-picker',
   imports: [
     MatInputModule,
-    MatSlider,
     FormsModule,
   ],
   templateUrl: './color-picker.component.html',
   styleUrl: './color-picker.component.scss'
 })
 export class ColorPickerComponent {
-  @Input()
-  public color: LinearColor = {r:1, g:1, b:1};
-  
-  @Input()
-  public useHSV: boolean = true;
-  
-  @Output()
-  public colorChange = new EventEmitter<LinearColor>();
-  
-  public colorHSV: LinearColor = {r:0, g:0, b:0};
-  public colorSaturated: LinearColor = {r:1, g:1, b:1};
-  
+  public colorValue = { r: 1, g: 1, b: 1 }
+  public color = model<LinearColor>(this.colorValue);
+  public useHSV = input(true)
+  public colorHSV: LinearColor = { r: 0, g: 0, b: 0 };
+  public colorSaturated: LinearColor = { r: 1, g: 1, b: 1 };
+  constructor(elementRef: ElementRef<HTMLElement>) {
+    effect(() => {
+      this.colorValue = this.color();
+      let newHsv = this.rgbToHsv(this.colorValue);
+      if (this.colorValue.r == this.colorValue.g && this.colorValue.g == this.colorValue.b) {
+        newHsv.r = this.colorHSV.r;
+      }
+      if (this.colorValue.r == 0 && this.colorValue.g == 0 && this.colorValue.b == 0) {
+        newHsv.g = this.colorHSV.g;
+      }
+      this.colorHSV = newHsv;
+      elementRef.nativeElement.style.setProperty('--r', `${this.colorValue.r * 255}`)
+      elementRef.nativeElement.style.setProperty('--g', `${this.colorValue.g * 255}`)
+      elementRef.nativeElement.style.setProperty('--b', `${this.colorValue.b * 255}`)
+      elementRef.nativeElement.style.setProperty('--color-saturated', `${this.colorHSV.r * 255}`)
+    })
+  }
   colorInputChanged() {
-    this.colorChange.emit(this.color);
+    this.color.set({ ...this.colorValue });
   }
-  
+
   colorInputChangedHSV() {
-    this.color = this.hsvToRgb(this.colorHSV);
-    this.colorSaturated = this.hsvToRgb({r: this.colorHSV.r, g: 1, b: 1});
-    this.colorChange.emit(this.color);
+    this.colorValue = this.hsvToRgb(this.colorHSV);
+    this.colorSaturated = this.hsvToRgb({ r: this.colorHSV.r, g: 1, b: 1 });
+    this.color.set({ ...this.colorValue });
   }
-  
-  // update hsv from color
-  ngOnChanges() {
-    let newHsv = this.rgbToHsv(this.color);
-    if(this.color.r == this.color.g && this.color.g == this.color.b) {
-      newHsv.r = this.colorHSV.r;
-    }
-    if(this.color.r == 0 && this.color.g == 0 && this.color.b == 0) {
-      newHsv.g = this.colorHSV.g;
-    }
-    this.colorHSV = newHsv;
-    this.colorSaturated = this.hsvToRgb({r: this.colorHSV.r, g: 1, b: 1});
-  }
-  
+
+
   rgbToHsv(rgb: LinearColor): LinearColor {
     const r = rgb.r;
     const g = rgb.g;
@@ -81,7 +78,7 @@ export class ColorPickerComponent {
     h = Math.round(h * 1000000000) / 1000000000;
     s = Math.round(s * 1000000000) / 1000000000;
     v = Math.round(v * 1000000000) / 1000000000;
-    return {r: h, g: s, b: v};
+    return { r: h, g: s, b: v };
   }
   hsvToRgb(hsv: LinearColor): LinearColor {
     const h = hsv.r;
@@ -133,6 +130,6 @@ export class ColorPickerComponent {
         b = q;
         break
     }
-    return {r: r, g: g, b: b};
+    return { r: r, g: g, b: b };
   }
 }

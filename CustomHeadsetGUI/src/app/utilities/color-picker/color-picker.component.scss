@@ -2,6 +2,30 @@
 
 :host {
 	--component-height: 2.3rem;
+	margin: 0.5rem 0;
+	display: flex;
+	position: relative;
+	align-items: stretch;
+
+	>div {
+		display: block;
+		position: relative;
+
+		&.control {
+			flex: 1 1 auto;
+		}
+
+		&.color-display {
+			display: block;
+			content: '';
+			width: 1.5rem;
+			border-radius: 0.5rem;
+			border: 0.1rem solid var(--mat-sys-outline);
+			background-color: rgb(var(--r), var(--g), var(--b));
+			margin: 0.25rem;
+		}
+	}
+
 }
 
 .color-picker-component {
@@ -31,9 +55,6 @@
 
 }
 
-:host {
-	margin: 0.5rem 0;
-}
 
 input[type=number] {
 	@include sf.simpleInput();
@@ -49,7 +70,7 @@ input[type=range] {
 	vertical-align: middle;
 	appearance: none;
 	-webkit-appearance: none;
-	border: 0.1rem solid #2e2e2e;
+	border: 0.1rem solid var(--mat-sys-outline);
 	flex: 1 1 auto;
 	border-radius: 0.4rem;
 }
