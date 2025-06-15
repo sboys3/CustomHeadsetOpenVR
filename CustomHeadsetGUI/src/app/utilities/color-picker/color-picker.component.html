@@ -1,0 +1,36 @@
+<div>
+	@if(useHSV){
+	<div class="color-picker-component">
+		<span class="color-picker-label">H</span>
+		<input matInput [(ngModel)]="colorHSV.r" (ngModelChange)="colorInputChangedHSV()" type="number" step="0.011111"/>
+		<input class="slider-hue" [(ngModel)]="colorHSV.r" (ngModelChange)="colorInputChangedHSV()" type="range" min="0" max="1" step="0.011111"/>
+	</div>
+	<div class="color-picker-component">
+		<span class="color-picker-label">S</span>
+		<input matInput [(ngModel)]="colorHSV.g" (ngModelChange)="colorInputChangedHSV()" type="number" step="0.01"/>
+		<input class="slider-saturation" [style.background]="'linear-gradient(to right, #ffffff, rgb(' + 255 * colorSaturated.r + ', ' + 255 * colorSaturated.g + ', ' + 255 * colorSaturated.b + ')'" [(ngModel)]="colorHSV.g" (ngModelChange)="colorInputChangedHSV()" type="range" min="0" max="1" step="0.01"/>
+	</div>
+	<div class="color-picker-component">
+		<span class="color-picker-label">V</span>
+		<input matInput [(ngModel)]="colorHSV.b" (ngModelChange)="colorInputChangedHSV()" type="number" step="0.01"/>
+		<input class="slider-brightness" [(ngModel)]="colorHSV.b" (ngModelChange)="colorInputChangedHSV()" type="range" min="0.01" max="3" step="0.01"/>
+	</div>
+	}
+	@else{
+	<div class="color-picker-component">
+		<span class="color-picker-label">R</span>
+		<input matInput [(ngModel)]="color.r" (ngModelChange)="colorInputChanged()" type="number" step="0.01"/>
+		<input class="slider-red" [(ngModel)]="color.r" (ngModelChange)="colorInputChanged()" type="range" min="0" max="2" step="0.01"/>
+	</div>
+	<div class="color-picker-component">
+		<span class="color-picker-label">G</span>
+		<input matInput [(ngModel)]="color.g" (ngModelChange)="colorInputChanged()" type="number" step="0.01"/>
+		<input class="slider-green" [(ngModel)]="color.g" (ngModelChange)="colorInputChanged()" type="range" min="0" max="2" step="0.01"/>
+	</div>
+	<div class="color-picker-component">
+		<span class="color-picker-label">B</span>
+		<input matInput [(ngModel)]="color.b" (ngModelChange)="colorInputChanged()" type="number" step="0.01"/>
+		<input class="slider-blue" [(ngModel)]="color.b" (ngModelChange)="colorInputChanged()" type="range" min="0" max="2" step="0.01"/>
+	</div>
+	}
+</div>

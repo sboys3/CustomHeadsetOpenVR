@@ -14,6 +14,7 @@ import { FieldNoteComponent } from '../../../utilities/field-note/field-note.com
 import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.component';
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
 import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
+import {ColorPickerComponent} from '../../../utilities/color-picker/color-picker.component'
 
 @Component({
   selector: 'app-meganex-x8-k',
@@ -29,6 +30,7 @@ import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
     ResetButtonComponent,
     FieldTipComponent,
     FieldNoteComponent,
+    ColorPickerComponent,
     CommonModule],
   templateUrl: './meganex-x8-k.component.html',
   styleUrl: './meganex-x8-k.component.scss'

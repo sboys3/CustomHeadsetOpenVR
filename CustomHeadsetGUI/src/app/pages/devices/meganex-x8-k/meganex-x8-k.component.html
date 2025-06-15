@@ -175,6 +175,19 @@
     </div>
 </div>
 <div class="field">
+    <div class="title">
+        <span i18n>Color Tint</span>
+        <app-field-tip i18n-info
+            info="Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene." />
+        <app-reset-button [canReset]="settings.colorMultiplier.r != defaults.colorMultiplier.r || settings.colorMultiplier.g != defaults.colorMultiplier.g || settings.colorMultiplier.b != defaults.colorMultiplier.b"
+            (resetClick)="resetOption('colorMultiplier')"></app-reset-button>
+    </div>
+    <div class="control">
+        <app-color-picker style="width: 100%" [(color)]="settings.colorMultiplier" (colorChange)="saveConfigSettings()">
+        </app-color-picker>
+    </div>
+</div>
+<div class="field">
     <div class="section-title">
         <span i18n>Stationary Dimming Settings</span>
         <app-field-tip i18n-info

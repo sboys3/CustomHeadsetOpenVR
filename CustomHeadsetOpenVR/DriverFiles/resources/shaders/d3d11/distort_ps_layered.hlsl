@@ -133,20 +133,21 @@ OutputStruct main(in InputStruct IN)
 	// if(frac(g_flTime)>0.5){
 	// 	offsetAmountY = 100;
 	// }
+	// I am not sure why the red subpixel is flipped vs the shadertoy, but it seems correct in testing
 	if(outputPixelOdd){
-		IN.uv1.xy +=  offsetAmountY;
+		IN.uv1.xy += -offsetAmountY;
 		IN.uv2.xy +=  offsetAmountY;
 		IN.uv3.xy += -offsetAmountY;
 		
-		IN.uv1.zw +=  offsetAmountYOverlay;
+		IN.uv1.zw += -offsetAmountYOverlay;
 		IN.uv2.zw +=  offsetAmountYOverlay;
 		IN.uv3.zw += -offsetAmountYOverlay;
 	}else{
-		IN.uv1.xy += -offsetAmountY;
+		IN.uv1.xy +=  offsetAmountY;
 		IN.uv2.xy += -offsetAmountY;
 		IN.uv3.xy +=  offsetAmountY;
 		
-		IN.uv1.zw += -offsetAmountYOverlay;
+		IN.uv1.zw +=  offsetAmountYOverlay;
 		IN.uv2.zw += -offsetAmountYOverlay;
 		IN.uv3.zw +=  offsetAmountYOverlay;
 	}

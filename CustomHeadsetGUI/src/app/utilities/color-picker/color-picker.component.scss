@@ -1,0 +1,66 @@
+.color-picker-component{
+	// height: 2em;
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+.color-picker-label{
+	display: inline-block;
+	width: 1em;
+}
+
+
+input[type=number] {
+	width: 7rem;
+	font-size: 130%;
+	margin-right: 1rem;
+	text-align: right;
+}
+
+input[type=range] {
+	height: 1.4rem;
+	vertical-align: middle;
+	appearance: none;
+	-webkit-appearance: none;
+	flex-grow: 1
+}
+input[type=range]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	background: #dadada;
+	cursor: pointer;
+	border: 0.2em solid #2e2e2e;
+	border-radius: 25%;
+}
+
+input[type=range]::-moz-range-thumb {
+	appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	background: #dadada;
+	cursor: pointer;
+	border: 0.2em solid #2e2e2e;
+	border-radius: 25%;
+}
+
+.slider-red{
+	background: linear-gradient(to right, #000000, #ff0000, #ffaaaa);
+}
+.slider-green{
+	background: linear-gradient(to right, #000000, #00ff00, #aaffaa);
+}
+.slider-blue{
+	background: linear-gradient(to right, #000000, #0000ff, #aaaaff);
+}
+
+.slider-hue{
+	background: linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 16.66%, rgb(0, 255, 0) 33.33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 66.66%, rgb(255, 0, 255) 83.33%, rgb(255, 0, 0) 100%);
+}
+.slider-saturation{
+	background: linear-gradient(to right, #ffffff, #000000);
+}
+.slider-brightness{
+	background: linear-gradient(to right, #000000, #ffffff, #ffffff, #ffffff);
+}

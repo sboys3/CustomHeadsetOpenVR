@@ -92,7 +92,11 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     }
     resetOption(key: keyof T) {
         if (this.settings && this.defaults) {
-            (this.settings as any)[key] = this.defaults?.[key];
+            if(typeof this.defaults?.[key] === 'object'){
+                (this.settings as any)[key] = JSON.parse(JSON.stringify(this.defaults?.[key]));
+            }else{ 
+                (this.settings as any)[key] = this.defaults?.[key];
+            }
             this.saveConfigSettings()
         }
     }

@@ -51,6 +51,11 @@ export type HiddenAreaMeshConfig = {
    */
   radiusBottomOuter: number;
 };
+export type LinearColor = {
+  r: number;
+  g: number;
+  b: number;
+};
 export type CustomShaderConfig = {
   enable: boolean;
   enableForMeganeX8K: boolean,
@@ -93,6 +98,8 @@ export type MeganeX8KConfig = {
    * minimum black levels from 0 to 1
    */
   blackLevel: number;
+  
+  colorMultiplier: LinearColor;
 
   /**
    * distortion profile to use
