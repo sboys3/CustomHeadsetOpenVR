@@ -49,19 +49,25 @@
 		display: flex;
 		flex: 1 1 auto;
 		align-items: center;
+		margin: 0 -0.5rem;
+
+		.label {
+			width: 1.5rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
 		.line {
 			border-top: 0.1rem solid var(--mat-sys-outline);
 			height: 0;
-			width: calc(30% - (0.75rem * 0.8));
-			margin: 0.5rem;
+			width: calc(30% - 1rem);
 		}
 
 		.dash {
 			border-top: 0.1rem dashed var(--mat-sys-outline);
 			height: 0;
 			flex: 1 1 auto;
-			margin: 0.5rem;
 		}
 	}
 }
