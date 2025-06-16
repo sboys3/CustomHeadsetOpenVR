@@ -21,7 +21,7 @@ export class ColorPickerComponent {
   public colorSaturated: LinearColor = { r: 1, g: 1, b: 1 };
   constructor(elementRef: ElementRef<HTMLElement>) {
     effect(() => {
-      this.colorValue = this.color();
+      this.colorValue = this.color() || { r: 1, g: 1, b: 1 };
       let newHsv = this.rgbToHsv(this.colorValue);
       if (this.colorValue.r == this.colorValue.g && this.colorValue.g == this.colorValue.b) {
         newHsv.r = this.colorHSV.r;
