@@ -36,6 +36,36 @@
 	position: relative;
 }
 
+.place-holder {
+	width: 8rem;
+	margin-right: 0.7rem;
+}
+
+.scale-container {
+	height: 0.5rem;
+	font-size: 80%;
+
+	.scale {
+		display: flex;
+		flex: 1 1 auto;
+		align-items: center;
+
+		.line {
+			border-top: 0.1rem solid var(--mat-sys-outline);
+			height: 0;
+			width: calc(30% - (0.75rem * 0.8));
+			margin: 0.5rem;
+		}
+
+		.dash {
+			border-top: 0.1rem dashed var(--mat-sys-outline);
+			height: 0;
+			flex: 1 1 auto;
+			margin: 0.5rem;
+		}
+	}
+}
+
 .color-picker-label {
 	display: block;
 	position: absolute;
