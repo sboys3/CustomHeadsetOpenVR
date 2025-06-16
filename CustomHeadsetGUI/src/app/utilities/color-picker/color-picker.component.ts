@@ -1,8 +1,7 @@
-import { Component, effect, ElementRef, EventEmitter, input, Input, model, Output } from '@angular/core';
+import { Component, effect, ElementRef, input, model } from '@angular/core';
 import { LinearColor } from '../../services/JsonFileDefines'
 import { MatInputModule } from '@angular/material/input'
 import { FormsModule } from '@angular/forms'
-import { MatSlider } from '@angular/material/slider'
 
 @Component({
   selector: 'app-color-picker',
