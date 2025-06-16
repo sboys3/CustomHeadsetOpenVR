@@ -103,7 +103,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .slider-saturation {
-	background: linear-gradient(to right, #ffffff, #000000);
+	background: linear-gradient(to right, #ffffff, rgb(var(--color-saturated-r), var(--color-saturated-g), var(--color-saturated-b)));
 }
 
 .slider-brightness {
