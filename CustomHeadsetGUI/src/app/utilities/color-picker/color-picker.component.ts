@@ -17,6 +17,7 @@ export class ColorPickerComponent {
   public colorValue = { r: 1, g: 1, b: 1 }
   public color = model<LinearColor>(this.colorValue);
   public useHSV = input(true)
+  public showColorDisplay = input(false)
   public colorHSV: LinearColor = { r: 0, g: 0, b: 0 };
   public colorSaturated: LinearColor = { r: 1, g: 1, b: 1 };
   constructor(elementRef: ElementRef<HTMLElement>) {
@@ -33,7 +34,10 @@ export class ColorPickerComponent {
       elementRef.nativeElement.style.setProperty('--r', `${this.colorValue.r * 255}`)
       elementRef.nativeElement.style.setProperty('--g', `${this.colorValue.g * 255}`)
       elementRef.nativeElement.style.setProperty('--b', `${this.colorValue.b * 255}`)
-      elementRef.nativeElement.style.setProperty('--color-saturated', `${this.colorHSV.r * 255}`)
+      this.colorSaturated = this.hsvToRgb({ r: this.colorHSV.r, g: 1, b: 1 });
+      elementRef.nativeElement.style.setProperty('--color-saturated-r', `${this.colorSaturated.r * 255}`)
+      elementRef.nativeElement.style.setProperty('--color-saturated-g', `${this.colorSaturated.g * 255}`)
+      elementRef.nativeElement.style.setProperty('--color-saturated-b', `${this.colorSaturated.b * 255}`)
     })
   }
   colorInputChanged() {
@@ -42,7 +46,6 @@ export class ColorPickerComponent {
 
   colorInputChangedHSV() {
     this.colorValue = this.hsvToRgb(this.colorHSV);
-    this.colorSaturated = this.hsvToRgb({ r: this.colorHSV.r, g: 1, b: 1 });
     this.color.set({ ...this.colorValue });
   }
 
