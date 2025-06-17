@@ -144,9 +144,9 @@ export class SystemDiagnosticService implements OnDestroy {
   }
   private installing = false
   async installDriver() {
-    if (this.installing) return;
+    if (this.installing) return false;
     const steamVrPath = this.steamVRinstalled();
-    if (!steamVrPath) return;
+    if (!steamVrPath) return false;
     this._installingDriver.set(true);
     this.installing = true
     try {
@@ -157,10 +157,10 @@ export class SystemDiagnosticService implements OnDestroy {
           if (path) {
             driverDir = path;
           } else {
-            return;
+            return false;
           }
         } else {
-          return;
+          return false;
         }
       }
       if (await exists(await join(driverDir, 'driver.vrdrivermanifest'))) {
@@ -175,8 +175,10 @@ export class SystemDiagnosticService implements OnDestroy {
           await this.dialog.message($localize`Install Failed`, `${e}`)
         }
         this.checkDriverInstalled()
+        return true;
       } else {
         await this.dialog.message($localize`Driver files not valid`, $localize`the folder seems not include driver file, please check again`)
+        return false;
       }
     } finally {
       if(!this.dss.values() || this.dss.values()?.meganeX8K?.enable){
