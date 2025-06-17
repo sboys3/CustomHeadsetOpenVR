@@ -241,19 +241,21 @@ bool MeganeX8KShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t* 
 	return false;
 }
 
-// set ipd and adjust eye to head transform accordingly. ipd is in meters.
-void MeganeX8KShim::SetIPD(float ipd){
+// set ipd and adjust eye to head transform accordingly. ipd is in meters. angle it in radians
+void MeganeX8KShim::SetIPD(float ipd, float angle){
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_UserIpdMeters_Float, ipd);
+	float c = std::cos(angle);
+	float s = std::sin(angle);
 	vr::HmdMatrix34_t leftEye = {{
-		{1, 0, 0, -ipd / 2.0f},
-		{0, 1, 0, 0},
-		{0, 0, 1, 0},
+		{ c, 0, s, -ipd / 2.0f},
+		{ 0, 1, 0, 0},
+		{-s, 0, c, 0},
 	}};
 	vr::HmdMatrix34_t rightEye = {{
-		{1, 0, 0, ipd / 2.0f},
-		{0, 1, 0, 0},
-		{0, 0, 1, 0},
+		{c, 0, -s, ipd / 2.0f},
+		{0, 1,  0, 0},
+		{s, 0,  c, 0},
 	}};
 	vr::VRServerDriverHost()->SetDisplayEyeToHead(0, leftEye, rightEye);
 }
@@ -333,7 +335,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD((float)(driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.f);
+	SetIPD((float)(driverConfig.meganeX8K.ipd + driverConfig.meganeX8K.ipdOffset) / 1000.f, (float)(driverConfig.meganeX8K.eyeRotation * kPi / 180.0f));
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)driverConfig.meganeX8K.secondsFromVsyncToPhotons);

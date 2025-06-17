@@ -121,6 +121,8 @@ public:
 		double superSamplingFilterPercent = 500;
 		// seconds of latency to the display
 		double secondsFromVsyncToPhotons = 0.009;
+		// angle in degrees for each eye to be rotated outwards
+		double eyeRotation = 0.0;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

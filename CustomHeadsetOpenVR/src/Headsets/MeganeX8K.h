@@ -51,7 +51,7 @@ public:
 	// helper function to calculate the 100% render resolution
 	void GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight);
 	
-	void SetIPD(float ipd);
+	void SetIPD(float ipd, float angle = 0);
 	
 	virtual void RunFrame() override;
 	

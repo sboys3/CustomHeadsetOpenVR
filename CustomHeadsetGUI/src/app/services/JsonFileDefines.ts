@@ -135,6 +135,8 @@ export type MeganeX8KConfig = {
   superSamplingFilterPercent: number
   
   secondsFromVsyncToPhotons: number
+  
+  eyeRotation: number
 
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;
