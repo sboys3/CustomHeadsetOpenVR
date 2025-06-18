@@ -236,7 +236,7 @@ OutputStruct main(in InputStruct IN)
 	float2 greenInRange = abs(IN.uv2.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
 	float2 blueInRange = abs(IN.uv3.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
 	float3 inRangeMultiplier = float3(redInRange.x * redInRange.y, greenInRange.x * greenInRange.y, blueInRange.x * blueInRange.y);
-	// col.rgb = col.rgb * inRangeMultiplier;
+	col.rgb = col.rgb * inRangeMultiplier;
 	inRangeMultiplier = 1 - inRangeMultiplier;
 	#endif
 	
