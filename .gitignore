@@ -3,3 +3,4 @@ x64
 x86
 lib
 output
+*_test.hlsl

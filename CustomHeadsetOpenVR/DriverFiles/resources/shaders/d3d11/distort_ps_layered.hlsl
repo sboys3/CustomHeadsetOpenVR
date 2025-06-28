@@ -367,7 +367,10 @@ OutputStruct main(in InputStruct IN)
 	// this is how it is in the default shader but it crushes blacks
 	col.rgb = max(col.rgb, g_flBlackLevel);
 	#endif
-
+	
+	#ifdef AFTER_TEST
+	#include "distort_ps_layered_after_test.hlsl"
+	#endif
 	
 	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
 	// float2 uv = IN.uv1.zw;

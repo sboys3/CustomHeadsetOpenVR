@@ -7,6 +7,7 @@
 #include <locale>
 #include <codecvt>
 #include <filesystem>
+#include <fstream>
 
 #include "../../../ThirdParty/easywsclient/easywsclient.hpp"
 
@@ -99,6 +100,7 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 
 static std::map<ConfigLoader::HeadsetType, std::vector<double>> srgbColorCorrectionMatrices = {
 	{ConfigLoader::HeadsetType::MeganeX8K, {
+		// convert sRGB into the section of the dci-p3 color space it occupies
 		0.8224619687143621, 0.17753803128563772, 0.0, 
 		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
 		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
@@ -241,6 +243,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	if(noDistortion){
 		defines[definesCount++] = {"NO_DISTORTION", "1"};
 		defines[definesCount++] = {"NO_LAYER", "1"};
+	}
+	if(std::filesystem::exists(getShaderPath() + "distort_ps_layered_after_test.hlsl")){
+		defines[definesCount++] = {"AFTER_TEST", "1"};
 	}
 	
 	defines[definesCount++] = {nullptr, nullptr}; // end of array
