@@ -136,6 +136,8 @@ export type MeganeX8KConfig = {
   
   secondsFromVsyncToPhotons: number
   
+  secondsFromPhotonsToVblank: number
+  
   eyeRotation: number
 
   hiddenArea: HiddenAreaMeshConfig;

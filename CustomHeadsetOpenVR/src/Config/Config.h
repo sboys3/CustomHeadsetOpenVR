@@ -120,7 +120,9 @@ public:
 		// percent of 1:1 resolution to apply the super sampling downscale filter at, this is really high to allow for subpixel sampling
 		double superSamplingFilterPercent = 500;
 		// seconds of latency to the display
-		double secondsFromVsyncToPhotons = 0.009;
+		double secondsFromVsyncToPhotons = 0.007;
+		// seconds from the the first to last line of the display
+		double secondsFromPhotonsToVblank = 0.0025;
 		// angle in degrees for each eye to be rotated outwards
 		double eyeRotation = 0.0;
 		// Config struct for the hidden area mesh

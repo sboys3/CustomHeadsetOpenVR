@@ -97,6 +97,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["secondsFromVsyncToPhotons"].is_number()){
 				newConfig.meganeX8K.secondsFromVsyncToPhotons = meganeX8KData["secondsFromVsyncToPhotons"].get<double>();
 			}
+			if(meganeX8KData["secondsFromPhotonsToVblank"].is_number()){
+				newConfig.meganeX8K.secondsFromPhotonsToVblank = meganeX8KData["secondsFromPhotonsToVblank"].get<double>();
+			}
 			if(meganeX8KData["eyeRotation"].is_number()){
 				newConfig.meganeX8K.eyeRotation = meganeX8KData["eyeRotation"].get<double>();
 			}
@@ -270,6 +273,7 @@ void ConfigLoader::WriteInfo(){
 				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
 				{"superSamplingFilterPercent", defaultSettings.meganeX8K.superSamplingFilterPercent},
 				{"secondsFromVsyncToPhotons", defaultSettings.meganeX8K.secondsFromVsyncToPhotons},
+				{"secondsFromPhotonsToVblank", defaultSettings.meganeX8K.secondsFromPhotonsToVblank},
 				{"eyeRotation", defaultSettings.meganeX8K.eyeRotation},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},

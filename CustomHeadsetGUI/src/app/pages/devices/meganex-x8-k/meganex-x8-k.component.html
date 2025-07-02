@@ -587,7 +587,7 @@
     <div class="title">
         <span i18n>Seconds From VSync to Photons</span>
         <app-field-tip i18n-info
-            info="The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction." />
+            info="The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery." />
         <app-reset-button [canReset]="settings.secondsFromVsyncToPhotons!=defaults.secondsFromVsyncToPhotons"
             (resetClick)="resetOption('secondsFromVsyncToPhotons')"></app-reset-button>
     </div>
@@ -596,6 +596,23 @@
             (ngModelChange)="saveConfigSettings()" type="number">
         <mat-slider max="0.02" min="0" step="0.0005" showTickMarks>
             <input matSliderThumb [(ngModel)]="settings.secondsFromVsyncToPhotons"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Seconds From Photons to Vblank</span>
+        <app-field-tip i18n-info
+            info="The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side." />
+        <app-reset-button [canReset]="settings.secondsFromPhotonsToVblank!=defaults.secondsFromPhotonsToVblank"
+            (resetClick)="resetOption('secondsFromPhotonsToVblank')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.secondsFromPhotonsToVblank" step="0.00025"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="0.01" min="0" step="0.00025" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.secondsFromPhotonsToVblank"
                 (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>

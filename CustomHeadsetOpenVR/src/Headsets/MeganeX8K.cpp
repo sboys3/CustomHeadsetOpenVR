@@ -339,6 +339,7 @@ void MeganeX8KShim::UpdateSettings(){
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)driverConfig.meganeX8K.secondsFromVsyncToPhotons);
+	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromPhotonsToVblank_Float, (float)driverConfig.meganeX8K.secondsFromPhotonsToVblank);
 
 	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea) { // This generally requires that you restart your game for it to update
 		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
