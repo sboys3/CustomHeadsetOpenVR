@@ -76,6 +76,7 @@ export type CustomShaderConfig = {
   disableBlackLevels: boolean;
   srgbColorCorrection: boolean;
   srgbColorCorrectionMatrix: number[]; // 3x3 matrix as a flat array of 9 elements
+  dither10Bit: boolean;
 }
 
 export type MeganeX8KConfig = {

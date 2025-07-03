@@ -261,6 +261,19 @@
 </div>
 <div class="field">
     <div class="title">
+        <span i18n>10 Bit Dithering</span>
+        <app-field-tip i18n-info
+            info="Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications." />
+        <app-reset-button [canReset]="settings.customShader.dither10Bit!=defaults.customShader.dither10Bit"
+            (resetClick)="nested('customShader').resetOption('dither10Bit')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.dither10Bit"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
         <span i18n>Enable for MeganeX 8K</span>
         <app-field-tip i18n-info
             info="Enables the custom shader for the MeganeX 8K." />

@@ -240,6 +240,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 			defines[definesCount++] = {"COLOR_CORRECTION_MATRIX", colorMatrixString.c_str()};
 		}
 	}
+	if(driverConfig.customShader.dither10Bit){
+		defines[definesCount++] = {"DITHER_10BIT", "1"};
+	}
 	if(noDistortion){
 		defines[definesCount++] = {"NO_DISTORTION", "1"};
 		defines[definesCount++] = {"NO_LAYER", "1"};

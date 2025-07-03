@@ -145,13 +145,10 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	Point2D distortionBlue = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelBlue, fU, fV);
 	
 	if(eEye == vr::Eye_Left && driverConfig.meganeX8K.disableEye & 1){
-		// distortionBlue.x *= 10000.0f;
-		// distortionBlue.y *= 10000.0f;
+		// this will completely cull the render mesh
 		distortionRed = distortionGreen = distortionBlue = {-1, -1};
 	}
 	if(eEye == vr::Eye_Right && driverConfig.meganeX8K.disableEye & 2){
-		// distortionBlue.x *= 10000.0f;
-		// distortionBlue.y *= 10000.0f;
 		distortionRed = distortionGreen = distortionBlue = {-1, -1};
 	}
 	
@@ -205,10 +202,6 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 		*pnWidth = driverConfig.meganeX8K.resolutionY;
 		*pnHeight = driverConfig.meganeX8K.resolutionX;
 		// *pnHeight = 3552;
-		if(driverConfig.meganeX8K.disableEye & 1){
-			// *pnWidth = 0;
-			// *pnHeight = 0;
-		}
 	}else{
 		*pnX = driverConfig.meganeX8K.resolutionY;
 		*pnY = 0;
@@ -216,10 +209,6 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 		*pnWidth = driverConfig.meganeX8K.resolutionY;
 		*pnHeight = driverConfig.meganeX8K.resolutionX;
 		// *pnHeight = 3552;
-		if(driverConfig.meganeX8K.disableEye & 2){
-			// *pnWidth = 0;
-			// *pnHeight = 0;
-		}
 	}
 	// if(eEye == vr::Eye_Left){
 	// 	*pnX = 0;

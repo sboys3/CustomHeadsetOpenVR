@@ -368,6 +368,17 @@ OutputStruct main(in InputStruct IN)
 	col.rgb = max(col.rgb, g_flBlackLevel);
 	#endif
 	
+	#ifdef DITHER_10BIT
+	// dithers a 10 bit input to be displayed on a 8 bit panel temporally over 4 frames and spatially over 4 pixels
+	// this is also known as Frame Rate Control (FRC)
+	uint pixelId = outputPixelOdd2D.x + outputPixelOdd2D.y * 2;
+	uint frameId = g_SceneTextureData[IN.param4].nVsyncId + 1; // +1 because 1 and 3 are the least intrusive
+	// frameId = 1;
+	pixelId = (pixelId + frameId) % 4;
+	// pixelId = 0;
+	col.rgb = floor(col.rgb * 255 + pixelId / 4.0) / 255;
+	#endif
+	
 	#ifdef AFTER_TEST
 	#include "distort_ps_layered_after_test.hlsl"
 	#endif
