@@ -603,6 +603,7 @@
 <div class="field">
     <div class="title">
         <span i18n>Seconds From Photons to Vblank</span>
+        <app-field-note type="steamvrRestart" />
         <app-field-tip i18n-info
             info="The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side." />
         <app-reset-button [canReset]="settings.secondsFromPhotonsToVblank!=defaults.secondsFromPhotonsToVblank"
@@ -633,6 +634,24 @@
         </mat-slider>
     </div>
 </div>
+<div class="field">
+    <div class="title">
+        <span i18n>Disable Eye</span>
+        <app-field-note type="gameRestart" />
+        <app-field-tip i18n-info
+            info="Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this sets the FOV extremely low and covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view." />
+        <app-reset-button [canReset]="settings.disableEye!=defaults.disableEye"
+            (resetClick)="resetOption('disableEye')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.disableEye" (ngModelChange)="saveConfigSettings()">
+            @for(opt of disableEyeOptions;track opt){
+            <mat-option [value]="opt.value">{{opt.name}}</mat-option>
+            }
+        </mat-select>
+    </div>
+</div>
+
 }
 }
 }

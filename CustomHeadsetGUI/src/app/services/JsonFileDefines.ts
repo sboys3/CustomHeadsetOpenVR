@@ -139,6 +139,8 @@ export type MeganeX8KConfig = {
   secondsFromPhotonsToVblank: number
   
   eyeRotation: number
+  
+  disableEye: number
 
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;

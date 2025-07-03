@@ -41,7 +41,11 @@ export class MeganexX8KComponent extends DeviceConfigComponentBase<MeganeX8KConf
   resolutionModel?: number;
   resolutionOptions = [
     { name: '4K', x: 3840, y: 3552 }, { name: '2K', x: 2880, y: 2664 }
-  ]
+  ];
+  disableEyeOptions = [
+    { name: $localize`None`, value: 0 }, { name: $localize`Left`, value: 1 }, 
+    { name: $localize`Right`, value: 2 }, { name: $localize`Both`, value: 3 }
+  ];
   distortionMeshResolutionOptions = [63, 127, 255];
   distortionMeshResolutionOptionsText: { [key: number]: string } = {
     63: $localize`Low (${63})`,

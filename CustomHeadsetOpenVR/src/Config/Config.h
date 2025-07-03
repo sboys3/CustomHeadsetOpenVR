@@ -125,6 +125,8 @@ public:
 		double secondsFromPhotonsToVblank = 0.0025;
 		// angle in degrees for each eye to be rotated outwards
 		double eyeRotation = 0.0;
+		// disable eyes as much as possible. 0:both enabled 1:left disabled 2:right disabled 3:both disabled
+		int disableEye = 0;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

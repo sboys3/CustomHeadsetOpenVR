@@ -90,6 +90,15 @@ void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 // defines the fov of the input image
 bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float *&pfLeft, float *&pfRight, float *&pfBottom, float *&pfTop){
 	distortionProfileConstructor.profile->GetProjectionRaw(eEye, pfLeft, pfRight, pfBottom, pfTop);
+	DriverLog("PreDisplayComponentGetProjectionRaw %f %f %f %f", *pfLeft, *pfRight, *pfBottom, *pfTop);
+	if(eEye == vr::Eye_Left && driverConfig.meganeX8K.disableEye & 1){
+		*pfTop = *pfRight = 0.000001f;
+		*pfBottom = *pfLeft = -*pfTop;
+	}
+	if(eEye == vr::Eye_Right && driverConfig.meganeX8K.disableEye & 2){
+		*pfTop = *pfRight = 0.000001f;
+		*pfBottom = *pfLeft = -*pfTop;
+	}	
 	return false;
 }
 
@@ -134,6 +143,17 @@ bool MeganeX8KShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float
 	Point2D distortionRed = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelRed, fU, redV);
 	Point2D distortionGreen = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelGreen, fU, greenV);
 	Point2D distortionBlue = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelBlue, fU, fV);
+	
+	if(eEye == vr::Eye_Left && driverConfig.meganeX8K.disableEye & 1){
+		// distortionBlue.x *= 10000.0f;
+		// distortionBlue.y *= 10000.0f;
+		distortionRed = distortionGreen = distortionBlue = {-1, -1};
+	}
+	if(eEye == vr::Eye_Right && driverConfig.meganeX8K.disableEye & 2){
+		// distortionBlue.x *= 10000.0f;
+		// distortionBlue.y *= 10000.0f;
+		distortionRed = distortionGreen = distortionBlue = {-1, -1};
+	}
 	
 	coordinates.rfRed[0] = distortionRed.x;
 	coordinates.rfRed[1] = distortionRed.y;
@@ -185,6 +205,10 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 		*pnWidth = driverConfig.meganeX8K.resolutionY;
 		*pnHeight = driverConfig.meganeX8K.resolutionX;
 		// *pnHeight = 3552;
+		if(driverConfig.meganeX8K.disableEye & 1){
+			// *pnWidth = 0;
+			// *pnHeight = 0;
+		}
 	}else{
 		*pnX = driverConfig.meganeX8K.resolutionY;
 		*pnY = 0;
@@ -192,6 +216,10 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 		*pnWidth = driverConfig.meganeX8K.resolutionY;
 		*pnHeight = driverConfig.meganeX8K.resolutionX;
 		// *pnHeight = 3552;
+		if(driverConfig.meganeX8K.disableEye & 2){
+			// *pnWidth = 0;
+			// *pnHeight = 0;
+		}
 	}
 	// if(eEye == vr::Eye_Left){
 	// 	*pnX = 0;
@@ -341,7 +369,7 @@ void MeganeX8KShim::UpdateSettings(){
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)driverConfig.meganeX8K.secondsFromVsyncToPhotons);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromPhotonsToVblank_Float, (float)driverConfig.meganeX8K.secondsFromPhotonsToVblank);
 
-	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea) { // This generally requires that you restart your game for it to update
+	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea || driverConfigOld.meganeX8K.disableEye != driverConfig.meganeX8K.disableEye) { // This generally requires that you restart your game for it to update
 		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
@@ -359,6 +387,14 @@ void MeganeX8KShim::UpdateSettings(){
 					}
 				}
 			}
+		}
+		if(driverConfig.meganeX8K.disableEye & 1){
+			vr::HmdVector2_t coverMesh[] = {{0, 0}, {1, 0}, {1, 1}, {0, 0}, {1, 1}, {0, 1}}; // cover the whole screen
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, vr::k_eHiddenAreaMesh_Standard, coverMesh, 6);
+		}
+		if(driverConfig.meganeX8K.disableEye & 2){
+			vr::HmdVector2_t coverMesh[] = {{0, 0}, {1, 0}, {1, 1}, {0, 0}, {1, 1}, {0, 1}}; // cover the whole screen
+			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, vr::k_eHiddenAreaMesh_Standard, coverMesh, 6);
 		}
 	}
 
@@ -384,6 +420,7 @@ void MeganeX8KShim::UpdateSettings(){
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionZoom != driverConfig.meganeX8K.distortionZoom;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;
+	shouldUpdateDistortion |= driverConfigOld.meganeX8K.disableEye != driverConfig.meganeX8K.disableEye;
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
 
 	
@@ -405,10 +442,18 @@ void MeganeX8KShim::UpdateSettings(){
 		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
 		// also update fov
 		float leftEyeLeft, leftEyeRight, leftEyeTop, leftEyeBottom;
-		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeTop, &leftEyeBottom);
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
 		float rightEyeLeft, rightEyeRight, rightEyeTop, rightEyeBottom;
-		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeTop, &rightEyeBottom);
-		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeTop}, {leftEyeRight, leftEyeBottom}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeTop}, {rightEyeRight, rightEyeBottom}});
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeBottom, &rightEyeTop);
+		if(driverConfig.meganeX8K.disableEye & 1){
+			leftEyeRight = leftEyeTop = 0.000001f;
+			leftEyeBottom = leftEyeLeft = -leftEyeTop;
+		}
+		if(driverConfig.meganeX8K.disableEye & 2){
+			rightEyeLeft = rightEyeTop = 0.000001f;
+			rightEyeBottom = rightEyeRight = -rightEyeTop;
+		}
+		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeBottom}, {leftEyeRight, leftEyeTop}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeBottom}, {rightEyeRight, rightEyeTop}});
 		// this requires reallocations so only do it when a finalization is not queued
 		if(!needsDistortionFinalization){
 			// update render target size
