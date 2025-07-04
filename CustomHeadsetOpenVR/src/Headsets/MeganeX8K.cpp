@@ -91,11 +91,11 @@ void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 bool MeganeX8KShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, float *&pfLeft, float *&pfRight, float *&pfBottom, float *&pfTop){
 	distortionProfileConstructor.profile->GetProjectionRaw(eEye, pfLeft, pfRight, pfBottom, pfTop);
 	DriverLog("PreDisplayComponentGetProjectionRaw %f %f %f %f", *pfLeft, *pfRight, *pfBottom, *pfTop);
-	if(eEye == vr::Eye_Left && driverConfig.meganeX8K.disableEye & 1){
+	if(eEye == vr::Eye_Left && driverConfig.meganeX8K.disableEye & 1 && driverConfig.meganeX8K.disableEyeDecreaseFov){
 		*pfTop = *pfRight = 0.000001f;
 		*pfBottom = *pfLeft = -*pfTop;
 	}
-	if(eEye == vr::Eye_Right && driverConfig.meganeX8K.disableEye & 2){
+	if(eEye == vr::Eye_Right && driverConfig.meganeX8K.disableEye & 2 && driverConfig.meganeX8K.disableEyeDecreaseFov){
 		*pfTop = *pfRight = 0.000001f;
 		*pfBottom = *pfLeft = -*pfTop;
 	}	
@@ -410,6 +410,7 @@ void MeganeX8KShim::UpdateSettings(){
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.subpixelShift != driverConfig.meganeX8K.subpixelShift;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.distortionMeshResolution != driverConfig.meganeX8K.distortionMeshResolution;
 	shouldUpdateDistortion |= driverConfigOld.meganeX8K.disableEye != driverConfig.meganeX8K.disableEye;
+	shouldUpdateDistortion |= driverConfigOld.meganeX8K.disableEyeDecreaseFov != driverConfig.meganeX8K.disableEyeDecreaseFov;
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
 
 	
@@ -434,11 +435,11 @@ void MeganeX8KShim::UpdateSettings(){
 		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
 		float rightEyeLeft, rightEyeRight, rightEyeTop, rightEyeBottom;
 		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeBottom, &rightEyeTop);
-		if(driverConfig.meganeX8K.disableEye & 1){
+		if(driverConfig.meganeX8K.disableEye & 1 && driverConfig.meganeX8K.disableEyeDecreaseFov){
 			leftEyeRight = leftEyeTop = 0.000001f;
 			leftEyeBottom = leftEyeLeft = -leftEyeTop;
 		}
-		if(driverConfig.meganeX8K.disableEye & 2){
+		if(driverConfig.meganeX8K.disableEye & 2 && driverConfig.meganeX8K.disableEyeDecreaseFov){
 			rightEyeLeft = rightEyeTop = 0.000001f;
 			rightEyeBottom = rightEyeRight = -rightEyeTop;
 		}

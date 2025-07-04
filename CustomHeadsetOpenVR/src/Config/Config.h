@@ -128,6 +128,8 @@ public:
 		double eyeRotation = 0.0;
 		// disable eyes as much as possible. 0:both enabled 1:left disabled 2:right disabled 3:both disabled
 		int disableEye = 0;
+		// if the fov should be decreased for the disabled eye, this causes problems in some apps
+		bool disableEyeDecreaseFov = false;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

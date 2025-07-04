@@ -106,6 +106,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["disableEye"].is_number()){
 				newConfig.meganeX8K.disableEye = meganeX8KData["disableEye"].get<int>();
 			}
+			if(meganeX8KData["disableEyeDecreaseFov"].is_boolean()){
+				newConfig.meganeX8K.disableEyeDecreaseFov = meganeX8KData["disableEyeDecreaseFov"].get<bool>();
+			}
 			
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
@@ -282,6 +285,7 @@ void ConfigLoader::WriteInfo(){
 				{"secondsFromPhotonsToVblank", defaultSettings.meganeX8K.secondsFromPhotonsToVblank},
 				{"eyeRotation", defaultSettings.meganeX8K.eyeRotation},
 				{"disableEye", defaultSettings.meganeX8K.disableEye},
+				{"disableEyeDecreaseFov", defaultSettings.meganeX8K.disableEyeDecreaseFov},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},
