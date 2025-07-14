@@ -71,6 +71,8 @@ struct CustomShaderConfig{
 	// a 3x3 matrix to apply to the linear colors
 	// if this is an array of 9 flat elements it will override the headset's default matrix
 	std::vector<double> srgbColorCorrectionMatrix = {};
+	// correct color uniformity issues of the lenses on the MeganeX
+	bool lensColorCorrection = false;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
 };

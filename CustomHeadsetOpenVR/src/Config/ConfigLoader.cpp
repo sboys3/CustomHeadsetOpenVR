@@ -189,6 +189,9 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["srgbColorCorrectionMatrix"].is_array()){
 				newConfig.customShader.srgbColorCorrectionMatrix = customShaderData["srgbColorCorrectionMatrix"].get<std::vector<double>>();
 			}
+			if(customShaderData["lensColorCorrection"].is_boolean()){
+				newConfig.customShader.lensColorCorrection = customShaderData["lensColorCorrection"].get<bool>();
+			}
 			if(customShaderData["dither10Bit"].is_boolean()){
 				newConfig.customShader.dither10Bit = customShaderData["dither10Bit"].get<bool>();
 			}
@@ -324,6 +327,7 @@ void ConfigLoader::WriteInfo(){
 				{"disableBlackLevels", defaultSettings.customShader.disableBlackLevels},
 				{"srgbColorCorrection", defaultSettings.customShader.srgbColorCorrection},
 				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
+				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
 			}}
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}

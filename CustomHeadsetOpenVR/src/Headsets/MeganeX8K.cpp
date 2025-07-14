@@ -39,6 +39,9 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
 	vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
 	
+	// it blackscreens and immediately crashes windows when changed at runtime
+	vr::VRProperties()->SetBoolProperty(container, vr::Prop_DisplaySupportsRuntimeFramerateChange_Bool, false);
+	
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xd222); // HVR htc vr
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, 43521); // vive
 	

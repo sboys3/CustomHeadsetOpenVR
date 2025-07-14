@@ -76,6 +76,7 @@ export type CustomShaderConfig = {
   disableBlackLevels: boolean;
   srgbColorCorrection: boolean;
   srgbColorCorrectionMatrix: number[]; // 3x3 matrix as a flat array of 9 elements
+  lensColorCorrection: boolean;
   dither10Bit: boolean;
 }
 

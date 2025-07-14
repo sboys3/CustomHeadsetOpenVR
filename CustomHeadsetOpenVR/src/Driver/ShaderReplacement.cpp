@@ -240,6 +240,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 			defines[definesCount++] = {"COLOR_CORRECTION_MATRIX", colorMatrixString.c_str()};
 		}
 	}
+	if(driverConfig.customShader.lensColorCorrection){
+		defines[definesCount++] = {"LENS_COLOR_CORRECTION", "1"};
+	}
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
 	}
@@ -441,6 +444,7 @@ void ShaderReplacement::ReloadShaders(){
 	websocket->send("mailbox_send vrcompositor_mailbox {\"type\":\"shaders_force_reload\"}");
 	websocket->poll();
 	websocket->close();
+	websocket->poll(); // final poll to close the connection
 	delete websocket;
 }
 
@@ -510,6 +514,7 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.disableBlackLevels != driverConfigOld.customShader.disableBlackLevels;
 				reloadShaders |= driverConfig.customShader.srgbColorCorrection != driverConfigOld.customShader.srgbColorCorrection;
 				reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix.size() != driverConfigOld.customShader.srgbColorCorrectionMatrix.size();
+				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				if(driverConfig.customShader.srgbColorCorrectionMatrix.size() == 9 && driverConfigOld.customShader.srgbColorCorrectionMatrix.size() == 9){
 					for(int i = 0; i < 9; i++){
 						reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix[i] != driverConfigOld.customShader.srgbColorCorrectionMatrix[i];

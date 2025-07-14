@@ -261,6 +261,19 @@
 </div>
 <div class="field">
     <div class="title">
+        <span i18n>Lens Color Correction</span>
+        <app-field-tip i18n-info
+            info="This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses." />
+        <app-reset-button [canReset]="settings.customShader.lensColorCorrection!=defaults.customShader.lensColorCorrection"
+            (resetClick)="nested('customShader').resetOption('lensColorCorrection')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.lensColorCorrection"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
         <span i18n>10 Bit Dithering</span>
         <app-field-tip i18n-info
             info="Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications." />
