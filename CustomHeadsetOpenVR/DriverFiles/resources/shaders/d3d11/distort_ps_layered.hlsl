@@ -310,9 +310,9 @@ OutputStruct main(in InputStruct IN)
 	// try 2
 	// col.rg *= 0.9 + min(pow(distanceFromCenter, 2), 0.15) * 1.5;
 	// try 3
-	float centerAmount = min(distanceFromCenter * distanceFromCenter, 0.1);
-	col.rg *= 0.9 + centerAmount * 0.75;
-	col.b *= 1 - centerAmount * 0.5;
+	float sideAmount = min(distanceFromCenter * distanceFromCenter, 0.1);
+	col.rg *= 0.9 + sideAmount * 0.75;
+	col.b *= 1 - sideAmount * 0.5;
 	#endif
 	#endif
 	

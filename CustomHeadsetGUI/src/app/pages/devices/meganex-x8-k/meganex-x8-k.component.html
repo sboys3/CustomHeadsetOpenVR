@@ -639,7 +639,7 @@
         <span i18n>Disable Eye</span>
         <app-field-note type="gameRestart" />
         <app-field-tip i18n-info
-            info="Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this sets the FOV extremely low and covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view." />
+            info="Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues." />
         <app-reset-button [canReset]="settings.disableEye!=defaults.disableEye"
             (resetClick)="resetOption('disableEye')"></app-reset-button>
     </div>
