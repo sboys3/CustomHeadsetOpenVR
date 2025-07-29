@@ -393,6 +393,7 @@ void MeganeX8KShim::UpdateSettings(){
 	
 	distortionProfileConstructor.distortionSettings.maxFovX = (float)driverConfig.meganeX8K.maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = (float)driverConfig.meganeX8K.maxFovY;
+	distortionProfileConstructor.distortionSettings.fovZoom = (float)driverConfig.meganeX8K.fovZoom;
 	if(driverConfig.meganeX8K.fovBurnInPrevention){
 		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
 		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;
@@ -402,6 +403,7 @@ void MeganeX8KShim::UpdateSettings(){
 	bool shouldReInitializeDistortion = false;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovX != driverConfig.meganeX8K.maxFovX;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.maxFovY != driverConfig.meganeX8K.maxFovY;
+	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.fovZoom != driverConfig.meganeX8K.fovZoom;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.renderResolutionMultiplierX != driverConfig.meganeX8K.renderResolutionMultiplierX;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.renderResolutionMultiplierY != driverConfig.meganeX8K.renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= driverConfigOld.meganeX8K.fovBurnInPrevention != driverConfig.meganeX8K.fovBurnInPrevention;

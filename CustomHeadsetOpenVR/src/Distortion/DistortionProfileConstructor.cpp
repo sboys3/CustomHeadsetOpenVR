@@ -169,6 +169,7 @@ void DistortionProfileConstructor::ReInitializeProfile(){
 	profile->resolutionY = distortionSettings.resolutionY;
 	profile->maxFovX = distortionSettings.maxFovX;
 	profile->maxFovY = distortionSettings.maxFovY;
+	profile->fovZoom = distortionSettings.fovZoom;
 	// initialize new profile and replace old one
 	profile->Initialize();
 }

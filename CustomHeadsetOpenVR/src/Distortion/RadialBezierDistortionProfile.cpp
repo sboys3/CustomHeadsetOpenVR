@@ -149,6 +149,15 @@ void RadialBezierDistortionProfile::Initialize(){
 		distortionsSmoothBlue[i].position *= SampleFromPoints(distortionsBluePercent, distortionsSmoothBlue[i].degree) / 100.0f + 1.0f;
 		// halfFov = std::max(halfFov, distortionsSmoothGreen[i].degree);
 	}
+	
+	// zoom fov
+	for(size_t i = 0; i < distortionsSmoothGreen.size(); i++){
+		distortionsSmoothRed[i].degree /= fovZoom;
+		distortionsSmoothGreen[i].degree /= fovZoom;
+		distortionsSmoothBlue[i].degree /= fovZoom;
+	}
+	
+	
 	DriverLog("== Distortion Statistics ==");
 	DriverLog("PPD at 0°: %f\n", ComputePPD(distortionsSmoothGreen, 0, 1));
 	DriverLog("PPD at 10°: %f\n", ComputePPD(distortionsSmoothGreen, 10, 11));

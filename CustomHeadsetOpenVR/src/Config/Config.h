@@ -102,6 +102,8 @@ public:
 		std::string distortionProfile = "MeganeX8K Default";
 		// amount to zoom in the distortion profile
 		double distortionZoom = 1.0;
+		// amount to zoom in the FOV, the fov is divided by this value
+		double fovZoom = 1.0;
 		// amount to shift the subpixels to account for their diffent rows
 		double subpixelShift = 0.33;
 		// width of one eye in pixels

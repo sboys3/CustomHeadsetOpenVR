@@ -25,6 +25,8 @@ public:
 	float maxFovX = 175;
 	// max fov to be displayed vertically
 	float maxFovY = 175;
+	// amount to divide the fov by
+	float fovZoom = 1;
 	
 	
 	

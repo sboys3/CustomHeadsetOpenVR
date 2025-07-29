@@ -64,6 +64,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["distortionZoom"].is_number()){
 				newConfig.meganeX8K.distortionZoom = meganeX8KData["distortionZoom"].get<double>();
 			}
+			if(meganeX8KData["fovZoom"].is_number()){
+				newConfig.meganeX8K.fovZoom = meganeX8KData["fovZoom"].get<double>();
+			}
 			if(meganeX8KData["subpixelShift"].is_number()){
 				newConfig.meganeX8K.subpixelShift = meganeX8KData["subpixelShift"].get<double>();
 			}
@@ -274,6 +277,7 @@ void ConfigLoader::WriteInfo(){
 				}},
 				{"distortionProfile", defaultSettings.meganeX8K.distortionProfile},
 				{"distortionZoom", defaultSettings.meganeX8K.distortionZoom},
+				{"fovZoom", defaultSettings.meganeX8K.fovZoom},
 				{"subpixelShift", defaultSettings.meganeX8K.subpixelShift},
 				{"resolutionX", defaultSettings.meganeX8K.resolutionX},
 				{"resolutionY", defaultSettings.meganeX8K.resolutionY},

@@ -74,4 +74,7 @@ export class MeganexX8KComponent extends DeviceConfigComponentBase<MeganeX8KConf
       }
     }
   }
+  scaledMaxFOV(originalFOV: number){
+    return Math.ceil(originalFOV / (this.settings?.fovZoom || 1))
+  }
 }

@@ -112,6 +112,8 @@ export type MeganeX8KConfig = {
    * amount to zoom in the distortion profile
    */
   distortionZoom: number;
+  
+  fovZoom: number;
 
   /**
    * amount to shift the subpixels to account for their different rows

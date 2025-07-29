@@ -85,7 +85,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="110" min="1" step="1">
+        <mat-slider [max]="scaledMaxFOV(110)" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -100,7 +100,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="96" min="1" step="1">
+        <mat-slider [max]="scaledMaxFOV(96)" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -158,6 +158,21 @@
     </div>
 </div>
 }
+<div class="field">
+    <div class="title">
+        <span i18n>FOV Zoom</span>
+        <app-field-tip i18n-info
+            info="Adjusts how zoomed in the FOV is. This can affect world scale. If you don't mind distortion this can be decreased too far to increase visible FOV." />
+        <app-reset-button [canReset]="settings.fovZoom!=defaults.fovZoom"
+            (resetClick)="resetOption('fovZoom')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.fovZoom" step="0.005" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="1.1" min="0.8" step="0.005" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.fovZoom" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
 <div class="field">
     <div class="title">
         <span i18n>Distortion Zoom</span>
