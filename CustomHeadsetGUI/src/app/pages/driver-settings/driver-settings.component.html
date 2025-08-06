@@ -1,7 +1,7 @@
 <app-system-ready>
   <mat-tab-group >
     <mat-tab label="MeganeX Superlight 8K">
-      <app-meganex-x8-k driverName="MeganeXSuperlight" settingField="meganeX8K" />
+      <app-meganex-x8-k [driverName]="['MeganeXsuperlight8K_Native','MeganeXSuperlight']" settingField="meganeX8K" />
     </mat-tab>
     <mat-tab label="General" i18n-label>
       <app-general driverName="" settingField="" />

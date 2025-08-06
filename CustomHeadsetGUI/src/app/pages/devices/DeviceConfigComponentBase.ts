@@ -16,7 +16,14 @@ type ObjectKeys<T> = KeysMatching<T, Record<PropertyKey, any>>;
 })
 export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> implements OnDestroy {
     public settingField = input.required<string>()
-    public driverName = input.required<string>()
+    public driverName = input.required<string | string[]>()
+    protected driverNames = computed(() => {
+        const names = this.driverName();
+        if (typeof names === 'string') {
+            return [names];
+        }
+        return names;
+    })
     public enabled = output<boolean>()
     public defaults?: T
     public settings?: T
@@ -70,12 +77,12 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
         effect(() => {
             const steamVrConfig = this.sds.steamVrConfig();
             const config = this.dss.values();
-            const driverName = this.driverName();
-            if (steamVrConfig && driverName) {
-                let shiftallEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, driverName)
+            const driverNames = this.driverNames();
+            if (steamVrConfig) {
+                let shiftallEnabled = driverNames.map(name => this.sds.getSteamVRDriverEnableState(steamVrConfig, name));
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
-                this.driverWarning.set((shiftallEnabled || !customEnabled) && (config?.meganeX8K?.enable ?? false));
-                this.driverEnablePrompt.set(!shiftallEnabled && !(config?.meganeX8K?.enable ?? true));
+                this.driverWarning.set((shiftallEnabled.some(x => x) || !customEnabled) && (config?.meganeX8K?.enable ?? false));
+                this.driverEnablePrompt.set(shiftallEnabled.every(x => !x) && !(config?.meganeX8K?.enable ?? true));
             } else if (steamVrConfig) {
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR');
                 this.driverWarning.set(!customEnabled);
@@ -126,16 +133,15 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
         this.resolutionInfoDisplay.update(x => !x)
     }
     async disableDriver() {
-        const driverName = this.driverName();
-        if (driverName) {
-            await this.sds.disableSteamVRDriver(driverName);
-            await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
+        for (const name of this.driverNames()) {
+            await this.sds.disableSteamVRDriver(name);
         }
+        await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
     }
     async enableDriver() {
-        const driverName = this.driverName();
-        if (driverName) {
-            await this.sds.enableSteamVRDriver(this.driverName());
+        const driverNames = this.driverNames();
+        if (driverNames.length) {
+            await this.sds.enableSteamVRDriver(driverNames[0]);
         }
     }
 
