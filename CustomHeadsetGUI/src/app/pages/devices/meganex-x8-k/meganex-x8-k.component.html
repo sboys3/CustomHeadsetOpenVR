@@ -684,7 +684,7 @@
     <div class="title">
         <span i18n>Decrease FOV for Disabled Eye</span>
         <app-field-tip i18n-info
-            info="Set the FOV to near zero for the disabled eye. This can cause issues with some games." />
+            info="Set the FOV to near zero for the disabled eye. By decreasing the FOV, occlusion culling may be able to decrease the rendering load. This can cause issues with some games." />
         <app-reset-button [canReset]="settings.disableEyeDecreaseFov!=defaults.disableEyeDecreaseFov"
             (resetClick)="resetOption('disableEyeDecreaseFov')"></app-reset-button>
     </div>
