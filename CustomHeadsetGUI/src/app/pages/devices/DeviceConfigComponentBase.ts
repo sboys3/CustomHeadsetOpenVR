@@ -32,6 +32,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     public dis = inject(DriverInfoService)
     public ass = inject(AppSettingService)
     public sds = inject(SystemDiagnosticService)
+    public Math = Math
     resolutionInfoDisplay = signal(false)
     profiles: DistortionProfileEntry[] = []
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)

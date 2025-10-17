@@ -85,7 +85,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="scaledMaxFOV(110)" min="1" step="1">
+        <mat-slider [max]="Math.ceil(dis.values()?.resolution?.fovMaxX || 115)" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -100,7 +100,7 @@
     </div>
     <div class="control">
         <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-        <mat-slider [max]="scaledMaxFOV(96)" min="1" step="1">
+        <mat-slider [max]="Math.ceil(dis.values()?.resolution?.fovMaxY || 99)" min="1" step="1">
             <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>
@@ -123,17 +123,23 @@
     <div class="note">
         @if(dis.values();as info){
         @if(info.resolution;as res){
-        @if(steamVRRunning();as steamvr){
         <div class="note">
-            @if(steamvr.updated){
-            @if(res.renderResolution100PercentX && steamvr.running){
-            @if(res.fovX != undefined){
+            
+            @if(res.fovX){
             <p>
                 <span i18n>Current rendered FOV</span>
                 <span>&nbsp;:&nbsp;</span>
                 <span>{{res.fovX.toFixed(1)}}x{{res.fovY.toFixed(1)}}</span>
             </p>
             }
+            @if(res.fovMaxX){
+            <p>
+                <span i18n>Maximum possible FOV</span>
+                <span>&nbsp;:&nbsp;</span>
+                <span>{{res.fovMaxX.toFixed(1)}}x{{res.fovMaxY.toFixed(1)}}</span>
+            </p>
+            }
+            @if(res.renderResolution100PercentX){
             <p>
                 <span i18n>100% Render resolution for SteamVR</span>
                 <span>&nbsp;:&nbsp;</span>
@@ -146,13 +152,16 @@
                 <span>&nbsp;(&nbsp;{{res.renderResolution1To1Percent|number:'1.0-1'}}%&nbsp;)</span>
             </p>
             }@else {
-            <span i18n>Steam VR not running or headset not connected</span>
+            <p><span i18n>Headset not connected</span></p>
             }
+            @if(steamVRRunning();as steamvr){
+            @if(!steamvr.updated || !steamvr.running){
+            <p><span class="warn-color" i18n>SteamVR is not running, so this information is not updated.</span></p>
+            }
+            }@else{
+            <p><span class="warn-color" i18n>SteamVR is not running, so this information is not updated.</span></p>
             }
         </div>
-        }@else {
-        <h5 class="warn-color" i18n>Please launch SteamVR</h5>
-        }
         }
         }
     </div>

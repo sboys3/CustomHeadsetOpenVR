@@ -19,6 +19,8 @@ public:
 	public:
 		double renderFovX = 0;
 		double renderFovY = 0;
+		double renderFovMaxX = 0;
+		double renderFovMaxY = 0;
 		uint32_t renderResolution1To1X = 0;
 		uint32_t renderResolution1To1Y = 0;
 		double renderResolution1To1Percent = 0;

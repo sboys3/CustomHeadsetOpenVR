@@ -166,6 +166,8 @@ export type DriverInfo = {
 export type ResolutionInfo = {
   fovX: number,
   fovY: number,
+  fovMaxX: number,
+  fovMaxY: number,
   renderResolution1To1X: number,
   renderResolution1To1Y: number,
   renderResolution1To1Percent: number,

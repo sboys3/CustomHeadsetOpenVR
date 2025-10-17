@@ -451,6 +451,15 @@ void MeganeX8KShim::UpdateSettings(){
 		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeBottom}, {leftEyeRight, leftEyeTop}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeBottom}, {rightEyeRight, rightEyeTop}});
 		// this requires reallocations so only do it when a finalization is not queued
 		if(!needsDistortionFinalization){
+			// get max fov from the new profile
+			DistortionProfileConstructor maxFovConstructor = DistortionProfileConstructor();
+			maxFovConstructor.distortionSettings = distortionProfileConstructor.distortionSettings;
+			maxFovConstructor.distortionSettings.maxFovX = 170;
+			maxFovConstructor.distortionSettings.maxFovY = 170;
+			maxFovConstructor.LoadDistortionProfile(driverConfig.meganeX8K.distortionProfile);
+			maxFovConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
+			driverConfigLoader.info.renderFovMaxX = (std::atan(leftEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi;
+			driverConfigLoader.info.renderFovMaxY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
 			// update render target size
 			uint32_t renderResolutionX, renderResolutionY;
 			GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);

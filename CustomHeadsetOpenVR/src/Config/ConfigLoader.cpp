@@ -340,6 +340,8 @@ void ConfigLoader::WriteInfo(){
 		{"resolution", {
 			{"fovX", info.renderFovX},
 			{"fovY", info.renderFovY},
+			{"fovMaxX", info.renderFovMaxX},
+			{"fovMaxY", info.renderFovMaxY},
 			{"renderResolution1To1X", info.renderResolution1To1X},
 			{"renderResolution1To1Y", info.renderResolution1To1Y},
 			{"renderResolution1To1Percent", info.renderResolution1To1Percent},
