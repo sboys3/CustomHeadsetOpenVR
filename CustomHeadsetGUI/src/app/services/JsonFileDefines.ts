@@ -145,6 +145,8 @@ export type MeganeX8KConfig = {
   eyeRotation: number
   
   disableEye: number
+  
+  disableEyeDecreaseFov: number
 
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;

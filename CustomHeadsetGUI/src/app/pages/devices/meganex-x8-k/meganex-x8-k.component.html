@@ -647,6 +647,10 @@
         <span i18n>Eye Rotation</span>
         <app-field-tip i18n-info
             info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
+        @if(settings.eyeRotation){
+        &nbsp;&nbsp;
+        <mat-icon class="warn-color-flash" matTooltip="This may cause vision problems outside of the headset.">warning</mat-icon>
+        }
         <app-reset-button [canReset]="settings.eyeRotation!=defaults.eyeRotation"
             (resetClick)="resetOption('eyeRotation')"></app-reset-button>
     </div>
@@ -675,6 +679,21 @@
         </mat-select>
     </div>
 </div>
+@if(settings.disableEye!=0){
+<div class="field">
+    <div class="title">
+        <span i18n>Decrease FOV for Disabled Eye</span>
+        <app-field-tip i18n-info
+            info="Set the FOV to near zero for the disabled eye. This can cause issues with some games." />
+        <app-reset-button [canReset]="settings.disableEyeDecreaseFov!=defaults.disableEyeDecreaseFov"
+            (resetClick)="resetOption('disableEyeDecreaseFov')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.disableEyeDecreaseFov"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
 
 }
 }

@@ -40,6 +40,22 @@ html {
   color: var(--mat-sys-error);
 }
 
+@keyframes warn-flash {
+  0% {
+    color: var(--mat-sys-error);
+  }
+  50% {
+    color: #F00;
+  }
+  100% {
+    color: var(--mat-sys-error);
+  }
+}
+
+.warn-color-flash {
+  animation: warn-flash 1s infinite;
+}
+
 html,
 body {
 

@@ -45,4 +45,9 @@ export class AboutComponent {
       this.dialog.message($localize`Install success`, $localize`please launch SteamVR to finish the installation`)
     }
   }
+  async uninstallDriver(){
+    if (await this.sds.uninstallDriver()) {
+      this.dialog.message($localize`Uninstall success`, $localize`Successfully uninstalled the driver`)
+    }
+  }
 }

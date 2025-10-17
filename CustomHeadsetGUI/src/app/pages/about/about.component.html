@@ -26,9 +26,12 @@
     @if(sds.driverInstalled();as verison){
     @if(aus.updateInfo();as updateInfo){
     <span>&nbsp;:&nbsp;{{verison}}</span>
+    <span>&nbsp;&nbsp;</span>
+    <button mat-stroked-button (click)="uninstallDriver()" [disabled]="sds.installingDriver()">
+        <span i18n>Uninstall Driver</span>
+    </button>
     @if(updateInfo.installAvailable){
-    <span>
-        &nbsp;&nbsp;</span>
+    <span>&nbsp;&nbsp;</span>
     <mat-icon class="warn-color">priority_high</mat-icon>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Install {{updateInfo.currentVersion}}</span>
@@ -39,6 +42,11 @@
     <span>
         &nbsp;:&nbsp;</span>
     <span i18n>Not installed</span>
+    <span>&nbsp;&nbsp;</span>
+    <mat-icon class="warn-color">priority_high</mat-icon>
+    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+        <span i18n>Install</span>
+    </button>
     }
 </p>
 <p>
@@ -46,8 +54,7 @@
     @if(dis.values();as info){
     @if(aus.updateInfo();as updateInfo){
     <span>&nbsp;:&nbsp;{{info.driverVersion}}</span>
-    <span>
-        &nbsp;&nbsp;</span>
+    <span>&nbsp;&nbsp;</span>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Re-Install Driver</span>
     </button>
