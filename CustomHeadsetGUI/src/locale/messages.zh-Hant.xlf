@@ -246,10 +246,6 @@
         <source>Driver folder not found</source>
         <target state="translated">找不到驅動程式資料夾</target>
       </trans-unit>
-      <trans-unit id="7697842312955845335" datatype="html">
-        <source>driver folder not in default location</source>
-        <target state="translated">驅動程式資料夾不在預設位置</target>
-      </trans-unit>
       <trans-unit id="6353920713750092185" datatype="html">
         <source>Locate</source>
         <target state="translated">定位</target>
@@ -306,10 +302,6 @@
         <source>please launch SteamVR to finish the installation</source>
         <target state="translated">請啟動 SteamVR 以完成安裝</target>
       </trans-unit>
-      <trans-unit id="1422053103497449239" datatype="html">
-        <source>Install Failed</source>
-        <target state="translated">安裝失敗</target>
-      </trans-unit>
       <trans-unit id="3099842785070530061" datatype="html">
         <source>Resolution Info</source>
         <target state="translated">解析度資訊</target>
@@ -321,10 +313,6 @@
       <trans-unit id="6957891556134371559" datatype="html">
         <source>Hide Details</source>
         <target state="translated">隱藏詳細資料</target>
-      </trans-unit>
-      <trans-unit id="263013383242607256" datatype="html">
-        <source>Please launch SteamVR</source>
-        <target state="translated">請啟動 SteamVR</target>
       </trans-unit>
       <trans-unit id="6150901173509410295" datatype="html">
         <source>Shiftall driver is also disabled</source>
@@ -373,10 +361,6 @@
       <trans-unit id="265959825807724821" datatype="html">
         <source>Radius Bottom Outer</source>
         <target state="translated">底部外側半徑</target>
-      </trans-unit>
-      <trans-unit id="6061938108548189229" datatype="html">
-        <source>Steam VR not running or headset not connected</source>
-        <target state="translated">SteamVR 未執行或頭戴式裝置未連接</target>
       </trans-unit>
       <trans-unit id="6545003957463909662" datatype="html">
         <source>Check driver update and launch SteamVR</source>
@@ -662,10 +646,6 @@
         <source>Seconds From VSync to Photons</source>
         <target state="translated">從 VSync 到光子產生的秒數</target>
       </trans-unit>
-      <trans-unit id="563695625550992951" datatype="html">
-        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
-        <target state="translated">指 GPU 完成渲染後，顯示器更新所需的時間。此數值用於計算時間扭曲校正。</target>
-      </trans-unit>
       <trans-unit id="8988091250221469673" datatype="html">
         <source>installed driver version</source>
         <target state="translated">已安裝的驅動程式版本</target>
@@ -814,10 +794,6 @@
         <source>Seconds From VSync to Photons</source>
         <target state="translated">從 VSync 到光子產生的秒數</target>
       </trans-unit>
-      <trans-unit id="563695625550992951" datatype="html">
-        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
-        <target state="translated">指 GPU 完成渲染後，顯示器更新所需的時間。此數值用於計算時間扭曲校正。</target>
-      </trans-unit>
       <trans-unit id="5251436848651467180" datatype="html">
         <source>Driver enabled</source>
         <target state="translated">驅動程式已啟用</target>
@@ -833,6 +809,126 @@
       <trans-unit id="6439365426343089851" datatype="html">
         <source>General</source>
         <target state="translated">通用</target>
+      </trans-unit>
+     <trans-unit id="470261502393586030" datatype="html">
+        <source>Uninstall Driver</source>
+        <target state="translated">解除安裝驅動程式</target>
+      </trans-unit>
+      <trans-unit id="6082171864197428613" datatype="html">
+        <source>Install</source>
+        <target state="translated">安裝</target>
+      </trans-unit>
+      <trans-unit id="2765285220153750975" datatype="html">
+        <source>Uninstall success</source>
+        <target state="translated">解除安裝成功</target>
+      </trans-unit>
+      <trans-unit id="6933733092575281171" datatype="html">
+        <source>Successfully uninstalled the driver</source>
+        <target state="translated">已成功解除安裝驅動程式</target>
+      </trans-unit>
+      <trans-unit id="731345165483658436" datatype="html">
+        <source>Lens Color Correction</source>
+        <target state="translated">鏡片色彩校正</target>
+      </trans-unit>
+      <trans-unit id="4754749553000622201" datatype="html">
+        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses.</source>
+        <target state="translated">修正由鏡片引起的色彩均勻度問題。在 MeganeX 上，此功能可修正鏡片中心的偏暖色調。</target>
+      </trans-unit>
+      <trans-unit id="2105504908065972608" datatype="html">
+        <source>10 Bit Dithering</source>
+        <target state="translated">10 位元抖色</target>
+      </trans-unit>
+      <trans-unit id="2952968935550666852" datatype="html">
+        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications.</source>
+        <target state="translated">啟用 10 位元抖色。這允許 10 位元的輸入顯示在 8 位元的顯示器上。像素會透過空間和時間上的抖動來呈現更多色彩。此功能適用於 MeganeX 和所有其他原生頭戴式顯示器，但僅對支援 10 位元的 VR 應用程式有效。</target>
+      </trans-unit>
+      <trans-unit id="4499826397276637153" datatype="html">
+        <source>You need to update your driver to use the custom shader.</source>
+        <target state="translated">您需要更新驅動程式才能使用自訂著色器。</target>
+      </trans-unit>
+      <trans-unit id="8266300035266908667" datatype="html">
+        <source>Maximum possible FOV</source>
+        <target state="translated">最大可能視野 (FOV)</target>
+      </trans-unit>
+      <trans-unit id="30427449539687573" datatype="html">
+        <source>Headset not connected</source>
+        <target state="translated">頭戴式顯示器未連接</target>
+      </trans-unit>
+      <trans-unit id="3031796914277964022" datatype="html">
+        <source>SteamVR is not running, so this information is not updated.</source>
+        <target state="translated">SteamVR 未執行，因此此資訊未更新。</target>
+      </trans-unit>
+      <trans-unit id="7824054889084111041" datatype="html">
+        <source>FOV Zoom</source>
+        <target state="translated">視野 (FOV) 縮放</target>
+      </trans-unit>
+      <trans-unit id="2076767309617511431" datatype="html">
+        <source>Adjusts how zoomed in the FOV is. This can affect world scale. If you don&apos;t mind distortion this can be decreased too far to increase visible FOV.</source>
+        <target state="translated">調整視野的縮放程度。這可能會影響世界比例。若您不介意失真，可以將其調得更低以增加可見視野。</target>
+      </trans-unit>
+      <trans-unit id="1655480221425894378" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery.</source>
+        <target state="translated">GPU 完成渲染後，顯示器更新所需的時間。此數值用於計算時間扭曲校正。設定過高或過低會導致追蹤過衝或不足，使追蹤更加抖動。</target>
+      </trans-unit>
+      <trans-unit id="6502161386443972573" datatype="html">
+        <source>Seconds From Photons to Vblank</source>
+        <target state="translated">從光子到Vblank的秒數</target>
+      </trans-unit>
+      <trans-unit id="87217576573016893" datatype="html">
+        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side.</source>
+        <target state="translated">顯示器顯示第一行到最後一行所需的時間。這是為了對抗您在桌面上快速左右移動視窗時所看到的相同效果。</target>
+      </trans-unit>
+      <trans-unit id="4319231426791349112" datatype="html">
+        <source>Eye Rotation</source>
+        <target state="translated">眼睛旋轉角度</target>
+      </trans-unit>
+      <trans-unit id="4206116216841321818" datatype="html">
+        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
+        <target state="translated">每隻眼睛向外旋轉的角度。經過一些訓練後，或許可以犧牲雙眼重疊範圍和舒適度來增加視野。此數值每增加 1 度，視野就會增加 2 度。除非您對頭戴式顯示器進行極端的改裝，否則這會在 VR 內外都對您的眼睛造成影響。</target>
+      </trans-unit>
+      <trans-unit id="8002186340510323483" datatype="html">
+        <source>Disable Eye</source>
+        <target state="translated">停用單眼</target>
+      </trans-unit>
+      <trans-unit id="7190698682370260339" datatype="html">
+        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
+        <target state="translated">停用單隻眼睛。遊戲重新啟動後，這可以為剩餘的眼睛提供更多效能。由於 SteamVR 無法完全停用單眼，此功能會使用隱藏區域網格遮蔽整隻眼睛。隱藏區域網格的變更需要重新啟動，且可能會使桌面檢視變黑。當在 settings.json 中手動設定 disableEyeDecreaseFov 時，它還可以將視野設定得極低，但這可能會導致問題。</target>
+      </trans-unit>
+      <trans-unit id="2084720747782315739" datatype="html">
+        <source>Decrease FOV for Disabled Eye</source>
+        <target state="translated">降低已停用眼睛的視野</target>
+      </trans-unit>
+      <trans-unit id="7763542106240292744" datatype="html">
+        <source>Set the FOV to near zero for the disabled eye. By decreasing the FOV, occlusion culling may be able to decrease the rendering load. This can cause issues with some games.</source>
+        <target state="translated">將已停用眼睛的視野設定為接近零。透過降低視野，遮蔽剔除 (occlusion culling) 或許能減少渲染負載。這可能會在某些遊戲中引起問題。</target>
+      </trans-unit>
+      <trans-unit id="6252070156626006029" datatype="html">
+        <source>None</source>
+        <target state="translated">無</target>
+      </trans-unit>
+      <trans-unit id="5246819740476460403" datatype="html">
+        <source>Left</source>
+        <target state="translated">左</target>
+      </trans-unit>
+      <trans-unit id="4808834755787530462" datatype="html">
+        <source>Right</source>
+        <target state="translated">右</target>
+      </trans-unit>
+      <trans-unit id="6251586038459969294" datatype="html">
+        <source>Both</source>
+        <target state="translated">雙眼</target>
+      </trans-unit>
+      <trans-unit id="637856309710144578" datatype="html">
+        <source>The driver folder is not in the default location. Unpack the entire zip and retry, or manually locate the new CustomHeadsetOpenVR folder to be installed.</source>
+        <target state="translated">驅動程式資料夾不在預設位置。請解壓縮整個 zip 檔案後重試，或手動定位要安裝的新的 CustomHeadsetOpenVR 資料夾。</target>
+      </trans-unit>
+      <trans-unit id="7669295652920485128" datatype="html">
+        <source>Install Failed, Make sure SteamVR is closed</source>
+        <target state="translated">安裝失敗，請確認 SteamVR 已關閉</target>
+      </trans-unit>
+      <trans-unit id="8168207416346173524" datatype="html">
+        <source>Uninstall Failed, Make sure SteamVR is closed</source>
+        <target state="translated">解除安裝失敗，請確認 SteamVR 已關閉</target>
       </trans-unit>
     </body>
   </file>

@@ -203,9 +203,6 @@
       <trans-unit id="4678747519396968836" datatype="html">
         <source>Driver folder not found</source>
       </trans-unit>
-      <trans-unit id="7697842312955845335" datatype="html">
-        <source>driver folder not in default location</source>
-      </trans-unit>
       <trans-unit id="6353920713750092185" datatype="html">
         <source>Locate</source>
       </trans-unit>
@@ -224,9 +221,6 @@
       <trans-unit id="5696123826602687537" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{updateInfo.currentVersion}}"/></source>
       </trans-unit>
-      <trans-unit id="1422053103497449239" datatype="html">
-        <source>Install Failed</source>
-      </trans-unit>
       <trans-unit id="4422662750836022649" datatype="html">
         <source>Install success</source>
       </trans-unit>
@@ -235,9 +229,6 @@
       </trans-unit>
       <trans-unit id="2109348818976292721" datatype="html">
         <source>Show Details</source>
-      </trans-unit>
-      <trans-unit id="263013383242607256" datatype="html">
-        <source>Please launch SteamVR</source>
       </trans-unit>
       <trans-unit id="3099842785070530061" datatype="html">
         <source>Resolution Info</source>
@@ -280,9 +271,6 @@
       </trans-unit>
       <trans-unit id="8838782636230653734" datatype="html">
         <source>Radius Top Inner</source>
-      </trans-unit>
-      <trans-unit id="6061938108548189229" datatype="html">
-        <source>Steam VR not running or headset not connected</source>
       </trans-unit>
       <trans-unit id="6545003957463909662" datatype="html">
         <source>Check driver update and launch SteamVR</source>
@@ -443,9 +431,6 @@
       <trans-unit id="5518205125788028902" datatype="html">
         <source>Seconds From VSync to Photons</source>
       </trans-unit>
-      <trans-unit id="563695625550992951" datatype="html">
-        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
-      </trans-unit>
       <trans-unit id="5832230287995382782" datatype="html">
         <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
       </trans-unit>
@@ -550,6 +535,96 @@
       </trans-unit>
       <trans-unit id="6439365426343089851" datatype="html">
         <source>General</source>
+      </trans-unit>
+      <trans-unit id="1655480221425894378" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery.</source>
+      </trans-unit>
+      <trans-unit id="2076767309617511431" datatype="html">
+        <source>Adjusts how zoomed in the FOV is. This can affect world scale. If you don&apos;t mind distortion this can be decreased too far to increase visible FOV.</source>
+      </trans-unit>
+      <trans-unit id="2084720747782315739" datatype="html">
+        <source>Decrease FOV for Disabled Eye</source>
+      </trans-unit>
+      <trans-unit id="2105504908065972608" datatype="html">
+        <source>10 Bit Dithering</source>
+      </trans-unit>
+      <trans-unit id="2765285220153750975" datatype="html">
+        <source>Uninstall success</source>
+      </trans-unit>
+      <trans-unit id="2952968935550666852" datatype="html">
+        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications.</source>
+      </trans-unit>
+      <trans-unit id="3031796914277964022" datatype="html">
+        <source>SteamVR is not running, so this information is not updated.</source>
+      </trans-unit>
+      <trans-unit id="30427449539687573" datatype="html">
+        <source>Headset not connected</source>
+      </trans-unit>
+      <trans-unit id="4206116216841321818" datatype="html">
+        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
+      </trans-unit>
+      <trans-unit id="4319231426791349112" datatype="html">
+        <source>Eye Rotation</source>
+      </trans-unit>
+      <trans-unit id="4499826397276637153" datatype="html">
+        <source>You need to update your driver to use the custom shader.</source>
+      </trans-unit>
+      <trans-unit id="470261502393586030" datatype="html">
+        <source>Uninstall Driver</source>
+      </trans-unit>
+      <trans-unit id="4754749553000622201" datatype="html">
+        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses.</source>
+      </trans-unit>
+      <trans-unit id="4808834755787530462" datatype="html">
+        <source>Right</source>
+      </trans-unit>
+      <trans-unit id="5246819740476460403" datatype="html">
+        <source>Left</source>
+      </trans-unit>
+      <trans-unit id="6082171864197428613" datatype="html">
+        <source>Install</source>
+      </trans-unit>
+      <trans-unit id="6251586038459969294" datatype="html">
+        <source>Both</source>
+      </trans-unit>
+      <trans-unit id="6252070156626006029" datatype="html">
+        <source>None</source>
+      </trans-unit>
+      <trans-unit id="637856309710144578" datatype="html">
+        <source>The driver folder is not in the default location. Unpack the entire zip and retry, or manually locate the new CustomHeadsetOpenVR folder to be installed.</source>
+      </trans-unit>
+      <trans-unit id="6502161386443972573" datatype="html">
+        <source>Seconds From Photons to Vblank</source>
+      </trans-unit>
+      <trans-unit id="6933733092575281171" datatype="html">
+        <source>Successfully uninstalled the driver</source>
+      </trans-unit>
+      <trans-unit id="7190698682370260339" datatype="html">
+        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
+      </trans-unit>
+      <trans-unit id="731345165483658436" datatype="html">
+        <source>Lens Color Correction</source>
+      </trans-unit>
+      <trans-unit id="7669295652920485128" datatype="html">
+        <source>Install Failed, Make sure SteamVR is closed</source>
+      </trans-unit>
+      <trans-unit id="7763542106240292744" datatype="html">
+        <source>Set the FOV to near zero for the disabled eye. By decreasing the FOV, occlusion culling may be able to decrease the rendering load. This can cause issues with some games.</source>
+      </trans-unit>
+      <trans-unit id="7824054889084111041" datatype="html">
+        <source>FOV Zoom</source>
+      </trans-unit>
+      <trans-unit id="8002186340510323483" datatype="html">
+        <source>Disable Eye</source>
+      </trans-unit>
+      <trans-unit id="8168207416346173524" datatype="html">
+        <source>Uninstall Failed, Make sure SteamVR is closed</source>
+      </trans-unit>
+      <trans-unit id="8266300035266908667" datatype="html">
+        <source>Maximum possible FOV</source>
+      </trans-unit>
+      <trans-unit id="87217576573016893" datatype="html">
+        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side.</source>
       </trans-unit>
     </body>
   </file>

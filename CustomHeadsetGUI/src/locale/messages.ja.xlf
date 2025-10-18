@@ -246,10 +246,6 @@
         <source>Driver folder not found</source>
         <target state="translated">ドライバーフォルダーが見つかりません</target>
       </trans-unit>
-      <trans-unit id="7697842312955845335" datatype="html">
-        <source>driver folder not in default location</source>
-        <target state="translated">ドライバーフォルダーがデフォルトの場所にありません</target>
-      </trans-unit>
       <trans-unit id="6353920713750092185" datatype="html">
         <source>Locate</source>
         <target state="translated">場所を指定</target>
@@ -306,10 +302,6 @@
         <source>please launch SteamVR to finish the installation</source>
         <target state="translated">インストールを完了するために、SteamVRを起動してください</target>
       </trans-unit>
-      <trans-unit id="1422053103497449239" datatype="html">
-        <source>Install Failed</source>
-        <target state="translated">インストール失敗</target>
-      </trans-unit>
       <trans-unit id="3099842785070530061" datatype="html">
         <source>Resolution Info</source>
         <target state="translated">解像度情報</target>
@@ -321,10 +313,6 @@
       <trans-unit id="6957891556134371559" datatype="html">
         <source>Hide Details</source>
         <target state="translated">詳細を非表示</target>
-      </trans-unit>
-      <trans-unit id="263013383242607256" datatype="html">
-        <source>Please launch SteamVR</source>
-        <target state="translated">SteamVRを起動してください</target>
       </trans-unit>
       <trans-unit id="6150901173509410295" datatype="html">
         <source>Shiftall driver is also disabled</source>
@@ -373,10 +361,6 @@
       <trans-unit id="265959825807724821" datatype="html">
         <source>Radius Bottom Outer</source>
         <target state="translated">下部外側半径</target>
-      </trans-unit>
-      <trans-unit id="6061938108548189229" datatype="html">
-        <source>Steam VR not running or headset not connected</source>
-        <target state="translated">SteamVRが起動していないか、ヘッドセットが接続されていません</target>
       </trans-unit>
       <trans-unit id="6545003957463909662" datatype="html">
         <source>Check driver update and launch SteamVR</source>
@@ -714,10 +698,6 @@
         <source>Seconds From VSync to Photons</source>
         <target state="translated">VSyncから光子までの秒数</target>
       </trans-unit>
-      <trans-unit id="563695625550992951" datatype="html">
-        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction.</source>
-        <target state="translated">GPUがレンダリングを完了してからディスプレイが更新されるまでの時間。これはタイムワープ補正の計算に使用されます。</target>
-      </trans-unit>
       <trans-unit id="5251436848651467180" datatype="html">
         <source>Driver enabled</source>
         <target state="translated">ドライバーは有効です</target>
@@ -733,6 +713,126 @@
       <trans-unit id="6439365426343089851" datatype="html">
         <source>General</source>
         <target state="translated">一般</target>
+      </trans-unit>
+      <trans-unit id="470261502393586030" datatype="html">
+        <source>Uninstall Driver</source>
+        <target state="translated">ドライバーをアンインストール</target>
+      </trans-unit>
+      <trans-unit id="6082171864197428613" datatype="html">
+        <source>Install</source>
+        <target state="translated">インストール</target>
+      </trans-unit>
+      <trans-unit id="2765285220153750975" datatype="html">
+        <source>Uninstall success</source>
+        <target state="translated">アンインストール成功</target>
+      </trans-unit>
+      <trans-unit id="6933733092575281171" datatype="html">
+        <source>Successfully uninstalled the driver</source>
+        <target state="translated">ドライバーのアンインストールに成功しました</target>
+      </trans-unit>
+      <trans-unit id="731345165483658436" datatype="html">
+        <source>Lens Color Correction</source>
+        <target state="translated">レンズカラー補正</target>
+      </trans-unit>
+      <trans-unit id="4754749553000622201" datatype="html">
+        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses.</source>
+        <target state="translated">レンズによって生じる色の均一性の問題を修正します。MeganeXでは、レンズ中央の暖色系の色合いを修正します。</target>
+      </trans-unit>
+      <trans-unit id="2105504908065972608" datatype="html">
+        <source>10 Bit Dithering</source>
+        <target state="translated">10ビットディザリング</target>
+      </trans-unit>
+      <trans-unit id="2952968935550666852" datatype="html">
+        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications.</source>
+        <target state="translated">10ビットディザリングを有効にします。これにより、10ビットの入力を8ビットのディスプレイに表示できます。ピクセルは空間的および時間的にディザリングされ、より多くの色を表現できます。これはMeganeXおよび他のすべてのネイティブヘッドセットで機能しますが、10ビットVRアプリケーションでのみ効果があります。</target>
+      </trans-unit>
+      <trans-unit id="4499826397276637153" datatype="html">
+        <source>You need to update your driver to use the custom shader.</source>
+        <target state="translated">カスタムシェーダーを使用するには、ドライバーを更新する必要があります。</target>
+      </trans-unit>
+      <trans-unit id="8266300035266908667" datatype="html">
+        <source>Maximum possible FOV</source>
+        <target state="translated">最大可能視野角 (FOV)</target>
+      </trans-unit>
+      <trans-unit id="30427449539687573" datatype="html">
+        <source>Headset not connected</source>
+        <target state="translated">ヘッドセットが接続されていません</target>
+      </trans-unit>
+      <trans-unit id="3031796914277964022" datatype="html">
+        <source>SteamVR is not running, so this information is not updated.</source>
+        <target state="translated">SteamVRが実行されていないため、この情報は更新されません。</target>
+      </trans-unit>
+      <trans-unit id="7824054889084111041" datatype="html">
+        <source>FOV Zoom</source>
+        <target state="translated">視野角 (FOV) ズーム</target>
+      </trans-unit>
+      <trans-unit id="2076767309617511431" datatype="html">
+        <source>Adjusts how zoomed in the FOV is. This can affect world scale. If you don&apos;t mind distortion this can be decreased too far to increase visible FOV.</source>
+        <target state="translated">視野角のズームレベルを調整します。これはワールドスケールに影響を与える可能性があります。歪みが気にならない場合は、この値を下げすぎることで可視視野角を広げることができます。</target>
+      </trans-unit>
+      <trans-unit id="1655480221425894378" datatype="html">
+        <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery.</source>
+        <target state="translated">GPUがレンダリングを完了してからディスプレイが更新されるまでの時間です。これはタイムワープ補正の計算に使用されます。設定が高すぎたり低すぎたりすると、トラッキングがオーバーシュートまたはアンダーシュートし、トラッキングがより不安定になります。</target>
+      </trans-unit>
+      <trans-unit id="6502161386443972573" datatype="html">
+        <source>Seconds From Photons to Vblank</source>
+        <target state="translated">光子からVblankまでの秒数</target>
+      </trans-unit>
+      <trans-unit id="87217576573016893" datatype="html">
+        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side.</source>
+        <target state="translated">ディスプレイが最初のラインと最後のラインを表示するのにかかる時間です。これは、デスクトップ上でウィンドウを素早く左右に動かしながら目で追うときに表示されるのと同じ効果を抑制するためのものです。</target>
+      </trans-unit>
+      <trans-unit id="4319231426791349112" datatype="html">
+        <source>Eye Rotation</source>
+        <target state="translated">目の回転角度</target>
+      </trans-unit>
+      <trans-unit id="4206116216841321818" datatype="html">
+        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
+        <target state="translated">各目が外側に回転する角度。トレーニング次第では、両眼の重複範囲と快適性を犠牲にしてFOVを増やすことができるかもしれません。この値が1度増加するごとに、FOVが2度追加されます。ヘッドセットに極端な改造を施さない限り、VR内外で目に負担がかかります。</target>
+      </trans-unit>
+      <trans-unit id="8002186340510323483" datatype="html">
+        <source>Disable Eye</source>
+        <target state="translated">片目の無効化</target>
+      </trans-unit>
+      <trans-unit id="7190698682370260339" datatype="html">
+        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
+        <target state="translated">片方の目を無効にします。ゲームを再起動すると、残りの目により高いパフォーマンスを提供できます。SteamVRでは目を完全に無効にすることはできないため、非表示領域メッシュで目全体を覆います。非表示領域メッシュの変更には再起動が必要で、デスクトップビューがブラックアウトすることがあります。また、settings.jsonでdisableEyeDecreaseFovを手動で設定すると、FOVを極端に低く設定することもできますが、問題が発生する可能性があります。</target>
+      </trans-unit>
+      <trans-unit id="2084720747782315739" datatype="html">
+        <source>Decrease FOV for Disabled Eye</source>
+        <target state="translated">無効化した目のFOVを減少</target>
+      </trans-unit>
+      <trans-unit id="7763542106240292744" datatype="html">
+        <source>Set the FOV to near zero for the disabled eye. By decreasing the FOV, occlusion culling may be able to decrease the rendering load. This can cause issues with some games.</source>
+        <target state="translated">無効にした目のFOVをほぼゼロに設定します。FOVを減少させることにより、オクルージョンカリングがレンダリング負荷を軽減できる可能性があります。一部のゲームでは問題が発生することがあります。</target>
+      </trans-unit>
+      <trans-unit id="6252070156626006029" datatype="html">
+        <source>None</source>
+        <target state="translated">なし</target>
+      </trans-unit>
+      <trans-unit id="5246819740476460403" datatype="html">
+        <source>Left</source>
+        <target state="translated">左</target>
+      </trans-unit>
+      <trans-unit id="4808834755787530462" datatype="html">
+        <source>Right</source>
+        <target state="translated">右</target>
+      </trans-unit>
+      <trans-unit id="6251586038459969294" datatype="html">
+        <source>Both</source>
+        <target state="translated">両方</target>
+      </trans-unit>
+      <trans-unit id="637856309710144578" datatype="html">
+        <source>The driver folder is not in the default location. Unpack the entire zip and retry, or manually locate the new CustomHeadsetOpenVR folder to be installed.</source>
+        <target state="translated">ドライバーフォルダーがデフォルトの場所にありません。zipファイル全体を展開して再試行するか、インストールする新しいCustomHeadsetOpenVRフォルダーを手動で指定してください。</target>
+      </trans-unit>
+      <trans-unit id="7669295652920485128" datatype="html">
+        <source>Install Failed, Make sure SteamVR is closed</source>
+        <target state="translated">インストールに失敗しました。SteamVRが閉じていることを確認してください</target>
+      </trans-unit>
+      <trans-unit id="8168207416346173524" datatype="html">
+        <source>Uninstall Failed, Make sure SteamVR is closed</source>
+        <target state="translated">アンインストールに失敗しました。SteamVRが閉じていることを確認してください</target>
       </trans-unit>
     </body>
   </file>
