@@ -4,6 +4,7 @@
 #include <map>
 
 std::unordered_map<std::string, DistortionProfileConfig> builtInDistortionProfiles = {};
+// map old names to the new name of distortion profiles for comatability with old configs
 std::unordered_map<std::string, std::string> builtInDistortionProfileAliases = {
 	{"MeganeX8K Original", "MeganeX8K v0.3.0"}
 };
@@ -14,11 +15,36 @@ bool PopulateBuiltInDistortionProfiles(){
 	defaultProfile.name = "MeganeX8K Default";
 	defaultProfile.device = "MeganeX8K";
 	defaultProfile.modifiedTime = 0;
-	defaultProfile.description = "Default distortion profile for MeganeX8K. This is the profile made by Essentia that was called the Western B CA profile. It works pretty well if you can get close enough to be able to nearly see the 110 degree field of view.";
+	defaultProfile.description = "Default distortion profile for MeganeX8K. This is the profile made by Essentia that was called the Essentia Zoom Out profile. Previous profiles are too zoomed in when the diopters are set to zero, so this one provides more FOV. It works best if you can get close enough to the lenses.";
 	defaultProfile.author = "Essentia, SBoys3, Shiftall";
-	defaultProfile.creationDate = 1748554999.135;
+	defaultProfile.creationDate = 1755911419.135;
 	defaultProfile.type = "RadialBezier";
 	defaultProfile.distortions = {
+		 0.0000, 0.0,
+		 5.0000, 12.024,
+		10.0000, 23.904,
+		15.0000, 35.429,
+		20.0000, 46.511,
+		25.0000, 57.162,
+		30.0000, 67.498,
+		35.0000, 77.596,
+		40.0000, 86.882,
+		45.0000, 94.532,
+		48.3073, 98.599,
+		50.0000, 100.265
+	};
+	builtInDistortionProfiles[defaultProfile.name] = defaultProfile;
+	
+	
+	DistortionProfileConfig meganeX8Kv1_0_0 = {};
+	meganeX8Kv1_0_0.name = "MeganeX8K v1.0.0";
+	meganeX8Kv1_0_0.device = "MeganeX8K";
+	meganeX8Kv1_0_0.modifiedTime = 0;
+	meganeX8Kv1_0_0.description = "This is the profile made by Essentia that was called the Western B CA profile. It works pretty well if you can get close enough to be able to nearly see the 110 degree field of view.";
+	meganeX8Kv1_0_0.author = "Essentia, SBoys3, Shiftall";
+	meganeX8Kv1_0_0.creationDate = 1748554999.135;
+	meganeX8Kv1_0_0.type = "RadialBezier";
+	meganeX8Kv1_0_0.distortions = {
 		0.00000f, 0.0f,
 		5.00000f, 12.463f,
 		10.0000f, 24.750f,
@@ -31,7 +57,7 @@ bool PopulateBuiltInDistortionProfiles(){
 		45.00000f, 96.357f,
 		48.30730f, 100.0f
 	};
-	builtInDistortionProfiles[defaultProfile.name] = defaultProfile;
+	builtInDistortionProfiles[meganeX8Kv1_0_0.name] = meganeX8Kv1_0_0;
 	
 	
 	DistortionProfileConfig meganeX8Kv0_4_0 = {};
