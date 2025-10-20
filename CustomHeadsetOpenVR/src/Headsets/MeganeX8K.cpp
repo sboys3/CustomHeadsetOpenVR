@@ -360,6 +360,11 @@ void MeganeX8KShim::UpdateSettings(){
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)driverConfig.meganeX8K.secondsFromVsyncToPhotons);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromPhotonsToVblank_Float, (float)driverConfig.meganeX8K.secondsFromPhotonsToVblank);
+	
+	//bluetoothDevice
+	if(driverConfig.meganeX8K.bluetoothDevice == 1){
+		vr::VRProperties()->SetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64, vr::AdditionalRadioFeatures_HTCLinkBox);
+	}
 
 	if (driverConfig.meganeX8K.hiddenArea != driverConfigOld.meganeX8K.hiddenArea || driverConfigOld.meganeX8K.disableEye != driverConfig.meganeX8K.disableEye) { // This generally requires that you restart your game for it to update
 		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {

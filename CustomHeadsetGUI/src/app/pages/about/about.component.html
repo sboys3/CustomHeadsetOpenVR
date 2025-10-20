@@ -32,10 +32,10 @@
     </button>
     @if(updateInfo.installAvailable){
     <span>&nbsp;&nbsp;</span>
-    <mat-icon class="warn-color">priority_high</mat-icon>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Install {{updateInfo.currentVersion}}</span>
     </button>
+    <mat-icon class="warn-color">priority_high</mat-icon>
     }
     }
     }@else {
@@ -43,10 +43,10 @@
         &nbsp;:&nbsp;</span>
     <span i18n>Not installed</span>
     <span>&nbsp;&nbsp;</span>
-    <mat-icon class="warn-color">priority_high</mat-icon>
     <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
         <span i18n>Install</span>
     </button>
+    <mat-icon class="warn-color">priority_high</mat-icon>
     }
 </p>
 <p>

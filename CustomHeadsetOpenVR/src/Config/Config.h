@@ -134,6 +134,8 @@ public:
 		int disableEye = 0;
 		// if the fov should be decreased for the disabled eye, this causes problems in some apps
 		bool disableEyeDecreaseFov = false;
+		// which bluetooth device to use for SteamVR 0:none 1:vive
+		int bluetoothDevice = 0;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
