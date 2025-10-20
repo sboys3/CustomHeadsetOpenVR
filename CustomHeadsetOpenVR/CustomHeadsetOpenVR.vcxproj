@@ -142,7 +142,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I</Command>
+      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
@@ -166,7 +166,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I</Command>
+      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
@@ -185,7 +185,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I</Command>
+      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
@@ -209,7 +209,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I</Command>
+      <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
