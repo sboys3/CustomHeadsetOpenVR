@@ -87,7 +87,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	UpdateSettings();
 	
-	//returnValue = vr::VRInitError_None;
+	// returnValue = vr::VRInitError_None;
 }
 void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 	isActive = false;
@@ -180,7 +180,7 @@ bool MeganeX8KShim::PreDisplayComponentIsDisplayOnDesktop(bool &returnValue){
 	return false;
 };
 bool MeganeX8KShim::PreDisplayComponentIsDisplayRealDisplay(bool &returnValue){
-	returnValue = true;
+	returnValue = !driverConfig.meganeX8K.directMode;
 	return false;
 };
 
