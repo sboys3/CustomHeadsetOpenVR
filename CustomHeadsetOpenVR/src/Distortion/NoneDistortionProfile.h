@@ -16,7 +16,10 @@ public:
 	
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) override{
 		constexpr float kPi{ 3.1415926535897932384626433832795028841971693993751058209749445f };
-
+		
+		if(fovZoom == 0){
+			fovZoom = 1.0f;
+		}
 		float hFovHalf = noneDistortionFovHorizontal / fovZoom / 2.0f;
 		float vFovHalf = noneDistortionFovVertical / fovZoom / 2.0f;
 		

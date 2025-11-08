@@ -136,6 +136,8 @@ public:
 		bool disableEyeDecreaseFov = false;
 		// which bluetooth device to use for SteamVR 0:none 1:vive
 		int bluetoothDevice = 0;
+		// if the display is in direct mode or false if it is on the desktop
+		bool directMode = true;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

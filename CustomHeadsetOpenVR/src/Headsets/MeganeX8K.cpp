@@ -5,6 +5,7 @@
 #include "../Config/Config.h"
 #include "../Config/ConfigLoader.h"
 #include "../HiddenArea/HiddenArea.h"
+#include "../Helpers/DisplayHelper.h"
 
 constexpr float kPi{ 3.1415926535897932384626433832795028841971693993751058209749445f };
 
@@ -16,6 +17,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 	
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
+	DriverLog("headset model: %s", modelNumber);
 	if(modelNumber != "MeganeX superlight 8K"){
 		// deactivate shim if this is not a MeganeX superlight 8K
 		shimActive = false;
@@ -26,8 +28,8 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	isActive = true;
 
 	// avoid "not fullscreen" warnings from vrmonitor
-	vr::VRProperties()->SetBoolProperty( container, vr::Prop_IsOnDesktop_Bool, false);
-	vr::VRProperties()->SetBoolProperty( container, vr::Prop_DisplayDebugMode_Bool, true);
+	vr::VRProperties()->SetBoolProperty( container, vr::Prop_IsOnDesktop_Bool, !driverConfig.meganeX8K.directMode);
+	vr::VRProperties()->SetBoolProperty( container, vr::Prop_DisplayDebugMode_Bool, driverConfig.meganeX8K.directMode);
 	
 	// I think this is already the default and produces true blacks
 	// vr::VRProperties()->SetFloatProperty( container, vr::Prop_DisplayGCBlackClamp_Float, 0.00f);
@@ -176,7 +178,7 @@ bool MeganeX8KShim::PreDisplayComponentIsDisplayOnDesktop(bool &returnValue){
 	return false;
 };
 bool MeganeX8KShim::PreDisplayComponentIsDisplayRealDisplay(bool &returnValue){
-	returnValue = false;
+	returnValue = true;
 	return false;
 };
 
@@ -184,6 +186,7 @@ bool MeganeX8KShim::PreDisplayComponentIsDisplayRealDisplay(bool &returnValue){
 bool MeganeX8KShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight){
 	*pnX = 0;
 	// *pnX = 3840 + 1080;
+	// *pnX = 3840 + 1080 + 1920;
 	*pnY = 0;
 	// *pnWidth = 2160;
 	// *pnHeight = 1200;
@@ -192,6 +195,11 @@ bool MeganeX8KShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&
 	*pnHeight = driverConfig.meganeX8K.resolutionX;
 	// *pnWidth = 5328;
 	// *pnHeight = 2880;
+	if(!driverConfig.meganeX8K.directMode){
+		int edidVendorId = vr::VRProperties()->GetInt32Property(vr::VRProperties()->TrackedDeviceToPropertyContainer(0), vr::Prop_EdidVendorID_Int32);
+		int edidProductId = vr::VRProperties()->GetInt32Property(vr::VRProperties()->TrackedDeviceToPropertyContainer(0), vr::Prop_EdidProductID_Int32);
+		FindDisplayPosition(*pnWidth, *pnHeight, edidVendorId, edidProductId, pnX, pnY);
+	}
 	return false;
 }
 

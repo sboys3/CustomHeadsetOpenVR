@@ -115,6 +115,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["bluetoothDevice"].is_number()){
 				newConfig.meganeX8K.bluetoothDevice = meganeX8KData["bluetoothDevice"].get<int>();
 			}
+			if(meganeX8KData["directMode"].is_boolean()){
+				newConfig.meganeX8K.directMode = meganeX8KData["directMode"].get<bool>();
+			}
 			
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
@@ -297,6 +300,7 @@ void ConfigLoader::WriteInfo(){
 				{"disableEye", defaultSettings.meganeX8K.disableEye},
 				{"disableEyeDecreaseFov", defaultSettings.meganeX8K.disableEyeDecreaseFov},
 				{"bluetoothDevice", defaultSettings.meganeX8K.bluetoothDevice},
+				{"directMode", defaultSettings.meganeX8K.directMode},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},
