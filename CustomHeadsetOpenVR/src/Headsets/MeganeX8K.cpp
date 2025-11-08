@@ -38,7 +38,9 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	// Set EDID id
 	vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xcc4c); // SFL megenex
-	// vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
+	if(!driverConfig.meganeX8K.directMode){
+		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
+	}
 	vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
 	
 	// it blackscreens and immediately crashes windows when changed at runtime
@@ -85,7 +87,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	UpdateSettings();
 	
-	returnValue = vr::VRInitError_None;
+	//returnValue = vr::VRInitError_None;
 }
 void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 	isActive = false;
