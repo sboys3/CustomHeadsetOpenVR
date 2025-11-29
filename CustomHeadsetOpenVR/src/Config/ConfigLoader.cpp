@@ -205,6 +205,9 @@ void ConfigLoader::ParseConfig(){
 				newConfig.customShader.dither10Bit = customShaderData["dither10Bit"].get<bool>();
 			}
 		}
+		if(data["forceTracking"].is_boolean()){
+			newConfig.forceTracking = data["forceTracking"].get<bool>();
+		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }
@@ -341,7 +344,8 @@ void ConfigLoader::WriteInfo(){
 				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
-			}}
+			}},
+			{"forceTracking", defaultSettings.forceTracking},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
 		{"builtInDistortionProfiles", emptyObject},

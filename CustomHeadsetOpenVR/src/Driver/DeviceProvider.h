@@ -29,7 +29,7 @@ public:
 	void Cleanup() override;
 	
 	// handle hook of TrackedDevicePoseUpdated
-	// bool HandleDevicePoseUpdated(uint32_t openVRID, vr::DriverPose_t &pose);
+	bool HandleDevicePoseUpdated(uint32_t openVRID, vr::DriverPose_t &pose);
 	// handle hook of TrackedDeviceAdded
 	bool HandleDeviceAdded(const char* &pchDeviceSerialNumber, vr::ETrackedDeviceClass &eDeviceClass, vr::ITrackedDeviceServerDriver* &pDriver);
 	// set of driver conexts collected by the hooking process

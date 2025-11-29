@@ -124,6 +124,15 @@ bool CustomHeadsetDeviceProvider::SendVendorEvent(uint32_t unWhichDevice, vr::EV
 	}
 }
 
+bool CustomHeadsetDeviceProvider::HandleDevicePoseUpdated(uint32_t openVRID, vr::DriverPose_t &pose){
+	if(driverConfig.forceTracking){
+		pose.poseIsValid = true;
+		if(pose.result != vr::TrackingResult_Fallback_RotationOnly){
+			pose.result = vr::TrackingResult_Running_OK;
+		}
+	}
+	return true;
+}
 
 bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerialNumber, vr::ETrackedDeviceClass &eDeviceClass, vr::ITrackedDeviceServerDriver *&pDriver){
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);

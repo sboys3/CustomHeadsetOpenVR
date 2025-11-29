@@ -56,6 +56,11 @@ html {
   animation: warn-flash 1s infinite;
 }
 
+.wrapped-block {
+  display: inline-block;
+  max-width: 50%;
+}
+
 html,
 body {
 

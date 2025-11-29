@@ -4,11 +4,12 @@ import { appLocalDataDir, join } from '@tauri-apps/api/path';
 import { DriverSettingService } from './driver-setting.service';
 import { DriverInfoService } from './driver-info.service';
 import { debounceTime, Subject } from 'rxjs';
-import { get_executable_path } from '../tauri_wrapper';
+import { get_executable_path, restart_vrcompositor } from '../tauri_wrapper';
 import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
 import { cleanJsonComments } from '../helpers';
+
 @Injectable({providedIn: "root", })
 export class SystemDiagnosticService implements OnDestroy {
   private _installingDriver = signal(false)
@@ -275,5 +276,8 @@ export class SystemDiagnosticService implements OnDestroy {
   }
   public async resetDriverSetting() {
     await writeTextFile(this.dss.filePath, "{}")
+  }
+  public async restartCompositor() {
+    return await restart_vrcompositor()
   }
 }

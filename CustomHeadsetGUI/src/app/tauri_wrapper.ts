@@ -8,3 +8,6 @@ export async function get_executable_path() {
 export async function is_vrmonitor_running() {
     return await invoke('is_vrmonitor_running') as boolean;
 }
+export async function restart_vrcompositor() {
+    return await invoke('restart_vrcompositor') as boolean;
+}

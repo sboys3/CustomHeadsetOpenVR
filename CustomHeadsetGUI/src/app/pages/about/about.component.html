@@ -66,6 +66,12 @@
     }
 </p>
 <p>
+    <span class="wrapped-block" i18n>
+        Restarting the compositor can fix some issues and allows changing various settings like refresh rate without restarting SteamVR or the game. 
+    </span>
+    <button mat-stroked-button (click)="sds.restartCompositor()"><span i18n>Restart Compositor</span></button>
+</p>
+<p>
     <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;">
         <span i18n>Github Page</span>
     </a>

@@ -148,6 +148,9 @@ public:
 	
 	CustomShaderConfig customShader = {};
 	
+	// if devices should always be reported as tracking
+	bool forceTracking = false;
+	
 	// reload the config every time a file is changed in the distortions directory
 	// this is for manual json editing, utilities should touch the main settings file when done modifying distortions instead
 	// this is now enabled by default
