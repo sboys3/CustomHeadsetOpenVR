@@ -141,8 +141,9 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     }
     async enableDriver() {
         const driverNames = this.driverNames();
-        if (driverNames.length) {
+        if (driverNames.length >= 4) {
             await this.sds.enableSteamVRDriver(driverNames[0]);
+            await this.sds.enableSteamVRDriver(driverNames[1]);
         }
     }
 

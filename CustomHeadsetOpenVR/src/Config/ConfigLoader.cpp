@@ -118,6 +118,15 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["directMode"].is_boolean()){
 				newConfig.meganeX8K.directMode = meganeX8KData["directMode"].get<bool>();
 			}
+			if(meganeX8KData["replaceIcons"].is_boolean()){
+				newConfig.meganeX8K.replaceIcons = meganeX8KData["replaceIcons"].get<bool>();
+			}
+			if(meganeX8KData["edidVendorIdOverride"].is_number()){
+				newConfig.meganeX8K.edidVendorIdOverride = meganeX8KData["edidVendorIdOverride"].get<int>();
+			}
+			if(meganeX8KData["edidProductIdOverride"].is_number()){
+				newConfig.meganeX8K.edidProductIdOverride = meganeX8KData["edidProductIdOverride"].get<int>();
+			}
 			
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
@@ -304,6 +313,9 @@ void ConfigLoader::WriteInfo(){
 				{"disableEyeDecreaseFov", defaultSettings.meganeX8K.disableEyeDecreaseFov},
 				{"bluetoothDevice", defaultSettings.meganeX8K.bluetoothDevice},
 				{"directMode", defaultSettings.meganeX8K.directMode},
+				{"replaceIcons", defaultSettings.meganeX8K.replaceIcons},
+				{"edidVendorIdOverride", defaultSettings.meganeX8K.edidVendorIdOverride},
+				{"edidProductIdOverride", defaultSettings.meganeX8K.edidProductIdOverride},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},

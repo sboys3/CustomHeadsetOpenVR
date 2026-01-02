@@ -18,10 +18,13 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
 	DriverLog("headset model: %s", modelNumber);
-	if(modelNumber != "MeganeX superlight 8K"){
+	if(modelNumber != "MeganeX superlight 8K" && modelNumber != "MeganeX 8K Mark II"){
 		// deactivate shim if this is not a MeganeX superlight 8K
 		shimActive = false;
 		return;
+	}
+	if(modelNumber == "MeganeX 8K Mark II"){
+		headsetRevision = 2;
 	}
 	driverConfigLoader.info.connectedHeadset = ConfigLoader::HeadsetType::MeganeX8K;
 	
@@ -42,6 +45,12 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
 	}
 	vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
+	if(driverConfig.meganeX8K.edidVendorIdOverride != 0){
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, driverConfig.meganeX8K.edidVendorIdOverride);
+	}
+	if(driverConfig.meganeX8K.edidProductIdOverride != 0){
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, driverConfig.meganeX8K.edidProductIdOverride);
+	}
 	
 	// it blackscreens and immediately crashes windows when changed at runtime
 	vr::VRProperties()->SetBoolProperty(container, vr::Prop_DisplaySupportsRuntimeFramerateChange_Bool, false);
@@ -59,6 +68,17 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDCP14LegacyCompat_Bool, false);
 	
 	
+	if(driverConfig.meganeX8K.replaceIcons){
+		// update icons
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceOff_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_off.png");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearching_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_searching.gif");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearchingAlert_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_searching_alert.gif");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReady_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_ready.png");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReadyAlert_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_ready_alert.png");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceNotReady_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_error.png");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceStandby_String, "{CustomHeadsetOpenVR}/icons/meganex8k/headset_status_standby.png");
+	}	
+
 	
 	// set ipd
 	// float ipd = vr::VRSettings()->GetFloat("driver_CustomHeadsetOpenVR", "ipd");

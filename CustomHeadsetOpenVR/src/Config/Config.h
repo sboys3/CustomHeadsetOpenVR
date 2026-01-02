@@ -138,6 +138,12 @@ public:
 		int bluetoothDevice = 0;
 		// if the display is in direct mode or false if it is on the desktop
 		bool directMode = true;
+		// if the icons in the SteamVR status window should be modified
+		bool replaceIcons = true;
+		// if non zero, override the edid vendor id
+		int edidVendorIdOverride = 0;
+		// if non zero, override the edid product id
+		int edidProductIdOverride = 0;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

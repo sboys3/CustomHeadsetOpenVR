@@ -185,6 +185,9 @@ export class SystemDiagnosticService implements OnDestroy {
     } finally {
       if(!this.dss.values() || this.dss.values()?.meganeX8K?.enable){
         await this.disableSteamVRDriver('MeganeXSuperlight');
+        await this.disableSteamVRDriver('MeganeX8KMark2');
+        await this.disableSteamVRDriver('MeganeXsuperlight8K_Native');
+        await this.disableSteamVRDriver('MeganeX8KMark2_Native');
       }
       await this.enableSteamVRDriver('CustomHeadsetOpenVR');
       this.installing = false
