@@ -6,7 +6,9 @@
 #include "nlohmann/json.hpp"
 #include "../Driver/DriverLog.h"
 #include "../Distortion/DistortionProfileConstructor.h"
-
+#ifdef _WIN32
+#include "Windows.h"
+#endif
 
 using json = nlohmann::json;
 using ordered_json = nlohmann::ordered_json;
@@ -442,7 +444,6 @@ void ConfigLoader::ReadInfo(){
 	// }
 // }
 #ifdef _WIN32
-#include "Windows.h"
 void ConfigLoader::WatcherThread(){
 	// watch for changes in the config file directory
 	std::string configPath = GetConfigFolder();

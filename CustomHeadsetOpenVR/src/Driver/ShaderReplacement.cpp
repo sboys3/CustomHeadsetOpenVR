@@ -31,7 +31,7 @@ std::string getShaderPath(){
 	return shaderPath;
 }
 
-static Hook<void*(*)(ID3D11Device*, const void* pShaderBytecode, SIZE_T BytecodeLength, ID3D11ClassLinkage* pClassLinkage, ID3D11PixelShader** ppPixelShader)> 
+static Hook<void(*)(ID3D11Device*, const void* pShaderBytecode, SIZE_T BytecodeLength, ID3D11ClassLinkage* pClassLinkage, ID3D11PixelShader** ppPixelShader)> 
 	CreatePixelShaderHook("ID3D11Device::CreatePixelShader");
 
 // holder for bytecode
