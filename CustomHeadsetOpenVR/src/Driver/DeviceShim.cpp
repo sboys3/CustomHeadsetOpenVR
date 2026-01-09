@@ -1,5 +1,6 @@
 #include "DeviceShim.h"
 #include "DriverLog.h"
+#include <cstring>
 
 ShimTrackedDeviceDriver::ShimTrackedDeviceDriver(ShimDefinition* shimDefinition, vr::ITrackedDeviceServerDriver* original){
 	DriverLog("Creating ShimTrackedDeviceDriver");

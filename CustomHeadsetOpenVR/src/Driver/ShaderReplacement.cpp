@@ -8,13 +8,16 @@
 #include <codecvt>
 #include <filesystem>
 #include <fstream>
+#include <thread>
 
 #include "../../../ThirdParty/easywsclient/easywsclient.hpp"
 
+#ifdef _WIN32
 #include "d3d11.h"
 #include "d3dcompiler.h"
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
 
 // this could probably use macros to get the current project location instead of hard coding it for my computer
 std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
@@ -434,20 +437,6 @@ void ShaderReplacement::Initialize(){
 	}
 }
 
-void ShaderReplacement::ReloadShaders(){
-	DriverLog("ShaderReplacement::ReloadShaders called");
-	easywsclient::WebSocket* websocket = easywsclient::WebSocket::from_url("ws://127.0.0.1:27062/", "http://127.0.0.1:27062");
-	if(websocket == nullptr){
-		DriverLog("Failed to create websocket");
-		return;
-	}
-	websocket->send("mailbox_send vrcompositor_mailbox {\"type\":\"shaders_force_reload\"}");
-	websocket->poll();
-	websocket->close();
-	websocket->poll(); // final poll to close the connection
-	delete websocket;
-}
-
 
 
 void ShaderReplacement::WatchShadersThread(){
@@ -479,6 +468,27 @@ void ShaderReplacement::WatchShadersThread(){
 		}while(pNotify->NextEntryOffset != 0);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
+}
+
+#elif __linux__
+void ShaderReplacement::Initialize(){
+}
+#endif
+
+
+
+void ShaderReplacement::ReloadShaders(){
+	DriverLog("ShaderReplacement::ReloadShaders called");
+	easywsclient::WebSocket* websocket = easywsclient::WebSocket::from_url("ws://127.0.0.1:27062/", "http://127.0.0.1:27062");
+	if(websocket == nullptr){
+		DriverLog("Failed to create websocket");
+		return;
+	}
+	websocket->send("mailbox_send vrcompositor_mailbox {\"type\":\"shaders_force_reload\"}");
+	websocket->poll();
+	websocket->close();
+	websocket->poll(); // final poll to close the connection
+	delete websocket;
 }
 
 void ShaderReplacement::CheckSettingsThread(){

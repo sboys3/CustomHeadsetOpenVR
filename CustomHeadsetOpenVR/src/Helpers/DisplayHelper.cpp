@@ -1,6 +1,9 @@
 #include "DisplayHelper.h"
-#include "Windows.h"
 #include <vector>
+
+#ifdef _WIN32
+#include "Windows.h"
+
 
 class MonitorEnumerator{
 public:
@@ -26,10 +29,13 @@ public:
 		EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)this);
 	}
 };
+
+#endif
 	
 
 
 void FindDisplayPosition(int width, int height, int edidVendorId, int edidProductId, int* x, int* y){
+	#ifdef _WIN32
 	MonitorEnumerator enumerator;
 	enumerator.EnumerateMonitors();
 	for(auto& monitor : enumerator.monitors){
@@ -39,6 +45,7 @@ void FindDisplayPosition(int width, int height, int edidVendorId, int edidProduc
 			return;
 		}
 	}
+	#endif
 }
 	
 	

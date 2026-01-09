@@ -35,12 +35,22 @@ Distortion profiles go in a folder named `Distortion` and they are referenced by
 ## Building
 1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
 2. Navigate to the repository folder with `cd CustomHeadsetOpenVR` in the terminal.
-3. Pull the submodules with `git submodule update --init --recursive`
+3. Pull the submodules with `git submodule update --init --recursive` then `git pull --recurse-submodules`
 4. Open the solution in Visual Studio.
 5. Change the configuration to Release.
 6. Build the solution. It will create the driver folder in `output` and copy it to the SteamVR drivers folder.
 
 To pull the latest changes, run `git pull --recurse-submodules`
+
+### Building on Linux
+1. Follow the cloning steps above
+2. `cd CustomHeadsetOpenVR/CustomHeadsetOpenVR`
+3. `mkdir build && cd build`
+4. `cmake .. -DCMAKE_BUILD_TYPE=Release`
+5. `make -j16`
+6. `rsync -a --delete CustomHeadsetOpenVR/ ~/.steam/steam/steamapps/common/SteamVR/drivers/CustomHeadsetOpenVR/`
+
+
 
 ## Features
 - MeganeX

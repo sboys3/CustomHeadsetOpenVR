@@ -6,8 +6,6 @@
 #include "nlohmann/json.hpp"
 #include "../Driver/DriverLog.h"
 #include "../Distortion/DistortionProfileConstructor.h"
-#include "Windows.h"
-
 
 
 using json = nlohmann::json;
@@ -15,8 +13,13 @@ using ordered_json = nlohmann::ordered_json;
 
 
 std::string ConfigLoader::GetConfigFolder(){
+	#ifdef _WIN32
 	char* appdataPath = std::getenv("APPDATA");
 	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/CustomHeadset/");
+	#elif __linux__
+	char* appdataPath = std::getenv("HOME");
+	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/.config/CustomHeadset/");
+	#endif
 	return configPath;
 }
 
@@ -275,7 +278,11 @@ void ConfigLoader::WriteInfo(){
 	std::string infoPath = GetConfigFolder() + "info.json";
 	std::ofstream infoFile(infoPath);
 	if(!infoFile.is_open()){
+		#ifdef _WIN32
 		DriverLog("Failed to open info.json for writing: %d", GetLastError());
+		#else
+		DriverLog("Failed to open info.json for writing");
+		#endif
 		return;
 	}
 	Config defaultSettings = {};
@@ -402,7 +409,11 @@ void ConfigLoader::ReadInfo(){
 	std::string infoPath = GetConfigFolder() + "info.json";
 	std::ifstream infoFile(infoPath);
 	if(!infoFile.is_open()){
+		#ifdef _WIN32
 		DriverLog("Failed to open info.json for reading: %d", GetLastError());
+		#else
+		DriverLog("Failed to open info.json for reading");
+		#endif
 		return;
 	}
 	try{
@@ -430,7 +441,8 @@ void ConfigLoader::ReadInfo(){
 	// 	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	// }
 // }
-
+#ifdef _WIN32
+#include "Windows.h"
 void ConfigLoader::WatcherThread(){
 	// watch for changes in the config file directory
 	std::string configPath = GetConfigFolder();
@@ -510,6 +522,114 @@ void ConfigLoader::WatcherThreadDistortions(){
 		std::this_thread::sleep_for(std::chrono::milliseconds(40));
 	}
 }
+#elif __linux__
+// use the c inotify system to watch for changes to the config file
+#include <sys/inotify.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+
+void ConfigLoader::WatcherThread(){
+	std::string configPath = GetConfigFolder();
+	int fd = inotify_init();
+	if(fd == -1){
+		DriverLog("Error initializing inotify\n");
+		return;
+	}
+	int wd = inotify_add_watch(fd, configPath.c_str(), IN_MODIFY | IN_CREATE);
+	if(wd == -1){
+		DriverLog("Error adding inotify watch to config folder\n");
+		return;
+	}
+	char buffer[sizeof(struct inotify_event) * 16];
+	while(started){
+		int length = read(fd, buffer, sizeof(buffer));
+		if(length == -1){
+			DriverLog("Error reading inotify events\n");
+			break;
+		}
+		// process events
+		int i = 0;
+		
+		bool hasReloadedConfig = false;
+		bool hasReloadedInfo = false;
+		while(i < length){
+			struct inotify_event *event = (struct inotify_event *) &buffer[i];
+			if(event->mask & IN_MODIFY || event->mask & IN_CREATE){
+				if(event->len){
+					std::string fileName = event->name;
+					if(fileName == "settings.json" && !hasReloadedConfig){
+						DriverLog("Config file changed, reloading...");
+						std::this_thread::sleep_for(std::chrono::milliseconds(10));
+						while(driverConfig.hasBeenUpdated){
+							// wait for the last config update to be used before doing another one
+							std::this_thread::sleep_for(std::chrono::milliseconds(10)); 
+						}
+						ParseConfig();
+						hasReloadedConfig = true;
+					}
+					if(fileName == "info.json" && !hasReloadedInfo){
+						DriverLog("Info file changed, reloading...");
+						std::this_thread::sleep_for(std::chrono::milliseconds(10));
+						ReadInfo();
+						hasReloadedInfo = true;
+					}
+				}
+			}
+			i += sizeof(struct inotify_event) + event->len;
+		}
+	}
+	inotify_rm_watch(fd, wd);
+	close(fd);
+}
+
+
+void ConfigLoader::WatcherThreadDistortions(){
+	std::string configPath = GetConfigFolder() + "Distortion/";
+	int fd = inotify_init();
+	if(fd == -1){
+		DriverLog("Error initializing inotify\n");
+		return;
+	}
+	int wd = inotify_add_watch(fd, configPath.c_str(), IN_MODIFY | IN_CREATE);
+	if(wd == -1){
+		DriverLog("Error adding inotify watch to distortion folder\n");
+		return;
+	}
+	char buffer[sizeof(struct inotify_event) * 16];
+	while(started){
+		int length = read(fd, buffer, sizeof(buffer));
+		if(length == -1){
+			DriverLog("Error reading inotify events\n");
+			break;
+		}
+		// process events
+		int i = 0;
+		while(i < length){
+			struct inotify_event *event = (struct inotify_event *) &buffer[i];
+			if(event->mask & IN_MODIFY || event->mask & IN_CREATE){
+				if(event->len){
+					std::string fileName = event->name;
+					if(fileName.find(".json") != std::string::npos){
+						DriverLog("Distortion profile changed, reloading...");
+							std::this_thread::sleep_for(std::chrono::milliseconds(10));
+							while(driverConfig.hasBeenUpdated){
+								// wait for the last config update to be used before doing another one
+								std::this_thread::sleep_for(std::chrono::milliseconds(10)); 
+							}
+						ParseConfig();
+						break;
+					}
+				}
+			}
+			i += sizeof(struct inotify_event) + event->len;
+		}
+	}
+	inotify_rm_watch(fd, wd);
+	close(fd);
+}
+#endif
+
 				
 // only define settings that most users will change and are unlikely to have their default changed
 // settings not defined here will easily be able to have their defaults changed in the future for everyone

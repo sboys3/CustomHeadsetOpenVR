@@ -2,7 +2,7 @@
 #include "../Config/ConfigLoader.h"
 // #include "CompositorPlugin.h"
 #include "openvr_driver.h"
-
+#include <cstring>
 
 #if defined( _WIN32 )
 #define HMD_DLL_EXPORT extern "C" __declspec( dllexport )

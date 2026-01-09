@@ -35,7 +35,7 @@ public:
 	void* originalObject = nullptr;
 	Hook(const std::string &name) : IHook(name) { }
 
-	bool CreateHookInObjectVTable(void *object, int vtableOffset, void *detourFunction)
+	bool CreateHookInObjectVTable(void *object, int vtableOffset, FuncType detourFunction)
 	{
 		/*
 		// For virtual objects, VC++ adds a pointer to the vtable as the first member.
@@ -66,7 +66,7 @@ public:
 			return false;
 		}
 		
-		originalFunc = (FuncType)vtablehook_hook(object, detourFunction, vtableOffset);
+		originalFunc = (FuncType)vtablehook_hook(object, (void*)detourFunction, vtableOffset);
 		originalObject = object;
 		originalVTableOffset = vtableOffset;
 		
@@ -81,7 +81,7 @@ public:
 		{
 			// MH_RemoveHook(targetFunc);
 			if(originalFunc){
-				vtablehook_hook(originalObject, originalFunc, originalVTableOffset);
+				vtablehook_hook(originalObject, (void*)originalFunc, originalVTableOffset);
 				originalFunc = nullptr;
 			}
 			enabled = false;

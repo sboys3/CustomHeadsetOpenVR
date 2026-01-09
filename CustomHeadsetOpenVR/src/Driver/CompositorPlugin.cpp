@@ -45,6 +45,7 @@ void* CompositorPlugin::GetComponent(const char *pchComponentNameAndVersion){
 
 // I can't actually get CompositorPlugin working so just inject it into vrcompositor.exe directly
 
+#ifdef _WIN32
 
 #include <thread>
 #include <windows.h>
@@ -236,3 +237,9 @@ bool InjectCompositorPlugin(int forProcessId){
 	
 	return true;
 }
+
+#elif __linux__
+bool InjectCompositorPlugin(int forProcessId){
+	return false;
+}
+#endif
