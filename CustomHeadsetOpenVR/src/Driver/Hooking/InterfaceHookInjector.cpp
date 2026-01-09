@@ -82,20 +82,22 @@ void InjectHooks(CustomHeadsetDeviceProvider *driver, vr::IVRDriverContext *pDri
 {
 	Driver = driver;
 
-	auto err = MH_Initialize();
-	if (err == MH_OK)
-	{
-		GetGenericInterfaceHook.CreateHookInObjectVTable(pDriverContext, 0, &DetourGetGenericInterface);
-		IHook::Register(&GetGenericInterfaceHook);
-	}
-	else
-	{
-		DriverLog("MH_Initialize error: %s", MH_StatusToString(err));
-	}
+	// auto err = MH_Initialize();
+	// if (err == MH_OK)
+	// {
+	// 	GetGenericInterfaceHook.CreateHookInObjectVTable(pDriverContext, 0, &DetourGetGenericInterface);
+	// 	IHook::Register(&GetGenericInterfaceHook);
+	// }
+	// else
+	// {
+	// 	DriverLog("MH_Initialize error: %s", MH_StatusToString(err));
+	// }
+	GetGenericInterfaceHook.CreateHookInObjectVTable(pDriverContext, 0, &DetourGetGenericInterface);
+	IHook::Register(&GetGenericInterfaceHook);
 }
 
 void DisableHooks()
 {
 	IHook::DestroyAll();
-	MH_Uninitialize();
+	// MH_Uninitialize();
 }

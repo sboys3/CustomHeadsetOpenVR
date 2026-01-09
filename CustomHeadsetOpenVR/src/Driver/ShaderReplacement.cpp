@@ -381,12 +381,12 @@ void ShaderReplacement::Initialize(){
 		DriverLog("ShaderReplacement::Initialize Successfully created D3D11 device and context");
 	}
 	// device->CreatePixelShader
-	auto err = MH_Initialize();
-	if (err == MH_OK)
-	{
-		CreatePixelShaderHook.CreateHookInObjectVTable(device, 15, &DetourCreatePixelShader);
-		IHook::Register(&CreatePixelShaderHook);
-	}
+	// auto err = MH_Initialize();
+	// if (err == MH_OK)
+	// {
+	CreatePixelShaderHook.CreateHookInObjectVTable(device, 15, &DetourCreatePixelShader);
+	IHook::Register(&CreatePixelShaderHook);
+	// }
 	
 	device->Release();
 	context->Release();
