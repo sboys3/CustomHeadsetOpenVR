@@ -14,4 +14,7 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 		driverConfigLoader.info.connectedHeadset = ConfigLoader::HeadsetType::Other;
 	}
 	driverConfigLoader.WriteInfo();
+	
+	// currently this does nothing else so disable the shim
+	shimActive = false;
 }

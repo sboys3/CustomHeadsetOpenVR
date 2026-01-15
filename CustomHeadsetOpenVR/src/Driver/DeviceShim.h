@@ -36,6 +36,8 @@ public:
 	virtual bool PreTrackedDeviceGetComponent(const char *&pchComponentNameAndVersion, void *&returnComponent){return true;};
 	virtual void PosTrackedDeviceGetComponent(const char *&pchComponentNameAndVersion, void *&returnComponent){};
 	
+	// if the display component should be shimmed. this must be true when GetComponent is run or it will never be shimmed
+	bool shimDisplayComponent = false;
 	// original display component
 	vr::IVRDisplayComponent *displayComponent = NULL;
 	virtual bool PreDisplayComponentIsDisplayOnDesktop(bool &returnValue){return true;};

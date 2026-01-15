@@ -23,6 +23,7 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 		shimActive = false;
 		return;
 	}
+	shimDisplayComponent = true;
 	if(modelNumber == "MeganeX 8K Mark II"){
 		headsetRevision = 2;
 	}

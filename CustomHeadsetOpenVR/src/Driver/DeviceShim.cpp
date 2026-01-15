@@ -26,7 +26,9 @@ void *ShimTrackedDeviceDriver::GetComponent(const char *pchComponentNameAndVersi
 			return returnValue;
 		}
 	}
-	if(strcmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version) == 0 && shimDefinition->shimActive){
+	// this may at some point need to load different shims depending on what the original returns
+	// but the MeganeX shim overwrites all of them so it is not currently a problem
+	if(strcmp(pchComponentNameAndVersion, vr::IVRDisplayComponent_Version) == 0 && shimDefinition->shimActive && shimDefinition->shimDisplayComponent){
 		returnValue = new ShimDisplayComponent(shimDefinition, (vr::IVRDisplayComponent*)shimDefinition->trackedDevice->GetComponent(pchComponentNameAndVersion));
 	}else{
 		returnValue = shimDefinition->trackedDevice->GetComponent(pchComponentNameAndVersion);
@@ -68,7 +70,9 @@ returnType shimClass::functionName(parameters){ \
 			return returnValue; \
 		} \
 	} \
-	returnValue = shimDefinition->shimObject->functionName(argumentList); \
+	if(shimDefinition->shimObject){ \
+		returnValue = shimDefinition->shimObject->functionName(argumentList); \
+	} \
 	if(shimDefinition->shimActive){ \
 		shimDefinition->Pos##shimClassFunctionName##functionName(argumentList, returnValue); \
 	} \
@@ -85,7 +89,9 @@ returnType shimClass::functionName(){ \
 			return returnValue; \
 		} \
 	} \
-	returnValue = shimDefinition->shimObject->functionName(); \
+	if(shimDefinition->shimObject){ \
+		returnValue = shimDefinition->shimObject->functionName(); \
+	} \
 	if(shimDefinition->shimActive){ \
 		shimDefinition->Pos##shimClassFunctionName##functionName(returnValue); \
 	} \
@@ -101,7 +107,9 @@ void shimClass::functionName(parameters){ \
 			return; \
 		} \
 	} \
-	shimDefinition->shimObject->functionName(argumentList); \
+	if(shimDefinition->shimObject){ \
+		shimDefinition->shimObject->functionName(argumentList); \
+	} \
 	if(shimDefinition->shimActive){ \
 		shimDefinition->Pos##shimClassFunctionName##functionName(argumentList); \
 	} \
