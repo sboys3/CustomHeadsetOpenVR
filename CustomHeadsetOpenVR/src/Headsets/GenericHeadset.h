@@ -9,4 +9,6 @@ public:
 	CustomHeadsetDeviceProvider* deviceProvider = nullptr;
 	
 	virtual void PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue) override;
+	
+	virtual void HandleEvent(const vr::VREvent_t &event) override;
 };

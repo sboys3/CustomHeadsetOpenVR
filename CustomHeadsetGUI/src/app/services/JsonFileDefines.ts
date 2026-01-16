@@ -8,9 +8,11 @@ export type DistortionProfileConfig = {
   distortionsBlue: number[];
 };
 export type Settings = {
-  watchDistortionProfiles: boolean,
   meganeX8K: MeganeX8KConfig,
-  customShader: CustomShaderConfig
+  customShader: CustomShaderConfig,
+  forceTracking: boolean,
+  takeCompositorScreenshots: boolean,
+  watchDistortionProfiles: boolean,
 }
 export type StationaryDimmingConfig = {
   enable: boolean,

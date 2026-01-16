@@ -81,6 +81,9 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			// check new processes and inject if they are the compositor
 			InjectCompositorPlugin(vrevent.data.process.pid);
 		}
+		for(auto shim : shims){
+			shim->HandleEvent(vrevent);
+		}
 	}
 	for(auto shim : shims){
 		if(shim->shimActive){

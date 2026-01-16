@@ -321,5 +321,19 @@
     </div>
 </div>
 }
+<div class="field">
+    <div class="title">
+        <span i18n>Take Compositor Screenshots</span>
+        <app-field-tip i18n-info
+            info="Makes SteamVR take compositor debug screenshots whenever a normal screenshot is taken. These screenshots are higher resolution and also include the exact output sent to the headset. The folder containing them will open when a screenshot is taken. In some cases standard screenshots do not work with the MeganeX but these are still functional. They are more performance intensive than normal screenshots." />
+        <app-reset-button
+            [canReset]="settings.takeCompositorScreenshots!=defaults.takeCompositorScreenshots"
+            (resetClick)="resetOption('takeCompositorScreenshots')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.takeCompositorScreenshots"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
 }
 }

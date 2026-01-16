@@ -61,6 +61,9 @@ public:
 	
 	// run on every frame of the main loop of the server
 	virtual void RunFrame(){};
+	
+	// run for every event received by the driver. these are not disabled when shimActive is false
+	virtual void HandleEvent(const vr::VREvent_t &event){};
 };
 
 class ShimTrackedDeviceDriver : public vr::ITrackedDeviceServerDriver{

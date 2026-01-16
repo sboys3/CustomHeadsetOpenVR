@@ -222,6 +222,9 @@ void ConfigLoader::ParseConfig(){
 		if(data["forceTracking"].is_boolean()){
 			newConfig.forceTracking = data["forceTracking"].get<bool>();
 		}
+		if(data["takeCompositorScreenshots"].is_boolean()){
+			newConfig.takeCompositorScreenshots = data["takeCompositorScreenshots"].get<bool>();
+		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }
@@ -367,6 +370,7 @@ void ConfigLoader::WriteInfo(){
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
 			}},
 			{"forceTracking", defaultSettings.forceTracking},
+			{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
 		{"builtInDistortionProfiles", emptyObject},
