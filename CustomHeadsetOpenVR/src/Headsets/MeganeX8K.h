@@ -24,7 +24,7 @@ public:
 	// the offset used for burn in prevention
 	float fovBurnInOffset = 0;
 	// last color multiplier applied
-	Config::Color lastColorMultiplier = {};
+	ConfigColor lastColorMultiplier = {};
 	// last time the the headset was detected as moving
 	double lastMovementTime = 0;
 	// last rotation of the headset that was detected as movement

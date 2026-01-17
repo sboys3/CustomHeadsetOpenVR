@@ -353,7 +353,7 @@ void MeganeX8KShim::RunFrame(){
 			dimmingMultiplier = 1;
 		}
 		
-		Config::Color color = driverConfig.meganeX8K.colorMultiplier;
+		ConfigColor color = driverConfig.meganeX8K.colorMultiplier;
 		double brightness = 1;
 		// brightness *= std::sin(now) * 0.5 + 0.5;
 		brightness *= dimmingMultiplier;

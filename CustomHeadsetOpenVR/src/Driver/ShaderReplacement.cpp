@@ -249,6 +249,11 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
 	}
+	std::string colorMultiplierString = "";
+	if(driverConfig.customShader.colorMultiplier.r != 1.0 || driverConfig.customShader.colorMultiplier.g != 1.0 || driverConfig.customShader.colorMultiplier.b != 1.0) {
+		colorMultiplierString = std::to_string(driverConfig.customShader.colorMultiplier.r) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.g) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.b);
+		defines[definesCount++] = {"COLOR_MULTIPLIER", colorMultiplierString.c_str()};
+	}
 	if(noDistortion){
 		defines[definesCount++] = {"NO_DISTORTION", "1"};
 		defines[definesCount++] = {"NO_LAYER", "1"};
@@ -526,6 +531,9 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix.size() != driverConfigOld.customShader.srgbColorCorrectionMatrix.size();
 				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				reloadShaders |= driverConfig.customShader.dither10Bit != driverConfigOld.customShader.dither10Bit;
+				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || 
+					driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || 
+					driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;
 				if(driverConfig.customShader.srgbColorCorrectionMatrix.size() == 9 && driverConfigOld.customShader.srgbColorCorrectionMatrix.size() == 9){
 					for(int i = 0; i < 9; i++){
 						reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix[i] != driverConfigOld.customShader.srgbColorCorrectionMatrix[i];

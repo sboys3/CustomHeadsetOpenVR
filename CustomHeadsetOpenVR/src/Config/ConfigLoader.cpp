@@ -58,7 +58,7 @@ void ConfigLoader::ParseConfig(){
 				newConfig.meganeX8K.blackLevel = meganeX8KData["blackLevel"].get<double>();
 			}
 			if(meganeX8KData["colorMultiplier"].is_object()){
-				Config::Color &colorMultiplier = newConfig.meganeX8K.colorMultiplier;
+				ConfigColor &colorMultiplier = newConfig.meganeX8K.colorMultiplier;
 				if(meganeX8KData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = meganeX8KData["colorMultiplier"]["r"].get<double>(); }
 				if(meganeX8KData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = meganeX8KData["colorMultiplier"]["g"].get<double>(); }
 				if(meganeX8KData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = meganeX8KData["colorMultiplier"]["b"].get<double>(); }
@@ -218,6 +218,12 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["dither10Bit"].is_boolean()){
 				newConfig.customShader.dither10Bit = customShaderData["dither10Bit"].get<bool>();
 			}
+			if(customShaderData["colorMultiplier"].is_object()){
+				ConfigColor &colorMultiplier = newConfig.customShader.colorMultiplier;
+				if(customShaderData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = customShaderData["colorMultiplier"]["r"].get<double>(); }
+				if(customShaderData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = customShaderData["colorMultiplier"]["g"].get<double>(); }
+				if(customShaderData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = customShaderData["colorMultiplier"]["b"].get<double>(); }
+			}
 		}
 		if(data["forceTracking"].is_boolean()){
 			newConfig.forceTracking = data["forceTracking"].get<bool>();
@@ -368,6 +374,11 @@ void ConfigLoader::WriteInfo(){
 				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
+				{"colorMultiplier", {
+					{"r", defaultSettings.customShader.colorMultiplier.r},
+					{"g", defaultSettings.customShader.colorMultiplier.g},
+					{"b", defaultSettings.customShader.colorMultiplier.b},
+				}},
 			}},
 			{"forceTracking", defaultSettings.forceTracking},
 			{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},

@@ -300,6 +300,11 @@ OutputStruct main(in InputStruct IN)
 	// color multiplier
 	col *= g_vColorPrescaleLinear;
 	
+	// tint multiplier
+	#ifdef COLOR_MULTIPLIER
+		col.rgb *= float3(COLOR_MULTIPLIER);
+	#endif
+	
 	#ifdef LENS_COLOR_CORRECTION
 	#ifdef MEGANEX8K
 	// correct for warmer colored center of the lens on the MeganeX

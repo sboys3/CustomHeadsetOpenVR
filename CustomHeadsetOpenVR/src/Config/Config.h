@@ -4,6 +4,12 @@
 #include <mutex>
 #include <tuple>
 
+struct ConfigColor{
+	double r = 1.0;
+	double g = 1.0;
+	double b = 1.0;
+};
+
 struct HiddenAreaMeshConfig {
 	bool enable = false;
 	bool testMode = false;
@@ -75,17 +81,14 @@ struct CustomShaderConfig{
 	bool lensColorCorrection = true;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
+	// color multiplier for tint adjustments
+	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
 };
 
 
 class Config{
 public:
-	class Color{
-	public:
-		double r = 1.0;
-		double g = 1.0;
-		double b = 1.0;
-	};
+	
 	class MeganeX8KConfig{
 	public:
 		// if the MeganeX superlight 8K should be shimmed byt this driver
@@ -97,7 +100,7 @@ public:
 		// minimum black levels from 0 to 1
 		double blackLevel = 0;
 		// tint the display this color
-		Color colorMultiplier = {};
+		ConfigColor colorMultiplier = {};
 		// distortion profile to use
 		std::string distortionProfile = "MeganeX8K Default";
 		// amount to zoom in the distortion profile

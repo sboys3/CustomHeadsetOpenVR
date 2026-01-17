@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FieldNoteComponent } from '../../../utilities/field-note/field-note.component';
 import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.component';
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
+import { ColorPickerComponent } from '../../../utilities/color-picker/color-picker.component';
 
 @Component({
   selector: 'app-general',
@@ -29,6 +30,7 @@ import { ResetButtonComponent } from '../../../utilities/reset-button/reset-butt
     ResetButtonComponent,
     FieldTipComponent,
     FieldNoteComponent,
+    ColorPickerComponent,
     CommonModule],
   templateUrl: './general.component.html',
   styleUrl: './general.component.scss'
