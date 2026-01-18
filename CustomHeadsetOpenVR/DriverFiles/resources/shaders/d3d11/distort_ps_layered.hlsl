@@ -108,6 +108,89 @@ float4 inputColorProcessor(float4 color){
 	return color;
 }
 
+// replacing the sampling here with something that does not have as many artifacts as bilinear may help
+// #define FxaaTexLod0(t, p) tex.SampleLevel(g_sScene, p, 0.0) 
+// #define FxaaTexOff(t, p, o, r) tex.SampleLevel(g_sScene, p, 0.0, o)
+#define FxaaTexLod0(t, p, s) tex.Sample(g_sScene, p) 
+#define FxaaTexOff(t, p, o, r, s) tex.Sample(g_sScene, p + (o * r)) 
+// #define FxaaTexLod0(t, p, s) getTexel(tex, p, s) 
+// #define FxaaTexOff(t, p, o, r, s) getTexel(tex, p + (o * r), s) 
+
+// FXAA version 2
+float4 FxaaPixelShader(
+in float4 posPos,       // Output of FxaaVertexShader interpolated across screen.
+in Texture2D<float4> tex,         // Input texture.
+in float2 rcpFrame, // Constant {1.0/frameWidth, 1.0/frameHeight}.
+in float2 dx, // uv derivative in the x direction
+in float2 dy // uv derivative in the y direction
+) {
+	#define FXAA_REDUCE_MIN   (1.0/128.0)
+	#define FXAA_REDUCE_MUL   (1.0/8.0)
+	#define FXAA_SPAN_MAX     8.0
+	// dx = normalize(dx);
+	// dy = normalize(dy);
+	float2 textureRez = 1.0/rcpFrame;
+/*--------------------------------------------------------------------------*/
+	float3 rgbNW = FxaaTexLod0(tex, posPos.zw, textureRez).xyz;
+	float3 rgbNE = FxaaTexOff(tex, posPos.zw, int2(1,0), rcpFrame.xy, textureRez).xyz;
+	float3 rgbSW = FxaaTexOff(tex, posPos.zw, int2(0,1), rcpFrame.xy, textureRez).xyz;
+	float3 rgbSE = FxaaTexOff(tex, posPos.zw, int2(1,1), rcpFrame.xy, textureRez).xyz;
+	float4 rgbM4  = FxaaTexLod0(tex, posPos.xy, textureRez).xyzw;
+	float3 rgbM  = rgbM4.xyz;
+	float rgbMA  = rgbM4.a;
+	// return rgbM;
+	// return float3(posPos.xy, 0);
+/*--------------------------------------------------------------------------*/
+	float3 luma = float3(0.299, 0.587, 0.114);
+	float lumaNW = dot(rgbNW, luma);
+	float lumaNE = dot(rgbNE, luma);
+	float lumaSW = dot(rgbSW, luma);
+	float lumaSE = dot(rgbSE, luma);
+	float lumaM  = dot(rgbM,  luma);
+/*--------------------------------------------------------------------------*/
+	float lumaMin = min(lumaM, min(min(lumaNW, lumaNE), min(lumaSW, lumaSE)));
+	float lumaMax = max(lumaM, max(max(lumaNW, lumaNE), max(lumaSW, lumaSE)));
+/*--------------------------------------------------------------------------*/
+	float2 dir; 
+	dir.x = -((lumaNW + lumaNE) - (lumaSW + lumaSE));
+	dir.y =  ((lumaNW + lumaSW) - (lumaNE + lumaSE));
+/*--------------------------------------------------------------------------*/
+	float dirReduce = max(
+		(lumaNW + lumaNE + lumaSW + lumaSE) * (0.25 * FXAA_REDUCE_MUL),
+		FXAA_REDUCE_MIN);
+	float rcpDirMin = 1.0/(min(abs(dir.x), abs(dir.y)) + dirReduce);
+	dir = min(float2( FXAA_SPAN_MAX,  FXAA_SPAN_MAX), 
+		max(float2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), 
+		dir * rcpDirMin)) * rcpFrame.xy;
+/*--------------------------------------------------------------------------*/
+	float3 rgbA = (1.0/2.0) * (
+		FxaaTexLod0(tex, posPos.xy + dir * (1.0/3.0 - 0.5), textureRez).xyz +
+		FxaaTexLod0(tex, posPos.xy + dir * (2.0/3.0 - 0.5), textureRez).xyz);
+	float3 rgbB = rgbA * (1.0/2.0) + (1.0/4.0) * (
+		FxaaTexLod0(tex, posPos.xy + dir * (0.0/3.0 - 0.5), textureRez).xyz +
+		FxaaTexLod0(tex, posPos.xy + dir * (3.0/3.0 - 0.5), textureRez).xyz);
+	float lumaB = dot(rgbB, luma);
+	if((lumaB < lumaMin) || (lumaB > lumaMax)) return float4(rgbA, rgbMA);
+	return float4(rgbB, rgbMA);
+}
+
+float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy){
+	#ifdef FILTER_FXAA2
+	// FXAA 2
+	// This uses FXAA as an upsampling method. It has some artifacts, but generally works OK.
+	int2 textureSize = int2(1024,1024);
+	tex.GetDimensions(textureSize.x, textureSize.y);
+	float2 inverseTextureSize = float2(1.0/textureSize.x, 1.0/textureSize.y);
+	#define FXAA_SUBPIX_SHIFT (1.0/4.0)
+	float4 posPos = float4(uv, uv - (inverseTextureSize * (0.5 + FXAA_SUBPIX_SHIFT)));
+	float4 color = FxaaPixelShader(posPos, tex, inverseTextureSize, dx, dy);
+	#else
+	// standard bilinear
+	float4 color = tex.Sample(g_sScene, uv);
+	#endif
+	return inputColorProcessor(color);
+}
+
 OutputStruct main(in InputStruct IN)
 {
 	OutputStruct OUT = (OutputStruct)0;
@@ -191,35 +274,35 @@ OutputStruct main(in InputStruct IN)
 	#ifndef NO_DISTORTION
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col.x = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv1.xy)).x;
-			col.y = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv2.xy)).y;
-			col.z = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv3.xy)).z;
+			col.x = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy).x;
+			col.y = sampleSceneTexture(g_tScene0, IN.uv2.xy, uvDx, uvDy).y;
+			col.z = sampleSceneTexture(g_tScene0, IN.uv3.xy, uvDx, uvDy).z;
 			break;
 		}
 		case 1:{
-			col.x = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv1.xy)).x;
-			col.y = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv2.xy)).y;
-			col.z = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv3.xy)).z;
+			col.x = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy).x;
+			col.y = sampleSceneTexture(g_tScene1, IN.uv2.xy, uvDx, uvDy).y;
+			col.z = sampleSceneTexture(g_tScene1, IN.uv3.xy, uvDx, uvDy).z;
 			break;
 		}
 		default:{
-			col.x = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv1.xy)).x;
-			col.y = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv2.xy)).y;
-			col.z = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv3.xy)).z;
+			col.x = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy).x;
+			col.y = sampleSceneTexture(g_tScene2, IN.uv2.xy, uvDx, uvDy).y;
+			col.z = sampleSceneTexture(g_tScene2, IN.uv3.xy, uvDx, uvDy).z;
 		break;
 	}}
 	#else
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col = inputColorProcessor(g_tScene0.Sample(g_sScene, IN.uv1.xy));
+			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy);
 			break;
 		}
 		case 1:{
-			col = inputColorProcessor(g_tScene1.Sample(g_sScene, IN.uv1.xy));
+			col = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy);
 			break;
 		}
 		default:{
-			col = inputColorProcessor(g_tScene2.Sample(g_sScene, IN.uv1.xy));
+			col = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy);
 		break;
 	}}
 	#endif
@@ -242,10 +325,10 @@ OutputStruct main(in InputStruct IN)
 	
 	
 	#ifndef NO_LAYER
-	// sample and combine existing overlay
-	float2 layerRA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv1.zw)).ra;
-	float2 layerGA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv2.zw)).ga;
-	float2 layerBA = inputColorProcessor(g_tLayer.Sample(g_sScene, IN.uv3.zw)).ba;
+ 	// sample and combine existing overlay
+ 	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay).ra;
+ 	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
+ 	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
 	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
 	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);
 	

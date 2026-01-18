@@ -20,7 +20,9 @@
 
 
 // this could probably use macros to get the current project location instead of hard coding it for my computer
-std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
+// std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
+// treats the current file as a directory to get relative paths
+std::string shaderDevPath = __FILE__ "/../../../DriverFiles/resources/shaders/d3d11/";
 
 std::string getShaderPath(){
 	std::string shaderPath = driverConfigLoader.info.driverResources + "shaders/d3d11/";
@@ -248,6 +250,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	}
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
+	}
+	if(driverConfig.customShader.samplingFilter == "FXAA2"){
+		defines[definesCount++] = {"FILTER_FXAA2", "1"};
 	}
 	std::string colorMultiplierString = "";
 	if(driverConfig.customShader.colorMultiplier.r != 1.0 || driverConfig.customShader.colorMultiplier.g != 1.0 || driverConfig.customShader.colorMultiplier.b != 1.0) {
@@ -531,6 +536,7 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix.size() != driverConfigOld.customShader.srgbColorCorrectionMatrix.size();
 				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				reloadShaders |= driverConfig.customShader.dither10Bit != driverConfigOld.customShader.dither10Bit;
+				reloadShaders |= driverConfig.customShader.samplingFilter != driverConfigOld.customShader.samplingFilter;
 				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || 
 					driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || 
 					driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;

@@ -81,6 +81,8 @@ struct CustomShaderConfig{
 	bool lensColorCorrection = true;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
+	// filters on the sampling of the texture,  "None" and "FXAA2"
+	std::string samplingFilter = "None";
 	// color multiplier for tint adjustments
 	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
 };

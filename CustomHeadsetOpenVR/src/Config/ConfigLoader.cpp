@@ -218,6 +218,9 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["dither10Bit"].is_boolean()){
 				newConfig.customShader.dither10Bit = customShaderData["dither10Bit"].get<bool>();
 			}
+			if(customShaderData["samplingFilter"].is_string()){
+				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
+			}
 			if(customShaderData["colorMultiplier"].is_object()){
 				ConfigColor &colorMultiplier = newConfig.customShader.colorMultiplier;
 				if(customShaderData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = customShaderData["colorMultiplier"]["r"].get<double>(); }
@@ -374,6 +377,7 @@ void ConfigLoader::WriteInfo(){
 				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
+				{"samplingFilter", defaultSettings.customShader.samplingFilter},
 				{"colorMultiplier", {
 					{"r", defaultSettings.customShader.colorMultiplier.r},
 					{"g", defaultSettings.customShader.colorMultiplier.g},
