@@ -26,6 +26,9 @@ public:
 		double renderResolution1To1Percent = 0;
 		uint32_t renderResolution100PercentX = 0;
 		uint32_t renderResolution100PercentY = 0;
+		// output resolution of the compositor per eye
+		uint32_t outputResolutionX = 0;
+		uint32_t outputResolutionY = 0;
 		std::string debugLog = "";
 		std::string driverResources = "";
 		std::string steamvrResources = "";

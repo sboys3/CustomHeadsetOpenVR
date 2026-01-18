@@ -163,6 +163,13 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_VIVE", "1"};
 		}
 	}
+	std::string resolutionX = std::to_string(driverConfigLoader.info.outputResolutionX);
+	std::string resolutionY = std::to_string(driverConfigLoader.info.outputResolutionY);
+	if(driverConfigLoader.info.outputResolutionX && driverConfigLoader.info.outputResolutionY){
+		// currently only the MeganeX8K can get the resolution to define these but it also the only one that uses it.
+		defines[definesCount++] = {"OUTPUT_RESOLUTION_X", resolutionX.c_str()};
+		defines[definesCount++] = {"OUTPUT_RESOLUTION_Y", resolutionY.c_str()};
+	}
 	double contrastMultiplier = driverConfig.customShader.contrast / 50.0;
 	std::string contrastMultiplierString = std::to_string(contrastMultiplier);
 	if(contrastMultiplier != 1){
@@ -281,7 +288,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 		D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main",
 		"ps_5_0",
-		0,
+		D3DCOMPILE_OPTIMIZATION_LEVEL3,
 		0,
 		&shaderBlob,
 		&errorBlob
@@ -458,7 +465,7 @@ void ShaderReplacement::WatchShadersThread(){
 	}
 	while(started){
 		DWORD bytesReturned;
-		char buffer[1024];
+		char buffer[1024] = {0};
 		FILE_NOTIFY_INFORMATION* pNotify;
 		BOOL success = ReadDirectoryChangesW(hDir, buffer, sizeof(buffer), FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_FILE_NAME, &bytesReturned, NULL, NULL);
 		if(!success){
@@ -469,7 +476,7 @@ void ShaderReplacement::WatchShadersThread(){
 		do{
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
 			if(fileName.find(L".hlsl") != std::wstring::npos && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
-				DriverLog("Shader changed, reloading...");
+				DriverLog("Shader changed, reloading... %s %i", fileName.c_str(), pNotify->Action);
 				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				ReloadShaders();
 				break;

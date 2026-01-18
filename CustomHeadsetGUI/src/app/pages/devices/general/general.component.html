@@ -290,7 +290,7 @@
     <div class="title">
         <span i18n>Filter</span>
         <app-field-tip i18n-info
-            info="The sampling filter to use for the custom shader. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing." />
+            info="The sampling filter to use for the custom shader. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing. However these filters increase GPU memory bandwidth usage." />
         <app-reset-button [canReset]="settings.customShader.samplingFilter!=defaults.customShader.samplingFilter"
             (resetClick)="nested('customShader').resetOption('samplingFilter')"></app-reset-button>
     </div>

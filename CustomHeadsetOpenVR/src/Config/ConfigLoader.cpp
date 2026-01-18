@@ -399,6 +399,8 @@ void ConfigLoader::WriteInfo(){
 			{"renderResolution1To1Percent", info.renderResolution1To1Percent},
 			{"renderResolution100PercentX", info.renderResolution100PercentX},
 			{"renderResolution100PercentY", info.renderResolution100PercentY},
+			{"outputResolutionX", info.outputResolutionX},
+			{"outputResolutionY", info.outputResolutionY},
 		}},
 		{"connectedHeadset", (int)info.connectedHeadset},
 		{"debugLog", info.debugLog},
@@ -448,6 +450,20 @@ void ConfigLoader::ReadInfo(){
 		}
 		if(data["connectedHeadset"].is_number()){
 			info.connectedHeadset = (HeadsetType)data["connectedHeadset"].get<int>();
+		}
+		if(data["resolution"].is_object()){
+			auto res = data["resolution"];
+			if(res["fovX"].is_number()) info.renderFovX = res["fovX"].get<double>();
+			if(res["fovY"].is_number()) info.renderFovY = res["fovY"].get<double>();
+			if(res["fovMaxX"].is_number()) info.renderFovMaxX = res["fovMaxX"].get<double>();
+			if(res["fovMaxY"].is_number()) info.renderFovMaxY = res["fovMaxY"].get<double>();
+			if(res["renderResolution1To1X"].is_number()) info.renderResolution1To1X = res["renderResolution1To1X"].get<int>();
+			if(res["renderResolution1To1Y"].is_number()) info.renderResolution1To1Y = res["renderResolution1To1Y"].get<int>();
+			if(res["renderResolution1To1Percent"].is_number()) info.renderResolution1To1Percent = res["renderResolution1To1Percent"].get<double>();
+			if(res["renderResolution100PercentX"].is_number()) info.renderResolution100PercentX = res["renderResolution100PercentX"].get<int>();
+			if(res["renderResolution100PercentY"].is_number()) info.renderResolution100PercentY = res["renderResolution100PercentY"].get<int>();
+			if(res["outputResolutionX"].is_number()) info.outputResolutionX = res["outputResolutionX"].get<int>();
+			if(res["outputResolutionY"].is_number()) info.outputResolutionY = res["outputResolutionY"].get<int>();
 		}
 		info.hasBeenUpdated = true; 
 	}catch(const std::exception& e){

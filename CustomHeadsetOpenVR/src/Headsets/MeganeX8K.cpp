@@ -244,6 +244,9 @@ bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, ui
 		*pnHeight = driverConfig.meganeX8K.resolutionX;
 		// *pnHeight = 3552;
 	}
+	driverConfigLoader.info.outputResolutionX = *pnWidth;
+	driverConfigLoader.info.outputResolutionY = *pnHeight;
+	driverConfigLoader.WriteInfo();
 	// if(eEye == vr::Eye_Left){
 	// 	*pnX = 0;
 	// 	*pnY = (5328 - 2880) / 2;;
