@@ -292,6 +292,8 @@ OutputStruct main(in InputStruct IN)
 		break;
 	}}
 	#else
+	float2 uvDx = ddx(IN.uv1.xy);
+	float2 uvDy = ddy(IN.uv1.xy);
 	[forcecase] switch (IN.param4){
 		case 0:{
 			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy);
@@ -331,6 +333,7 @@ OutputStruct main(in InputStruct IN)
  	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
 	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
 	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);
+	// layerAlphas = layerRA.x > 0;
 	
 	// col.r = lerp(col.r, layerRA.x, layerRA.y);
 	// col.g = lerp(col.g, layerGA.x, layerGA.y);

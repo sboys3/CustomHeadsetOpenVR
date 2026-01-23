@@ -18,6 +18,8 @@
 #pragma comment(lib, "D3D11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
+#include "../../../ThirdParty/minhook/include/MinHook.h"
+
 
 // this could probably use macros to get the current project location instead of hard coding it for my computer
 // std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
@@ -33,6 +35,13 @@ std::string getShaderPath(){
 	return shaderPath;
 }
 
+/*
+virtual HRESULT STDMETHODCALLTYPE CreatePixelShader( 
+_In_reads_(BytecodeLength)  const void *pShaderBytecode,
+_In_  SIZE_T BytecodeLength,
+_In_opt_  ID3D11ClassLinkage *pClassLinkage,
+_COM_Outptr_opt_  ID3D11PixelShader **ppPixelShader) = 0;
+*/
 static Hook<void(*)(ID3D11Device*, const void* pShaderBytecode, SIZE_T BytecodeLength, ID3D11ClassLinkage* pClassLinkage, ID3D11PixelShader** ppPixelShader)> 
 	CreatePixelShaderHook("ID3D11Device::CreatePixelShader");
 
@@ -87,6 +96,48 @@ static void DetourCreatePixelShader(ID3D11Device* _this, const void* pShaderByte
 	// if no replacement is found, call the original function with the original bytecode
 	CreatePixelShaderHook.originalFunc(_this, pShaderBytecode, BytecodeLength, pClassLinkage, ppPixelShader);
 }
+
+/*
+virtual void STDMETHODCALLTYPE CopySubresourceRegion( 
+_In_  ID3D11Resource *pDstResource,
+_In_  UINT DstSubresource,
+_In_  UINT DstX,
+_In_  UINT DstY,
+_In_  UINT DstZ,
+_In_  ID3D11Resource *pSrcResource,
+_In_  UINT SrcSubresource,
+_In_opt_  const D3D11_BOX *pSrcBox) = 0;
+*/
+// typedef void(*CopySubresourceRegionFunction)(ID3D11DeviceContext*, ID3D11Resource* pDstResource, UINT DstSubresource, UINT DstX, UINT DstY, UINT DstZ, ID3D11Resource* pSrcResource, UINT SrcSubresource, const D3D11_BOX* pSrcBox);
+// CopySubresourceRegionFunction originalCopySubresourceRegion = nullptr;
+// static Hook<CopySubresourceRegionFunction> 
+// 	CopySubresourceRegionHook("ID3D11DeviceContext::CopySubresourceRegion");
+// // bool hookFound = false;
+// void DetourCopySubresourceRegion(ID3D11DeviceContext* _this, ID3D11Resource* pDstResource, UINT DstSubresource, UINT DstX, UINT DstY, UINT DstZ, ID3D11Resource* pSrcResource, UINT SrcSubresource, const D3D11_BOX* pSrcBox){
+// 	// hookFound = true;
+// 	DriverLog("DetourCopySubresourceRegion Called");
+// 	DriverLog("CopySubresourceRegion(%p, %u, %u, %u, %u, %p, %u, %p) ptr: %p", pDstResource, DstSubresource, DstX, DstY, DstZ, pSrcResource, SrcSubresource, pSrcBox, originalCopySubresourceRegion);
+// 	D3D11_BOX newSrcBox = {0};
+// 	if(pSrcBox != nullptr){
+// 		DriverLog("Box: %u, %u, %u, %u, %u, %u", pSrcBox->left, pSrcBox->top, pSrcBox->front, pSrcBox->right, pSrcBox->bottom, pSrcBox->back);
+// 		newSrcBox = *pSrcBox;
+// 		// half in size
+// 		if(pSrcBox->right > 1){
+// 			newSrcBox.right = (newSrcBox.right - newSrcBox.left) / 2 + newSrcBox.left;
+// 		}
+// 		if(pSrcBox->bottom > 1){
+// 			newSrcBox.bottom = (newSrcBox.bottom - newSrcBox.top) / 2 + newSrcBox.top;
+// 		}
+// 		pSrcBox = &newSrcBox;
+// 	}
+// 	if(originalCopySubresourceRegion){
+// 		// deep hook of fuction the vtable points to
+// 		originalCopySubresourceRegion(_this, pDstResource, DstSubresource, DstX, DstY, DstZ, pSrcResource, SrcSubresource, pSrcBox);
+// 	}else{
+// 		// vtable hook, unused in actual usage as ID3D11DeviceContext has multiple instances
+// 		CopySubresourceRegionHook.originalFunc(_this, pDstResource, DstSubresource, DstX, DstY, DstZ, pSrcResource, SrcSubresource, pSrcBox);
+// 	}
+// }
 
 std::string ConvertWideToUtf8(const std::wstring& wstr){
     int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), NULL, 0, NULL, NULL);
@@ -393,7 +444,7 @@ void ShaderReplacement::Initialize(){
 		&device,
 		NULL,
 		&context
-	);            // return the context
+	);
 	if(FAILED(hr)){
 		DriverLog("ShaderReplacement::Initialize Failed to create D3D11 device and context");
 		return;
@@ -401,15 +452,42 @@ void ShaderReplacement::Initialize(){
 		DriverLog("ShaderReplacement::Initialize Successfully created D3D11 device and context");
 	}
 	// device->CreatePixelShader
-	// auto err = MH_Initialize();
-	// if (err == MH_OK)
-	// {
 	CreatePixelShaderHook.CreateHookInObjectVTable(device, 15, &DetourCreatePixelShader);
 	IHook::Register(&CreatePixelShaderHook);
 	// }
 	
-	device->Release();
-	context->Release();
+	// // context->CopySubresourceRegion
+	// CopySubresourceRegionHook.CreateHookInObjectVTable(context, 39 + 7, &DetourCopySubresourceRegion);
+	// IHook::Register(&CopySubresourceRegionHook);
+	// context->CopySubresourceRegion(NULL, NULL, 0, NULL, NULL, 0, NULL, 0); // test hook
+	// // int vtablePosition = 39;
+	// // while(hookFound == false){
+	// // 	CopySubresourceRegionHook.Destroy();
+	// // 	CopySubresourceRegionHook.CreateHookInObjectVTable(context, vtablePosition, &DetourCopySubresourceRegion);
+	// // 	IHook::Register(&CopySubresourceRegionHook);
+	// // 	context->CopySubresourceRegion(NULL, NULL, 0, NULL, NULL, 0, NULL, 0); // test hook
+	// // 	if(hookFound){
+	// // 		DriverLog("ShaderReplacement::Initialize found hook position: %i", vtablePosition);
+	// // 		break;
+	// // 	}
+	// // 	vtablePosition++;
+	// // 	if(vtablePosition > 100){
+	// // 		DriverLog("ShaderReplacement::Initialize failed to find hook position");
+	// // 		break;
+	// // 	}
+	// // }
+	
+	// DriverLog("ShaderReplacement::Initialize CopySubresourceRegion function pointer %p %p", (void (ID3D11DeviceContext::*)())&ID3D11DeviceContext::CopySubresourceRegion, CopySubresourceRegionHook.originalFunc);
+	
+	// // There are multiple ID3D11DeviceContexts, so hook the function that it points to
+	// auto err = MH_Initialize();
+	// if(err == MH_OK){
+	// 	if(MH_CreateHook(CopySubresourceRegionHook.originalFunc, &DetourCopySubresourceRegion, reinterpret_cast<LPVOID*>(&originalCopySubresourceRegion)) == MH_OK){
+	// 		if(MH_EnableHook(CopySubresourceRegionHook.originalFunc) == MH_OK){
+	// 			DriverLog("ShaderReplacement::Initialize successfully enabled deep CopySubresourceRegion hook");
+	// 		}
+	// 	}
+	// }
 	
 	
 	DriverLog("ShaderReplacement::Initialize loading shader replacement table");

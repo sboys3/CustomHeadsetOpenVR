@@ -307,7 +307,7 @@
     <div class="title">
         <span i18n>Color Tint</span>
         <app-field-tip i18n-info
-            info="Adjusts the color of the image when using the custom shader. This can also be used to decrease or increase the brightness of the scene." />
+            info="Adjusts the color of the image for any headset that can use the custom shader. This can also be used to decrease or increase the brightness of the scene." />
         <app-reset-button [canReset]="settings.customShader.colorMultiplier.r != defaults.customShader.colorMultiplier.r || settings.customShader.colorMultiplier.g != defaults.customShader.colorMultiplier.g || settings.customShader.colorMultiplier.b != defaults.customShader.colorMultiplier.b"
             (resetClick)="nested('customShader').resetOption('colorMultiplier')"></app-reset-button>
     </div>
