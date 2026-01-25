@@ -298,6 +298,8 @@
         <mat-select [(ngModel)]="settings.customShader.samplingFilter" (ngModelChange)="saveConfigSettings()">
             <mat-option value="None">None</mat-option>
             <mat-option value="FXAA2">FXAA2</mat-option>
+            <mat-option value="LumaSharpen">Luma Sharpen</mat-option>
+            <mat-option value="NearestNeighbor">Nearest Neighbor</mat-option>
         </mat-select>
     </div>
 </div>

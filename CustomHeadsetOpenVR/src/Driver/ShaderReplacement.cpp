@@ -309,9 +309,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
 	}
-	if(driverConfig.customShader.samplingFilter == "FXAA2"){
-		defines[definesCount++] = {"FILTER_FXAA2", "1"};
-	}
+	std::string samplingFilterString = "FILTER_" + driverConfig.customShader.samplingFilter;
+	std::transform(samplingFilterString.begin(), samplingFilterString.end(), samplingFilterString.begin(), ::toupper);
+	defines[definesCount++] = {samplingFilterString.c_str(), "1"};
 	std::string colorMultiplierString = "";
 	if(driverConfig.customShader.colorMultiplier.r != 1.0 || driverConfig.customShader.colorMultiplier.g != 1.0 || driverConfig.customShader.colorMultiplier.b != 1.0) {
 		colorMultiplierString = std::to_string(driverConfig.customShader.colorMultiplier.r) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.g) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.b);
