@@ -149,6 +149,12 @@ public:
 		int edidVendorIdOverride = 0;
 		// if non zero, override the edid product id
 		int edidProductIdOverride = 0;
+		// DSC Version
+		int dscVersion = -1;
+		// DSC Slice count
+		int dscSliceCount = -1;
+		// DSC bits per pixel
+		int dscBPPx16 = -1;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

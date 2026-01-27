@@ -132,6 +132,15 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["edidProductIdOverride"].is_number()){
 				newConfig.meganeX8K.edidProductIdOverride = meganeX8KData["edidProductIdOverride"].get<int>();
 			}
+			if(meganeX8KData["dscVersion"].is_number()){
+				newConfig.meganeX8K.dscVersion = meganeX8KData["dscVersion"].get<int>();
+			}
+			if(meganeX8KData["dscSliceCount"].is_number()){
+				newConfig.meganeX8K.dscSliceCount = meganeX8KData["dscSliceCount"].get<int>();
+			}
+			if(meganeX8KData["dscBPPx16"].is_number()){
+				newConfig.meganeX8K.dscBPPx16 = meganeX8KData["dscBPPx16"].get<int>();
+			}
 			
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
@@ -337,6 +346,9 @@ void ConfigLoader::WriteInfo(){
 				{"replaceIcons", defaultSettings.meganeX8K.replaceIcons},
 				{"edidVendorIdOverride", defaultSettings.meganeX8K.edidVendorIdOverride},
 				{"edidProductIdOverride", defaultSettings.meganeX8K.edidProductIdOverride},
+				{"dscVersion", defaultSettings.meganeX8K.dscVersion},
+				{"dscSliceCount", defaultSettings.meganeX8K.dscSliceCount},
+				{"dscBPPx16", defaultSettings.meganeX8K.dscBPPx16},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},

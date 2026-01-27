@@ -59,11 +59,6 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xd222); // HVR htc vr
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, 43521); // vive
 	
-	// DSC does not need to be set manually but these are available
-	// vr::VRProperties()->SetInt32Property(container, vr::Prop_DSCVersion_Int32, 2);
-	// vr::VRProperties()->SetInt32Property(container, vr::Prop_DSCSliceCount_Int32, 4);
-	// vr::VRProperties()->SetInt32Property(container, vr::Prop_DSCBPPx16_Int32, 8 * 16);
-	
 	// Prop_Hmd_SupportsHDR10_Bool does not actually make the connection to the headset 10 bit, however the compositor screenshots come out in 10 bit
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDR10_Bool, true);
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDCP14LegacyCompat_Bool, false);
@@ -394,6 +389,25 @@ void MeganeX8KShim::UpdateSettings(){
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)driverConfig.meganeX8K.blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)driverConfig.meganeX8K.secondsFromVsyncToPhotons);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromPhotonsToVblank_Float, (float)driverConfig.meganeX8K.secondsFromPhotonsToVblank);
+	
+	#define Prop_DSCVersion_Int32 (vr::ETrackedDeviceProperty)2110
+	#define Prop_DSCSliceCount_Int32 (vr::ETrackedDeviceProperty)2111
+	#define Prop_DSCBPPx16_Int32 (vr::ETrackedDeviceProperty)2112
+	if(driverConfig.meganeX8K.dscVersion == -1){
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCVersion_Int32, 0);
+	}else{
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCVersion_Int32, driverConfig.meganeX8K.dscVersion);
+	}
+	if(driverConfig.meganeX8K.dscSliceCount == -1){
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCSliceCount_Int32, 0);
+	}else{
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCSliceCount_Int32, driverConfig.meganeX8K.dscSliceCount);
+	}
+	if(driverConfig.meganeX8K.dscBPPx16 == -1){
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCBPPx16_Int32, 0);
+	}else{
+		vr::VRProperties()->SetInt32Property(container, Prop_DSCBPPx16_Int32, driverConfig.meganeX8K.dscBPPx16);
+	}
 	
 	//bluetoothDevice
 	if(driverConfig.meganeX8K.bluetoothDevice == 1){
