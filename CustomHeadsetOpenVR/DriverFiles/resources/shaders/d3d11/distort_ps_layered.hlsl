@@ -202,10 +202,10 @@ uniform bool show_sharpen <
 	ui_tooltip = "Visualize the strength of the sharpen (multiplied by 4 to see it better)";
 > = false;
 */
-#define sharp_strength 1.5
-#define sharp_clamp 0.1
-#define pattern 1
-#define offset_bias 1.0
+// #define sharp_strength 1.5
+// #define sharp_clamp 0.1
+// #define pattern 1
+// #define offset_bias 1.0
 #define show_sharpen false
 
 #define tex2D(tex, uv) tex.Sample(g_sScene, uv)

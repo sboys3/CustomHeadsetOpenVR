@@ -303,6 +303,80 @@
     </div>
 </div>
 }
+@if(settings.customShader.samplingFilter == 'LumaSharpen'){
+<div class="field">
+    <div class="title">
+        <span i18n>Luma Sharpen Strength</span>
+        <app-field-tip i18n-info
+            info="Strength of the sharpening effect. Higher values produce more sharpening." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterLumaSharpenStrength!=defaults.customShader.samplingFilterLumaSharpenStrength"
+            (resetClick)="nested('customShader').resetOption('samplingFilterLumaSharpenStrength')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterLumaSharpenStrength" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="5.0" min="0.1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterLumaSharpenStrength"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Luma Sharpen Clamp</span>
+        <app-field-tip i18n-info
+            info="Limits maximum amount of sharpening a pixel receives. Lower values reduce artifacts at the cost of some sharpness." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterLumaSharpenClamp!=defaults.customShader.samplingFilterLumaSharpenClamp"
+            (resetClick)="nested('customShader').resetOption('samplingFilterLumaSharpenClamp')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterLumaSharpenClamp" step="0.005"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="0.3" min="0.0" step="0.005" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterLumaSharpenClamp"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+     <div class="title">
+         <span i18n>Luma Sharpen Pattern</span>
+         <app-field-tip i18n-info
+             info="The sample pattern to use for the sharpening effect. Different patterns produce slightly different results." />
+         <app-reset-button
+             [canReset]="settings.customShader.samplingFilterLumaSharpenPattern!=defaults.customShader.samplingFilterLumaSharpenPattern"
+             (resetClick)="nested('customShader').resetOption('samplingFilterLumaSharpenPattern')"></app-reset-button>
+     </div>
+     <div class="control">
+         <mat-select [(ngModel)]="settings.customShader.samplingFilterLumaSharpenPattern" (ngModelChange)="saveConfigSettings()">
+             <mat-option [value]="0">Fast</mat-option>
+             <mat-option [value]="1">Normal</mat-option>
+             <mat-option [value]="2">Wider</mat-option>
+             <mat-option [value]="3">Pyramid shaped</mat-option>
+         </mat-select>
+     </div>
+ </div>
+ <div class="field">
+     <div class="title">
+         <span i18n>Luma Sharpen Radius</span>
+         <app-field-tip i18n-info
+             info="Radius of the sampling pattern. Higher values produce a wider effect. 1.0 is best in most cases, but higher values may help some blurry content." />
+         <app-reset-button
+             [canReset]="settings.customShader.samplingFilterLumaSharpenRadius!=defaults.customShader.samplingFilterLumaSharpenRadius"
+             (resetClick)="nested('customShader').resetOption('samplingFilterLumaSharpenRadius')"></app-reset-button>
+     </div>
+     <div class="control">
+         <input matInput [(ngModel)]="settings.customShader.samplingFilterLumaSharpenRadius" step="0.1"
+             (ngModelChange)="saveConfigSettings()" type="number">
+         <mat-slider max="6.0" min="0.1" step="0.1" showTickMarks>
+             <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterLumaSharpenRadius"
+                 (ngModelChange)="saveConfigSettings()">
+         </mat-slider>
+     </div>
+ </div>
+}
 @if(defaults.customShader.colorMultiplier){
 <div class="field">
     <div class="title">

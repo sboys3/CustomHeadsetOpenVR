@@ -83,6 +83,11 @@ struct CustomShaderConfig{
 	bool dither10Bit = false;
 	// filters on the sampling of the texture,  "None", "NearestNeighbor", "FXAA2" and "LumaSharpen"
 	std::string samplingFilter = "None";
+	// luma sharpen filter parameters
+	double samplingFilterLumaSharpenStrength = 1.5;
+	double samplingFilterLumaSharpenClamp = 0.1;
+	int samplingFilterLumaSharpenPattern = 1;
+	double samplingFilterLumaSharpenRadius = 1.0;
 	// color multiplier for tint adjustments
 	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
 };

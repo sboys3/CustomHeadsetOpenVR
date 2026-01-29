@@ -236,6 +236,18 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["samplingFilter"].is_string()){
 				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
 			}
+			if(customShaderData["samplingFilterLumaSharpenStrength"].is_number()){
+				newConfig.customShader.samplingFilterLumaSharpenStrength = customShaderData["samplingFilterLumaSharpenStrength"].get<double>();
+			}
+			if(customShaderData["samplingFilterLumaSharpenClamp"].is_number()){
+				newConfig.customShader.samplingFilterLumaSharpenClamp = customShaderData["samplingFilterLumaSharpenClamp"].get<double>();
+			}
+			if(customShaderData["samplingFilterLumaSharpenPattern"].is_number()){
+				newConfig.customShader.samplingFilterLumaSharpenPattern = customShaderData["samplingFilterLumaSharpenPattern"].get<int>();
+			}
+			if(customShaderData["samplingFilterLumaSharpenRadius"].is_number()){
+				newConfig.customShader.samplingFilterLumaSharpenRadius = customShaderData["samplingFilterLumaSharpenRadius"].get<double>();
+			}
 			if(customShaderData["colorMultiplier"].is_object()){
 				ConfigColor &colorMultiplier = newConfig.customShader.colorMultiplier;
 				if(customShaderData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = customShaderData["colorMultiplier"]["r"].get<double>(); }
@@ -399,6 +411,10 @@ void ConfigLoader::WriteInfo(){
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
 				{"samplingFilter", defaultSettings.customShader.samplingFilter},
+				{"samplingFilterLumaSharpenStrength", defaultSettings.customShader.samplingFilterLumaSharpenStrength},
+				{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
+				{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
+				{"samplingFilterLumaSharpenRadius", defaultSettings.customShader.samplingFilterLumaSharpenRadius},
 				{"colorMultiplier", {
 					{"r", defaultSettings.customShader.colorMultiplier.r},
 					{"g", defaultSettings.customShader.colorMultiplier.g},

@@ -281,6 +281,11 @@ void RadialBezierDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfL
 	*pfRight = std::tan(hFovHalf);
 	*pfTop = std::tan(vFovHalf);
 	*pfBottom = std::tan(-vFovHalf);
+	// if(eEye == vr::Eye_Left){
+	// 	*pfRight = 0.00001;
+	// }else{
+	// 	*pfLeft = -0.00001;
+	// }
 }
 
 Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV){
@@ -316,6 +321,12 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	distortion.y = unitV * radius;
 	distortion.x /= std::tan(halfFovX * kPi / 180.0f);
 	distortion.y /= std::tan(halfFovY * kPi / 180.0f);
+	
+	// if(eEye == vr::Eye_Left){
+	// 	distortion.x = distortion.x * 2.0f + 1.0f;
+	// }else{
+	// 	distortion.x = distortion.x * 2.0f - 1.0f;
+	// }
 	return distortion;
 }
 

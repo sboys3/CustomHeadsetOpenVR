@@ -199,7 +199,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	
 	
 	// create defines for shader settings
-	D3D_SHADER_MACRO defines[30] = {};
+	D3D_SHADER_MACRO defines[50] = {};
 	int definesCount = 0;
 	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
@@ -312,6 +312,20 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	std::string samplingFilterString = "FILTER_" + driverConfig.customShader.samplingFilter;
 	std::transform(samplingFilterString.begin(), samplingFilterString.end(), samplingFilterString.begin(), ::toupper);
 	defines[definesCount++] = {samplingFilterString.c_str(), "1"};
+	std::string sharpStrengthString, sharpClampString, patternString, radiusString;
+	if(driverConfig.customShader.samplingFilter == "LumaSharpen"){
+		sharpStrengthString = std::to_string(driverConfig.customShader.samplingFilterLumaSharpenStrength);
+		defines[definesCount++] = {"sharp_strength", sharpStrengthString.c_str()};
+		
+		sharpClampString = std::to_string(driverConfig.customShader.samplingFilterLumaSharpenClamp);
+		defines[definesCount++] = {"sharp_clamp", sharpClampString.c_str()};
+		
+		patternString = std::to_string(driverConfig.customShader.samplingFilterLumaSharpenPattern);
+		defines[definesCount++] = {"pattern", patternString.c_str()};
+		
+		radiusString = std::to_string(driverConfig.customShader.samplingFilterLumaSharpenRadius);
+		defines[definesCount++] = {"offset_bias", radiusString.c_str()};
+	}
 	std::string colorMultiplierString = "";
 	if(driverConfig.customShader.colorMultiplier.r != 1.0 || driverConfig.customShader.colorMultiplier.g != 1.0 || driverConfig.customShader.colorMultiplier.b != 1.0) {
 		colorMultiplierString = std::to_string(driverConfig.customShader.colorMultiplier.r) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.g) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.b);
@@ -622,6 +636,10 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				reloadShaders |= driverConfig.customShader.dither10Bit != driverConfigOld.customShader.dither10Bit;
 				reloadShaders |= driverConfig.customShader.samplingFilter != driverConfigOld.customShader.samplingFilter;
+				reloadShaders |= driverConfig.customShader.samplingFilterLumaSharpenStrength != driverConfigOld.customShader.samplingFilterLumaSharpenStrength;
+				reloadShaders |= driverConfig.customShader.samplingFilterLumaSharpenClamp != driverConfigOld.customShader.samplingFilterLumaSharpenClamp;
+				reloadShaders |= driverConfig.customShader.samplingFilterLumaSharpenPattern != driverConfigOld.customShader.samplingFilterLumaSharpenPattern;
+				reloadShaders |= driverConfig.customShader.samplingFilterLumaSharpenRadius != driverConfigOld.customShader.samplingFilterLumaSharpenRadius;
 				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || 
 					driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || 
 					driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;
