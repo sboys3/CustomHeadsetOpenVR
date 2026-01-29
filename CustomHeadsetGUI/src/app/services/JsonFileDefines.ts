@@ -9,6 +9,7 @@ export type DistortionProfileConfig = {
 };
 export type Settings = {
   meganeX8K: MeganeX8KConfig,
+  generalHeadset: GeneralHeadsetConfig,
   customShader: CustomShaderConfig,
   forceTracking: boolean,
   takeCompositorScreenshots: boolean,
@@ -155,6 +156,10 @@ export type MeganeX8KConfig = {
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;
 };
+
+export type GeneralHeadsetConfig = {
+  useViveBluetooth: boolean;
+}
 
 export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light';

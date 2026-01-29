@@ -117,8 +117,8 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["disableEyeDecreaseFov"].is_boolean()){
 				newConfig.meganeX8K.disableEyeDecreaseFov = meganeX8KData["disableEyeDecreaseFov"].get<bool>();
 			}
-			if(meganeX8KData["bluetoothDevice"].is_number()){
-				newConfig.meganeX8K.bluetoothDevice = meganeX8KData["bluetoothDevice"].get<int>();
+			if(meganeX8KData["useViveBluetooth"].is_boolean()){
+				newConfig.meganeX8K.useViveBluetooth = meganeX8KData["useViveBluetooth"].get<bool>();
 			}
 			if(meganeX8KData["directMode"].is_boolean()){
 				newConfig.meganeX8K.directMode = meganeX8KData["directMode"].get<bool>();
@@ -160,6 +160,12 @@ void ConfigLoader::ParseConfig(){
 				if(stationaryDimmingJson["dimBrightnessPercent"].is_number()){ newStationaryDimming.dimBrightnessPercent = stationaryDimmingJson["dimBrightnessPercent"].get<double>(); }
 				if(stationaryDimmingJson["dimSeconds"].is_number()){ newStationaryDimming.dimSeconds = stationaryDimmingJson["dimSeconds"].get<double>(); }
 				if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
+			}
+		}
+		if(data["generalHeadset"].is_object()){
+			json generalHeadsetData = data["generalHeadset"];
+			if(generalHeadsetData["useViveBluetooth"].is_boolean()){
+				newConfig.generalHeadset.useViveBluetooth = generalHeadsetData["useViveBluetooth"].get<bool>();
 			}
 		}
 		if(data["customShader"].is_object()){
@@ -341,7 +347,7 @@ void ConfigLoader::WriteInfo(){
 				{"eyeRotation", defaultSettings.meganeX8K.eyeRotation},
 				{"disableEye", defaultSettings.meganeX8K.disableEye},
 				{"disableEyeDecreaseFov", defaultSettings.meganeX8K.disableEyeDecreaseFov},
-				{"bluetoothDevice", defaultSettings.meganeX8K.bluetoothDevice},
+				{"useViveBluetooth", defaultSettings.meganeX8K.useViveBluetooth},
 				{"directMode", defaultSettings.meganeX8K.directMode},
 				{"replaceIcons", defaultSettings.meganeX8K.replaceIcons},
 				{"edidVendorIdOverride", defaultSettings.meganeX8K.edidVendorIdOverride},
@@ -366,6 +372,9 @@ void ConfigLoader::WriteInfo(){
 					{"dimSeconds", defaultSettings.meganeX8K.stationaryDimming.dimSeconds},
 					{"brightenSeconds", defaultSettings.meganeX8K.stationaryDimming.brightenSeconds},
 				}},
+			}},
+			{"generalHeadset", {
+				{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
 			}},
 			{"customShader", {
 				{"enable", defaultSettings.customShader.enable},

@@ -139,8 +139,8 @@ public:
 		int disableEye = 0;
 		// if the fov should be decreased for the disabled eye, this causes problems in some apps
 		bool disableEyeDecreaseFov = false;
-		// which bluetooth device to use for SteamVR 0:none 1:vive
-		int bluetoothDevice = 0;
+		// if a vive link box should be used for bluetooth
+		bool useViveBluetooth = false;
 		// if the display is in direct mode or false if it is on the desktop
 		bool directMode = true;
 		// if the icons in the SteamVR status window should be modified
@@ -162,6 +162,13 @@ public:
 	};
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K;
+	
+	class GeneralHeadsetConfig{
+	public:
+		// if a vive link box should be used for bluetooth
+		bool useViveBluetooth = false;
+	};
+	GeneralHeadsetConfig generalHeadset = {};
 	
 	CustomShaderConfig customShader = {};
 	

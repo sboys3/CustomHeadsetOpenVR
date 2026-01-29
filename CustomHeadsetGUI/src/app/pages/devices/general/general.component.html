@@ -1,10 +1,9 @@
-@if(settings){
-@if(defaults){
+@if(settings && defaults){
 <div class="field">
     <div class="section-title">
         <span i18n>Custom Shader</span>
         <app-field-tip i18n-info
-            info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization." />
+            info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR's compositor." />
     </div>
 </div>
 @if(defaults.customShader){
@@ -356,6 +355,14 @@
 </div>
 }
 <div class="field">
+    <div class="section-title">
+        <span i18n>General Headset Settings</span>
+        <app-field-tip i18n-info
+            info="These settings work with any SteamVR headset." />
+    </div>
+</div>
+@if(defaults.takeCompositorScreenshots != undefined){
+<div class="field">
     <div class="title">
         <span i18n>Take Compositor Screenshots</span>
         <app-field-tip i18n-info
@@ -366,6 +373,23 @@
     </div>
     <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.takeCompositorScreenshots"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
+@if(defaults.generalHeadset != undefined){
+<div class="field">
+    <div class="title">
+        <span i18n>Use Vive Bluetooth</span>
+        <app-field-note type="steamvrRestart" />
+        <app-field-tip i18n-info
+            info="Enables the use of the original Vive's link box for any headset to control base stations directly with SteamVR." />
+        <app-reset-button
+            [canReset]="settings.generalHeadset.useViveBluetooth!=defaults.generalHeadset.useViveBluetooth"
+            (resetClick)="nested('generalHeadset').resetOption('useViveBluetooth')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.generalHeadset.useViveBluetooth"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>

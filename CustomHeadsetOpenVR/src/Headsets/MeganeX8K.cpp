@@ -410,7 +410,7 @@ void MeganeX8KShim::UpdateSettings(){
 	}
 	
 	//bluetoothDevice
-	if(driverConfig.meganeX8K.bluetoothDevice == 1){
+	if(driverConfig.meganeX8K.useViveBluetooth){
 		vr::VRProperties()->SetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64, vr::AdditionalRadioFeatures_HTCLinkBox);
 	}
 
