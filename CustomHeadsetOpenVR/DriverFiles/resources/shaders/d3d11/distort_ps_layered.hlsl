@@ -163,6 +163,7 @@ in float2 dy // uv derivative in the y direction
 	dir = min(float2( FXAA_SPAN_MAX,  FXAA_SPAN_MAX), 
 		max(float2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), 
 		dir * rcpDirMin)) * rcpFrame.xy;
+	// return float4(dir * 200, length(dir)*50, rgbMA);
 /*--------------------------------------------------------------------------*/
 	float3 rgbA = (1.0/2.0) * (
 		FxaaTexLod0(tex, posPos.xy + dir * (1.0/3.0 - 0.5), textureRez).xyz +
@@ -171,8 +172,26 @@ in float2 dy // uv derivative in the y direction
 		FxaaTexLod0(tex, posPos.xy + dir * (0.0/3.0 - 0.5), textureRez).xyz +
 		FxaaTexLod0(tex, posPos.xy + dir * (3.0/3.0 - 0.5), textureRez).xyz);
 	float lumaB = dot(rgbB, luma);
-	if((lumaB < lumaMin) || (lumaB > lumaMax)) return float4(rgbA, rgbMA);
-	return float4(rgbB, rgbMA);
+	float3 output;
+	if((lumaB < lumaMin) || (lumaB > lumaMax)){
+		output = rgbA;
+	}else{
+		output = rgbB;
+	}
+	
+	// #define sharp_strength 1
+	// #define sharp_clamp 0.05
+	#ifdef sharp_strength 
+	// do a similar operation to luma sharpen
+	float3 sharp_strength_luma = (luma);
+	float blur_ori = (lumaNW + lumaNE + lumaSW + lumaSE) * 0.25;
+	float sharp_luma = dot(output, luma) - blur_ori;
+	sharp_luma *= sharp_strength;
+	sharp_luma = clamp(sharp_luma, -sharp_clamp, sharp_clamp);
+	output += sharp_luma;
+	#endif
+	
+	return float4(output, rgbMA);
 }
 #endif
 
@@ -327,7 +346,8 @@ float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, 
 	#ifdef FILTER_FXAA2
 	// FXAA 2
 	// This uses FXAA as an upsampling method. It has some artifacts, but generally works OK.
-	#define FXAA_SUBPIX_SHIFT (1.0/4.0)
+	// #define FXAA_SUBPIX_SHIFT (1.0/4.0)
+	#define FXAA_SUBPIX_SHIFT 0
 	float4 posPos = float4(uv, uv - (inverseTextureSize * (0.5 + FXAA_SUBPIX_SHIFT)));
 	float4 color = FxaaPixelShader(posPos, tex, inverseTextureSize, dx, dy);
 	#elif defined(FILTER_LUMASHARPEN)

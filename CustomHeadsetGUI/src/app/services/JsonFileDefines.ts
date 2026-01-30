@@ -82,6 +82,8 @@ export type CustomShaderConfig = {
   lensColorCorrection: boolean;
   dither10Bit: boolean;
   samplingFilter: string;
+  samplingFilterFXAA2SharpenStrength: number;
+  samplingFilterFXAA2SharpenClamp: number;
   samplingFilterLumaSharpenStrength: number;
   samplingFilterLumaSharpenClamp: number;
   samplingFilterLumaSharpenPattern: number;

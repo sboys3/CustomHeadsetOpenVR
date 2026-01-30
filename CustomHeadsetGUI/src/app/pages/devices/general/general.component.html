@@ -303,6 +303,44 @@
     </div>
 </div>
 }
+@if(settings.customShader.samplingFilter == 'FXAA2'){
+<div class="field">
+    <div class="title">
+        <span i18n>FXAA2 Sharpen Strength</span>
+        <app-field-tip i18n-info
+            info="Strength of the FXAA2 sharpening effect. Higher values produce more sharpening." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterFXAA2SharpenStrength!=defaults.customShader.samplingFilterFXAA2SharpenStrength"
+            (resetClick)="nested('customShader').resetOption('samplingFilterFXAA2SharpenStrength')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterFXAA2SharpenStrength" step="0.1"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="5.0" min="0.1" step="0.1" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterFXAA2SharpenStrength"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>FXAA2 Sharpen Clamp</span>
+        <app-field-tip i18n-info
+            info="Limits maximum amount of sharpening a pixel receives. Lower values reduce artifacts at the cost of some sharpness." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterFXAA2SharpenClamp!=defaults.customShader.samplingFilterFXAA2SharpenClamp"
+            (resetClick)="nested('customShader').resetOption('samplingFilterFXAA2SharpenClamp')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterFXAA2SharpenClamp" step="0.005"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="0.3" min="0.0" step="0.005" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterFXAA2SharpenClamp"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+}
 @if(settings.customShader.samplingFilter == 'LumaSharpen'){
 <div class="field">
     <div class="title">

@@ -236,6 +236,12 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["samplingFilter"].is_string()){
 				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
 			}
+			if(customShaderData["samplingFilterFXAA2SharpenStrength"].is_number()){
+				newConfig.customShader.samplingFilterFXAA2SharpenStrength = customShaderData["samplingFilterFXAA2SharpenStrength"].get<double>();
+			}
+			if(customShaderData["samplingFilterFXAA2SharpenClamp"].is_number()){
+				newConfig.customShader.samplingFilterFXAA2SharpenClamp = customShaderData["samplingFilterFXAA2SharpenClamp"].get<double>();
+			}
 			if(customShaderData["samplingFilterLumaSharpenStrength"].is_number()){
 				newConfig.customShader.samplingFilterLumaSharpenStrength = customShaderData["samplingFilterLumaSharpenStrength"].get<double>();
 			}
@@ -411,6 +417,8 @@ void ConfigLoader::WriteInfo(){
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
 				{"samplingFilter", defaultSettings.customShader.samplingFilter},
+				{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
+				{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
 				{"samplingFilterLumaSharpenStrength", defaultSettings.customShader.samplingFilterLumaSharpenStrength},
 				{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
 				{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
