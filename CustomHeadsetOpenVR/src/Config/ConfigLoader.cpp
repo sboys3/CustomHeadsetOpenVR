@@ -254,6 +254,12 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["samplingFilterLumaSharpenRadius"].is_number()){
 				newConfig.customShader.samplingFilterLumaSharpenRadius = customShaderData["samplingFilterLumaSharpenRadius"].get<double>();
 			}
+ 			if(customShaderData["samplingFilterCASStrength"].is_number()){
+ 				newConfig.customShader.samplingFilterCASStrength = customShaderData["samplingFilterCASStrength"].get<double>();
+ 			}
+			if(customShaderData["samplingFilterCASContrast"].is_number()){
+				newConfig.customShader.samplingFilterCASContrast = customShaderData["samplingFilterCASContrast"].get<double>();
+			}
 			if(customShaderData["colorMultiplier"].is_object()){
 				ConfigColor &colorMultiplier = newConfig.customShader.colorMultiplier;
 				if(customShaderData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = customShaderData["colorMultiplier"]["r"].get<double>(); }
@@ -423,6 +429,8 @@ void ConfigLoader::WriteInfo(){
 				{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
 				{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
 				{"samplingFilterLumaSharpenRadius", defaultSettings.customShader.samplingFilterLumaSharpenRadius},
+ 				{"samplingFilterCASStrength", defaultSettings.customShader.samplingFilterCASStrength},
+				{"samplingFilterCASContrast", defaultSettings.customShader.samplingFilterCASContrast},
 				{"colorMultiplier", {
 					{"r", defaultSettings.customShader.colorMultiplier.r},
 					{"g", defaultSettings.customShader.colorMultiplier.g},

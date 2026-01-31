@@ -18,7 +18,7 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 	driverConfigLoader.WriteInfo();
 	
 	if(driverConfig.generalHeadset.useViveBluetooth){
-		int existingFeatures = vr::VRProperties()->GetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64);
+		uint64_t existingFeatures = vr::VRProperties()->GetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64);
 		vr::VRProperties()->SetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64, existingFeatures | vr::AdditionalRadioFeatures_HTCLinkBox);
 	}
 	

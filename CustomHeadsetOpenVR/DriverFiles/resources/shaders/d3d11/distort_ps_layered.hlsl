@@ -112,8 +112,8 @@ float4 inputColorProcessor(float4 color){
 // replacing the sampling here with something that does not have as many artifacts as bilinear may help
 // #define FxaaTexLod0(t, p) tex.SampleLevel(g_sScene, p, 0.0) 
 // #define FxaaTexOff(t, p, o, r) tex.SampleLevel(g_sScene, p, 0.0, o)
-#define FxaaTexLod0(t, p, s) tex.Sample(g_sScene, p) 
-#define FxaaTexOff(t, p, o, r, s) tex.Sample(g_sScene, p + (o * r)) 
+#define FxaaTexLod0(tex, p, s) tex.Sample(g_sScene, p) 
+#define FxaaTexOff(tex, p, o, r, s) tex.Sample(g_sScene, p + (o * r)) 
 // #define FxaaTexLod0(t, p, s) getTexel(tex, p, s) 
 // #define FxaaTexOff(t, p, o, r, s) getTexel(tex, p + (o * r), s) 
 
@@ -336,9 +336,77 @@ float4 LumaSharpenPass(in Texture2D<float4> tex, in float2 uv, in float2 inverse
 }
 #endif
 
+#ifdef FILTER_CAS
+// uniform float Sharpening <
+// 	ui_type = "drag";
+//     ui_label = "Sharpening intensity";
+//     ui_tooltip = "Adjusts sharpening intensity by averaging the original pixels to the sharpened result.  1.0 is the unmodified default.";
+// 	ui_min = 0.0; ui_max = 1.0;
+// > = 1.0;
+//
+// uniform float Contrast <
+// 	ui_type = "drag";
+//     ui_label = "Contrast Adaptation";
+//     ui_tooltip = "Adjusts the range the shader adapts to high contrast (0 is not all the way off).  Higher values = more high contrast sharpening.";
+// 	ui_min = 0.0; ui_max = 1.0;
+// > = 0.0;
+
+// #define CAS_SHARPENING 1.0
+// #define CAS_CONTRAST 0.0
+
+#define tex2Doffset(tex, p, o, r) tex.Sample(g_sScene, p + (o * r)) 
+float4 CASPass(in Texture2D<float4> sTexColor, float2 texcoord, in float2 inverseTextureSize){    
+    // fetch a 3x3 neighborhood around the pixel 'e',
+    //  a b c
+    //  d(e)f
+    //  g h i
+    float3 a = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(-1, -1)).rgb;
+    float3 b = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(0, -1)).rgb;
+    float3 c = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(1, -1)).rgb;
+    float3 d = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(-1, 0)).rgb;
+    float4 z = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(0, 0)).rgba;
+    float3 f = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(1, 0)).rgb;
+    float3 g = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(-1, 1)).rgb;
+    float3 h = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(0, 1)).rgb;
+    float3 i = tex2Doffset(sTexColor, texcoord, inverseTextureSize, float2(1, 1)).rgb;
+	float3 e = z.rgb;
+	// Soft min and max.
+	//  a b c             b
+	//  d e f * 0.5  +  d e f * 0.5
+	//  g h i             h
+    // These are 2.0x bigger (factored out the extra multiply).
+    float3 mnRGB = min(min(min(d, e), min(f, b)), h);
+    float3 mnRGB2 = min(mnRGB, min(min(a, c), min(g, i)));
+    mnRGB += mnRGB2;
+
+    float3 mxRGB = max(max(max(d, e), max(f, b)), h);
+    float3 mxRGB2 = max(mxRGB, max(max(a, c), max(g, i)));
+    mxRGB += mxRGB2;
+
+    // Smooth minimum distance to signal limit divided by smooth max.
+    float3 rcpMRGB = rcp(mxRGB);
+    float3 ampRGB = saturate(min(mnRGB, 2.0 - mxRGB) * rcpMRGB);    
+    
+    // Shaping amount of sharpening.
+    ampRGB = rsqrt(ampRGB);
+    
+    float peak = 8.0 - 3.0 * CAS_CONTRAST;
+    float3 wRGB = -rcp(ampRGB * peak);
+
+    float3 rcpWeightRGB = rcp(1.0 + 4.0 * wRGB);
+
+    //                          0 w 0
+    //  Filter shape:           w 1 w
+    //                          0 w 0  
+    float3 window = (b + d) + (f + h);
+    float3 outColor = saturate((window * wRGB + e) * rcpWeightRGB);
+    return float4(lerp(e, outColor, CAS_SHARPENING), z.a);
+}
+#endif
+
 // #define FILTER_NEARESTNEIGHBOR
 float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy){
-	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR)
+	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR) || defined(FILTER_CAS)
 	int2 textureSize = int2(1024,1024);
 	tex.GetDimensions(textureSize.x, textureSize.y);
 	float2 inverseTextureSize = float2(1.0/textureSize.x, 1.0/textureSize.y);
@@ -352,6 +420,8 @@ float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, 
 	float4 color = FxaaPixelShader(posPos, tex, inverseTextureSize, dx, dy);
 	#elif defined(FILTER_LUMASHARPEN)
 	float4 color = LumaSharpenPass(tex, uv, inverseTextureSize);
+	#elif defined(FILTER_CAS)
+	float4 color = CASPass(tex, uv, inverseTextureSize);
 	#elif defined(FILTER_NEARESTNEIGHBOR)
 	float4 color = tex.SampleLevel(g_sScene, (round(uv * textureSize - 0.5) + 0.5) * inverseTextureSize, 0);
 	#else

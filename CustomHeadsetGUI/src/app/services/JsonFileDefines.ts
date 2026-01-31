@@ -88,6 +88,8 @@ export type CustomShaderConfig = {
   samplingFilterLumaSharpenClamp: number;
   samplingFilterLumaSharpenPattern: number;
   samplingFilterLumaSharpenRadius: number;
+  samplingFilterCASStrength: number;
+  samplingFilterCASContrast: number;
   colorMultiplier: LinearColor;
 }
 
