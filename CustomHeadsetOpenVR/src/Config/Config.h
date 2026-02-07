@@ -87,13 +87,13 @@ struct CustomShaderConfig{
 	double samplingFilterFXAA2SharpenStrength = 1;
 	double samplingFilterFXAA2SharpenClamp = 0.05;
 	// luma sharpen filter parameters
-	double samplingFilterLumaSharpenStrength = 1.5;
+	double samplingFilterLumaSharpenStrength = 2.0;
 	double samplingFilterLumaSharpenClamp = 0.1;
 	int samplingFilterLumaSharpenPattern = 1;
 	double samplingFilterLumaSharpenRadius = 1.0;
  	// CAS filter parameters
  	double samplingFilterCASStrength = 1.0;
- 	double samplingFilterCASContrast = 0.5;
+ 	double samplingFilterCASContrast = 1.0;
 	// color multiplier for tint adjustments
 	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
 };

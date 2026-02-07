@@ -61,7 +61,8 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	
 	DistortionProfileConfig meganeX8Kv0_4_0 = {};
-	meganeX8Kv0_4_0.name = "MeganeX8K v0.4.0";	
+	meganeX8Kv0_4_0.name = "MeganeX8K v0.4.0";
+	meganeX8Kv0_4_0.device = "MeganeX8K";
 	meganeX8Kv0_4_0.modifiedTime = 0;
 	meganeX8Kv0_4_0.description = "MeganeX8K distortion profile from CustomHeadset v0.4.0";
 	meganeX8Kv0_4_0.author = "SBoys3, Shiftall";
@@ -80,7 +81,8 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	
 	DistortionProfileConfig meganeX8Kv0_3_0 = {};
-	meganeX8Kv0_3_0.name = "MeganeX8K v0.3.0";	
+	meganeX8Kv0_3_0.name = "MeganeX8K v0.3.0";
+	meganeX8Kv0_3_0.device = "MeganeX8K";
 	meganeX8Kv0_3_0.modifiedTime = 0;
 	meganeX8Kv0_3_0.description = "MeganeX8K original distortion profile which is the same as simplehmd.";
 	meganeX8Kv0_3_0.author = "Shiftall";

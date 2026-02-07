@@ -175,12 +175,22 @@ export type AppSetting = {
   advanceMode: boolean
 }
 
+export const HeadsetType = {
+  None: 0,
+  Other: 1,
+  MeganeX8K: 2,
+  Vive: 3,
+} as const;
+
+export type HeadsetType = typeof HeadsetType[keyof typeof HeadsetType];
+
 export type DriverInfo = {
   about: string;
   defaultSettings: Settings;
   builtInDistortionProfiles: BuiltInDistortionProfiles;
   resolution: ResolutionInfo,
-  driverVersion: string
+  driverVersion: string,
+  connectedHeadset: number
 }
 export type ResolutionInfo = {
   fovX: number,

@@ -8,6 +8,13 @@
             margin-right: 0.5rem;
         }
     }
+    
+    .dirver-warning-main {
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+        display: block;
+        text-align: center;
+    }
 
     .page-disabled {
         .field:not(.ignore-disable) {
@@ -25,9 +32,9 @@
     padding: 1rem;
 }
 
-app-system-ready {
-    display: flex;
-}
+// app-system-ready {
+//     display: flex;
+// }
 
 mat-tab-group {
     width: 100%;

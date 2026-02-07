@@ -1,10 +1,28 @@
 <app-system-ready>
-  <mat-tab-group >
-    <mat-tab label="MeganeX Superlight 8K">
-      <app-meganex-x8-k [driverName]="['MeganeXSuperlight','MeganeX8KMark2','MeganeXsuperlight8K_Native','MeganeX8KMark2_Native']" settingField="meganeX8K" />
+  @if(driverEnablePrompt()){
+  <div class="dirver-warning-main">
+      <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
+      <span i18n>Custom Headset's driver is disabled </span>
+      <button mat-stroked-button i18n (click)="enableDriver()">Enable</button>
+  </div>
+  }
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
+    @for (tab of orderedTabs; track tab.headsetType) {
+    <mat-tab label="MeganeX Superlight 8K" i18n-label *ngIf="tab.type === 'MeganeX8K'">
+      <ng-template matTabContent>
+        @if(orderedTabs[0].type !== "MeganeX8K"){
+          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        }
+        <app-meganex-x8-k [driverName]="['MeganeXSuperlight','MeganeX8KMark2','MeganeXsuperlight8K_Native','MeganeX8KMark2_Native']" settingField="meganeX8K" />
+      </ng-template>
     </mat-tab>
-    <mat-tab label="General" i18n-label>
-      <app-general driverName="" settingField="" />
+    <mat-tab label="General" i18n-label *ngIf="tab.type === 'General'">
+      <ng-template matTabContent>
+        <app-general 
+          driverName="" 
+          settingField="" />
+      </ng-template>
     </mat-tab>
+    }
   </mat-tab-group>
 </app-system-ready>

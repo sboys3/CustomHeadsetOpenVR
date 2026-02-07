@@ -183,12 +183,19 @@ in float2 dy // uv derivative in the y direction
 	// #define sharp_clamp 0.05
 	#ifdef sharp_strength 
 	// do a similar operation to luma sharpen
-	float3 sharp_strength_luma = (luma);
+	#if 1
 	float blur_ori = (lumaNW + lumaNE + lumaSW + lumaSE) * 0.25;
 	float sharp_luma = dot(output, luma) - blur_ori;
 	sharp_luma *= sharp_strength;
 	sharp_luma = clamp(sharp_luma, -sharp_clamp, sharp_clamp);
 	output += sharp_luma;
+	#else
+	float3 blur_ori = (rgbNW + rgbNE + rgbSW + rgbSE) * 0.25;
+	float3 sharp_luma = output - blur_ori;
+	sharp_luma *= sharp_strength;
+	sharp_luma = clamp(sharp_luma, -sharp_clamp, sharp_clamp);
+	output += sharp_luma;
+	#endif
 	#endif
 	
 	return float4(output, rgbMA);

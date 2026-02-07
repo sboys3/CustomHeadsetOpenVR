@@ -84,10 +84,6 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
                 this.driverWarning.set((shiftallEnabled.some(x => x) || !customEnabled) && (config?.meganeX8K?.enable ?? false));
                 this.driverEnablePrompt.set(shiftallEnabled.every(x => !x) && !(config?.meganeX8K?.enable ?? true));
-            } else if (steamVrConfig) {
-                let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR');
-                this.driverWarning.set(!customEnabled);
-                this.driverEnablePrompt.set(false);
             }
         })
         effect(() => {
