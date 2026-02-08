@@ -84,6 +84,8 @@ export type CustomShaderConfig = {
   samplingFilter: string;
   samplingFilterFXAA2SharpenStrength: number;
   samplingFilterFXAA2SharpenClamp: number;
+  samplingFilterFXAA2CASStrength: number;
+  samplingFilterFXAA2CASContrast: number;
   samplingFilterLumaSharpenStrength: number;
   samplingFilterLumaSharpenClamp: number;
   samplingFilterLumaSharpenPattern: number;

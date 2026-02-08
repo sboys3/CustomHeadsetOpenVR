@@ -81,11 +81,14 @@ struct CustomShaderConfig{
 	bool lensColorCorrection = true;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
-	// filters on the sampling of the texture,  "None", "NearestNeighbor", "FXAA2", "LumaSharpen", and "CAS"
+	// filters on the sampling of the texture,  "None", "NearestNeighbor", "FXAA2", "FXAA2CAS", "LumaSharpen", and "CAS"
 	std::string samplingFilter = "None";
 	// FXAA2 filter parameters
-	double samplingFilterFXAA2SharpenStrength = 1;
+	double samplingFilterFXAA2SharpenStrength = 1.0;
 	double samplingFilterFXAA2SharpenClamp = 0.05;
+	// FXAA2CAS filter parameters
+	double samplingFilterFXAA2CASStrength = 1.0;
+	double samplingFilterFXAA2CASContrast = 1.0;
 	// luma sharpen filter parameters
 	double samplingFilterLumaSharpenStrength = 2.0;
 	double samplingFilterLumaSharpenClamp = 0.1;

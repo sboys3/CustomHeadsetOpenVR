@@ -242,6 +242,12 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["samplingFilterFXAA2SharpenClamp"].is_number()){
 				newConfig.customShader.samplingFilterFXAA2SharpenClamp = customShaderData["samplingFilterFXAA2SharpenClamp"].get<double>();
 			}
+			if(customShaderData["samplingFilterFXAA2CASStrength"].is_number()){
+				newConfig.customShader.samplingFilterFXAA2CASStrength = customShaderData["samplingFilterFXAA2CASStrength"].get<double>();
+			}
+			if(customShaderData["samplingFilterFXAA2CASContrast"].is_number()){
+				newConfig.customShader.samplingFilterFXAA2CASContrast = customShaderData["samplingFilterFXAA2CASContrast"].get<double>();
+			}
 			if(customShaderData["samplingFilterLumaSharpenStrength"].is_number()){
 				newConfig.customShader.samplingFilterLumaSharpenStrength = customShaderData["samplingFilterLumaSharpenStrength"].get<double>();
 			}
@@ -425,11 +431,13 @@ void ConfigLoader::WriteInfo(){
 				{"samplingFilter", defaultSettings.customShader.samplingFilter},
 				{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
 				{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
+				{"samplingFilterFXAA2CASStrength", defaultSettings.customShader.samplingFilterFXAA2CASStrength},
+				{"samplingFilterFXAA2CASContrast", defaultSettings.customShader.samplingFilterFXAA2CASContrast},
 				{"samplingFilterLumaSharpenStrength", defaultSettings.customShader.samplingFilterLumaSharpenStrength},
 				{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
 				{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
 				{"samplingFilterLumaSharpenRadius", defaultSettings.customShader.samplingFilterLumaSharpenRadius},
- 				{"samplingFilterCASStrength", defaultSettings.customShader.samplingFilterCASStrength},
+				{"samplingFilterCASStrength", defaultSettings.customShader.samplingFilterCASStrength},
 				{"samplingFilterCASContrast", defaultSettings.customShader.samplingFilterCASContrast},
 				{"colorMultiplier", {
 					{"r", defaultSettings.customShader.colorMultiplier.r},

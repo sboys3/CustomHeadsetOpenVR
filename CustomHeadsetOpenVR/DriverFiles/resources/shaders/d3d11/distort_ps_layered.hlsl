@@ -108,6 +108,10 @@ float4 inputColorProcessor(float4 color){
 	return color;
 }
 
+#ifdef FILTER_FXAA2CAS
+#define FILTER_FXAA2
+#endif
+
 #ifdef FILTER_FXAA2
 // replacing the sampling here with something that does not have as many artifacts as bilinear may help
 // #define FxaaTexLod0(t, p) tex.SampleLevel(g_sScene, p, 0.0) 
@@ -179,10 +183,47 @@ in float2 dy // uv derivative in the y direction
 		output = rgbB;
 	}
 	
+	#ifdef FILTER_FXAA2CAS
+	// #define CAS_SHARPENING 1.0
+	// #define CAS_CONTRAST 1.0
+	#ifdef CAS_SHARPENING
+	// do a similar filter to the one used in CAS using the existing samples as much as possible
+	// fetch a 3x3 neighborhood around the pixel 'e',
+	//   a b c
+	//  d (e) f
+	//   g h i
+	float3 a = rgbNW;
+	float3 b = FxaaTexOff(tex, posPos.xy, float2(0, -1), rcpFrame.xy, textureRez).xyz;
+	float3 c = rgbNE;
+	float3 d = FxaaTexOff(tex, posPos.xy, float2(-1, 0), rcpFrame.xy, textureRez).xyz;
+	float3 e = output;
+	float3 f = FxaaTexOff(tex, posPos.xy, float2(1, 0), rcpFrame.xy, textureRez).xyz;
+	float3 g = rgbSW;
+	float3 h = FxaaTexOff(tex, posPos.xy, float2(0, 1), rcpFrame.xy, textureRez).xyz;
+	float3 i = rgbSE;
+	float3 mnRGB = min(min(min(d, e), min(f, b)), h);
+	float3 mnRGB2 = min(mnRGB, min(min(a, c), min(g, i)));
+	mnRGB += mnRGB2;
+	float3 mxRGB = max(max(max(d, e), max(f, b)), h);
+	float3 mxRGB2 = max(mxRGB, max(max(a, c), max(g, i)));
+	mxRGB += mxRGB2;
+	float3 rcpMRGB = rcp(mxRGB);
+	float3 ampRGB = saturate(min(mnRGB, 2.0 - mxRGB) * rcpMRGB);
+	ampRGB = rsqrt(ampRGB);
+	float peak = 8.0 - 3.0 * CAS_CONTRAST;
+	float3 wRGB = -rcp(ampRGB * peak);
+	float3 rcpWeightRGB = rcp(1.0 + 4.0 * wRGB);
+	float3 window = (b + d) + (f + h);
+	float3 outColor = saturate((window * wRGB + e) * rcpWeightRGB);
+	output = lerp(e, outColor, CAS_SHARPENING);
+	
+	#endif
+	#else // FILTER_FXAA2CAS
+	
 	// #define sharp_strength 1
 	// #define sharp_clamp 0.05
 	#ifdef sharp_strength 
-	// do a similar operation to luma sharpen
+	// do a similar operation to luma sharpen using the existing luma values
 	#if 1
 	float blur_ori = (lumaNW + lumaNE + lumaSW + lumaSE) * 0.25;
 	float sharp_luma = dot(output, luma) - blur_ori;
@@ -190,6 +231,7 @@ in float2 dy // uv derivative in the y direction
 	sharp_luma = clamp(sharp_luma, -sharp_clamp, sharp_clamp);
 	output += sharp_luma;
 	#else
+	// non-luma test
 	float3 blur_ori = (rgbNW + rgbNE + rgbSW + rgbSE) * 0.25;
 	float3 sharp_luma = output - blur_ori;
 	sharp_luma *= sharp_strength;
@@ -197,6 +239,8 @@ in float2 dy // uv derivative in the y direction
 	output += sharp_luma;
 	#endif
 	#endif
+	
+	#endif // FILTER_FXAA2CAS
 	
 	return float4(output, rgbMA);
 }
@@ -359,7 +403,7 @@ float4 LumaSharpenPass(in Texture2D<float4> tex, in float2 uv, in float2 inverse
 // > = 0.0;
 
 // #define CAS_SHARPENING 1.0
-// #define CAS_CONTRAST 0.0
+// #define CAS_CONTRAST 1.0
 
 #define tex2Doffset(tex, p, o, r) tex.Sample(g_sScene, p + (o * r)) 
 float4 CASPass(in Texture2D<float4> sTexColor, float2 texcoord, in float2 inverseTextureSize){    
