@@ -192,7 +192,8 @@ export type DriverInfo = {
   builtInDistortionProfiles: BuiltInDistortionProfiles;
   resolution: ResolutionInfo,
   driverVersion: string,
-  connectedHeadset: number
+  connectedHeadset: number,
+  nonNativeHeadsetFound: boolean
 }
 export type ResolutionInfo = {
   fovX: number,

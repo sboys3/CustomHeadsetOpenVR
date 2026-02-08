@@ -464,6 +464,7 @@ void ConfigLoader::WriteInfo(){
 			{"outputResolutionY", info.outputResolutionY},
 		}},
 		{"connectedHeadset", (int)info.connectedHeadset},
+		{"nonNativeHeadsetFound", info.nonNativeHeadsetFound},
 		{"debugLog", info.debugLog},
 		{"driverResources", info.driverResources},
 		{"steamvrResources", info.steamvrResources},

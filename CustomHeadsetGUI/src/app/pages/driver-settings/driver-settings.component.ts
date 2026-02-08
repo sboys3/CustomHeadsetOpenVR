@@ -41,6 +41,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     private _previousOrderedTabs: TabConfig[] = [];
     public sds = inject(SystemDiagnosticService)
     driverEnablePrompt = signal(false)
+    nonNativeWarning = signal(false)
 
     // Expose component classes to template
     MeganexX8KComponent = MeganexX8KComponent;
@@ -60,6 +61,11 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
                 // Convert number to HeadsetType enum
                 const headsetType = info.connectedHeadset as HeadsetType;
                 this.currentHeadsetType.set(headsetType);
+            }
+            if (info && info.nonNativeHeadsetFound) {
+                this.nonNativeWarning.set(true)
+            } else {
+                this.nonNativeWarning.set(false)
             }
         });
 

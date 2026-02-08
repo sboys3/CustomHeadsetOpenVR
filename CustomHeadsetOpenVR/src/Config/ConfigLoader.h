@@ -33,6 +33,8 @@ public:
 		std::string driverResources = "";
 		std::string steamvrResources = "";
 		HeadsetType connectedHeadset = HeadsetType::None;
+		// if a headset that does not use the steamvr compositor is connected
+		bool nonNativeHeadsetFound = false;
 		// used when watching info
 		bool hasBeenUpdated = true;
 	};

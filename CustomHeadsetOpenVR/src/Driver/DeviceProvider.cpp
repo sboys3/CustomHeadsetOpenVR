@@ -76,7 +76,17 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 				}
 			}
 		}
-		
+		if(vrevent.eventType == vr::VREvent_TrackedDeviceActivated){
+			// set nonNativeHeadsetFound if a device with a direct mode component is found
+			vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(vrevent.trackedDeviceIndex);
+			if(container){
+				// DriverLog("Device %d has driver direct mode component: %s", vrevent.trackedDeviceIndex, vr::VRProperties()->GetBoolProperty(container, vr::Prop_HasDriverDirectModeComponent_Bool) ? "true" : "false");
+				if(vr::VRProperties()->GetBoolProperty(container, vr::Prop_HasDriverDirectModeComponent_Bool)){
+					driverConfigLoader.info.nonNativeHeadsetFound = true;
+					driverConfigLoader.WriteInfo();
+				}
+			}
+		}
 		if(vrevent.eventType == vr::VREvent_ProcessConnected && customShaderEnabled){
 			// check new processes and inject if they are the compositor
 			InjectCompositorPlugin(vrevent.data.process.pid);
