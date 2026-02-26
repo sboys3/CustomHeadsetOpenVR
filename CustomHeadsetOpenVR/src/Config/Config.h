@@ -63,7 +63,7 @@ struct CustomShaderConfig{
 	double contrastRight = 50;
 	double contrastMidpointRight = 50;
 	// increase or decrease the variation of the colors
-	double chroma = 50;
+	double saturation = 50;
 	// gamma of the output
 	double gamma = 2.2;
 	// if the subpixels should be offset
@@ -107,7 +107,7 @@ public:
 	
 	class MeganeX8KConfig{
 	public:
-		// if the MeganeX superlight 8K should be shimmed byt this driver
+		// if the MeganeX superlight 8K should be shimmed by this driver
 		bool enable = true;
 		// ipd in mm
 		double ipd = 63.0;
@@ -169,6 +169,8 @@ public:
 		int dscSliceCount = -1;
 		// DSC bits per pixel
 		int dscBPPx16 = -1;
+		// if the driver should be enabled for every hmd
+		bool forceEnable = false;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
@@ -226,7 +228,9 @@ public:
 	std::vector<double> distortionsRed = {};
 	// additional distortion to apply to the blue channel
 	std::vector<double> distortionsBlue = {};
-	// amount to smooth the curve from 0 to 1
+	// if legacy smoothing should be used for bezier curves
+	bool legacySmoothing = false;
+	// amount to smooth the curve from 0 to 1 for legacy smoothing
 	double smoothAmount = 0.66;
 };
 

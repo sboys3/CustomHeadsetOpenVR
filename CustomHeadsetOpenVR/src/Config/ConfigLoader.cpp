@@ -141,6 +141,9 @@ void ConfigLoader::ParseConfig(){
 			if(meganeX8KData["dscBPPx16"].is_number()){
 				newConfig.meganeX8K.dscBPPx16 = meganeX8KData["dscBPPx16"].get<int>();
 			}
+			if(meganeX8KData["forceEnable"].is_boolean()){
+				newConfig.meganeX8K.forceEnable = meganeX8KData["forceEnable"].get<bool>();
+			}
 			
 			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
 				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
@@ -206,8 +209,8 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["contrastMidpointRight"].is_number()){
 				newConfig.customShader.contrastMidpointRight = customShaderData["contrastMidpointRight"].get<double>();
 			}
-			if(customShaderData["chroma"].is_number()){
-				newConfig.customShader.chroma = customShaderData["chroma"].get<double>();
+			if(customShaderData["saturation"].is_number()){
+				newConfig.customShader.saturation = customShaderData["saturation"].get<double>();
 			}
 			if(customShaderData["gamma"].is_number()){
 				newConfig.customShader.gamma = customShaderData["gamma"].get<double>();
@@ -323,6 +326,9 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 		if(data["distortionsBlue"].is_array()){
 			profile.distortionsBlue = data["distortionsBlue"].get<std::vector<double>>();
 		}
+		if(data["legacySmoothing"].is_boolean()){
+			profile.legacySmoothing = data["legacySmoothing"].get<bool>();
+		}
 		if(data["smoothAmount"].is_number()){
 			profile.smoothAmount = data["smoothAmount"].get<double>();
 		}
@@ -385,6 +391,7 @@ void ConfigLoader::WriteInfo(){
 				{"dscVersion", defaultSettings.meganeX8K.dscVersion},
 				{"dscSliceCount", defaultSettings.meganeX8K.dscSliceCount},
 				{"dscBPPx16", defaultSettings.meganeX8K.dscBPPx16},
+				{"forceEnable", defaultSettings.meganeX8K.forceEnable},
 				{"hiddenArea", {
 					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
 					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},
@@ -419,7 +426,7 @@ void ConfigLoader::WriteInfo(){
 				{"contrastMidpointLeft", defaultSettings.customShader.contrastMidpointLeft},
 				{"contrastRight", defaultSettings.customShader.contrastRight},
 				{"contrastMidpointRight", defaultSettings.customShader.contrastMidpointRight},
-				{"chroma", defaultSettings.customShader.chroma},
+				{"saturation", defaultSettings.customShader.saturation},
 				{"gamma", defaultSettings.customShader.gamma},
 				{"subpixelShift", defaultSettings.customShader.subpixelShift},
 				{"disableMuraCorrection", defaultSettings.customShader.disableMuraCorrection},
@@ -733,10 +740,7 @@ void ConfigLoader::WatcherThreadDistortions(){
 // settings not defined here will easily be able to have their defaults changed in the future for everyone
 std::string defaultConfig = R"({
 	"meganeX8K": {
-		"enable": true,
-		"ipd": 63.0,
-		"ipdOffset": 0.0,
-		"distortionProfile": "MeganeX8K Default"
+		"enable": true
 	}
 })";
 

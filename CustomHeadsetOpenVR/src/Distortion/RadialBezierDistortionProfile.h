@@ -20,7 +20,9 @@ public:
 	std::vector<DistortionPoint> distortionsRed = {{0.f, 0.5f}, {47.5f, 0.5f}};
 	// additional percent distortions for the blue channel to be done after the main distortion
 	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.7f}, {47.5f, -0.7f}};
-	// amount to smooth the curve from 0 to 1
+	// if legacy smoothing should be used
+	bool legacySmoothing = false;
+	// amount to smooth the curve from 0 to 1 for legacy smoothing
 	double smoothAmount = 0.66;
 private:
 	// this is automatically calculated from the distortions

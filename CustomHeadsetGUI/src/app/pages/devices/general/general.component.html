@@ -397,17 +397,17 @@
 }
 <div class="field">
     <div class="title">
-        <span i18n>Chroma</span>
+        <span i18n>Saturation</span>
         <app-field-tip i18n-info
-            info="Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale." />
-        <app-reset-button [canReset]="settings.customShader.chroma!=defaults.customShader.chroma"
-            (resetClick)="nested('customShader').resetOption('chroma')"></app-reset-button>
+            info="Adjusts the saturation of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale." />
+        <app-reset-button [canReset]="settings.customShader.saturation!=defaults.customShader.saturation"
+            (resetClick)="nested('customShader').resetOption('saturation')"></app-reset-button>
     </div>
     <div class="control">
-        <input matInput [(ngModel)]="settings.customShader.chroma" step="0.1"
+        <input matInput [(ngModel)]="settings.customShader.saturation" step="0.1"
             (ngModelChange)="saveConfigSettings()" type="number">
         <mat-slider max="100" min="0" step="0.1" showTickMarks>
-            <input matSliderThumb [(ngModel)]="settings.customShader.chroma"
+            <input matSliderThumb [(ngModel)]="settings.customShader.saturation"
                 (ngModelChange)="saveConfigSettings()">
         </mat-slider>
     </div>

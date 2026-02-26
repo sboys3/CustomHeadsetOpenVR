@@ -16,9 +16,11 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	// get property container
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 	
+	std::string lighthouseName = vr::VRProperties()->GetStringProperty(container, vr::Prop_SerialNumber_String);
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
-	DriverLog("headset model: %s", modelNumber);
-	if(modelNumber != "MeganeX superlight 8K" && modelNumber != "MeganeX 8K Mark II"){
+	DriverLog("headset id: %s", lighthouseName);
+	DriverLog("headset model: %s", modelNumber.c_str());
+	if(modelNumber != "MeganeX superlight 8K" && modelNumber != "MeganeX 8K Mark II" && !driverConfig.meganeX8K.forceEnable){
 		// deactivate shim if this is not a MeganeX superlight 8K
 		shimActive = false;
 		return;
@@ -41,16 +43,18 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	
 	
 	// Set EDID id
-	vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xcc4c); // SFL megenex
-	if(!driverConfig.meganeX8K.directMode){
-		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
-	}
-	vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
 	if(driverConfig.meganeX8K.edidVendorIdOverride != 0){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, driverConfig.meganeX8K.edidVendorIdOverride);
+	}else{
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xcc4c); // SFL megenex
 	}
 	if(driverConfig.meganeX8K.edidProductIdOverride != 0){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, driverConfig.meganeX8K.edidProductIdOverride);
+	}else{
+		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
+	}
+	if(!driverConfig.meganeX8K.directMode){
+		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
 	}
 	
 	// it blackscreens and immediately crashes windows when changed at runtime
@@ -104,6 +108,12 @@ void MeganeX8KShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitEr
 	UpdateSettings();
 	
 	// returnValue = vr::VRInitError_None;
+	if(returnValue != vr::VRInitError_None){
+		// nothing is going to work if the driver has failed, so disable the shim
+		shimActive = false;
+	}
+	
+	DriverLog("Starting headset %s with code %i", modelNumber.c_str(), returnValue);
 }
 void MeganeX8KShim::PosTrackedDeviceDeactivate(){
 	isActive = false;
@@ -223,7 +233,7 @@ bool MeganeX8KShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t *&
 
 // define where each eye is drawn onto the output screen
 bool MeganeX8KShim::PreDisplayComponentGetEyeOutputViewport(vr::EVREye &eEye, uint32_t *&pnX, uint32_t *&pnY, uint32_t *&pnWidth, uint32_t *&pnHeight){
-	// X and Y from teh config are seemingly reversed here because the panels are rotated 90 degrees
+	// X and Y from the config are seemingly reversed here because the panels are rotated 90 degrees
 	if(eEye == vr::Eye_Left){
 		*pnX = 0;
 		*pnY = 0;
@@ -311,6 +321,10 @@ void MeganeX8KShim::SetIPD(float ipd, float angle){
 
 
 void MeganeX8KShim::RunFrame(){
+	if(!isActive){
+		// don't do anything if not the active device
+		return;
+	}
 	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
 	double frameTime = now - lastFrameTime;
 	if(lastFrameTime == 0){
@@ -407,6 +421,16 @@ void MeganeX8KShim::UpdateSettings(){
 		vr::VRProperties()->SetInt32Property(container, Prop_DSCBPPx16_Int32, 0);
 	}else{
 		vr::VRProperties()->SetInt32Property(container, Prop_DSCBPPx16_Int32, driverConfig.meganeX8K.dscBPPx16);
+	}
+	if(driverConfig.meganeX8K.edidVendorIdOverride != 0){
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, driverConfig.meganeX8K.edidVendorIdOverride);
+	}else{
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xcc4c);
+	}
+	if(driverConfig.meganeX8K.edidProductIdOverride != 0){
+		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, driverConfig.meganeX8K.edidProductIdOverride);
+	}else{
+		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
 	}
 	
 	//bluetoothDevice

@@ -266,10 +266,10 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 			defines[definesCount++] = {"CONTRAST_PER_EYE_LINEAR", "1"};
 		}
 	}
-	double chroma = driverConfig.customShader.chroma / 50.0;
-	std::string chromaString = std::to_string(chroma);
-	if(chroma != 1){
-		defines[definesCount++] = {"CHROMA", chromaString.c_str()};
+	double saturation = driverConfig.customShader.saturation / 50.0;
+	std::string saturationString = std::to_string(saturation);
+	if(saturation != 1){
+		defines[definesCount++] = {"SATURATION", saturationString.c_str()};
 	}
 	std::string gammaString = std::to_string(driverConfig.customShader.gamma);
 	if(driverConfig.customShader.gamma != 2.2){
@@ -641,7 +641,7 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.contrastMidpointLeft != driverConfigOld.customShader.contrastMidpointLeft;
 				reloadShaders |= driverConfig.customShader.contrastRight != driverConfigOld.customShader.contrastRight;
 				reloadShaders |= driverConfig.customShader.contrastMidpointRight != driverConfigOld.customShader.contrastMidpointRight;
-				reloadShaders |= driverConfig.customShader.chroma != driverConfigOld.customShader.chroma;
+				reloadShaders |= driverConfig.customShader.saturation != driverConfigOld.customShader.saturation;
 				reloadShaders |= driverConfig.customShader.gamma != driverConfigOld.customShader.gamma;
 				reloadShaders |= driverConfig.customShader.subpixelShift != driverConfigOld.customShader.subpixelShift;
 				reloadShaders |= driverConfig.customShader.disableMuraCorrection != driverConfigOld.customShader.disableMuraCorrection;

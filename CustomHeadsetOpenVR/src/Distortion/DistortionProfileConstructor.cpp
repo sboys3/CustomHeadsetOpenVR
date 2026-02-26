@@ -161,6 +161,7 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 				radialBezierProfile->distortionsBlue.push_back({(float)config.distortionsBlue[i * 2], (float)config.distortionsBlue[i * 2 + 1]});
 			}
 		}
+		radialBezierProfile->legacySmoothing = config.legacySmoothing;
 		radialBezierProfile->smoothAmount = config.smoothAmount;
 		newProfile = radialBezierProfile;
 	}

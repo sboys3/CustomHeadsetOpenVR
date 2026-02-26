@@ -73,6 +73,7 @@ export type CustomShaderConfig = {
   contrastRight: number;
   contrastMidpointRight: number;
   chroma: number;
+  saturation: number;
   gamma: number;
   subpixelShift: boolean;
   disableMuraCorrection: boolean;
@@ -162,6 +163,8 @@ export type MeganeX8KConfig = {
   disableEye: number
   
   disableEyeDecreaseFov: number
+  
+  edidVendorIdOverride: number
 
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;

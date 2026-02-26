@@ -95,9 +95,9 @@ struct OutputStruct {
 // this is because each channel in the output gos to different locations on the display.
 // instead the effects must be processed on each input image sample.
 float4 inputColorProcessor(float4 color){
-	#ifdef CHROMA
+	#ifdef SATURATION
 	float grayScale = dot(color.rgb, float3(0.299, 0.587, 0.114));
-	color.rgb = lerp(grayScale, color.rgb, CHROMA);
+	color.rgb = lerp(grayScale, color.rgb, SATURATION);
 	#endif
 	#ifdef COLOR_CORRECTION_MATRIX
 	// this matrix converts from linear srgb to linear display p3 on the MeganeX

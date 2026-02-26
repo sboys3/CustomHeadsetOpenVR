@@ -12,6 +12,12 @@ struct Point2D{
 	float y = 0.f;
 };
 
+struct Point3D{
+	float x = 0.f;
+	float y = 0.f;
+	float z = 0.f;
+};
+
 // An abstract class that all distortion profiles are derived from
 class DistortionProfile{
 public:

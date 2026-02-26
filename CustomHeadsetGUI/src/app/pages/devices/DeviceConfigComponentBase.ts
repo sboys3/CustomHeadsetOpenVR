@@ -73,6 +73,13 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                     isDefault: false,
                     file: f
                 }))]
+            
+            if(info?.defaultSettings?.customShader?.saturation && this.rootSetting && this.rootSetting?.customShader?.chroma != info?.defaultSettings?.customShader?.chroma && (this?.rootSetting?.customShader?.saturation == undefined || this.rootSetting?.customShader?.saturation == info.defaultSettings?.customShader?.saturation)) {
+                // migrate chroma to saturation if chroma is set and saturation is not
+                this.rootSetting.customShader.saturation = this.rootSetting.customShader.chroma
+                this.rootSetting.customShader.chroma = info?.defaultSettings?.customShader?.chroma
+                this.saveConfigSettings()
+            }
         });
 
         effect(() => {

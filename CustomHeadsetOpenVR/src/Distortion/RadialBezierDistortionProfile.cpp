@@ -6,6 +6,11 @@ constexpr float kPi{ 3.141592653589793238462643383279502884197169399375105820974
 
 using DistortionPoint = RadialBezierDistortionProfile::DistortionPoint;
 
+// linear interpolation between two values based on a t value between 0 and 1
+static constexpr float lerp(float a, float b, float t){
+	return a + t * (b - a);
+}
+
 // calculates a point on a cubic Bezier curve given a parameter t and a set of control points.
 static DistortionPoint BezierPoint(float t, const std::vector<DistortionPoint>& controlPoints){
 	float tSquared = t * t;
@@ -68,10 +73,192 @@ static std::vector<DistortionPoint> SmoothPoints(const std::vector<DistortionPoi
 	return outPoints;
 }
 
-// linear interpolation between two values based on a t value between 0 and 1
-static constexpr float lerp(float a, float b, float t){
-	return a + t * (b - a);
+void logVector(const char* label, const std::vector<DistortionPoint>& points){
+	std::string out = label;
+	out += " [";
+	for(size_t i = 0; i < points.size(); i++){
+		out += "(" + std::to_string(points[i].degree) + ", " + std::to_string(points[i].position) + ")";
+		if(i < points.size() - 1) out += ", ";
+	}
+	out += "]";
+	DriverLog(out.c_str());
 }
+void logVector(const char* label, const std::vector<float>& points){
+	std::string out = label;
+	out += " [";
+	for(size_t i = 0; i < points.size(); i++){
+		out += std::to_string(points[i]);
+		if(i < points.size() - 1) out += ", ";
+	}
+	out += "]";
+	DriverLog(out.c_str());	
+}
+
+
+
+// adapted from https://www.stkent.com/2015/07/03/building-smooth-paths-using-bezier-curves.html
+class PolyBezierPathUtil {
+public:
+	struct MathPoint {
+		float x, y;
+		MathPoint(float x = 0, float y = 0) : x(x), y(y) {}
+		MathPoint operator+(const MathPoint& other) const { return MathPoint(x + other.x, y + other.y); }
+		MathPoint operator-(const MathPoint& other) const { return MathPoint(x - other.x, y - other.y); }
+		// MathPoint scaleBy(float scalar) const { return MathPoint(x * scalar, y * scalar); }
+		MathPoint operator*(float scalar) const { return MathPoint(x * scalar, y * scalar); }
+	};
+	static void logVectorMathPoint(const char* label, const std::vector<PolyBezierPathUtil::MathPoint>& points){
+		std::string out = label;
+		out += " [" + std::to_string(points.size()) + "][";
+		for(size_t i = 0; i < points.size(); i++){
+			out += "(" + std::to_string(points[i].x) + ", " + std::to_string(points[i].y) + ")";
+			if(i < points.size() - 1) out += ", ";
+		}
+		out += "]";
+		DriverLog(out.c_str());
+	}
+	static std::vector<MathPoint> computeControlPoints(const std::vector<MathPoint>& knots) {
+		int n = knots.size() - 1;
+		if(n < 2) return {};
+		std::vector<MathPoint> result(2 * n, 0);
+		std::vector<MathPoint> target = constructTargetVector(n, knots);
+		std::vector<float> lowerDiag = constructLowerDiagonalVector(n - 1);
+		std::vector<float> mainDiag = constructMainDiagonalVector(n);
+		std::vector<float> upperDiag = constructUpperDiagonalVector(n - 1);
+		
+		std::vector<MathPoint> newTarget(n, 0);
+		std::vector<float> newUpperDiag(n - 1, 0);
+
+		// Forward sweep
+		newUpperDiag[0] = upperDiag[0] / mainDiag[0];
+		newTarget[0] = target[0] * (1.0f / mainDiag[0]);
+		
+		for (int i = 1; i < n - 1; i++) {
+			newUpperDiag[i] = upperDiag[i] / (mainDiag[i] - (lowerDiag[i - 1] * newUpperDiag[i - 1]));
+		}
+		// DriverLog("n = %i", n);
+		// logVectorMathPoint("knots", knots);
+		// logVector("lowerDiag", lowerDiag);
+		// logVector("mainDiag", mainDiag);
+		// logVector("upperDiag", upperDiag);
+		// logVectorMathPoint("target", target);
+		// logVectorMathPoint("newTarget", newTarget);
+		// logVector("newUpperDiag", newUpperDiag);
+		for (int i = 1; i < n; i++) {
+			float targetScale = 1.0f / (mainDiag[i] - (lowerDiag[i - 1] * newUpperDiag[i - 1]));
+			MathPoint diff = target[i] - (newTarget[i - 1] * lowerDiag[i - 1]);
+			newTarget[i] = diff * targetScale;
+		}
+
+		// Backward sweep
+		result[n - 1] = newTarget[n - 1];
+		for (int i = n - 2; i >= 0; i--) {
+			result[i] = newTarget[i] - (result[i + 1] * newUpperDiag[i]);
+		}
+		// logVectorMathPoint("result", result);
+
+		// Calculate remaining control points directly
+		for (int i = 0; i < n - 1; i++) {
+			result[n + i] = (knots[i + 1] * 2.0f) - result[i + 1];
+		}
+		result[2 * n - 1] = (knots[n] * 0.5f) + (result[n - 1] * 0.5f);
+		// logVectorMathPoint("result2", result);
+		
+		return result;
+	}
+	
+private:
+
+	static std::vector<MathPoint> constructTargetVector(int n, const std::vector<MathPoint>& knots) {
+		std::vector<MathPoint> result(n, 0);
+		result[0] = knots[0] + knots[1] * 2.0f;
+		DriverLog("n = %i result[0] = %f,%f knots[0] = %f,%f knots[1] = %f,%f", n, result[0].x, result[0].y, knots[0].x, knots[0].y, knots[1].x, knots[1].y);
+		for (int i = 1; i < n - 1; i++) {
+			result[i] = ((knots[i] * 2.0f) + knots[i + 1]) * 2.0f;
+			DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, i, result[i].x, result[i].y, i, knots[i].x, knots[i].y, i+1, knots[i+1].x, knots[i+1].y);
+		}
+		result[n - 1] = knots[n - 1] * 8.0f + knots[n];
+		DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, n - 1, result[n - 1].x, result[n - 1].y, n - 1, knots[n - 1].x, knots[n - 1].y, n, knots[n].x, knots[n].y);
+		return result;
+	}
+
+	static std::vector<float> constructLowerDiagonalVector(int length) {
+		std::vector<float> result(length, 0);
+		for (int i = 0; i < length - 1; i++) {
+			result[i] = 1.0f;
+		}
+		result[length - 1] = 2.0f;
+		return result;
+	}
+
+	static std::vector<float> constructMainDiagonalVector(int n) {
+		std::vector<float> result(n, 0);
+		result[0] = 2.0f;
+		for (int i = 1; i < n - 1; i++) {
+			result[i] = 4.0f;
+		}
+		result[n - 1] = 7.0f;
+		return result;
+	}
+
+	static std::vector<float> constructUpperDiagonalVector(int length) {
+		std::vector<float> result(length, 0);
+		for (int i = 0; i < length; i++) {
+			result[i] = 1.0f;
+		}
+		return result;
+	}
+};
+
+/**
+ * New implementation of SmoothPoints using a different algorithm that produces smoother curves.
+ * The results are twice diffentaible which produces smooth curves and smooth derivatives.
+ */
+static std::vector<DistortionPoint> SmoothPoints2(const std::vector<DistortionPoint>& points, int innerPointCounts){
+	// return for edge cases
+	if(points.size() == 0){
+		return  {{0,0},{0,0}};
+	}
+	std::vector <DistortionPoint> outPoints = {};
+	if(points.size() == 1){
+		// return {{points[0].degree, points[0].position},{points[0].degree, points[0].position}};
+		for(int i = 0; i <= innerPointCounts; i++){
+			outPoints.push_back({points[0].degree, points[0].position});
+		}
+		return outPoints;
+	}
+	if(points.size() == 2){
+		for(int i = 0; i <= innerPointCounts; i++){
+			float t = i / static_cast<float>(innerPointCounts);
+			outPoints.push_back({lerp(points[0].degree, points[1].degree, t), lerp(points[0].position, points[1].position, t)});
+		}
+		return outPoints;
+	}
+	std::vector<PolyBezierPathUtil::MathPoint> mathPoints = {};
+	for(const auto& point : points){
+		mathPoints.push_back(PolyBezierPathUtil::MathPoint(point.degree, point.position));
+	}
+	auto allControlPoints = PolyBezierPathUtil::computeControlPoints(mathPoints);
+	int otherControlPointOffset = allControlPoints.size() / 2; 
+	for(size_t i = 0; i < points.size() - 1; i++){
+		outPoints.push_back(points[i]);
+		// generate inner points based on the bezier curve
+		std::vector<DistortionPoint> controlPoints = {
+			points[i],
+			{allControlPoints[i].x, allControlPoints[i].y},
+			{allControlPoints[i + otherControlPointOffset].x, allControlPoints[i + otherControlPointOffset].y},
+			points[i + 1]
+		};
+		// logVector("control points", controlPoints);
+		for(int j = 0; j < innerPointCounts; j++){
+			float t = (j + 1) / static_cast<float>(innerPointCounts + 1);
+			outPoints.push_back(BezierPoint(t, controlPoints));
+		}
+	}
+	outPoints.push_back(points[points.size() - 1]);
+	return outPoints;
+}
+
 
 // sample a value from the points based on the degree
 static float SampleFromPoints(const std::vector<DistortionPoint>& points, float degree){
@@ -136,10 +323,19 @@ float RadialBezierDistortionProfile::ComputePPD(std::vector<DistortionPoint> dis
 
 void RadialBezierDistortionProfile::Initialize(){
 	Cleanup();
-		// smooth the points
-	std::vector<DistortionPoint> distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints, (float)smoothAmount / 2.0f);
-	std::vector<DistortionPoint> distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints, (float)smoothAmount / 2.0f);
-	std::vector<DistortionPoint> distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints, (float)smoothAmount / 2.0f);
+	// smooth the points
+	std::vector<DistortionPoint> distortionsSmoothGreen;
+	std::vector<DistortionPoint> distortionsRedPercent;
+	std::vector<DistortionPoint> distortionsBluePercent;
+	if(legacySmoothing){
+		distortionsSmoothGreen = SmoothPoints(distortions, inBetweenPoints, (float)smoothAmount / 2.0f);
+		distortionsRedPercent = SmoothPoints(distortionsRed, inBetweenPoints, (float)smoothAmount / 2.0f);
+		distortionsBluePercent = SmoothPoints(distortionsBlue, inBetweenPoints, (float)smoothAmount / 2.0f);
+	}else{
+		distortionsSmoothGreen = SmoothPoints2(distortions, inBetweenPoints);
+		distortionsRedPercent = SmoothPoints2(distortionsRed, inBetweenPoints);
+		distortionsBluePercent = SmoothPoints2(distortionsBlue, inBetweenPoints);
+	}
 	
 	std::vector<DistortionPoint> distortionsSmoothRed = distortionsSmoothGreen;
 	std::vector<DistortionPoint> distortionsSmoothBlue = distortionsSmoothGreen;

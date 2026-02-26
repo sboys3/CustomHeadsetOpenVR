@@ -64,11 +64,11 @@ pub fn restart_vrcompositor() -> bool {
     for (_pid, process) in system.processes() {
         if process.name().eq_ignore_ascii_case(target_compositor_process_name) {
             compositor_process = Some(process);
-            break;
+            continue;
         }
         if process.name().eq_ignore_ascii_case(target_server_process_name) {
             server_process = Some(process);
-            break;
+            continue;
         }
     }
     // kill and get path of current compositor
@@ -83,6 +83,7 @@ pub fn restart_vrcompositor() -> bool {
                         println!("failed to kill vrcompositor");
                         return false;
                     }else{
+                        println!("killed vrcompositor");
                         sleep(Duration::from_millis(1000));
                         Some(valid_path)
                     }
