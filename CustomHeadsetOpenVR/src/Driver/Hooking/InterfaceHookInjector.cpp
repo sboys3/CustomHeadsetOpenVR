@@ -42,6 +42,13 @@ static void DetourTrackedDeviceAdded006(vr::IVRServerDriverHost *_this, const ch
 	if (Driver->HandleDeviceAdded(pchDeviceSerialNumber, eDeviceClass, pDriver))  
 	{
 		TrackedDeviceAddedHook006.originalFunc(_this, pchDeviceSerialNumber, eDeviceClass, pDriver);
+		// // Add 19 more copies with random serial numbers
+		// for (int i = 0; i < 19; i++)
+		// {
+		// 	char serial[32]{};
+		// 	snprintf(serial, sizeof(serial), "FIM-%d-%d", i, rand());
+		// 	TrackedDeviceAddedHook006.originalFunc(_this, serial, eDeviceClass, pDriver);
+		// }
 	}
 }
 

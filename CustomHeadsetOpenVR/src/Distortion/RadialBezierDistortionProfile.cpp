@@ -172,13 +172,13 @@ private:
 	static std::vector<MathPoint> constructTargetVector(int n, const std::vector<MathPoint>& knots) {
 		std::vector<MathPoint> result(n, 0);
 		result[0] = knots[0] + knots[1] * 2.0f;
-		DriverLog("n = %i result[0] = %f,%f knots[0] = %f,%f knots[1] = %f,%f", n, result[0].x, result[0].y, knots[0].x, knots[0].y, knots[1].x, knots[1].y);
+		// DriverLog("n = %i result[0] = %f,%f knots[0] = %f,%f knots[1] = %f,%f", n, result[0].x, result[0].y, knots[0].x, knots[0].y, knots[1].x, knots[1].y);
 		for (int i = 1; i < n - 1; i++) {
 			result[i] = ((knots[i] * 2.0f) + knots[i + 1]) * 2.0f;
-			DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, i, result[i].x, result[i].y, i, knots[i].x, knots[i].y, i+1, knots[i+1].x, knots[i+1].y);
+			// DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, i, result[i].x, result[i].y, i, knots[i].x, knots[i].y, i+1, knots[i+1].x, knots[i+1].y);
 		}
 		result[n - 1] = knots[n - 1] * 8.0f + knots[n];
-		DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, n - 1, result[n - 1].x, result[n - 1].y, n - 1, knots[n - 1].x, knots[n - 1].y, n, knots[n].x, knots[n].y);
+		// DriverLog("n = %i result[%i] = %f,%f knots[%i] = %f,%f knots[%i] = %f,%f", n, n - 1, result[n - 1].x, result[n - 1].y, n - 1, knots[n - 1].x, knots[n - 1].y, n, knots[n].x, knots[n].y);
 		return result;
 	}
 
@@ -486,6 +486,15 @@ void RadialBezierDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfL
 
 Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV){
 	
+	// offset distortions
+	// TODO: the offset also needs to effect the clip planes
+	if(eEye == vr::Eye_Left){
+		fU += offsetX / 100.0f;
+	}else{
+		fU -= offsetX / 100.0f;
+	}
+	fV += offsetY / 100.0f;
+	
 	// convert to radius and unit vector
 	float radius = std::sqrt(fU * fU + fV * fV);
 	float unitU = fU / radius;
@@ -497,6 +506,8 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	if(!std::isfinite(unitV)){
 		unitV = 0;
 	}
+	
+	
 	
 	// sample distortion map for the given radius and color channel
 	switch (colorChannel){

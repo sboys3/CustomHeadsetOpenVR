@@ -20,6 +20,10 @@ public:
 	std::vector<DistortionPoint> distortionsRed = {{0.f, 0.5f}, {47.5f, 0.5f}};
 	// additional percent distortions for the blue channel to be done after the main distortion
 	std::vector<DistortionPoint> distortionsBlue = {{0.f, -0.7f}, {47.5f, -0.7f}};
+	// offset image outwards on the display using the same 0 to 100 scale 
+	float offsetX = 0.0f;
+	// offset image upwards on the display using the same 0 to 100 scale
+	float offsetY = 0.0f;
 	// if legacy smoothing should be used
 	bool legacySmoothing = false;
 	// amount to smooth the curve from 0 to 1 for legacy smoothing

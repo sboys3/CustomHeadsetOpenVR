@@ -154,9 +154,16 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 }
 
 
-static std::map<ConfigLoader::HeadsetType, std::vector<double>> srgbColorCorrectionMatrices = {
-	{ConfigLoader::HeadsetType::MeganeX8K, {
+static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionMatrices = {
+	{Config::HeadsetType::MeganeX8K, {
 		// convert sRGB into the section of the dci-p3 color space it occupies
+		0.8224619687143621, 0.17753803128563772, 0.0, 
+		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
+		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
+	}},
+	{Config::HeadsetType::DreamAir, {
+		// convert sRGB into the section of the dci-p3 color space it occupies
+		// I have not verified that this is correct for the sony panels
 		0.8224619687143621, 0.17753803128563772, 0.0, 
 		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
 		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
@@ -201,17 +208,23 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	// create defines for shader settings
 	D3D_SHADER_MACRO defines[50] = {};
 	int definesCount = 0;
-	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
 		if(driverConfig.customShader.subpixelShift && driverConfig.meganeX8K.subpixelShift != 0 && driverConfig.meganeX8K.resolutionY == 3552){
 			// only do this if the subpixel shift is not zero and it is running at full resolution
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_MEGANEX8K", "1"};
 		}
 	}
-	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::Vive){
 		defines[definesCount++] = {"VIVE", "1"};
 		if(driverConfig.customShader.subpixelShift){
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_VIVE", "1"};
+		}
+	}
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir){
+		defines[definesCount++] = {"DREAMAIR", "1"};
+		if(driverConfig.customShader.subpixelShift){
+			defines[definesCount++] = {"SUBPIXEL_SHIFT_DREAMAIR", "1"};
 		}
 	}
 	std::string resolutionX = std::to_string(driverConfigLoader.info.outputResolutionX);
@@ -403,7 +416,7 @@ Bytecode DistortionShaderPlain(){
 
 // same as DistortionShader but with mura correction enabled
 Bytecode DistortionShaderMuraCorrection(){
-	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
 		// don't compile for headsets that will not use it
 		return {nullptr, 0};
 	}
@@ -412,7 +425,7 @@ Bytecode DistortionShaderMuraCorrection(){
 
 // same as DistortionShader but with no distortion enabled
 Bytecode DistortionShaderNoDistortion(){
-	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K || driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::Vive){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K || driverConfigLoader.info.connectedHeadset == Config::HeadsetType::Vive){
 		// don't compile for headsets that will not use it
 		return {nullptr, 0};
 	}

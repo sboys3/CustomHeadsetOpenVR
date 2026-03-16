@@ -2,10 +2,12 @@
 #include "DriverLog.h"
 #include "DeviceShim.h"
 #include "CompositorPlugin.h"
+// #include "HidModifier.h"
 
 #include "Hooking/InterfaceHookInjector.h"
 
 #include "../Headsets/MeganeX8K.h"
+#include "../Headsets/DreamAir.h"
 #include "../Headsets/GenericHeadset.h"
 
 #include "../Config/ConfigLoader.h"
@@ -23,6 +25,7 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
+	// hidModifier.InjectHooks();
 	return vr::VRInitError_None;
 }
 const char *const *CustomHeadsetDeviceProvider::GetInterfaceVersions(){
@@ -65,7 +68,8 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 				// add context based on the event data.
 				uint32_t id = static_cast<uint32_t>(data.reserved1);
 				vr::IVRDriverContext* ctx = (vr::IVRDriverContext*)data.reserved2;
-				DriverLog("Received context collection event for device with ID: %d, Context: %p", id, ctx);	
+				// logging here seems to deadlock on occasion
+				// DriverLog("Received context collection event for device with ID: %d, Context: %p", id, ctx);	
 				driverContextsByDeviceId[id] = ctx;
 				// send any queued events
 				if(queuedEvents.find(id) != queuedEvents.end()){
@@ -105,6 +109,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		InjectCompositorPlugin();
 		customShaderEnabled = true;
 	}
+	// hidModifier.RunFrame();
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
 }
@@ -154,6 +159,15 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		// add more shims here, they can stack and none of the functions are particularly hot
 		// later shims can override earlier shims
 		// the PosTrackedDeviceActivate function will likely have enough information that you can decide if it is the device you want and can then set shimActive to false to deactivate the shim
+		
+		// TODO: validate the interface versions of drivers and make the shims conform to versions to prevent potential crashes
+		
+		if(driverConfig.dreamAir.enable){
+			DreamAirShim* dreamAirShim = new DreamAirShim();
+			dreamAirShim->deviceProvider = this;
+			shims.insert(dreamAirShim);
+			pDriver = new ShimTrackedDeviceDriver(dreamAirShim, pDriver);
+		}
 		
 		if(driverConfig.meganeX8K.enable){
 			MeganeX8KShim* meganeX8KShim = new MeganeX8KShim();

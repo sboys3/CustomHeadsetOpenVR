@@ -7,3 +7,5 @@
 extern void DriverLog( const char *pchFormat, ... );
 
 extern void DebugDriverLog( const char *pchFormat, ... );
+
+extern void DriverLogString( const char *buf );

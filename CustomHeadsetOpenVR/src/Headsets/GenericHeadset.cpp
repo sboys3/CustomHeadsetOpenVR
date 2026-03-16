@@ -9,11 +9,11 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 	
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
 	if(modelNumber == "Vive. MV"){
-		driverConfigLoader.info.connectedHeadset = ConfigLoader::HeadsetType::Vive;
+		driverConfigLoader.info.connectedHeadset = Config::HeadsetType::Vive;
 	}
-	if(returnValue == vr::VRInitError_None && driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::None){
+	if(returnValue == vr::VRInitError_None && driverConfigLoader.info.connectedHeadset == Config::HeadsetType::None){
 		// mark that there has been some headset found
-		driverConfigLoader.info.connectedHeadset = ConfigLoader::HeadsetType::Other;
+		driverConfigLoader.info.connectedHeadset = Config::HeadsetType::Other;
 	}
 	driverConfigLoader.WriteInfo();
 	
@@ -21,6 +21,8 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 		uint64_t existingFeatures = vr::VRProperties()->GetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64);
 		vr::VRProperties()->SetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64, existingFeatures | vr::AdditionalRadioFeatures_HTCLinkBox);
 	}
+	
+	
 	
 	// currently this does nothing else so disable the shim
 	shimActive = false;
@@ -39,5 +41,10 @@ void GenericHeadsetShim::HandleEvent(const vr::VREvent_t &event){
 		websocket->close();
 		websocket->poll(); // final poll to close the connection
 		delete websocket;
+	}
+	if(driverConfig.forceTracking && event.eventType == vr::VREvent_TrackedDeviceActivated){
+		// initial pose
+		vr::DriverPose_t pose = {};
+		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(event.trackedDeviceIndex, pose, sizeof(vr::DriverPose_t));
 	}
 }

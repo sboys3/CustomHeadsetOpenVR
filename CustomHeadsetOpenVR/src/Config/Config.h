@@ -104,11 +104,20 @@ struct CustomShaderConfig{
 
 class Config{
 public:
+	enum HeadsetType{
+		None = 0,
+		Other = 1,
+		MeganeX8K = 2,
+		Vive = 3,
+		DreamAir = 4,
+	};
 	
-	class MeganeX8KConfig{
+	class BaseHeadsetConfig{
 	public:
-		// if the MeganeX superlight 8K should be shimmed by this driver
+		// if the headset should be shimmed by this driver
 		bool enable = true;
+		// the type of headset this is
+		HeadsetType headsetType = HeadsetType::None;
 		// ipd in mm
 		double ipd = 63.0;
 		// ipd offset from the ipd value in mm
@@ -118,7 +127,7 @@ public:
 		// tint the display this color
 		ConfigColor colorMultiplier = {};
 		// distortion profile to use
-		std::string distortionProfile = "MeganeX8K Default";
+		std::string distortionProfile = "None";
 		// amount to zoom in the distortion profile
 		double distortionZoom = 1.0;
 		// amount to zoom in the FOV, the fov is divided by this value
@@ -129,6 +138,8 @@ public:
 		int resolutionX = 3840;
 		// height of one eye in pixels
 		int resolutionY = 3552;
+		// clockwise rotation of the image on the right display, 0:0, 1:90, 2:180, 3:270
+		int displayRotation = 0;
 		// max horizontal fov
 		double maxFovX = 100.0;
 		// max vertical fov
@@ -159,6 +170,10 @@ public:
 		bool directMode = true;
 		// if the icons in the SteamVR status window should be modified
 		bool replaceIcons = true;
+		// the edid for the headset
+		int edidVendorId = 0;
+		// the edid for the headset
+		int edidProductId = 0;
 		// if non zero, override the edid vendor id
 		int edidVendorIdOverride = 0;
 		// if non zero, override the edid product id
@@ -176,8 +191,32 @@ public:
 		// config for dimming the display when stationary
 		StationaryDimmingConfig stationaryDimming = {};
 	};
+	
+	class MeganeX8KConfig : public BaseHeadsetConfig{
+	public:
+		MeganeX8KConfig(){
+			headsetType = HeadsetType::MeganeX8K;
+			distortionProfile = "MeganeX8K Default";
+			edidVendorId = 0xcc4c; // SFL
+			displayRotation = 1;
+		}
+	};
 	// config for the MeganeX superlight 8K
-	MeganeX8KConfig meganeX8K;
+	MeganeX8KConfig meganeX8K = {};
+	
+	class DreamAirConfig : public BaseHeadsetConfig{
+		public:
+		DreamAirConfig(){
+			headsetType = HeadsetType::DreamAir;
+			distortionProfile = "Dream Air Default";
+			maxFovY = 86;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			eyeRotation = 2;
+		}
+	};
+	// config for the Dream Air
+	DreamAirConfig dreamAir = {};
 	
 	class GeneralHeadsetConfig{
 	public:
@@ -228,6 +267,10 @@ public:
 	std::vector<double> distortionsRed = {};
 	// additional distortion to apply to the blue channel
 	std::vector<double> distortionsBlue = {};
+	// offset image outwards on the display using the same 0 to 100 scale 
+	float offsetX = 0.0f;
+	// offset image upwards on the display using the same 0 to 100 scale
+	float offsetY = 0.0f;
 	// if legacy smoothing should be used for bezier curves
 	bool legacySmoothing = false;
 	// amount to smooth the curve from 0 to 1 for legacy smoothing

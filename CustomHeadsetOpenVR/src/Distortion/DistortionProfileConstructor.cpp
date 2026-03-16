@@ -163,6 +163,8 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 		}
 		radialBezierProfile->legacySmoothing = config.legacySmoothing;
 		radialBezierProfile->smoothAmount = config.smoothAmount;
+		radialBezierProfile->offsetX = config.offsetX;
+		radialBezierProfile->offsetY = config.offsetY;
 		newProfile = radialBezierProfile;
 	}
 	

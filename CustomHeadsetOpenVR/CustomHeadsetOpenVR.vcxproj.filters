@@ -134,5 +134,11 @@
     <ClCompile Include="..\ThirdParty\zlib\deflate.c">
       <Filter>Source Files\zlib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Headsets\BaseHeadset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Headsets\DreamAir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

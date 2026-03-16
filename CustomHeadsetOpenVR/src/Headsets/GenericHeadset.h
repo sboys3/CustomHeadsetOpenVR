@@ -1,3 +1,4 @@
+#pragma once
 #include "../Driver/DeviceShim.h"
 #include "../Driver/DeviceProvider.h"
 #include "../Driver/DriverLog.h"

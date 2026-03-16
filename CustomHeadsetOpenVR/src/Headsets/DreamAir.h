@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseHeadset.h"
 
-class MeganeX8KShim : public BaseHeadsetShim{
+class DreamAirShim : public BaseHeadsetShim{
 public:
 	// function that returns if this is a MeganeX8K headset
 	virtual bool IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container);
@@ -9,6 +9,4 @@ public:
 	virtual Config::BaseHeadsetConfig& GetConfig();
 	// function that returns the old config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfigOld();
-	// revision of the headset 1: original 2: mk2
-	int headsetRevision = 1;
 };

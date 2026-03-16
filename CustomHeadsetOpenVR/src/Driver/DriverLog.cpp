@@ -12,11 +12,7 @@
 #include "windows.h"
 #endif
 
-static void DriverLogVarArgs( const char *pMsgFormat, va_list args )
-{
-	char buf[ 1024 ];
-	vsnprintf_s( buf, sizeof( buf ), pMsgFormat, args );
-	
+void DriverLogString( const char *buf ){
 	if(vr::VRDriverContext() != nullptr){
 		vr::VRDriverLog()->Log( buf );
 	}else{
@@ -26,6 +22,14 @@ static void DriverLogVarArgs( const char *pMsgFormat, va_list args )
 		OutputDebugStringA( "\n" );
 		#endif
 	}
+}
+
+static void DriverLogVarArgs( const char *pMsgFormat, va_list args )
+{
+	char buf[ 1024 ];
+	vsnprintf_s( buf, sizeof( buf ), pMsgFormat, args );
+	
+	DriverLogString( buf );
 }
 
 

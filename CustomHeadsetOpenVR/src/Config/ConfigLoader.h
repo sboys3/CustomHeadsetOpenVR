@@ -7,12 +7,6 @@
 // This class loads config files and watches for changes to them, updating the global config object as needed.
 class ConfigLoader{
 public:
-	enum HeadsetType{
-		None = 0,
-		Other = 1,
-		MeganeX8K = 2,
-		Vive = 3,
-	};
 	// class to contain info from elsewhere in the driver to write to info.json
 	// this is not structured in the same way as the json file so check WriteInfo in ConfigLoader.cpp
 	class Info{
@@ -32,7 +26,7 @@ public:
 		std::string debugLog = "";
 		std::string driverResources = "";
 		std::string steamvrResources = "";
-		HeadsetType connectedHeadset = HeadsetType::None;
+		Config::HeadsetType connectedHeadset = Config::HeadsetType::None;
 		// if a headset that does not use the steamvr compositor is connected
 		bool nonNativeHeadsetFound = false;
 		// used when watching info
@@ -73,11 +67,11 @@ inline bool IsCustomShaderEnabled(){
 	if(!driverConfig.customShader.enable){
 		return false;
 	}
-	if(driverConfigLoader.info.connectedHeadset == ConfigLoader::HeadsetType::MeganeX8K){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
 		return driverConfig.customShader.enableForMeganeX8K;
 	}
 	// all other headsets that do not have explicit toggles
-	if(driverConfigLoader.info.connectedHeadset != ConfigLoader::HeadsetType::None){
+	if(driverConfigLoader.info.connectedHeadset != Config::HeadsetType::None){
 		return driverConfig.customShader.enableForOther;
 	}
 	return false;

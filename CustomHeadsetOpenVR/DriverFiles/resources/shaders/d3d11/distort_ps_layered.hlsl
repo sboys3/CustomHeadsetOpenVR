@@ -797,6 +797,14 @@ OutputStruct main(in InputStruct IN)
 	#include "distort_ps_layered_after_test.hlsl"
 	#endif
 	
+	
+	#ifdef MEGANEX8K
+	// mitigate banding on the BOE panels at the edge of the color space
+	float maxSubpixel = max(col.r, max(col.g, col.b));
+	float3 minSubpixels = min(maxSubpixel * 0.2, float3(0.04, 0.03, 0.02));
+	col.rgb = max(col.rgb, minSubpixels);
+	#endif
+	
 	// set sub-pixels outside of uvs to zero to prevent fringing on the edges
 	// float2 uv = IN.uv1.zw;
 	// if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0){

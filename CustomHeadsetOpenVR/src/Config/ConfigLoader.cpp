@@ -25,6 +25,131 @@ std::string ConfigLoader::GetConfigFolder(){
 	return configPath;
 }
 
+void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headsetConfig){
+	if(headsetData["enable"].is_boolean()){
+		headsetConfig.enable = headsetData["enable"].get<bool>();
+	}
+	if(headsetData["ipd"].is_number()){
+		headsetConfig.ipd = headsetData["ipd"].get<double>();
+	}
+	if(headsetData["ipdOffset"].is_number()){
+		headsetConfig.ipdOffset = headsetData["ipdOffset"].get<double>();
+	}
+	if(headsetData["blackLevel"].is_number()){
+		headsetConfig.blackLevel = headsetData["blackLevel"].get<double>();
+	}
+	if(headsetData["colorMultiplier"].is_object()){
+		ConfigColor &colorMultiplier = headsetConfig.colorMultiplier;
+		if(headsetData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = headsetData["colorMultiplier"]["r"].get<double>(); }
+		if(headsetData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = headsetData["colorMultiplier"]["g"].get<double>(); }
+		if(headsetData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = headsetData["colorMultiplier"]["b"].get<double>(); }
+	}
+	if(headsetData["distortionProfile"].is_string()){
+		headsetConfig.distortionProfile = headsetData["distortionProfile"].get<std::string>();
+	}
+	if(headsetData["distortionZoom"].is_number()){
+		headsetConfig.distortionZoom = headsetData["distortionZoom"].get<double>();
+	}
+	if(headsetData["fovZoom"].is_number()){
+		headsetConfig.fovZoom = headsetData["fovZoom"].get<double>();
+	}
+	if(headsetData["subpixelShift"].is_number()){
+		headsetConfig.subpixelShift = headsetData["subpixelShift"].get<double>();
+	}
+	if(headsetData["resolutionX"].is_number()){
+		headsetConfig.resolutionX = headsetData["resolutionX"].get<int>();
+	}
+	if(headsetData["resolutionY"].is_number()){
+		headsetConfig.resolutionY = headsetData["resolutionY"].get<int>();
+	}
+	if(headsetData["displayRotation"].is_number()){
+		headsetConfig.displayRotation = headsetData["displayRotation"].get<int>();
+	}
+	if(headsetData["maxFovX"].is_number()){
+		headsetConfig.maxFovX = headsetData["maxFovX"].get<double>();
+	}
+	if(headsetData["maxFovY"].is_number()){
+		headsetConfig.maxFovY = headsetData["maxFovY"].get<double>();
+	}
+	if(headsetData["distortionMeshResolution"].is_number()){
+		headsetConfig.distortionMeshResolution = headsetData["distortionMeshResolution"].get<int>();
+	}
+	if(headsetData["fovBurnInPrevention"].is_boolean()){
+		headsetConfig.fovBurnInPrevention = headsetData["fovBurnInPrevention"].get<bool>();
+	}
+	if(headsetData["renderResolutionMultiplierX"].is_number()){
+		headsetConfig.renderResolutionMultiplierX = headsetData["renderResolutionMultiplierX"].get<double>();
+	}
+	if(headsetData["renderResolutionMultiplierY"].is_number()){
+		headsetConfig.renderResolutionMultiplierY = headsetData["renderResolutionMultiplierY"].get<double>();
+	}
+	if(headsetData["superSamplingFilterPercent"].is_number()){
+		headsetConfig.superSamplingFilterPercent = headsetData["superSamplingFilterPercent"].get<double>();
+	}
+	if(headsetData["secondsFromVsyncToPhotons"].is_number()){
+		headsetConfig.secondsFromVsyncToPhotons = headsetData["secondsFromVsyncToPhotons"].get<double>();
+	}
+	if(headsetData["secondsFromPhotonsToVblank"].is_number()){
+		headsetConfig.secondsFromPhotonsToVblank = headsetData["secondsFromPhotonsToVblank"].get<double>();
+	}
+	if(headsetData["eyeRotation"].is_number()){
+		headsetConfig.eyeRotation = headsetData["eyeRotation"].get<double>();
+	}
+	if(headsetData["disableEye"].is_number()){
+		headsetConfig.disableEye = headsetData["disableEye"].get<int>();
+	}
+	if(headsetData["disableEyeDecreaseFov"].is_boolean()){
+		headsetConfig.disableEyeDecreaseFov = headsetData["disableEyeDecreaseFov"].get<bool>();
+	}
+	if(headsetData["useViveBluetooth"].is_boolean()){
+		headsetConfig.useViveBluetooth = headsetData["useViveBluetooth"].get<bool>();
+	}
+	if(headsetData["directMode"].is_boolean()){
+		headsetConfig.directMode = headsetData["directMode"].get<bool>();
+	}
+	if(headsetData["replaceIcons"].is_boolean()){
+		headsetConfig.replaceIcons = headsetData["replaceIcons"].get<bool>();
+	}
+	if(headsetData["edidVendorIdOverride"].is_number()){
+		headsetConfig.edidVendorIdOverride = headsetData["edidVendorIdOverride"].get<int>();
+	}
+	if(headsetData["edidProductIdOverride"].is_number()){
+		headsetConfig.edidProductIdOverride = headsetData["edidProductIdOverride"].get<int>();
+	}
+	if(headsetData["dscVersion"].is_number()){
+		headsetConfig.dscVersion = headsetData["dscVersion"].get<int>();
+	}
+	if(headsetData["dscSliceCount"].is_number()){
+		headsetConfig.dscSliceCount = headsetData["dscSliceCount"].get<int>();
+	}
+	if(headsetData["dscBPPx16"].is_number()){
+		headsetConfig.dscBPPx16 = headsetData["dscBPPx16"].get<int>();
+	}
+	if(headsetData["forceEnable"].is_boolean()){
+		headsetConfig.forceEnable = headsetData["forceEnable"].get<bool>();
+	}
+	
+	if(json& hiddenAreaJson = headsetData["hiddenArea"]; hiddenAreaJson.is_object()){
+		auto& newHiddenArea = headsetConfig.hiddenArea;
+		if(hiddenAreaJson["enable"].is_boolean()){ newHiddenArea.enable = hiddenAreaJson["enable"].get<bool>(); }
+		if(hiddenAreaJson["testMode"].is_boolean()){ newHiddenArea.testMode = hiddenAreaJson["testMode"].get<bool>(); }
+		if(hiddenAreaJson["detailLevel"].is_number()){ newHiddenArea.detailLevel = hiddenAreaJson["detailLevel"].get<int>(); }
+		if(hiddenAreaJson["radiusTopOuter"].is_number()){ newHiddenArea.radiusTopOuter = hiddenAreaJson["radiusTopOuter"].get<double>(); }
+		if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
+		if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
+		if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
+	}
+	if(json& stationaryDimmingJson = headsetData["stationaryDimming"]; stationaryDimmingJson.is_object()){
+		auto& newStationaryDimming = headsetConfig.stationaryDimming;
+		if(stationaryDimmingJson["enable"].is_boolean()){ newStationaryDimming.enable = stationaryDimmingJson["enable"].get<bool>(); }
+		if(stationaryDimmingJson["movementThreshold"].is_number()){ newStationaryDimming.movementThreshold = stationaryDimmingJson["movementThreshold"].get<double>(); }
+		if(stationaryDimmingJson["movementTime"].is_number()){ newStationaryDimming.movementTime = stationaryDimmingJson["movementTime"].get<double>(); }
+		if(stationaryDimmingJson["dimBrightnessPercent"].is_number()){ newStationaryDimming.dimBrightnessPercent = stationaryDimmingJson["dimBrightnessPercent"].get<double>(); }
+		if(stationaryDimmingJson["dimSeconds"].is_number()){ newStationaryDimming.dimSeconds = stationaryDimmingJson["dimSeconds"].get<double>(); }
+		if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
+	}
+}
+
 void ConfigLoader::ParseConfig(){
 	// acquire driverConfig.configLock for the duration of this function
 	// std::lock_guard<std::mutex> lock(driverConfig.configLock);
@@ -44,126 +169,12 @@ void ConfigLoader::ParseConfig(){
 		json data = json::parse(configFile, nullptr, true, true);
 		Config newConfig = {};
 		if(data["meganeX8K"].is_object()){
-			json meganeX8KData = data["meganeX8K"];
-			if(meganeX8KData["enable"].is_boolean()){
-				newConfig.meganeX8K.enable = meganeX8KData["enable"].get<bool>();
-			}
-			if(meganeX8KData["ipd"].is_number()){
-				newConfig.meganeX8K.ipd = meganeX8KData["ipd"].get<double>();
-			}
-			if(meganeX8KData["ipdOffset"].is_number()){
-				newConfig.meganeX8K.ipdOffset = meganeX8KData["ipdOffset"].get<double>();
-			}
-			if(meganeX8KData["blackLevel"].is_number()){
-				newConfig.meganeX8K.blackLevel = meganeX8KData["blackLevel"].get<double>();
-			}
-			if(meganeX8KData["colorMultiplier"].is_object()){
-				ConfigColor &colorMultiplier = newConfig.meganeX8K.colorMultiplier;
-				if(meganeX8KData["colorMultiplier"]["r"].is_number()){ colorMultiplier.r = meganeX8KData["colorMultiplier"]["r"].get<double>(); }
-				if(meganeX8KData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = meganeX8KData["colorMultiplier"]["g"].get<double>(); }
-				if(meganeX8KData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = meganeX8KData["colorMultiplier"]["b"].get<double>(); }
-			}
-			if(meganeX8KData["distortionProfile"].is_string()){
-				newConfig.meganeX8K.distortionProfile = meganeX8KData["distortionProfile"].get<std::string>();
-			}
-			if(meganeX8KData["distortionZoom"].is_number()){
-				newConfig.meganeX8K.distortionZoom = meganeX8KData["distortionZoom"].get<double>();
-			}
-			if(meganeX8KData["fovZoom"].is_number()){
-				newConfig.meganeX8K.fovZoom = meganeX8KData["fovZoom"].get<double>();
-			}
-			if(meganeX8KData["subpixelShift"].is_number()){
-				newConfig.meganeX8K.subpixelShift = meganeX8KData["subpixelShift"].get<double>();
-			}
-			if(meganeX8KData["resolutionX"].is_number()){
-				newConfig.meganeX8K.resolutionX = meganeX8KData["resolutionX"].get<int>();
-			}
-			if(meganeX8KData["resolutionY"].is_number()){
-				newConfig.meganeX8K.resolutionY = meganeX8KData["resolutionY"].get<int>();
-			}
-			if(meganeX8KData["maxFovX"].is_number()){
-				newConfig.meganeX8K.maxFovX = meganeX8KData["maxFovX"].get<double>();
-			}
-			if(meganeX8KData["maxFovY"].is_number()){
-				newConfig.meganeX8K.maxFovY = meganeX8KData["maxFovY"].get<double>();
-			}
-			if(meganeX8KData["distortionMeshResolution"].is_number()){
-				newConfig.meganeX8K.distortionMeshResolution = meganeX8KData["distortionMeshResolution"].get<int>();
-			}
-			if(meganeX8KData["fovBurnInPrevention"].is_boolean()){
-				newConfig.meganeX8K.fovBurnInPrevention = meganeX8KData["fovBurnInPrevention"].get<bool>();
-			}
-			if(meganeX8KData["renderResolutionMultiplierX"].is_number()){
-				newConfig.meganeX8K.renderResolutionMultiplierX = meganeX8KData["renderResolutionMultiplierX"].get<double>();
-			}
-			if(meganeX8KData["renderResolutionMultiplierY"].is_number()){
-				newConfig.meganeX8K.renderResolutionMultiplierY = meganeX8KData["renderResolutionMultiplierY"].get<double>();
-			}
-			if(meganeX8KData["superSamplingFilterPercent"].is_number()){
-				newConfig.meganeX8K.superSamplingFilterPercent = meganeX8KData["superSamplingFilterPercent"].get<double>();
-			}
-			if(meganeX8KData["secondsFromVsyncToPhotons"].is_number()){
-				newConfig.meganeX8K.secondsFromVsyncToPhotons = meganeX8KData["secondsFromVsyncToPhotons"].get<double>();
-			}
-			if(meganeX8KData["secondsFromPhotonsToVblank"].is_number()){
-				newConfig.meganeX8K.secondsFromPhotonsToVblank = meganeX8KData["secondsFromPhotonsToVblank"].get<double>();
-			}
-			if(meganeX8KData["eyeRotation"].is_number()){
-				newConfig.meganeX8K.eyeRotation = meganeX8KData["eyeRotation"].get<double>();
-			}
-			if(meganeX8KData["disableEye"].is_number()){
-				newConfig.meganeX8K.disableEye = meganeX8KData["disableEye"].get<int>();
-			}
-			if(meganeX8KData["disableEyeDecreaseFov"].is_boolean()){
-				newConfig.meganeX8K.disableEyeDecreaseFov = meganeX8KData["disableEyeDecreaseFov"].get<bool>();
-			}
-			if(meganeX8KData["useViveBluetooth"].is_boolean()){
-				newConfig.meganeX8K.useViveBluetooth = meganeX8KData["useViveBluetooth"].get<bool>();
-			}
-			if(meganeX8KData["directMode"].is_boolean()){
-				newConfig.meganeX8K.directMode = meganeX8KData["directMode"].get<bool>();
-			}
-			if(meganeX8KData["replaceIcons"].is_boolean()){
-				newConfig.meganeX8K.replaceIcons = meganeX8KData["replaceIcons"].get<bool>();
-			}
-			if(meganeX8KData["edidVendorIdOverride"].is_number()){
-				newConfig.meganeX8K.edidVendorIdOverride = meganeX8KData["edidVendorIdOverride"].get<int>();
-			}
-			if(meganeX8KData["edidProductIdOverride"].is_number()){
-				newConfig.meganeX8K.edidProductIdOverride = meganeX8KData["edidProductIdOverride"].get<int>();
-			}
-			if(meganeX8KData["dscVersion"].is_number()){
-				newConfig.meganeX8K.dscVersion = meganeX8KData["dscVersion"].get<int>();
-			}
-			if(meganeX8KData["dscSliceCount"].is_number()){
-				newConfig.meganeX8K.dscSliceCount = meganeX8KData["dscSliceCount"].get<int>();
-			}
-			if(meganeX8KData["dscBPPx16"].is_number()){
-				newConfig.meganeX8K.dscBPPx16 = meganeX8KData["dscBPPx16"].get<int>();
-			}
-			if(meganeX8KData["forceEnable"].is_boolean()){
-				newConfig.meganeX8K.forceEnable = meganeX8KData["forceEnable"].get<bool>();
-			}
-			
-			if(json& hiddenAreaJson = meganeX8KData["hiddenArea"]; hiddenAreaJson.is_object()){
-				auto& newHiddenArea = newConfig.meganeX8K.hiddenArea;
-				if(hiddenAreaJson["enable"].is_boolean()){ newHiddenArea.enable = hiddenAreaJson["enable"].get<bool>(); }
-				if(hiddenAreaJson["testMode"].is_boolean()){ newHiddenArea.testMode = hiddenAreaJson["testMode"].get<bool>(); }
-				if(hiddenAreaJson["detailLevel"].is_number()){ newHiddenArea.detailLevel = hiddenAreaJson["detailLevel"].get<int>(); }
-				if(hiddenAreaJson["radiusTopOuter"].is_number()){ newHiddenArea.radiusTopOuter = hiddenAreaJson["radiusTopOuter"].get<double>(); }
-				if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
-				if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
-				if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
-			}
-			if(json& stationaryDimmingJson = meganeX8KData["stationaryDimming"]; stationaryDimmingJson.is_object()){
-				auto& newStationaryDimming = newConfig.meganeX8K.stationaryDimming;
-				if(stationaryDimmingJson["enable"].is_boolean()){ newStationaryDimming.enable = stationaryDimmingJson["enable"].get<bool>(); }
-				if(stationaryDimmingJson["movementThreshold"].is_number()){ newStationaryDimming.movementThreshold = stationaryDimmingJson["movementThreshold"].get<double>(); }
-				if(stationaryDimmingJson["movementTime"].is_number()){ newStationaryDimming.movementTime = stationaryDimmingJson["movementTime"].get<double>(); }
-				if(stationaryDimmingJson["dimBrightnessPercent"].is_number()){ newStationaryDimming.dimBrightnessPercent = stationaryDimmingJson["dimBrightnessPercent"].get<double>(); }
-				if(stationaryDimmingJson["dimSeconds"].is_number()){ newStationaryDimming.dimSeconds = stationaryDimmingJson["dimSeconds"].get<double>(); }
-				if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
-			}
+			json headsetData = data["meganeX8K"];
+			parseBaseHeadsetConfig(headsetData, newConfig.meganeX8K);
+		}
+		if(data["dreamAir"].is_object()){
+			json headsetData = data["dreamAir"];
+			parseBaseHeadsetConfig(headsetData, newConfig.dreamAir);
 		}
 		if(data["generalHeadset"].is_object()){
 			json generalHeadsetData = data["generalHeadset"];
@@ -326,6 +337,12 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 		if(data["distortionsBlue"].is_array()){
 			profile.distortionsBlue = data["distortionsBlue"].get<std::vector<double>>();
 		}
+		if(data["offsetX"].is_number()){
+			profile.offsetX = data["offsetX"].get<double>();
+		}
+		if(data["offsetY"].is_number()){
+			profile.offsetY = data["offsetY"].get<double>();
+		}
 		if(data["legacySmoothing"].is_boolean()){
 			profile.legacySmoothing = data["legacySmoothing"].get<bool>();
 		}
@@ -339,6 +356,64 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 	}
 }
 
+ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
+	return {
+		{"enable", headsetConfig.enable},
+		{"ipd", headsetConfig.ipd},
+		{"ipdOffset", headsetConfig.ipdOffset},
+		{"blackLevel", headsetConfig.blackLevel},
+		{"colorMultiplier", {
+			{"r", headsetConfig.colorMultiplier.r},
+			{"g", headsetConfig.colorMultiplier.g},
+			{"b", headsetConfig.colorMultiplier.b},
+		}},
+		{"distortionProfile", headsetConfig.distortionProfile},
+		{"distortionZoom", headsetConfig.distortionZoom},
+		{"fovZoom", headsetConfig.fovZoom},
+		{"subpixelShift", headsetConfig.subpixelShift},
+		{"resolutionX", headsetConfig.resolutionX},
+		{"resolutionY", headsetConfig.resolutionY},
+		{"displayRotation", headsetConfig.displayRotation},
+		{"maxFovX", headsetConfig.maxFovX},
+		{"maxFovY", headsetConfig.maxFovY},
+		{"distortionMeshResolution", headsetConfig.distortionMeshResolution},
+		{"fovBurnInPrevention", headsetConfig.fovBurnInPrevention},
+		{"renderResolutionMultiplierX", headsetConfig.renderResolutionMultiplierX},
+		{"renderResolutionMultiplierY", headsetConfig.renderResolutionMultiplierY},
+		{"superSamplingFilterPercent", headsetConfig.superSamplingFilterPercent},
+		{"secondsFromVsyncToPhotons", headsetConfig.secondsFromVsyncToPhotons},
+		{"secondsFromPhotonsToVblank", headsetConfig.secondsFromPhotonsToVblank},
+		{"eyeRotation", headsetConfig.eyeRotation},
+		{"disableEye", headsetConfig.disableEye},
+		{"disableEyeDecreaseFov", headsetConfig.disableEyeDecreaseFov},
+		{"useViveBluetooth", headsetConfig.useViveBluetooth},
+		{"directMode", headsetConfig.directMode},
+		{"replaceIcons", headsetConfig.replaceIcons},
+		{"edidVendorIdOverride", headsetConfig.edidVendorIdOverride},
+		{"edidProductIdOverride", headsetConfig.edidProductIdOverride},
+		{"dscVersion", headsetConfig.dscVersion},
+		{"dscSliceCount", headsetConfig.dscSliceCount},
+		{"dscBPPx16", headsetConfig.dscBPPx16},
+		{"forceEnable", headsetConfig.forceEnable},
+		{"hiddenArea", {
+			{"enable", headsetConfig.hiddenArea.enable},
+			{"testMode", headsetConfig.hiddenArea.testMode},
+			{"detailLevel", headsetConfig.hiddenArea.detailLevel},
+			{"radiusTopOuter", headsetConfig.hiddenArea.radiusTopOuter},
+			{"radiusTopInner", headsetConfig.hiddenArea.radiusTopInner},
+			{"radiusBottomInner", headsetConfig.hiddenArea.radiusBottomInner},
+			{"radiusBottomOuter", headsetConfig.hiddenArea.radiusBottomOuter},
+		}},
+		{"stationaryDimming", {
+			{"enable", headsetConfig.stationaryDimming.enable},
+			{"movementThreshold", headsetConfig.stationaryDimming.movementThreshold},
+			{"movementTime", headsetConfig.stationaryDimming.movementTime},
+			{"dimBrightnessPercent", headsetConfig.stationaryDimming.dimBrightnessPercent},
+			{"dimSeconds", headsetConfig.stationaryDimming.dimSeconds},
+			{"brightenSeconds", headsetConfig.stationaryDimming.brightenSeconds},
+		}},
+	};
+}
 void ConfigLoader::WriteInfo(){
 	std::string infoPath = GetConfigFolder() + "info.json";
 	std::ofstream infoFile(infoPath);
@@ -355,61 +430,8 @@ void ConfigLoader::WriteInfo(){
 	ordered_json data = {
 		{"about", "This file is not for configuration. It provides info from the driver for other utilities to use."},
 		{"defaultSettings", {
-			{"meganeX8K", {
-				{"enable", defaultSettings.meganeX8K.enable},
-				{"ipd", defaultSettings.meganeX8K.ipd},
-				{"ipdOffset", defaultSettings.meganeX8K.ipdOffset},
-				{"blackLevel", defaultSettings.meganeX8K.blackLevel},
-				{"colorMultiplier", {
-					{"r", defaultSettings.meganeX8K.colorMultiplier.r},
-					{"g", defaultSettings.meganeX8K.colorMultiplier.g},
-					{"b", defaultSettings.meganeX8K.colorMultiplier.b},
-				}},
-				{"distortionProfile", defaultSettings.meganeX8K.distortionProfile},
-				{"distortionZoom", defaultSettings.meganeX8K.distortionZoom},
-				{"fovZoom", defaultSettings.meganeX8K.fovZoom},
-				{"subpixelShift", defaultSettings.meganeX8K.subpixelShift},
-				{"resolutionX", defaultSettings.meganeX8K.resolutionX},
-				{"resolutionY", defaultSettings.meganeX8K.resolutionY},
-				{"maxFovX", defaultSettings.meganeX8K.maxFovX},
-				{"maxFovY", defaultSettings.meganeX8K.maxFovY},
-				{"distortionMeshResolution", defaultSettings.meganeX8K.distortionMeshResolution},
-				{"fovBurnInPrevention", defaultSettings.meganeX8K.fovBurnInPrevention},
-				{"renderResolutionMultiplierX", defaultSettings.meganeX8K.renderResolutionMultiplierX},
-				{"renderResolutionMultiplierY", defaultSettings.meganeX8K.renderResolutionMultiplierY},
-				{"superSamplingFilterPercent", defaultSettings.meganeX8K.superSamplingFilterPercent},
-				{"secondsFromVsyncToPhotons", defaultSettings.meganeX8K.secondsFromVsyncToPhotons},
-				{"secondsFromPhotonsToVblank", defaultSettings.meganeX8K.secondsFromPhotonsToVblank},
-				{"eyeRotation", defaultSettings.meganeX8K.eyeRotation},
-				{"disableEye", defaultSettings.meganeX8K.disableEye},
-				{"disableEyeDecreaseFov", defaultSettings.meganeX8K.disableEyeDecreaseFov},
-				{"useViveBluetooth", defaultSettings.meganeX8K.useViveBluetooth},
-				{"directMode", defaultSettings.meganeX8K.directMode},
-				{"replaceIcons", defaultSettings.meganeX8K.replaceIcons},
-				{"edidVendorIdOverride", defaultSettings.meganeX8K.edidVendorIdOverride},
-				{"edidProductIdOverride", defaultSettings.meganeX8K.edidProductIdOverride},
-				{"dscVersion", defaultSettings.meganeX8K.dscVersion},
-				{"dscSliceCount", defaultSettings.meganeX8K.dscSliceCount},
-				{"dscBPPx16", defaultSettings.meganeX8K.dscBPPx16},
-				{"forceEnable", defaultSettings.meganeX8K.forceEnable},
-				{"hiddenArea", {
-					{"enable", defaultSettings.meganeX8K.hiddenArea.enable},
-					{"testMode", defaultSettings.meganeX8K.hiddenArea.testMode},
-					{"detailLevel", defaultSettings.meganeX8K.hiddenArea.detailLevel},
-					{"radiusTopOuter", defaultSettings.meganeX8K.hiddenArea.radiusTopOuter},
-					{"radiusTopInner", defaultSettings.meganeX8K.hiddenArea.radiusTopInner},
-					{"radiusBottomInner", defaultSettings.meganeX8K.hiddenArea.radiusBottomInner},
-					{"radiusBottomOuter", defaultSettings.meganeX8K.hiddenArea.radiusBottomOuter},
-				}},
-				{"stationaryDimming", {
-					{"enable", defaultSettings.meganeX8K.stationaryDimming.enable},
-					{"movementThreshold", defaultSettings.meganeX8K.stationaryDimming.movementThreshold},
-					{"movementTime", defaultSettings.meganeX8K.stationaryDimming.movementTime},
-					{"dimBrightnessPercent", defaultSettings.meganeX8K.stationaryDimming.dimBrightnessPercent},
-					{"dimSeconds", defaultSettings.meganeX8K.stationaryDimming.dimSeconds},
-					{"brightenSeconds", defaultSettings.meganeX8K.stationaryDimming.brightenSeconds},
-				}},
-			}},
+			{"meganeX8K", baseHeadsetInfo(defaultSettings.meganeX8K)},
+			{"dreamAir", baseHeadsetInfo(defaultSettings.dreamAir)},
 			{"generalHeadset", {
 				{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
 			}},
@@ -518,7 +540,7 @@ void ConfigLoader::ReadInfo(){
 			info.steamvrResources = data["steamvrResources"].get<std::string>();
 		}
 		if(data["connectedHeadset"].is_number()){
-			info.connectedHeadset = (HeadsetType)data["connectedHeadset"].get<int>();
+			info.connectedHeadset = (Config::HeadsetType)data["connectedHeadset"].get<int>();
 		}
 		if(data["resolution"].is_object()){
 			auto res = data["resolution"];
