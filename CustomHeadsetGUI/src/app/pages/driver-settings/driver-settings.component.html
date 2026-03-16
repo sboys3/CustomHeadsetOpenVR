@@ -3,7 +3,7 @@
   <div>
     <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
     <span i18n>A headset is currently running with a non-native driver. Many settings will not work.</span>
-  </div> 
+  </div>
   }
   @if(driverEnablePrompt()){
   <div class="dirver-warning-main">
@@ -14,18 +14,26 @@
   }
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
     @for (tab of orderedTabs; track tab.headsetType) {
-    <mat-tab label="MeganeX Superlight 8K" i18n-label *ngIf="tab.type === 'MeganeX8K'">
+    <mat-tab label="MeganeX 8K" i18n-label *ngIf="tab.type === 'MeganeX8K'">
       <ng-template matTabContent>
         @if(orderedTabs[0].type !== "MeganeX8K"){
           <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
         }
-        <app-meganex-x8-k [driverName]="['MeganeXSuperlight','MeganeX8KMark2','MeganeXsuperlight8K_Native','MeganeX8KMark2_Native']" settingField="meganeX8K" />
+        <app-meganex-x8-k />
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Dream Air" i18n-label *ngIf="tab.type === 'DreamAir'">
+      <ng-template matTabContent>
+        @if(orderedTabs[0].type !== "DreamAir"){
+          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        }
+        <app-dream-air />
       </ng-template>
     </mat-tab>
     <mat-tab label="General" i18n-label *ngIf="tab.type === 'General'">
       <ng-template matTabContent>
-        <app-general 
-          driverName="" 
+        <app-general
+          driverName=""
           settingField="" />
       </ng-template>
     </mat-tab>

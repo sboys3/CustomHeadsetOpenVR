@@ -7,8 +7,12 @@ export type DistortionProfileConfig = {
   distortionsRed: number[];
   distortionsBlue: number[];
 };
+/**
+ * See the c++ documentation for documentation on what the settings are for
+ */
 export type Settings = {
   meganeX8K: MeganeX8KConfig,
+  dreamAir: DreamAirConfig,
   generalHeadset: GeneralHeadsetConfig,
   customShader: CustomShaderConfig,
   forceTracking: boolean,
@@ -24,34 +28,12 @@ export type StationaryDimmingConfig = {
   brightenSeconds: number
 }
 export type HiddenAreaMeshConfig = {
-  /**
-   * If hidden area meshes should be used.
-   */
   enable: boolean;
-  /**
-   * "Inverts" the hidden area meshes and increases the black level.
-   * This makes it easy to see how large the hidden are mesh is.
-   */
   testMode: boolean;
-  /**
-   * How many points should be used for each rounded corner.
-   */
   detailLevel: number;
-  /**
-   * Top outer corner radius, as a fraction the cropped display area.
-   */
   radiusTopOuter: number;
-  /**
-   * Top inner corner radius, as a fraction the cropped display area.
-   */
   radiusTopInner: number;
-  /**
-   * Bottom inner corner radius, as a fraction the cropped display area.
-   */
   radiusBottomInner: number;
-  /**
-   * Bottom outer corner radius, as a fraction the cropped display area.
-   */
   radiusBottomOuter: number;
 };
 export type LinearColor = {
@@ -96,78 +78,45 @@ export type CustomShaderConfig = {
   colorMultiplier: LinearColor;
 }
 
-export type MeganeX8KConfig = {
-  /**
-   * if the MeganeX superlight 8K should be shimmed by this driver
-   */
+/**
+ * Base configuration type for headset devices that share common settings.
+ * Mirrors the BaseHeadsetConfig class in Config.h
+ */
+export type BaseHeadsetConfig = {
   enable: boolean;
-
-  /**
-   * ipd in mm
-   */
   ipd: number;
-
-  /**
-   * ipd offset from the ipd value in mm
-   */
   ipdOffset: number;
-
-  /**
-   * minimum black levels from 0 to 1
-   */
   blackLevel: number;
-  
   colorMultiplier: LinearColor;
-
-  /**
-   * distortion profile to use
-   */
   distortionProfile: string;
-
-  /**
-   * amount to zoom in the distortion profile
-   */
   distortionZoom: number;
-  
   fovZoom: number;
-
-  /**
-   * amount to shift the subpixels to account for their different rows
-   */
   subpixelShift: number;
-
   resolutionX: number;
-
   resolutionY: number;
-
   maxFovX: number;
-
   maxFovY: number;
-
   distortionMeshResolution: number;
-
   fovBurnInPrevention: boolean;
-
   renderResolutionMultiplierX: number;
-
   renderResolutionMultiplierY: number;
-  
-  superSamplingFilterPercent: number
-  
-  secondsFromVsyncToPhotons: number
-  
-  secondsFromPhotonsToVblank: number
-  
-  eyeRotation: number
-  
-  disableEye: number
-  
-  disableEyeDecreaseFov: number
-  
-  edidVendorIdOverride: number
-
+  superSamplingFilterPercent: number;
+  secondsFromVsyncToPhotons: number;
+  secondsFromPhotonsToVblank: number;
+  eyeRotation: number;
+  disableEye: number;
+  disableEyeDecreaseFov: number;
+  edidVendorIdOverride: number;
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;
+};
+
+export type MeganeX8KConfig = BaseHeadsetConfig & {
+  // MeganeX8K-specific fields can be added here if needed
+};
+
+export type DreamAirConfig = BaseHeadsetConfig & {
+  // DreamAir-specific fields can be added here if needed
 };
 
 export type GeneralHeadsetConfig = {
@@ -185,6 +134,7 @@ export const HeadsetType = {
   Other: 1,
   MeganeX8K: 2,
   Vive: 3,
+  DreamAir: 4,
 } as const;
 
 export type HeadsetType = typeof HeadsetType[keyof typeof HeadsetType];

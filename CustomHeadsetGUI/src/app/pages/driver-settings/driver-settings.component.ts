@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
 import { MeganexX8KComponent } from '../devices/meganex-x8-k/meganex-x8-k.component';
+import { DreamAirComponent } from '../devices/dream-air/dream-air.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
 import { HeadsetType, HeadsetType as HeadsetTypeEnum } from '../../services/JsonFileDefines';
@@ -22,13 +23,14 @@ export interface TabConfig {
     imports: [
         SystemReadyComponent,
         MeganexX8KComponent,
+        DreamAirComponent,
         GeneralComponent,
         MatTabsModule,
         MatIconModule,
         MatButtonModule,
         CommonModule
     ],
-    providers: [MeganexX8KComponent],
+    providers: [MeganexX8KComponent, DreamAirComponent],
     templateUrl: './driver-settings.component.html',
     styleUrl: './driver-settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -46,12 +48,14 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     // Expose component classes to template
     MeganexX8KComponent = MeganexX8KComponent;
     GeneralComponent = GeneralComponent;
+    DreamAirComponent = DreamAirComponent;
 
     constructor(private dis: DriverInfoService) {
         // Register tab configurations
         this._tabs.set([
             { type: 'General', headsetType: HeadsetType.Other }, // Other
             { type: 'MeganeX8K', headsetType: HeadsetType.MeganeX8K }, // MeganeX8K
+            { type: 'DreamAir', headsetType: HeadsetType.DreamAir }, // DreamAir
         ]);
 
         // Effect to update current headset type when driver info changes
