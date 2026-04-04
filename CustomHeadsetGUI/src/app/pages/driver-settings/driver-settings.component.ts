@@ -12,6 +12,7 @@ import { effect, signal, computed } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
 import {SystemDiagnosticService} from '../../services/system-diagnostic.service'
 import {MatButtonModule} from '@angular/material/button'
+import { AppSettingService } from '../../services/app-setting.service';
 
 export interface TabConfig {
   type: string;
@@ -43,6 +44,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     private _previousOrderedTabs: TabConfig[] = [];
     public sds = inject(SystemDiagnosticService)
     driverEnablePrompt = signal(false)
+    driverBlocked = signal(false)
     nonNativeWarning = signal(false)
 
     // Expose component classes to template
@@ -50,7 +52,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     GeneralComponent = GeneralComponent;
     DreamAirComponent = DreamAirComponent;
 
-    constructor(private dis: DriverInfoService) {
+    constructor(private dis: DriverInfoService, private appSettingService: AppSettingService) {
         // Register tab configurations
         this._tabs.set([
             { type: 'General', headsetType: HeadsetType.Other }, // Other
@@ -114,6 +116,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
             if (steamVrConfig) {
                 let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
                 this.driverEnablePrompt.set(!customEnabled);
+                this.driverBlocked.set(this.sds.isDriverBlocked(steamVrConfig, 'CustomHeadsetOpenVR'));
             }
         })
     }
@@ -129,7 +132,19 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         const currentType = this.currentHeadsetType();
         const tabs = this._tabs();
         const previousOrder = this._previousOrderedTabs.length > 0 ? this._previousOrderedTabs : tabs;
+        const appSettings = this.appSettingService.values();
+        const defaultTab = appSettings?.defaultSettingsTab ?? 'auto';
 
+        // If default tab is set to a specific tab (not 'auto'), use that tab
+        if (defaultTab !== 'auto') {
+            const selectedTab = tabs.find(tab => tab.type === defaultTab);
+            if (selectedTab) {
+                const otherTabs = tabs.filter(tab => tab !== selectedTab);
+                return [selectedTab, ...otherTabs];
+            }
+        }
+
+        // Auto mode: use headset-based selection
         if (!currentType) {
             // When headset is unknown, keep tab order
             return previousOrder;
@@ -177,5 +192,9 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     
     async enableDriver() {
         await this.sds.enableSteamVRDriver("CustomHeadsetOpenVR")
+    }
+
+    async unblockAllDrivers() {
+        await this.sds.unblockAllDrivers()
     }
 }

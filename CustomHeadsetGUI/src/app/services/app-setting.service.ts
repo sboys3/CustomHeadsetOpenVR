@@ -12,7 +12,8 @@ export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
     super(paths.guiSettingPath, paths.appDataDirPath, signal({
       colorScheme: 'system',
       updateMode: 'rewrite',
-      advanceMode: false
+      advanceMode: false,
+      defaultSettingsTab: 'auto'
     }), true, true)
     const appSettingHolder = inject(AppSettingHolder)
     effect(() => {

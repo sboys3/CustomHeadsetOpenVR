@@ -131,6 +131,20 @@ export class SystemDiagnosticService implements OnDestroy {
       return true;
     })
   }
+  public async unblockAllDrivers() {
+    await this.updateSteamVRSettings(settings => {
+      let changed = false;
+      for (const key in settings) {
+        if (key.startsWith('driver_') && settings[key]) {
+          if (settings[key]['blocked_by_safe_mode']) {
+            delete settings[key]['blocked_by_safe_mode'];
+            changed = true;
+          }
+        }
+      }
+      return changed;
+    })
+  }
   public getSteamVRDriverEnableState(settings: any, driverName: string) {
     if (settings) {
       const driverSetting = settings[this.getDriverFieldName(driverName)]
@@ -139,6 +153,21 @@ export class SystemDiagnosticService implements OnDestroy {
       }
     }
     return true;
+  }
+  public isDriverBlocked(settings: any, driverName: string) {
+    if (settings) {
+      const driverSetting = settings[this.getDriverFieldName(driverName)]
+      if (driverSetting) {
+        for (const key in settings) {
+          if (key.startsWith('driver_') && settings[key]) {
+            if (settings[key]['blocked_by_safe_mode']) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
   private getDriverFieldName(driverName: string) {
     return `driver_${driverName}`;

@@ -3,3 +3,14 @@
 :host {
     @include sf.formStyle();
 }
+
+.dream-air-warning {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: rgba(255, 152, 0, 0.1);
+    border: 1px solid var(--mat-sys-error);
+    border-radius: 4px;
+}

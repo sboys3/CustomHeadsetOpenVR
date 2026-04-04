@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { DreamAirConfig } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 
 @Component({
   selector: 'app-dream-air',
-  imports: [HeadsetSettingsComponent],
+  imports: [HeadsetSettingsComponent, MatIconModule],
   templateUrl: './dream-air.component.html',
   styleUrl: './dream-air.component.scss'
 })

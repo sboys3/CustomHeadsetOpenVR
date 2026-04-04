@@ -26,4 +26,16 @@
         <mat-slide-toggle [(ngModel)]="settings.advanceMode" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+<div class="field">
+    <div class="title" i18n>Default Settings Tab</div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.defaultSettingsTab" (ngModelChange)="saveConfigSettings()"
+            (closed)="saveConfigSettings()">
+            <mat-option value="auto" i18n>Auto (based on headset)</mat-option>
+            <mat-option value="General" i18n>General</mat-option>
+            <mat-option value="MeganeX8K" i18n>MeganeX8K</mat-option>
+            <mat-option value="DreamAir" i18n>Dream Air</mat-option>
+        </mat-select>
+    </div>
+</div>
 }

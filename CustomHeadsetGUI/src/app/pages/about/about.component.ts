@@ -21,14 +21,20 @@ export class AboutComponent {
   public checking = signal<boolean>(false)
   public updateInfo = signal<AppUpdateInfoSuccess | undefined>(undefined)
   public dss = inject(DriverSettingService)
-  private oldEdidVendor: number | undefined = undefined
+  private oldMeganeXEdidVendor: number | undefined = undefined
+  private oldDreamAirEidVendor: number | undefined = undefined
   constructor(public aus: AppUpdateService, public dis: DriverInfoService, public sds: SystemDiagnosticService, private dialog: DialogService) {
     effect(() => {
         let newSettings = this.dss.values()
-        if(newSettings?.meganeX8K?.edidVendorIdOverride != undefined && this.oldEdidVendor != undefined && newSettings.meganeX8K.edidVendorIdOverride != this.oldEdidVendor) {
+        
+        if(newSettings?.meganeX8K?.edidVendorIdOverride != undefined && this.oldMeganeXEdidVendor != undefined && newSettings.meganeX8K.edidVendorIdOverride != this.oldMeganeXEdidVendor) {
           sds.restartCompositor()
         }
-        this.oldEdidVendor = newSettings?.meganeX8K?.edidVendorIdOverride
+        this.oldMeganeXEdidVendor = newSettings?.meganeX8K?.edidVendorIdOverride
+        if(newSettings?.dreamAir?.edidVendorIdOverride != undefined && this.oldDreamAirEidVendor != undefined && newSettings.dreamAir.edidVendorIdOverride != this.oldDreamAirEidVendor) {
+          sds.restartCompositor()
+        }
+        this.oldDreamAirEidVendor = newSettings?.dreamAir?.edidVendorIdOverride
     });
   }
   async openExternal(url: string) {

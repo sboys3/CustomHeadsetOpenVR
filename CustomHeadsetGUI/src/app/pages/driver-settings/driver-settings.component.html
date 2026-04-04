@@ -10,6 +10,9 @@
     <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
     <span i18n>Custom Headset's driver is disabled</span>
     <button mat-stroked-button i18n (click)="enableDriver()">Enable</button>
+    @if(driverBlocked()){
+    <button mat-stroked-button i18n (click)="unblockAllDrivers()">Unblock All</button>
+    }
   </div>
   }
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="onTabChange($event)">

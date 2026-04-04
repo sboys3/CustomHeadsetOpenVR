@@ -126,7 +126,8 @@ export type GeneralHeadsetConfig = {
 export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light';
   updateMode: 'replace' | 'rewrite';
-  advanceMode: boolean
+  advanceMode: boolean;
+  defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';
 }
 
 export const HeadsetType = {
