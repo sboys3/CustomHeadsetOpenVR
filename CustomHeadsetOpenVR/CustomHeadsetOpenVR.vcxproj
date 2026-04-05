@@ -51,6 +51,7 @@
     <ClCompile Include="src\Driver\DeviceProvider.cpp" />
     <ClCompile Include="src\Driver\DeviceShim.cpp" />
     <ClCompile Include="src\Driver\DriverLog.cpp" />
+    <ClCompile Include="src\Driver\HidModifier.cpp" />
     <ClCompile Include="src\Driver\HmdDriverFactory.cpp" />
     <ClCompile Include="src\Driver\Hooking\Hooking.cpp" />
     <ClCompile Include="src\Driver\Hooking\InterfaceHookInjector.cpp" />

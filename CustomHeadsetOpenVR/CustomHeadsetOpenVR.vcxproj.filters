@@ -104,6 +104,9 @@
     <ClCompile Include="src\Helpers\DisplayHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Driver\HidModifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\compress.c">
       <Filter>Source Files\zlib</Filter>
     </ClCompile>

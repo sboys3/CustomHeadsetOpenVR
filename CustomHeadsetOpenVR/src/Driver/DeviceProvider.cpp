@@ -2,7 +2,7 @@
 #include "DriverLog.h"
 #include "DeviceShim.h"
 #include "CompositorPlugin.h"
-// #include "HidModifier.h"
+#include "HidModifier.h"
 
 #include "Hooking/InterfaceHookInjector.h"
 
@@ -25,7 +25,7 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
-	// hidModifier.InjectHooks();
+	hidModifier.InjectHooks();
 	return vr::VRInitError_None;
 }
 const char *const *CustomHeadsetDeviceProvider::GetInterfaceVersions(){
@@ -109,7 +109,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		InjectCompositorPlugin();
 		customShaderEnabled = true;
 	}
-	// hidModifier.RunFrame();
+	hidModifier.RunFrame();
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
 }
@@ -153,6 +153,9 @@ bool CustomHeadsetDeviceProvider::HandleDevicePoseUpdated(uint32_t openVRID, vr:
 }
 
 bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerialNumber, vr::ETrackedDeviceClass &eDeviceClass, vr::ITrackedDeviceServerDriver *&pDriver){
+	if(driverConfig.onlyHandlePrivateFunctionality){
+		return true;
+	}
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);
 	if(eDeviceClass == vr::TrackedDeviceClass_HMD){
 		

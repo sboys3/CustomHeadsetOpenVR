@@ -293,6 +293,9 @@ void ConfigLoader::ParseConfig(){
 		if(data["takeCompositorScreenshots"].is_boolean()){
 			newConfig.takeCompositorScreenshots = data["takeCompositorScreenshots"].get<bool>();
 		}
+		if(data["onlyHandlePrivateFunctionality"].is_boolean()){
+			newConfig.onlyHandlePrivateFunctionality = data["onlyHandlePrivateFunctionality"].get<bool>();
+		}
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }
@@ -476,6 +479,7 @@ void ConfigLoader::WriteInfo(){
 			}},
 			{"forceTracking", defaultSettings.forceTracking},
 			{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},
+			{"onlyHandlePrivateFunctionality", defaultSettings.onlyHandlePrivateFunctionality},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 		}},
 		{"builtInDistortionProfiles", emptyObject},
@@ -784,8 +788,15 @@ void ConfigLoader::Start(){
 			configFile << defaultConfig;
 			configFile.close();
 		}
-		
-		if(watchInfo){
+	}catch(const std::exception& e){
+		DriverLog("Failed to create settings.json %s", e.what());
+	}
+	
+	// load config for the first time
+	ParseConfig();
+	
+	try{
+		if(watchInfo || driverConfig.onlyHandlePrivateFunctionality){
 			ReadInfo();
 		}else{
 			WriteInfo();
@@ -794,12 +805,8 @@ void ConfigLoader::Start(){
 			// infoThread.detach();
 		}
 	}catch(const std::exception& e){
-		DriverLog("Failed to create settings.json %s", e.what());
+		DriverLog("Failed to manage info.json: %s", e.what());
 	}
-	
-	// load config for the first time
-	ParseConfig();
-	
 	try{	
 		// start watcher thread
 		std::thread watcher(&ConfigLoader::WatcherThread, this);

@@ -5,3 +5,4 @@ lib
 output
 *_test.hlsl
 build
+HidModifierPrivate.cpp

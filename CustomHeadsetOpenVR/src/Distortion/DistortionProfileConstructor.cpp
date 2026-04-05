@@ -106,6 +106,45 @@ bool PopulateBuiltInDistortionProfiles(){
 		47.5f, -0.42f,
 	};
 	builtInDistortionProfiles[meganeX8Kv0_3_0.name] = meganeX8Kv0_3_0;
+	
+	
+	DistortionProfileConfig dreamAir = {};
+	dreamAir.name = "Dream Air Default";
+	dreamAir.device = "DreamAir";
+	dreamAir.modifiedTime = 0;
+	dreamAir.description = "Dream Air Distortion Profile";
+	dreamAir.author = "SBoys3";
+	dreamAir.creationDate = 1771922353.519;
+	dreamAir.type = "RadialBezier";
+	dreamAir.distortions = {
+		0.00f, 0.000f,
+		5.00f, 12.80f,
+		10.0f, 25.50f,
+		15.0f, 38.00f,
+		20.0f, 50.23f,
+		25.0f, 62.05f,
+		30.0f, 73.35f,
+		35.0f, 84.10f,
+		40.0f, 94.20f,
+		45.0f, 103.25f,
+		50.0f, 111.1f,
+		55.0f, 118.0f
+	};
+	dreamAir.distortionsRed = {
+		0.00f, 0.30f,
+		25.0f, 0.45f,
+		40.0f, 0.50f,
+		50.0f, 0.55f
+	};
+	dreamAir.distortionsBlue = {
+		0.00f, -0.2f,
+		25.0f, -0.4f,
+		30.0f, -0.5f,
+		40.0f, -0.7f,
+		50.0f, -0.7f
+	};
+	builtInDistortionProfiles[dreamAir.name] = dreamAir;
+	
 	return true;
 };
 // this is pretty much just an initializer so immediately call
