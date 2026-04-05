@@ -41,6 +41,8 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	// it blackscreens and immediately crashes windows when changed at runtime for the MeganeX on nvidia
 	vr::VRProperties()->SetBoolProperty(container, vr::Prop_DisplaySupportsRuntimeFramerateChange_Bool, false);
 	
+	// vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayFrequency_Float, 90.0f);
+	
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xd222); // HVR htc vr
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, 43521); // vive
 	
@@ -225,8 +227,14 @@ bool BaseHeadsetShim::PreDisplayComponentGetWindowBounds(int32_t *&pnX, int32_t 
 		*pnHeight = GetConfig().resolutionY;
 	}
 	if(!GetConfig().directMode){
-		int edidVendorId = vr::VRProperties()->GetInt32Property(vr::VRProperties()->TrackedDeviceToPropertyContainer(0), vr::Prop_EdidVendorID_Int32);
-		int edidProductId = vr::VRProperties()->GetInt32Property(vr::VRProperties()->TrackedDeviceToPropertyContainer(0), vr::Prop_EdidProductID_Int32);
+		int edidVendorId = GetConfig().edidVendorId;
+		if(GetConfig().edidVendorIdOverride){
+			edidVendorId = GetConfig().edidVendorIdOverride;
+		}
+		int edidProductId = GetConfig().edidProductId;
+		if(GetConfig().edidProductIdOverride){
+			edidProductId = GetConfig().edidProductIdOverride;
+		}
 		FindDisplayPosition(*pnWidth, *pnHeight, edidVendorId, edidProductId, pnX, pnY);
 	}
 	DriverLog("Display bounds: %i %i %i %i", *pnX, *pnY, *pnWidth, *pnHeight);
@@ -435,16 +443,16 @@ void BaseHeadsetShim::UpdateSettings(){
 	}else{
 		vr::VRProperties()->SetInt32Property(container, Prop_DSCBPPx16_Int32, GetConfig().dscBPPx16);
 	}
-	if(GetConfig().edidVendorIdOverride != 0){
+	if(GetConfig().edidVendorIdOverride != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, GetConfig().edidVendorIdOverride);
-	}else if(GetConfig().edidVendorId != 0){
+	}else if(GetConfig().edidVendorId != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, GetConfig().edidVendorId);
 	}else{
 		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidVendorID_Int32);
 	}
-	if(GetConfig().edidProductIdOverride != 0){
+	if(GetConfig().edidProductIdOverride != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, GetConfig().edidProductIdOverride);
-	}if(GetConfig().edidProductId != 0){
+	}if(GetConfig().edidProductId != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, GetConfig().edidProductId);
 	}else{
 		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
@@ -511,6 +519,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldUpdateDistortion |= GetConfigOld().distortionMeshResolution != GetConfig().distortionMeshResolution;
 	shouldUpdateDistortion |= GetConfigOld().disableEye != GetConfig().disableEye;
 	shouldUpdateDistortion |= GetConfigOld().disableEyeDecreaseFov != GetConfig().disableEyeDecreaseFov;
+	shouldUpdateDistortion |= GetConfigOld().displayRotation != GetConfig().displayRotation;
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
 
 	
