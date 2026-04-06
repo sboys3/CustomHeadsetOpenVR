@@ -1,4 +1,3 @@
-
 import { invoke } from '@tauri-apps/api/core';
 
 export async function get_executable_path() {
@@ -10,4 +9,10 @@ export async function is_vrmonitor_running() {
 }
 export async function restart_vrcompositor() {
     return await invoke('restart_vrcompositor') as boolean;
+}
+export async function kill_process(process_name: string): Promise<boolean> {
+    return await invoke('kill_process', { processName: process_name }) as boolean;
+}
+export async function launch_process(path: string, args: string[]): Promise<boolean> {
+    return await invoke('launch_process', { path, args }) as boolean;
 }

@@ -138,3 +138,42 @@ pub fn restart_vrcompositor() -> bool {
         Ok(_child) => return true,
     }
 }
+
+#[command]
+pub fn kill_process(process_name: String) -> bool {
+    let mut system = System::new_all();
+    system.refresh_processes(ProcessesToUpdate::All, false);
+    
+    let mut found = false;
+    for (_pid, process) in system.processes() {
+        if process.name().eq_ignore_ascii_case(&process_name) {
+            found = true;
+            if !process.kill() {
+                println!("failed to kill {}", process_name);
+            } else {
+                println!("killed {}", process_name);
+            }
+        }
+    }
+    found
+}
+
+#[command]
+pub fn launch_process(path: String, args: Vec<String>) -> bool {
+    use std::path::PathBuf;
+    
+    let path_buf = PathBuf::from(path);
+    
+    println!("Launching {:?} with args {:?}", path_buf, args);
+    
+    match Command::new(&path_buf).args(&args).spawn() {
+        Ok(_) => {
+            println!("Successfully launched {:?}", path_buf);
+            true
+        }
+        Err(e) => {
+            println!("Failed to launch {:?}: {}", path_buf, e);
+            false
+        }
+    }
+}

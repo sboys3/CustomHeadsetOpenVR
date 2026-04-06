@@ -233,7 +233,8 @@ public:
 	// if the screenshot requests should cause full compositor debug screenshots to be taken
 	bool takeCompositorScreenshots = false;
 	
-	// if only private functionality should be handled
+	// makes the diver only do things related to closed source functionality if it exits
+	// this allows for a driver built from source to run along side the driver with proprietary code
 	bool onlyHandlePrivateFunctionality = false;
 	
 	// reload the config every time a file is changed in the distortions directory

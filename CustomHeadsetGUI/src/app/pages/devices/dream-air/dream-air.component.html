@@ -2,4 +2,13 @@
   <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
   <span i18n>This page is currently non-functional. Waiting on Pimax to make Dream Air support possible.</span>
 </div> -->
+
+<div class="launch-section">
+  <button mat-raised-button mat-stroked-button [color]="isLaunching ? 'warn' : 'primary'" (click)="onLaunchHeadset()">
+    <mat-icon>{{ isLaunching ? 'stop' : 'play_arrow' }}</mat-icon>
+    <span i18n>{{ isLaunching ? 'Cancel Launch' : 'Launch Dream Air Headset' }}</span>
+  </button>
+  <p class="launch-info" i18n>Pimax Play must be open and logged in for this to work. Pimax has not provided me any integration with their DRM so this flaky method needs to be used. It has been {{ daysSinceDreamAirBlocked }} days since the Dream Air could start without Pimax Play if Pimax allowed it for everyone.</p>
+</div>
+
 <app-headset-settings [config]="headsetConfig" [driverName]="headsetConfig.driverName" [settingField]="headsetConfig.settingField"></app-headset-settings>

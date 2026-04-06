@@ -26,6 +26,8 @@ pub fn run() {
             js_api::get_executable_path,
             js_api::is_vrmonitor_running,
             js_api::restart_vrcompositor,
+            js_api::kill_process,
+            js_api::launch_process,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
