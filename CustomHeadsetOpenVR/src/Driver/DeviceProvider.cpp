@@ -153,9 +153,11 @@ bool CustomHeadsetDeviceProvider::HandleDevicePoseUpdated(uint32_t openVRID, vr:
 }
 
 bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerialNumber, vr::ETrackedDeviceClass &eDeviceClass, vr::ITrackedDeviceServerDriver *&pDriver){
+	#ifdef HAS_PRIVATE
 	if(driverConfig.onlyHandlePrivateFunctionality){
 		return true;
 	}
+	#endif
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);
 	if(eDeviceClass == vr::TrackedDeviceClass_HMD){
 		

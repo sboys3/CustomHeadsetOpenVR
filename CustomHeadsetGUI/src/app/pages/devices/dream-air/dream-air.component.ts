@@ -68,7 +68,7 @@ export class DreamAirComponent {
 
   private async launchDreamAirSequence(): Promise<void> {
     const killInterval = 250; // 0.25 seconds
-    const totalDuration = 30000; // 30 seconds
+    const totalDuration = 40000; // 40 seconds
     const steamvrDelay = 5000; // 5 seconds
 
     let steamvrLaunched = false;

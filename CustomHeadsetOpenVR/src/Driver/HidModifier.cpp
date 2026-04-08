@@ -344,6 +344,12 @@ int HidModifier::HidReadTimeoutHook(hid_device* device, unsigned char* data, siz
 int HidModifier::HidGetFeatureReportHook(hid_device* device, unsigned char* data, size_t length){
 	hidModifier.AddDevice(device);
 	
+	#ifdef HAS_PRIVATE
+	if(driverConfig.onlyHandlePrivateFunctionality){
+		return origHidGetFeatureReport(device, data, length);
+	}
+	#endif
+	
 	HidDeviceInfo &info = hidModifier.deviceMap[device];
 	if(info.newLighthouseConfig != nullptr){
 		// output the new config

@@ -149,7 +149,7 @@ bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, flo
 			fV = -tmp;
 		}
 	}
-	if(GetConfig().displayRotation == 3){
+	if(GetConfig().displayRotation == 2 || GetConfig().displayRotation == 3){
 		fU *= -1;
 		fV *= -1;
 	}
