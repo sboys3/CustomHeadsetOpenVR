@@ -35,6 +35,10 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     public Math = Math
     resolutionInfoDisplay = signal(false)
     profiles: DistortionProfileEntry[] = []
+    displayNames: Map<string,string> = new Map([
+        ["MeganeX8K Default", "MeganeX8K Custom Default"],
+        ["Dream Air Default", "Dream Air Custom Default"],
+    ])
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
     driverWarning = signal(false)
     driverEnablePrompt = signal(false)
@@ -67,12 +71,15 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 this.defaults = (info?.defaultSettings as any)
             }
             this.profiles = [
-                ...Object.keys(defaultProfiles).map(name => ({ name, isDefault: true })),
+                ...Object.keys(defaultProfiles).map(name => ({ name, displayName: "", isDefault: true })),
                 ...this.dss.distortionProfileList().map(f => ({
                     name: f.name.split('.').slice(0, -1).join('.'),
+                    displayName: "",
                     isDefault: false,
                     file: f
                 }))]
+            
+            this.profiles = this.profiles.map((profile) => ({...profile, displayName: this.displayNames.get(profile.name) || profile.name}))
             
             if(info?.defaultSettings?.customShader?.saturation && this.rootSetting && this.rootSetting?.customShader?.chroma != info?.defaultSettings?.customShader?.chroma && (this?.rootSetting?.customShader?.saturation == undefined || this.rootSetting?.customShader?.saturation == info.defaultSettings?.customShader?.saturation)) {
                 // migrate chroma to saturation if chroma is set and saturation is not

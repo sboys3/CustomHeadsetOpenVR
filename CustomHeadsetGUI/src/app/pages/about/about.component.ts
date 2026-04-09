@@ -8,9 +8,10 @@ import { DriverInfoService } from '../../services/driver-info.service';
 import { SystemDiagnosticService } from '../../services/system-diagnostic.service';
 import { DialogService } from '../../services/dialog.service';
 import { DriverSettingService } from '../../services/driver-setting.service'
+import {FieldTipComponent} from '../../utilities/field-tip/field-tip.component'
 @Component({
   selector: 'app-about',
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, FieldTipComponent,],
   providers: [],
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss'

@@ -10,6 +10,7 @@ import { cleanJsonComments } from '../helpers';
 import { DriverInfoService } from './driver-info.service';
 export type DistortionProfileEntry = {
   name: string;
+  displayName?: string;
   isDefault: boolean;
   file?: DirEntry;
 };

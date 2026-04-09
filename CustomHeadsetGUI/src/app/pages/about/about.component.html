@@ -1,78 +1,113 @@
-<h2>Custom Headset GUI</h2>
-<p>
-    <span i18n>app version</span>
-    @if(aus.updateInfo();as update){
-    <span>&nbsp;:&nbsp;{{update.currentVersion}}&nbsp;</span>
-    @if(update.updateAvailable){
-    <a (click)="openExternal(update.url)" href="javascript:;">
-        <span i18n>New version available</span><mat-icon class="warn-color" style="vertical-align: middle;">priority_high</mat-icon>
-    </a>
-    }@else{
-    @if(!checking() && update.fetchSuccess){
-    <span i18n>(Up to date)</span>
-    }
-    <button mat-icon-button [disabled]="checking()" (click)="checkUpdate()">
-        @if(checking()){
-        <mat-icon class="primary-color">more_horiz</mat-icon>
-        }@else {
-        <mat-icon class="primary-color">refresh</mat-icon>
+<div class="field">
+    <div class="section-title">
+        Custom Headset Driver
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>App Version</div>
+    <div class="control">
+        @if(aus.updateInfo();as update){
+        <span>{{update.currentVersion}}</span>
+        @if(update.updateAvailable){
+        <a (click)="openExternal(update.url)" href="javascript:;">
+            <span i18n>New version available</span><mat-icon class="warn-color" style="vertical-align: middle;">priority_high</mat-icon>
+        </a>
+        }@else{
+        @if(!checking() && update.fetchSuccess){
+        <span i18n>(Up to date)</span>
         }
-    </button>
-    }
-    }
-</p>
-<p>
-    <span i18n>installed driver version</span>
-    @if(sds.driverInstalled();as verison){
-    @if(aus.updateInfo();as updateInfo){
-    <span>&nbsp;:&nbsp;{{verison}}</span>
-    <span>&nbsp;&nbsp;</span>
-    <button mat-stroked-button (click)="uninstallDriver()" [disabled]="sds.installingDriver()">
-        <span i18n>Uninstall Driver</span>
-    </button>
-    @if(updateInfo.installAvailable){
-    <span>&nbsp;&nbsp;</span>
-    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
-        <span i18n>Install {{updateInfo.currentVersion}}</span>
-    </button>
-    <mat-icon class="warn-color">priority_high</mat-icon>
-    }
-    }
-    }@else {
-    <span>
-        &nbsp;:&nbsp;</span>
-    <span i18n>Not installed</span>
-    <span>&nbsp;&nbsp;</span>
-    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
-        <span i18n>Install</span>
-    </button>
-    <mat-icon class="warn-color">priority_high</mat-icon>
-    }
-</p>
-<p>
-    <span i18n>last run driver version</span>
-    @if(dis.values();as info){
-    @if(aus.updateInfo();as updateInfo){
-    <span>&nbsp;:&nbsp;{{info.driverVersion}}</span>
-    <span>&nbsp;&nbsp;</span>
-    <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
-        <span i18n>Re-Install Driver</span>
-    </button>
-    }
-    }@else {
-    <span>
-        &nbsp;:&nbsp;</span>
-    <span i18n>Not installed</span>
-    }
-</p>
-<p>
-    <span class="wrapped-block" i18n>
-        Restarting the compositor can fix some issues and allows changing various settings like refresh rate without restarting SteamVR or the game. 
-    </span>
-    <button mat-stroked-button (click)="sds.restartCompositor()"><span i18n>Restart Compositor</span></button>
-</p>
-<p>
-    <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;">
-        <span i18n>Github Page</span>
-    </a>
-</p>
+        <button mat-icon-button [disabled]="checking()" (click)="checkUpdate()">
+            @if(checking()){
+            <mat-icon class="primary-color">more_horiz</mat-icon>
+            }@else {
+            <mat-icon class="primary-color">refresh</mat-icon>
+            }
+        </button>
+        }
+        }
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>Installed Driver Version</div>
+    <div class="control">
+        @if(sds.driverInstalled();as version){
+        <span>{{version}}</span>
+        <span>&nbsp;&nbsp;</span>
+        @if(aus.updateInfo();as updateInfo){
+        <button mat-stroked-button (click)="uninstallDriver()" [disabled]="sds.installingDriver()">
+            <span i18n>Uninstall Driver</span>
+        </button>
+        @if(updateInfo.installAvailable){
+        <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+            <span i18n>Install {{updateInfo.currentVersion}}</span>
+        </button>
+        <mat-icon class="warn-color">priority_high</mat-icon>
+        }
+        }
+        }@else {
+        <span i18n>Not installed</span>
+        <span>&nbsp;&nbsp;</span>
+        <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+            <span i18n>Install</span>
+        </button>
+        <mat-icon class="warn-color">priority_high</mat-icon>
+        }
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>Last Run Driver Version</div>
+    <div class="control">
+        @if(dis.values();as info){
+        <span>{{info.driverVersion}}</span>
+        @if(aus.updateInfo();as updateInfo){
+        <span>&nbsp;&nbsp;</span>
+        <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+            <span i18n>Re-Install Driver</span>
+        </button>
+        }
+        }@else {
+        <span i18n>Not installed</span>
+        }
+    </div>
+</div>
+<div class="field">
+    
+    <div class="title" i18n>
+        Restart Compositor
+        <app-field-tip i18n-info info="Restarting the compositor can fix some issues and allows changing various settings like refresh rate without restarting SteamVR or the game." />
+    </div>
+    <div class="control">
+        <span>&nbsp;&nbsp;</span>
+        <button mat-stroked-button (click)="sds.restartCompositor()"><span i18n>Restart Compositor</span></button>
+    </div>
+</div>
+<div class="field">
+    <div class="section-title" i18n>Links</div>
+</div>
+<div class="field">
+    <div class="title" i18n>Updates, Source Code, and Documentation</div>
+    <div class="control">
+        <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;" class="donation-link">
+            <img src="/CustomHeadsetCropped.png" alt="CustomHeadset" class="donation-logo">
+            <span i18n>Github Page</span>
+        </a>
+    </div>
+</div>
+<div class="field">
+    <div class="title" i18n>
+        Donation Links
+    </div>
+    <div class="control">
+        <a (click)="openExternal('https://patreon.com/SBoys3')" href="javascript:;" class="donation-link">
+            <img src="/patreon-logo.svg" alt="Patreon" class="donation-logo">
+            <span i18n>Patreon</span>
+        </a>
+        <a (click)="openExternal('https://ko-fi.com/sboys3')" href="javascript:;" class="donation-link">
+            <img src="/ko-fi-logo.svg" alt="Ko-fi" class="donation-logo">
+            <span i18n>Ko-fi</span>
+        </a>
+        <div class="note">
+            If my project improved your VR experience, consider donating.
+        </div>
+    </div>
+</div>

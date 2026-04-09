@@ -60,7 +60,7 @@
     <div class="control">
       <mat-select [(ngModel)]="settings.distortionProfile" (ngModelChange)="saveConfigSettings()">
         @for(p of profiles; track p.name) {
-          <mat-option [value]="p.name">{{p.name}}</mat-option>
+          <mat-option [value]="p.name">{{p.displayName}}</mat-option>
         }
       </mat-select>
     </div>
@@ -87,7 +87,7 @@
     <div class="title">
       <span i18n>Max Fov Horizontal</span>
       <app-field-tip i18n-info
-          info="The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
+          info="The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
       <app-reset-button [canReset]="settings.maxFovX !== defaults.maxFovX"
           (resetClick)="resetOption('maxFovX')"></app-reset-button>
     </div>
@@ -104,7 +104,7 @@
     <div class="title">
       <span i18n>Max Fov Vertical</span>
       <app-field-tip i18n-info
-          info="The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
+          info="The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
       <app-reset-button [canReset]="settings.maxFovY !== defaults.maxFovY"
           (resetClick)="resetOption('maxFovY')"></app-reset-button>
     </div>
@@ -138,14 +138,14 @@
             <div class="note">
               @if(res.fovX) {
                 <p>
-                  <span i18n>Current rendered FOV</span>
+                  <span i18n>Current rendered per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovX.toFixed(1)}}x{{res.fovY.toFixed(1)}}</span>
                 </p>
               }
               @if(res.fovMaxX) {
                 <p>
-                  <span i18n>Maximum possible FOV</span>
+                  <span i18n>Maximum possible per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovMaxX.toFixed(1)}}x{{res.fovMaxY.toFixed(1)}}</span>
                 </p>
