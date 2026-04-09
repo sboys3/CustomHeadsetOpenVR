@@ -128,6 +128,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["forceEnable"].is_boolean()){
 		headsetConfig.forceEnable = headsetData["forceEnable"].get<bool>();
 	}
+	if(headsetData["parallelProjection"].is_boolean()){
+		headsetConfig.parallelProjection = headsetData["parallelProjection"].get<bool>();
+	}
 	
 	if(json& hiddenAreaJson = headsetData["hiddenArea"]; hiddenAreaJson.is_object()){
 		auto& newHiddenArea = headsetConfig.hiddenArea;
@@ -398,6 +401,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"dscSliceCount", headsetConfig.dscSliceCount},
 		{"dscBPPx16", headsetConfig.dscBPPx16},
 		{"forceEnable", headsetConfig.forceEnable},
+		{"parallelProjection", headsetConfig.parallelProjection},
 		{"hiddenArea", {
 			{"enable", headsetConfig.hiddenArea.enable},
 			{"testMode", headsetConfig.hiddenArea.testMode},

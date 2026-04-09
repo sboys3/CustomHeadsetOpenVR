@@ -464,6 +464,9 @@ void BaseHeadsetShim::UpdateSettings(){
 		vr::VRProperties()->SetUint64Property(container, vr::Prop_AdditionalRadioFeatures_Uint64, vr::AdditionalRadioFeatures_HTCLinkBox);
 	}
 
+	// Set parallel projection property
+	vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_EnableParallelRenderCameras_Bool, GetConfig().parallelProjection);
+
 	if (GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye) { // This generally requires that you restart your game for it to update
 		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
 			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
@@ -520,6 +523,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldUpdateDistortion |= GetConfigOld().disableEye != GetConfig().disableEye;
 	shouldUpdateDistortion |= GetConfigOld().disableEyeDecreaseFov != GetConfig().disableEyeDecreaseFov;
 	shouldUpdateDistortion |= GetConfigOld().displayRotation != GetConfig().displayRotation;
+	shouldUpdateDistortion |= GetConfigOld().parallelProjection != GetConfig().parallelProjection;
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
 
 	

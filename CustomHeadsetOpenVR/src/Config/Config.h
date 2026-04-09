@@ -186,6 +186,8 @@ public:
 		int dscBPPx16 = -1;
 		// if the driver should be enabled for every hmd
 		bool forceEnable = false;
+		// if parallel projection should be used for rendering
+		bool parallelProjection = false;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary

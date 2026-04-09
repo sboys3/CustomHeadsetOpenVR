@@ -109,6 +109,7 @@ export type BaseHeadsetConfig = {
   edidVendorIdOverride: number;
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;
+  parallelProjection: boolean;
 };
 
 export type MeganeX8KConfig = BaseHeadsetConfig & {

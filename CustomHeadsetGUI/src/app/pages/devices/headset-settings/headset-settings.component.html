@@ -214,6 +214,21 @@
     </div>
   </div>
 
+  <!-- Parallel Projection -->
+  <div class="field">
+    <div class="title">
+      <span i18n>Parallel Projection</span>
+      <app-field-tip i18n-info
+          info="Enabling parallel projection makes the virtual cameras always point in the same direction. It increases compatibility but slightly harms performance. This only applies when rendered binocular overlap is not 100%." />
+      <app-reset-button [canReset]="settings.parallelProjection !== defaults.parallelProjection"
+          (resetClick)="resetOption('parallelProjection')"></app-reset-button>
+    </div>
+    <div class="control">
+      <mat-slide-toggle [(ngModel)]="settings.parallelProjection"
+          (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+  </div>
+
   <!-- Color Tint -->
   @if(defaults.colorMultiplier) {
     <div class="field">
@@ -713,7 +728,7 @@
         <span i18n>Eye Rotation</span>
         <app-field-tip i18n-info
             info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
-        @if(settings.eyeRotation) {
+        @if(settings.eyeRotation !== defaults.eyeRotation) {
           &nbsp;&nbsp;
           <mat-icon class="warn-color-flash" matTooltip="This may cause vision problems outside of the headset.">warning</mat-icon>
         }
