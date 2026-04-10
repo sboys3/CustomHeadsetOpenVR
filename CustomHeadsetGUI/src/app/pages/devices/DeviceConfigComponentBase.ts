@@ -1,4 +1,4 @@
-import { Component, computed, effect, HostBinding, inject, input, model, OnDestroy, output, signal } from "@angular/core";
+import { ChangeDetectorRef, Component, computed, effect, HostBinding, inject, input, model, OnDestroy, output, signal } from "@angular/core";
 import { AppSettingService } from "../../services/app-setting.service";
 import { DriverInfoService } from "../../services/driver-info.service";
 import { DistortionProfileEntry, DriverSettingService } from "../../services/driver-setting.service";
@@ -32,6 +32,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     public dis = inject(DriverInfoService)
     public ass = inject(AppSettingService)
     public sds = inject(SystemDiagnosticService)
+    // private cdr = inject(ChangeDetectorRef)
     public Math = Math
     resolutionInfoDisplay = signal(false)
     profiles: DistortionProfileEntry[] = []
@@ -59,6 +60,8 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 this.settings = (this.rootSetting as any)
             }
             this.enabled.emit(this.settings?.enable ?? false)
+            // Force re-render when settings change
+            // this.cdr.markForCheck()
         });
         effect(() => {
             const info = (this.dis.values() ?? {}) as DriverInfo;

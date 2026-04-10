@@ -57,6 +57,15 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	// acquire driverConfig.configLock for the duration of this function
 	std::lock_guard<std::mutex> lock(driverConfigLock);
 	
+	hidModifier.RunFrame();
+	
+	#ifdef HAS_PRIVATE
+	if(driverConfig.onlyHandlePrivateFunctionality){
+		driverConfig.hasBeenUpdated = false;
+		return;
+	}
+	#endif
+		
 	// process events that were submitted for this frame.
 	vr::VREvent_t vrevent{};
 	while(vr::VRServerDriverHost()->PollNextEvent(&vrevent, sizeof(vr::VREvent_t))){
@@ -109,7 +118,6 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		InjectCompositorPlugin();
 		customShaderEnabled = true;
 	}
-	hidModifier.RunFrame();
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
 }

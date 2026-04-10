@@ -1,8 +1,8 @@
 # CustomHeadsetOpenVR
-This is a custom headset driver for SteamVR that allows the MeganeX superlight 8K to operate as a native SteamVR headset. In the future this will provide tools to modify any SteamVR device.  
-⚠️Be careful with high brightnesses to avoid burn in on the MeganeX. This driver does not automatically dim the headset in bright scenes which may permanently dim the panel if viewed for many hours.
+This is a custom headset driver for SteamVR that allows the MeganeX 8K and Dream Air to operate as native SteamVR headsets. It provides significant image customization to all native SteamVR headsets through the custom shader.  
 
-<picture><img src="./CustomHeadsetGUI/public/CustomHeadsetCropped.png" height="64"><img/></picture>
+
+<picture><img src="./CustomHeadsetGUI/public/CustomHeadsetCropped.png" height="96"><img/></picture>
 
 ## Installing
 1. Download the latest release from the [releases page](https://github.com/sboys3/CustomHeadsetOpenVR/releases/latest)
@@ -27,10 +27,20 @@ You do not need to do this if you installed the driver with the GUI.
 ## Configuring
 Run `custom-headset-gui.exe` to configure settings.
 Almost all settings will be immediately applied when the file is saved without restarting SteamVR.  
-### Manual Configuration
-Enter `%APPDATA%/CustomHeadset` into the file browser top bar to get to the settings folder.  
-Edit the `settings.json` file based on the [Config header file](./CustomHeadsetOpenVR/src/Config/Config.h)  
-Distortion profiles go in a folder named `Distortion` and they are referenced by their name.  
+
+
+## Donations and Affiliates
+
+If you find this project helpful, consider supporting it through donations or using the affiliate links below:
+
+### Donation Links
+If my project improved your VR experience, consider donating.  
+[<img src="./CustomHeadsetGUI/public/patreon-logo.svg" height="24" alt="Patreon"> Patreon](https://patreon.com/SBoys3)  
+[<img src="./CustomHeadsetGUI/public/ko-fi-logo.svg" height="24" alt="Ko-fi"> Ko-fi](https://ko-fi.com/sboys3)  
+
+### Affiliate Links
+If my driver is a major factor in your decision of purchasing the Dream Air, use my affiliate link at no cost to you. You can use the affiliate links for other Pimax headsets to support me as well.  
+[<img src="./CustomHeadsetGUI/public/DreamAirHD.png" height="24" alt="Pimax"> Pimax](https://pimax.com/products/pimax-dream-air?ref=sboys3)  
 
 ## Building
 1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
@@ -50,26 +60,43 @@ To pull the latest changes, run `git pull --recurse-submodules`
 5. `make -j16`
 6. `rsync -a --delete CustomHeadsetOpenVR/ ~/.steam/steam/steamapps/common/SteamVR/drivers/CustomHeadsetOpenVR/`
 
+### Manual Configuration
+Enter `%APPDATA%/CustomHeadset` into the file browser top bar to get to the settings folder.  
+Edit the `settings.json` file based on the [Config header file](./CustomHeadsetOpenVR/src/Config/Config.h)  
+Distortion profiles go in a folder named `Distortion` and they are referenced by their name.  
+
+### Closed Source Components
+The DRM related functionality on the Dream Air is not open source, but the released driver can be used with a compiled from source driver.
+
+The `onlyHandlePrivateFunctionality` property allows you to run a compiled source driver alongside the closed-source driver. When set to `true` in the root of the config, it disables all functionality in the driver that contains private code except for the private code itself. This allows a compiled source driver to handle all the important parts of the driver. A driver without the closed source components is unaffected by the option.
+
+To use this feature:
+
+1. Build the driver from source following the steps above
+2. Rename the released driver folder, the DLL, and the name in `driver.vrdrivermanifest` to something else (e.g., `CustomHeadsetOpenVR_Private`)
+3. Set `onlyHandlePrivateFunctionality: true` in the root of your `settings.json` config file
+4. The closed-source driver will handle private functionality while your source-built driver handles everything else
 
 
 ## Features
-- MeganeX
+- MeganeX and Dream Air
 	- [x] Running as a native headset
 	- [x] Ignore other headsets
 	- [x] Code to generate the distortion mesh
 	- [X] Darken the display when no motion is detected
+      * ⚠️Be careful with high brightnesses to avoid burn in on the MeganeX. This driver does not automatically dim the headset in bright scenes which may permanently dim the panel if viewed for many hours.
 	- [X] Support for non square outputs to light edges of the display
 	- [X] A good default distortion profile
 	- [X] A near perfect default distortion profile
 	- [X] Multiple distortion profiles
 	- [X] Hidden area mesh
 - Custom Shader
+	- [X] Support all native headsets (MeganeX, Dream Air, BSB 1&2, Index, Vive, etc)
 	- [X] Replace SteamVR compositor shaders at runtime
 	- [X] Configure contrast, chroma, and gamma
 	- [X] Subpixel shifts for the MeganeX and Vive
 	- [X] sRGB color correction for the MeganeX
 	- [X] Remove mura correction or black clamp for any native headset
-	- [X] Support all native headsets
 - Config
 	- [X] Define the structure of the config file
 	- [X] Create MeganeX section
@@ -86,7 +113,7 @@ To pull the latest changes, run `git pull --recurse-submodules`
 	- [X] Install the driver
 	- [ ] Change physical MeganeX settings
 - Driver
-	- [ ] Linux build support
+	- [X] Linux build support
 	- [ ] Override any property of any SteamVR device based on the config
 	- [ ] Change device types
 	- [ ] Apply presets to devices ex: Vive tracker or generic headset
@@ -108,4 +135,4 @@ Thanks to everyone who has shown appreciation to me for this project. It has bee
 
 <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="80" height="80"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/df8e8bbdb98cda795b9602697ea50542.jpg" width="64" height="64"><img/></picture>]( https://t.me/realtavirtualevr "") [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default.png" width="64" height="64"><img/></picture>](# "GoodyearBiff") [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/773d6805d3aa80d1316a26ec1b364379.jpg" width="64" height="64"><img/></picture>](https://github.com/gregtakacs "Greg Takacs") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/7ac08ea782441bede3916424fc32bc0b.jpg" width="64" height="64"><img/></picture>](https://www.youtube.com/@Essentia-Channel "Essentia") [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/3e9ac621e70bbe27c69d79f346c30491.jpg" width="64" height="64"><img/></picture>](https://www.youtube.com/c/VRFlightSimGuy "VR Flight Sim Guy") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="64" height="64"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/f2abff6a17e0ff18d125e7ba7b003fb2.png" width="48" height="48"><img/></picture>](https://hookmanuk.itch.io/ "hookman") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/7ddc5c7cc7adf41aff1285ac1cd10ba0.jpg" width="48" height="48"><img/></picture>](# "Richard Åsberg (WebMaximus)") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="48" height="48"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/04c6935fd569b309d57c3c0a51bea463.jpg" width="32" height="32"><img/></picture>](https://www.artstation.com/cless "") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/cbcb907081b8d18f7bcc2755ef8f72ef.jpg" width="32" height="32"><img/></picture>](https://github.com/hsinyu-chen "hsin yu,chen") [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default.png" width="32" height="32"><img/></picture>](# "Nick Babalis") [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/faec663d3c4ea4ce4341e621eaeab573.jpg" width="32" height="32"><img/></picture>](https://www.youtube.com/@MartydudeVR "MartydudeVR") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> [<picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default.png" width="32" height="32"><img/></picture>](# "SparkerInVR") <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> <picture><img src="https://raw.githubusercontent.com/sboys3/supporters/main/icons/default-anon.png" width="32" height="32"><img/></picture> 
 
-If you want your info displayed, send me a message on the platform you donated on. You can tell me where to get an icon, a name to display when hovered, and a link to wherever you want. You can provide any combination of the 3 and I will add it. Alternatively you can remain autonomous as a generic icon. I can always change it for you in the future, but it will stay in github history.
+If you want your info displayed, send me a message on the platform you donated on. You can tell me where to get an icon, a name to display when hovered, and a link to wherever you want. You can provide any combination of the 3 and I will add it. Alternatively you can remain autonomous as a generic icon. I can always change it for you in the future, but information will stay in github history forever.
