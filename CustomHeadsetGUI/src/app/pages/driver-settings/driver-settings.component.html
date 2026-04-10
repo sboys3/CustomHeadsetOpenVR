@@ -5,6 +5,12 @@
     <span i18n>A headset is currently running with a non-native driver. Many settings will not work.</span>
   </div>
   }
+  @if(appUpdateService.updateInfo()?.installAvailable){
+  <div>
+    <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
+    <span i18n>You still need to install the driver into SteamVR on the About page.</span>
+  </div>
+  }
   @if(driverEnablePrompt()){
   <div class="dirver-warning-main">
     <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>

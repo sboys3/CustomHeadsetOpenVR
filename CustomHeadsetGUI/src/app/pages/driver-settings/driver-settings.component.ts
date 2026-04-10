@@ -13,6 +13,7 @@ import {MatIconModule} from '@angular/material/icon'
 import {SystemDiagnosticService} from '../../services/system-diagnostic.service'
 import {MatButtonModule} from '@angular/material/button'
 import { AppSettingService } from '../../services/app-setting.service';
+import { AppUpdateService } from '../../services/app-update.service'
 
 export interface TabConfig {
   type: string;
@@ -52,7 +53,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     GeneralComponent = GeneralComponent;
     DreamAirComponent = DreamAirComponent;
 
-    constructor(private dis: DriverInfoService, private appSettingService: AppSettingService) {
+    constructor(private dis: DriverInfoService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
         // Register tab configurations
         this._tabs.set([
             { type: 'General', headsetType: HeadsetType.Other }, // Other
