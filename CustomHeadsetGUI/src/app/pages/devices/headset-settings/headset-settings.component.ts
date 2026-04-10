@@ -111,4 +111,19 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   scaledMaxFOV(originalFOV: number) {
     return Math.ceil(originalFOV / (this.settings?.fovZoom || 1));
   }
+
+  combinedHfov(horizontalFov: number) {
+    return Math.max(0, horizontalFov + (this.settings?.eyeRotation || 0) * 2);
+  }
+
+  binocularOverlap(horizontalFov: number) {
+    return Math.max(0, horizontalFov - (this.settings?.eyeRotation || 0) * 2);
+  }
+
+  showBurnInDeviationNote(maxPossibleFovX: number, maxPossibleFovY: number) {
+    if (!this.settings?.fovBurnInPrevention) {
+      return false;
+    }
+    return this.settings.maxFovX < maxPossibleFovX || this.settings.maxFovY < maxPossibleFovY;
+  }
 }

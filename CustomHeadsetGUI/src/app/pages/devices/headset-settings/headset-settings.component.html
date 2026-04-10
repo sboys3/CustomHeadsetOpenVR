@@ -141,6 +141,9 @@
                   <span i18n>Current rendered per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovX.toFixed(1)}}x{{res.fovY.toFixed(1)}}</span>
+                  @if(showBurnInDeviationNote(res.fovMaxX, res.fovMaxY)) {
+                    <span i18n="@@currentRenderedFovBurnInNote">&nbsp;(deviates by a random value to reduce burn-in)</span>
+                  }
                 </p>
               }
               @if(res.fovMaxX) {
@@ -148,6 +151,16 @@
                   <span i18n>Maximum possible per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovMaxX.toFixed(1)}}x{{res.fovMaxY.toFixed(1)}}</span>
+                </p>
+                <p>
+                  <span i18n="@@combinedHfov">Combined HFOV</span>
+                  <span>&nbsp;:&nbsp;</span>
+                  <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
+                </p>
+                <p>
+                  <span i18n="@@binocularOverlap">Binocular overlap</span>
+                  <span>&nbsp;:&nbsp;</span>
+                  <span>{{binocularOverlap(res.fovX).toFixed(1)}}</span>
                 </p>
               }
               @if(res.renderResolution100PercentX) {

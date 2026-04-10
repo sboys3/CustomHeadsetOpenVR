@@ -322,6 +322,10 @@
         <source>Enable</source>
         <target state="translated">啟用</target>
       </trans-unit>
+      <trans-unit id="currentRenderedFovBurnInNote" datatype="html">
+        <source> (deviates by a random value to reduce burn-in)</source>
+        <target state="translated">（會因隨機值而偏移，以減少烙印）</target>
+      </trans-unit>
       <trans-unit id="4651117059363790056" datatype="html">
         <source>100% Render resolution for SteamVR</source>
         <target state="translated">SteamVR 的 100% 渲染解析度</target>
@@ -329,6 +333,14 @@
       <trans-unit id="6195061204627290703" datatype="html">
         <source>Render resolution for 1:1 sample per panel pixel</source>
         <target state="translated">每個面板像素 1:1 個取樣的渲染解析度</target>
+      </trans-unit>
+      <trans-unit id="combinedHfov" datatype="html">
+        <source>Combined HFOV</source>
+        <target state="translated">Combined HFOV</target>
+      </trans-unit>
+      <trans-unit id="binocularOverlap" datatype="html">
+        <source>Binocular overlap</source>
+        <target state="translated">雙眼重疊</target>
       </trans-unit>
       <trans-unit id="6190895239365336532" datatype="html">
         <source>Enable Hidden Area Meshes</source>
