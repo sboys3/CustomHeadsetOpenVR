@@ -220,6 +220,22 @@ public:
 	// config for the Dream Air
 	DreamAirConfig dreamAir = {};
 	
+	class FakeHeadsetConfig : public BaseHeadsetConfig{
+		public:
+		FakeHeadsetConfig(){
+			enable = false;
+			headsetType = HeadsetType::Other;
+			distortionProfile = "MeganeX8K Default";
+			displayRotation = 0;
+			// use a 1080p monitor
+			directMode = false;
+			resolutionX = 960;
+			resolutionY = 1080;
+		}
+	};
+	// config for the fake headset
+	FakeHeadsetConfig fakeHeadset = {};
+	
 	class GeneralHeadsetConfig{
 	public:
 		// if a vive link box should be used for bluetooth

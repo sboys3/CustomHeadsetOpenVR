@@ -40,7 +40,7 @@ If my project improved your VR experience, consider donating.
 
 ### Affiliate Links
 If my driver is a major factor in your decision of purchasing the Dream Air, use my affiliate link at no cost to you. You can use the affiliate links for other Pimax headsets to support me as well.  
-[<img src="./CustomHeadsetGUI/public/DreamAirHD.png" height="24" alt="Pimax"> Pimax (25SBOY3 for $25 off)](https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3)  
+[<img src="./CustomHeadsetGUI/public/DreamAirHD.png" height="24" alt="Pimax"> Pimax with $25 off](https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3)  
 
 ## Building
 1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`

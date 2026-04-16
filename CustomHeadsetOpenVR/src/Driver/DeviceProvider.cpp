@@ -9,6 +9,7 @@
 #include "../Headsets/MeganeX8K.h"
 #include "../Headsets/DreamAir.h"
 #include "../Headsets/GenericHeadset.h"
+#include "../Headsets/FakeHeadset.h"
 
 #include "../Config/ConfigLoader.h"
 
@@ -26,6 +27,16 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
 	hidModifier.InjectHooks();
+	
+	// the shim classes can be used to implement entirely new headsets, not just shim existing ones
+	if(driverConfig.fakeHeadset.enable){
+		FakeHeadset* fakeHeadsetImplementation = new FakeHeadset();
+		fakeHeadsetImplementation->deviceProvider = this;
+		shims.insert(fakeHeadsetImplementation);
+		vr::ITrackedDeviceServerDriver* driver = new ShimTrackedDeviceDriver(fakeHeadsetImplementation, nullptr);
+		vr::VRServerDriverHost()->TrackedDeviceAdded("FakeCustomHMD", vr::TrackedDeviceClass_HMD, driver);
+	}
+	
 	return vr::VRInitError_None;
 }
 const char *const *CustomHeadsetDeviceProvider::GetInterfaceVersions(){

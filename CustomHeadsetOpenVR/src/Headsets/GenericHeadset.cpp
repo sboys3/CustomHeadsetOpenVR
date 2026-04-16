@@ -45,6 +45,9 @@ void GenericHeadsetShim::HandleEvent(const vr::VREvent_t &event){
 	if(driverConfig.forceTracking && event.eventType == vr::VREvent_TrackedDeviceActivated){
 		// initial pose
 		vr::DriverPose_t pose = {};
+		pose.qWorldFromDriverRotation.w = 1.f;
+		pose.qDriverFromHeadRotation.w = 1.f;
+		pose.qRotation.w = 1.f;
 		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(event.trackedDeviceIndex, pose, sizeof(vr::DriverPose_t));
 	}
 }
