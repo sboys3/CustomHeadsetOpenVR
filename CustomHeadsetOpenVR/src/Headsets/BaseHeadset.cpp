@@ -11,7 +11,8 @@ constexpr float kPi{ 3.141592653589793238462643383279502884197169399375105820974
 
 void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue){
 	DriverLog("PosTrackedDeviceActivate");
-
+	
+	deviceIndex = unObjectId;
 
 	// get property container
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
@@ -26,9 +27,6 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 		return;
 	}
 	shimDisplayComponent = true;
-	if(modelNumber == "MeganeX 8K Mark II"){
-		headsetRevision = 2;
-	}
 	driverConfigLoader.info.connectedHeadset = GetConfig().headsetType;
 	
 	isActive = true;

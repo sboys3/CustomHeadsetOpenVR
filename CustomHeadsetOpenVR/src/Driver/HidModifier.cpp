@@ -259,7 +259,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	}
 	
 	if(data["device_class"].is_string() && data["device_class"].get<std::string>() == "hmd"){
-		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && driverConfig.meganeX8K.enable){
+		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && (driverConfig.meganeX8K.forceEnable || (info.deviceName == "MeganeX superlight 8K" || info.deviceName == "MeganeX 8K Mark II")) && driverConfig.meganeX8K.enable){
 			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != driverConfig.meganeX8K.edidVendorIdOverride){
 				data["direct_mode_edid_vid"] = driverConfig.meganeX8K.edidVendorIdOverride;
 				doReplace = true;

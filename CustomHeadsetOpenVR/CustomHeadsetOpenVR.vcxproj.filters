@@ -143,5 +143,8 @@
     <ClCompile Include="src\Headsets\DreamAir.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Headsets\FakeHeadset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

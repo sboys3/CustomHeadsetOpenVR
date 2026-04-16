@@ -58,6 +58,7 @@
     <ClCompile Include="src\Driver\ShaderReplacement.cpp" />
     <ClCompile Include="src\Headsets\BaseHeadset.cpp" />
     <ClCompile Include="src\Headsets\DreamAir.cpp" />
+    <ClCompile Include="src\Headsets\FakeHeadset.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
     <ClCompile Include="src\Headsets\GenericHeadset.cpp" />
     <ClCompile Include="src\Helpers\DisplayHelper.cpp" />

@@ -19,6 +19,10 @@ public:
 	// function that returns the old config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfigOld() = 0;
 	
+	// SteamVR device index
+	int deviceIndex = -1;
+	// if this shim is actively running a headset
+	bool isActive = false;
 	
 	
 	CustomHeadsetDeviceProvider* deviceProvider = nullptr;
@@ -41,10 +45,6 @@ public:
 	vr::HmdMatrix34_t lastMovementRotation = {};
 	// brightness multiplier from for dimming when the headset is not moving
 	double dimmingMultiplier = 1;
-	// revision of the headset 1: original 2: mk2
-	int headsetRevision = 1;
-	// if this shim is actively running a headset
-	bool isActive = false;
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;
