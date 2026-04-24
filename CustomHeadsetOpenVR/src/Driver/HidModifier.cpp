@@ -118,6 +118,10 @@ void HidModifier::InjectHooks(){
 	hasHooked = true;
 	
 	DriverLog("Hooks enabled");
+	
+	#ifdef PIPRESTART
+	PIPRESTART
+	#endif
 }
 
 void HidModifier::RunFrame(){
@@ -255,11 +259,14 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	ordered_json data = ordered_json::parse(configStr, nullptr, true, true);
 	
 	if(data["model_number"].is_string()){
-		info.deviceName = data["model_number"].get<std::string>();
+		info.lighthouseDeviceName = data["model_number"].get<std::string>();
+	}
+	if(data["manufacturer"].is_string()){
+		info.lighthouseDeviceManufacturer = data["manufacturer"].get<std::string>();
 	}
 	
 	if(data["device_class"].is_string() && data["device_class"].get<std::string>() == "hmd"){
-		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && (driverConfig.meganeX8K.forceEnable || (info.deviceName == "MeganeX superlight 8K" || info.deviceName == "MeganeX 8K Mark II")) && driverConfig.meganeX8K.enable){
+		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && (driverConfig.meganeX8K.forceEnable || (info.lighthouseDeviceName == "MeganeX superlight 8K" || info.lighthouseDeviceName == "MeganeX 8K Mark II")) && driverConfig.meganeX8K.enable){
 			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != driverConfig.meganeX8K.edidVendorIdOverride){
 				data["direct_mode_edid_vid"] = driverConfig.meganeX8K.edidVendorIdOverride;
 				doReplace = true;
@@ -293,8 +300,8 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 		};
 	}
 	
-	if(jsonOverrides.find(info.deviceName) != jsonOverrides.end()){
-		mergeJson(data, jsonOverrides[info.deviceName]);
+	if(jsonOverrides.find(info.lighthouseDeviceName) != jsonOverrides.end()){
+		mergeJson(data, jsonOverrides[info.lighthouseDeviceName]);
 		doReplace = true;
 	}
 			

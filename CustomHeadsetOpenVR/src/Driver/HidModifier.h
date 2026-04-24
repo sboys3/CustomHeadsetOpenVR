@@ -65,7 +65,8 @@ public:
 	class HidDeviceInfo {
 	public:
 		hid_device* device;
-		std::string deviceName;
+		std::string lighthouseDeviceName;
+		std::string lighthouseDeviceManufacturer;
 		// std::string lighthouseConfig;
 		unsigned char* newLighthouseConfig;
 		int newLighthouseConfigLength;
