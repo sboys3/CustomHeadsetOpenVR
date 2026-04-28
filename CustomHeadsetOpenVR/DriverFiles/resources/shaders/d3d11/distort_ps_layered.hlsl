@@ -527,6 +527,37 @@ OutputStruct main(in InputStruct IN)
 	}
 	#endif
 	
+	#ifdef SUBPIXEL_SHIFT_DREAMAIR
+	// do subpixel offsets
+	// https://www.shadertoy.com/view/Wcd3D7
+	// only the y direction is done because the x direction is already done by global offsets in the UVs
+	bool outputPixelOdd = outputPixelOdd2D.x == 0;
+	float2 offsetAmountY = uvDy * 0.25f;
+	float2 offsetAmountYOverlay = uvDyOverlay * 0.25f;
+	// if(frac(g_flTime)>0.5){
+		// offsetAmountY *= 100;
+		// offsetAmountY *= 0;
+		// offsetAmountY *= -1;
+	// }
+	if(!outputPixelOdd){
+		IN.uv1.xy += -offsetAmountY;
+		IN.uv2.xy +=  offsetAmountY;
+		IN.uv3.xy += -offsetAmountY;
+		
+		IN.uv1.zw += -offsetAmountYOverlay;
+		IN.uv2.zw +=  offsetAmountYOverlay;
+		IN.uv3.zw += -offsetAmountYOverlay;
+	}else{
+		IN.uv1.xy +=  offsetAmountY;
+		IN.uv2.xy += -offsetAmountY;
+		IN.uv3.xy +=  offsetAmountY;
+		
+		IN.uv1.zw +=  offsetAmountYOverlay;
+		IN.uv2.zw += -offsetAmountYOverlay;
+		IN.uv3.zw +=  offsetAmountYOverlay;
+	}
+	#endif
+	
 	#ifdef SUBPIXEL_SHIFT_VIVE
 	// do subpixel offsets
 	// https://www.shadertoy.com/view/Wcd3D7

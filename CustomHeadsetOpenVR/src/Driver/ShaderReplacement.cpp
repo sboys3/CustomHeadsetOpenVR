@@ -163,10 +163,9 @@ static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionMat
 	}},
 	{Config::HeadsetType::DreamAir, {
 		// convert sRGB into the section of the dci-p3 color space it occupies
-		// I have not verified that this is correct for the sony panels
-		0.8224619687143621, 0.17753803128563772, 0.0, 
-		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
-		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
+		0.8086585139263373, 0.2701921842418791, 0.02818862968779734,
+		0.037776947709785444, 0.9514191752817748, 0.010373580450483824,
+		0.009672316745800479, 0.03419594187859908, 0.6757370235197377
 	}},
 };
 
@@ -223,7 +222,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	}
 	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir){
 		defines[definesCount++] = {"DREAMAIR", "1"};
-		if(driverConfig.customShader.subpixelShift){
+		if(driverConfig.customShader.subpixelShift && driverConfig.dreamAir.subpixelShift != 0 ){
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_DREAMAIR", "1"};
 		}
 	}
@@ -644,6 +643,7 @@ void ShaderReplacement::CheckSettingsThread(){
 			enabled = isNowEnabled;
 			if(isNowEnabled){
 				reloadShaders |= driverConfig.meganeX8K.subpixelShift != driverConfigOld.meganeX8K.subpixelShift;
+				reloadShaders |= driverConfig.dreamAir.subpixelShift != driverConfigOld.dreamAir.subpixelShift;
 				reloadShaders |= driverConfig.customShader.enable != driverConfigOld.customShader.enable;
 				reloadShaders |= driverConfig.customShader.contrast != driverConfigOld.customShader.contrast;
 				reloadShaders |= driverConfig.customShader.contrastMidpoint != driverConfigOld.customShader.contrastMidpoint;
