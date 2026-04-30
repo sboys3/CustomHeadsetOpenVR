@@ -448,6 +448,7 @@ void RadialBezierDistortionProfile::Initialize(){
 	radialUVMapB = new float[radialMapSize];
 	// calculate how much further the radial map needs to go to cover the entire screen area
 	float distancePastOne = std::max(resolutionX, resolutionY) / resolution;
+	distancePastOne *= 1.41421; // it needs to reach the corners
 	radialMapConversion = (float)radialMapSize / distancePastOne;
 	for(int i = 0; i < radialMapSize; i++){
 		float outputRadius = i / radialMapConversion * 100;

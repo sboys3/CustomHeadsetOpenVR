@@ -128,7 +128,8 @@ bool PopulateBuiltInDistortionProfiles(){
 		40.0f, 94.20f,
 		45.0f, 103.25f,
 		50.0f, 111.1f,
-		55.0f, 118.0f
+		52.5f, 114.3f,
+		55.0f, 117.3f
 	};
 	dreamAir.distortionsRed = {
 		0.00f, 0.30f,
