@@ -564,6 +564,20 @@
 </div>
 <div class="field">
     <div class="title">
+        <span i18n>Enable for Dream Air</span>
+        <app-field-tip i18n-info
+            info="Enables the custom shader for the Dream Air." />
+        <app-reset-button
+            [canReset]="settings.customShader.enableForDreamAir!=defaults.customShader.enableForDreamAir"
+            (resetClick)="nested('customShader').resetOption('enableForDreamAir')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableForDreamAir"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
         <span i18n>Enable for Other HMDs</span>
         <app-field-tip i18n-info
             info="Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won't work yet." />

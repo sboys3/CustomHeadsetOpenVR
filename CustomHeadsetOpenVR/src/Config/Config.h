@@ -48,6 +48,7 @@ struct CustomShaderConfig{
 	// if shaders should be replaced in the compositor
 	bool enable = false;
 	bool enableForMeganeX8K = true;
+	bool enableForDreamAir = true;
 	bool enableForOther = false;
 	// contrast with 50 being normal
 	double contrast = 50;
