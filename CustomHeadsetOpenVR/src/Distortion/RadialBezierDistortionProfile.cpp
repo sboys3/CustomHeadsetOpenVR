@@ -367,19 +367,38 @@ void RadialBezierDistortionProfile::Initialize(){
 	DriverLog("Display resolution: %ix%i\n", (int)resolutionX, (int)resolutionY);
 	
 	// find maximum degrees that fit all color channels on the screen
-	halfFovX = SampleFromPointsInverse(distortionsSmoothRed, resolutionX / resolution * 100.0f);
-	halfFovX = std::min(halfFovX, SampleFromPointsInverse(distortionsSmoothGreen, resolutionX / resolution * 100.0f));
-	halfFovX = std::min(halfFovX, SampleFromPointsInverse(distortionsSmoothBlue, resolutionX / resolution * 100.0f));
-	halfFovY = SampleFromPointsInverse(distortionsSmoothRed, resolutionY / resolution * 100.0f);
-	halfFovY = std::min(halfFovY, SampleFromPointsInverse(distortionsSmoothGreen, resolutionY / resolution * 100.0f));
-	halfFovY = std::min(halfFovY, SampleFromPointsInverse(distortionsSmoothBlue, resolutionY / resolution * 100.0f));
+	float radiusOuter = resolutionX / resolution * 100.0f - offsetX;
+	halfFovOuterX = SampleFromPointsInverse(distortionsSmoothRed, radiusOuter);
+	halfFovOuterX = std::min(halfFovOuterX, SampleFromPointsInverse(distortionsSmoothGreen, radiusOuter));
+	halfFovOuterX = std::min(halfFovOuterX, SampleFromPointsInverse(distortionsSmoothBlue, radiusOuter));
+	float radiusInner = resolutionX / resolution * 100.0f + offsetX;
+	halfFovInnerX = SampleFromPointsInverse(distortionsSmoothRed, radiusInner);
+	halfFovInnerX = std::min(halfFovInnerX, SampleFromPointsInverse(distortionsSmoothGreen, radiusInner));
+	halfFovInnerX = std::min(halfFovInnerX, SampleFromPointsInverse(distortionsSmoothBlue, radiusInner));
+	float radiusTop = resolutionY / resolution * 100.0f - offsetY;
+	halfFovTopY = SampleFromPointsInverse(distortionsSmoothRed, radiusTop);
+	halfFovTopY = std::min(halfFovTopY, SampleFromPointsInverse(distortionsSmoothGreen, radiusTop));
+	halfFovTopY = std::min(halfFovTopY, SampleFromPointsInverse(distortionsSmoothBlue, radiusTop));
+	float radiusBottom = resolutionY / resolution * 100.0f + offsetY;
+	halfFovBottomY = SampleFromPointsInverse(distortionsSmoothRed, radiusBottom);
+	halfFovBottomY = std::min(halfFovBottomY, SampleFromPointsInverse(distortionsSmoothGreen, radiusBottom));
+	halfFovBottomY = std::min(halfFovBottomY, SampleFromPointsInverse(distortionsSmoothBlue, radiusBottom));
 	
 	// limit to max fov
-	halfFovX = std::min(halfFovX, maxFovX / 2.0f);
-	halfFovY = std::min(halfFovY, maxFovY / 2.0f);
+	float fovX = halfFovOuterX + halfFovInnerX;
+	float fovY = halfFovTopY + halfFovBottomY;
+	fovX = std::min(fovX, maxFovX);
+	fovY = std::min(fovY, maxFovY);
+	float multiplierX = fovX / (halfFovOuterX + halfFovInnerX);
+	float multiplierY = fovY / (halfFovTopY + halfFovBottomY);
+	halfFovOuterX *= multiplierX;
+	halfFovInnerX *= multiplierX;
+	halfFovTopY *= multiplierY;
+	halfFovBottomY *= multiplierY;
 	
 	// halfFovY = halfFovX;
-	DriverLog("FOV: %fx%f\n", halfFovX * 2, halfFovY * 2);
+	DriverLog("FOV: %fx%f", fovX * 2, fovY * 2);
+	DriverLog("FOV Halfs: Outer: %f, Inner: %f, Top: %f, Bottom: %f", halfFovOuterX, halfFovInnerX, halfFovTopY, halfFovBottomY);
 	// halfFovX = 20;
 	// halfFovY = 20;
 	
@@ -393,8 +412,10 @@ void RadialBezierDistortionProfile::Initialize(){
 	}
 	
 	// calculate tangents for the edges of the input screen
-	float edgeTanX = std::tan(halfFovX * kPi / 180.0f);
-	float edgeTanY = std::tan(halfFovY * kPi / 180.0f);
+	maxHalfFovX = std::max(halfFovOuterX, halfFovInnerX);
+	maxHalfFovY = std::max(halfFovTopY, halfFovBottomY);
+	float edgeTanX = std::tan(maxHalfFovX * kPi / 180.0f);
+	float edgeTanY = std::tan(maxHalfFovY * kPi / 180.0f);
 	
 	// calculate the maximum output percentage for the edge of the output
 	float maxOutputPercentageX = SampleFromPoints(distortionsSmoothGreen, edgeTanX);
@@ -471,13 +492,22 @@ void RadialBezierDistortionProfile::Initialize(){
 
 void RadialBezierDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop){
 	// DriverLog("GetProjectionRaw returning an fov of %f", halfFov * 2.0f);
-	const float hFovHalf = halfFovX * kPi / 180.0f; // Convert to radians
-	const float vFovHalf = halfFovY * kPi / 180.0f; // Convert to radians
+	// const float hFovHalf = halfFovX * kPi / 180.0f; // Convert to radians
+	// const float vFovHalf = halfFovY * kPi / 180.0f; // Convert to radians
+	const float hFovHalfOuter = halfFovOuterX * kPi / 180.0f; // Convert to radians
+	const float hFovHalfInner = halfFovInnerX * kPi / 180.0f; // Convert to radians
+	const float vFovHalfTop = halfFovTopY * kPi / 180.0f; // Convert to radians
+	const float vFovHalfBottom = halfFovBottomY * kPi / 180.0f; // Convert to radians
 	
-	*pfLeft = std::tan(-hFovHalf);
-	*pfRight = std::tan(hFovHalf);
-	*pfTop = std::tan(vFovHalf);
-	*pfBottom = std::tan(-vFovHalf);
+	if(eEye == vr::Eye_Left){
+		*pfLeft = std::tan(-hFovHalfOuter);
+		*pfRight = std::tan(hFovHalfInner);
+	}else{
+		*pfLeft = std::tan(-hFovHalfInner);
+		*pfRight = std::tan(hFovHalfOuter);
+	}
+	*pfTop = std::tan(vFovHalfTop);
+	*pfBottom = std::tan(-vFovHalfBottom);
 	// if(eEye == vr::Eye_Left){
 	// 	*pfRight = 0.00001;
 	// }else{
@@ -527,8 +557,42 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	Point2D distortion;
 	distortion.x = unitU * radius;
 	distortion.y = unitV * radius;
-	distortion.x /= std::tan(halfFovX * kPi / 180.0f);
-	distortion.y /= std::tan(halfFovY * kPi / 180.0f);
+	// if(eEye == vr::Eye_Left){
+	// 	distortion.x -= offsetX / 100.0f;
+	// }else{
+	// 	distortion.x += offsetX / 100.0f;
+	// }
+	// distortion.y -= offsetY / 100.0f;
+	// distortion.x /= std::tan((halfFovOuterX + halfFovInnerX) * kPi / 180.0f);
+	// distortion.y /= std::tan((halfFovTopY + halfFovBottomY) * kPi / 180.0f);
+	// if(eEye == vr::Eye_Left){
+	// 	distortion.x -= offsetX / 100.0f;
+	// }else{
+	// 	distortion.x += offsetX / 100.0f;
+	// }
+	// distortion.y -= offsetY / 100.0f;
+	// if(eEye == vr::Eye_Left){
+	// 	distortion.x += offsetX / 100.0f;
+	// }else{
+	// 	distortion.x -= offsetX / 100.0f;
+	// }
+	// distortion.y += offsetY / 100.0f;
+	
+	
+	float outerTan = std::tan(halfFovOuterX * kPi / 180.0f);
+	float innerTan = std::tan(halfFovInnerX * kPi / 180.0f);
+	float topTan = std::tan(halfFovTopY * kPi / 180.0f);
+	float bottomTan = std::tan(halfFovBottomY * kPi / 180.0f);
+	float tanX = outerTan + innerTan;
+	float tanY = topTan + bottomTan;
+	distortion.x /= (outerTan + innerTan) / 2;
+	distortion.y /= (topTan + bottomTan) / 2;
+	if(eEye == vr::Eye_Left){
+		distortion.x += (outerTan - innerTan) / (outerTan + innerTan);
+	}else{
+		distortion.x -= (outerTan - innerTan) / (outerTan + innerTan);
+	}
+	distortion.y -= (topTan - bottomTan) / (topTan + bottomTan);
 	
 	// if(eEye == vr::Eye_Left){
 	// 	distortion.x = distortion.x * 2.0f + 1.0f;

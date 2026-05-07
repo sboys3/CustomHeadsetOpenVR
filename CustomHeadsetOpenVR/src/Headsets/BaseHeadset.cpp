@@ -130,53 +130,63 @@ bool BaseHeadsetShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, floa
 
 // run for each vertex of the distortion mesh and outputs the uv coordinates to sample for each color
 bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float &fU, float &fV, vr::DistortionCoordinates_t &coordinates){
-
-	float minResolution = (float)std::min(GetConfig().resolutionX, GetConfig().resolutionY);
-	// change range to -1 to 1 for coverage of the minResolution square
-	fU = (fU - 0.5f) * 2.0f * GetConfig().resolutionY / minResolution;
-	fV = (fV - 0.5f) * 2.0f * GetConfig().resolutionX / minResolution;
-	if(GetConfig().displayRotation == 1 || GetConfig().displayRotation == 3){
-		// swap u and v for 90 and 270 rotation
-		if(eEye == vr::Eye_Left){
-			float tmp = fU;
-			fU = -fV;
-			fV = tmp;
-		}else{
-			float tmp = fU;
-			fU = fV;
-			fV = -tmp;
+	
+	float redU = fU;
+	float redV = fV;
+	float greenU = fU;
+	float greenV = fV;
+	float blueU = fU;
+	float blueV = fV;
+	// apply sub pixel offsets for super sampling
+	float subpixelOffsetMultiplier = (float)(GetConfig().subpixelShift);
+	if(subpixelOffsetMultiplier > 0){
+		auto subpixelOffsets = GetConfig().subpixelOffsets;
+		if(subpixelOffsets.size() >= 6){
+			redU += subpixelOffsets[0] * subpixelOffsetMultiplier;
+			redV += subpixelOffsets[1] * subpixelOffsetMultiplier;
+			greenU += subpixelOffsets[2] * subpixelOffsetMultiplier;
+			greenV += subpixelOffsets[3] * subpixelOffsetMultiplier;
+			blueU += subpixelOffsets[4] *subpixelOffsetMultiplier;
+			blueV += subpixelOffsets[5] * subpixelOffsetMultiplier;
 		}
 	}
-	if(GetConfig().displayRotation == 2 || GetConfig().displayRotation == 3){
-		fU *= -1;
-		fV *= -1;
-	}
 	
-	fU /= (float)GetConfig().distortionZoom;
-	fV /= (float)GetConfig().distortionZoom;
-	
-	float redV = fV;
-	float greenV = fV;
-	
-	// apply sub pixel offsets for super sampling
-	// the resolution is hardcoded here because the physical pixel sizes remain constant regardless of resolution
-	// TODO: make this configurable
-	float subpixelOffset = (float)(GetConfig().subpixelShift / 3552);
-	// if(testToggle){
-	if(eEye == vr::Eye_Left){
-		redV -= subpixelOffset;
-		greenV += subpixelOffset;
-	}else{
-		redV += subpixelOffset;
-		greenV -= subpixelOffset;
-	}
-	// }
+	float minResolution = (float)std::min(GetConfig().resolutionX, GetConfig().resolutionY);
+	float distortionZoom = (float)GetConfig().distortionZoom;
+	float displayRotation = (float)GetConfig().displayRotation;
+	// change range to -1 to 1 for coverage of the minResolution square, apply rotation, and apply zoom
+	auto transformUV = [&](float &u, float &v){
+		// change range to -1 to 1 for coverage of the minResolution square
+		u = (u - 0.5f) * 2.0f * GetConfig().resolutionY / minResolution;
+		v = (v - 0.5f) * 2.0f * GetConfig().resolutionX / minResolution;
+		if(displayRotation == 1 || displayRotation == 3){
+			// swap u and v for 90 and 270 rotation
+			if(eEye == vr::Eye_Left){
+				float tmp = u;
+				u = -v;
+				v = tmp;
+			}else{
+				float tmp = u;
+				u = v;
+				v = -tmp;
+			}
+		}
+		if(displayRotation == 2 || displayRotation == 3){
+			u *= -1;
+			v *= -1;
+		}
+		u /= distortionZoom;
+		v /= distortionZoom;
+	};
+	transformUV(redU, redV);
+	transformUV(greenU, greenV);
+	transformUV(blueU, blueV);
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	// apply distortion profile to each color channel
-	Point2D distortionRed = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelRed, fU, redV);
-	Point2D distortionGreen = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelGreen, fU, greenV);
-	Point2D distortionBlue = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelBlue, fU, fV);
+	Point2D distortionRed = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelRed, redU, redV);
+	Point2D distortionGreen = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelGreen, greenU, greenV);
+	Point2D distortionBlue = distortionProfileConstructor.profile->ComputeDistortion(eEye, ColorChannelBlue, blueU, blueV);
 	
 	if(eEye == vr::Eye_Left && GetConfig().disableEye & 1){
 		// this will completely cull the render mesh
@@ -517,6 +527,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	bool shouldUpdateDistortion = loadedNewDistortionProfile || shouldReInitializeDistortion;
 	shouldUpdateDistortion |= GetConfigOld().distortionZoom != GetConfig().distortionZoom;
 	shouldUpdateDistortion |= GetConfigOld().subpixelShift != GetConfig().subpixelShift;
+	shouldUpdateDistortion |= GetConfigOld().subpixelOffsets != GetConfig().subpixelOffsets;
 	shouldUpdateDistortion |= GetConfigOld().distortionMeshResolution != GetConfig().distortionMeshResolution;
 	shouldUpdateDistortion |= GetConfigOld().disableEye != GetConfig().disableEye;
 	shouldUpdateDistortion |= GetConfigOld().disableEyeDecreaseFov != GetConfig().disableEyeDecreaseFov;

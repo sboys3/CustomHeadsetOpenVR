@@ -61,6 +61,7 @@ export type CustomShaderConfig = {
   disableMuraCorrection: boolean;
   disableBlackLevels: boolean;
   srgbColorCorrection: boolean;
+  srgbWhitePointCorrection: boolean;
   srgbColorCorrectionMatrix: number[]; // 3x3 matrix as a flat array of 9 elements
   lensColorCorrection: boolean;
   dither10Bit: boolean;
@@ -92,6 +93,7 @@ export type BaseHeadsetConfig = {
   distortionZoom: number;
   fovZoom: number;
   subpixelShift: number;
+  subpixelOffsets: number[];
   resolutionX: number;
   resolutionY: number;
   maxFovX: number;

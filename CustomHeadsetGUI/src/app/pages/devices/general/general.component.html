@@ -5,8 +5,10 @@
 <div class="field">
     <div class="section-title">
         <span i18n>Custom Shader</span>
-        <app-field-tip i18n-info
-            info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR's compositor." />
+        <a href="https://github.com/sboys3/CustomHeadsetOpenVR/wiki/Custom-Shader" target="_blank" style="color: #1a73e8;">
+            <app-field-tip i18n-info
+                info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR's compositor. Click for more information." />
+        </a>
     </div>
 </div>
 @if(defaults.customShader){
@@ -488,6 +490,19 @@
     </div>
     <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.customShader.srgbColorCorrection"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field" *ngIf="settings.customShader.srgbColorCorrection">
+    <div class="title">
+        <span i18n>sRGB White Point Correction</span>
+        <app-field-tip i18n-info
+            info="Corrects the sRGB white point in addition to the colors. This may result in a warmer image but more accurate colors to the sRGB standard." />
+        <app-reset-button [canReset]="settings.customShader.srgbWhitePointCorrection!=defaults.customShader.srgbWhitePointCorrection"
+            (resetClick)="nested('customShader').resetOption('srgbWhitePointCorrection')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.srgbWhitePointCorrection"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>

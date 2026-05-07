@@ -31,8 +31,12 @@ public:
 private:
 	// this is automatically calculated from the distortions
 	// this is half the fov of the input image in degrees
-	float halfFovX = 0.0f;
-	float halfFovY = 0.0f;
+	float halfFovInnerX = 0.0f;
+	float halfFovOuterX = 0.0f;
+	float halfFovTopY = 0.0f;
+	float halfFovBottomY = 0.0f;
+	float maxHalfFovX = 0.0f;
+	float maxHalfFovY = 0.0f;
 	// recommended render resolution
 	uint32_t recommendedRenderWidth = 0;
 	uint32_t recommendedRenderHeight = 0;

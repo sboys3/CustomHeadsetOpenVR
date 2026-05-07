@@ -74,6 +74,8 @@ struct CustomShaderConfig{
 	bool disableBlackLevels = false;
 	// if the colors should be corrected to display the srgb input as srgb on the display
 	bool srgbColorCorrection = false;
+	// if the white point correction should be applied to the srgb color correction
+	bool srgbWhitePointCorrection = false;
 	// a 3x3 matrix to apply to the linear colors
 	// if this is an array of 9 flat elements it will override the headset's default matrix
 	std::vector<double> srgbColorCorrectionMatrix = {};
@@ -132,8 +134,10 @@ public:
 		double distortionZoom = 1.0;
 		// amount to zoom in the FOV, the fov is divided by this value
 		double fovZoom = 1.0;
-		// amount to shift the subpixels to account for their diffent rows
-		double subpixelShift = 0.33;
+		// multiplier for the subpixel offsets
+		double subpixelShift = 1.0;
+		// subpixel offsets in pixel units for each color channel [offsetXRed, offsetYRed, offsetXGreen, offsetYGreen, offsetXBlue, offsetYBlue]
+		std::vector<double> subpixelOffsets = {0, 0, 0, 0, 0, 0};
 		// width of one eye in pixels
 		int resolutionX = 3840;
 		// height of one eye in pixels
@@ -214,6 +218,7 @@ public:
 			maxFovY = 86;
 			edidVendorId = 53826; // PVR
 			displayRotation = 3;
+			subpixelOffsets = {0.33 / 3552.0, 0, 0, 0, -0.33 / 3552.0, 0};
 			eyeRotation = 2;
 		}
 	};
