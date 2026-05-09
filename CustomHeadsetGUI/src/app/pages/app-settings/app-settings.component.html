@@ -38,4 +38,12 @@
         </mat-select>
     </div>
 </div>
+@if(settings.advanceMode){
+<div class="field">
+    <div class="title" i18n>Show Incompatible Profiles</div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.showIncompatibleProfiles" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
 }

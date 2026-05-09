@@ -508,6 +508,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	distortionProfileConstructor.distortionSettings.maxFovX = (float)GetConfig().maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = (float)GetConfig().maxFovY;
 	distortionProfileConstructor.distortionSettings.fovZoom = (float)GetConfig().fovZoom;
+	distortionProfileConstructor.distortionSettings.disableFovClamping = GetConfig().disableFovClamping;
 	if(GetConfig().fovBurnInPrevention){
 		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
 		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;
@@ -521,6 +522,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierX != GetConfig().renderResolutionMultiplierX;
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierY != GetConfig().renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= GetConfigOld().fovBurnInPrevention != GetConfig().fovBurnInPrevention;
+	shouldReInitializeDistortion |= GetConfigOld().disableFovClamping != GetConfig().disableFovClamping;
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(GetConfig().distortionProfile);

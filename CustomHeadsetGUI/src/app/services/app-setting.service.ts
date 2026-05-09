@@ -10,10 +10,11 @@ import { AppSettingHolder } from './AppSettingAccessor';
 export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
   constructor(paths: PathsService) {
     super(paths.guiSettingPath, paths.appDataDirPath, signal({
-      colorScheme: 'system',
+      colorScheme: 'dark',
       updateMode: 'rewrite',
       advanceMode: false,
-      defaultSettingsTab: 'auto'
+      defaultSettingsTab: 'auto',
+      showIncompatibleProfiles: false
     }), true, true)
     const appSettingHolder = inject(AppSettingHolder)
     effect(() => {

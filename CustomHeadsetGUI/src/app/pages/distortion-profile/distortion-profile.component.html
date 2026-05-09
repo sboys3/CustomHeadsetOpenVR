@@ -1,33 +1,139 @@
 <app-system-ready>
-    <div class="actions">
-        <button mat-stroked-button i18n (click)="importFile()">Import</button>
-        <button mat-stroked-button i18n (click)="openDir()">Reveal In File Explorer</button>
-        <div class="text"><span i18n>Current Profile : </span>{{settings?.distortionProfile}}</div>
-    </div>
-    <div class="container">
-        <app-distortion-profile-viewer [profiles]="displayedCurve"></app-distortion-profile-viewer>
-        <div class="list">
-            <cdk-virtual-scroll-viewport [itemSize]="50" class="viewport">
-                <div class="item" [attr.index]="i " [class.alternate]="odd" *cdkVirtualFor="let profile of profiles(); let odd = odd;let i = index">
-                    <span class="name"
-                        [class.primary-color]="settings?.distortionProfile==profile.name">{{profile.name}}</span>
-                    <button mat-icon-button matTooltip="Show" (click)="showProfile(profile)" i18n-matTooltip
-                        [disabled]="displayedCurve.includes(profile.name)">
-                        <mat-icon>visibility</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Apply" (click)="applyProfile(profile.name)" i18n-matTooltip
-                        [disabled]="settings?.distortionProfile==profile.name">
-                        <mat-icon>check</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="exportFile(profile)" matTooltip="Export" i18n-matTooltip>
-                        <mat-icon class="tertiary-color">share</mat-icon>
-                    </button>
-                    <button [disabled]="settings?.distortionProfile==profile.name" matTooltip="Delete" class="warn"
-                        mat-icon-button i18n-matTooltip (click)="deleteProfile(profile)">
-                        <mat-icon
-                            [class.warn-color]="settings?.distortionProfile!=profile.name">delete</mat-icon></button>
-                </div>
-            </cdk-virtual-scroll-viewport>
+    @if(loaded()) {
+        <div class="actions">
+            <button mat-stroked-button i18n (click)="importFile()">Import</button>
+            <button mat-stroked-button i18n (click)="openDir()">Reveal In File Explorer</button>
         </div>
-    </div>
+
+        <div class="profile-section">
+            <h2 class="section-header">
+                <span i18n>Custom Distortion Profiles</span>
+                <span class="profile-count">{{ customProfiles().length }} <span i18n>profiles</span></span>
+            </h2>
+
+            <div class="table-container">
+                @if(customProfiles().length > 0) {
+                    <table mat-table [dataSource]="customProfiles()" class="profile-table">
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef i18n>Name</th>
+                            <td mat-cell *matCellDef="let profile">{{ profile.name }}</td>
+                        </ng-container>
+
+                        <!-- Type Column (Device + Type + Points) -->
+                        <ng-container matColumnDef="details">
+                            <th mat-header-cell *matHeaderCellDef i18n>Type</th>
+                            <td mat-cell *matCellDef="let profile" class="details-cell">
+                                <div class="details-device" matTooltip="Target Device" i18n-matTooltip>{{ profile.device ?? 'Unknown' }}</div>
+                                <div class="details-meta">
+                                    <span class="details-type" matTooltip="Distortion Algorithm" i18n-matTooltip>{{ profile.type ?? 'N/A' }}</span>
+                                    <span class="details-separator">·</span>
+                                    <span class="details-points" matTooltip="Distortion Control Points" i18n-matTooltip>{{ profile.distortionPoints ?? 'N/A' }}</span>@if(profile.hasChromaticAberration){ <span class="ca-badge" matTooltip="Chromatic Aberration Correction" i18n-matTooltip>+CA</span> }
+                                </div>
+                            </td>
+                        </ng-container>
+
+
+                        <!-- Author Column -->
+                        <ng-container matColumnDef="author">
+                            <th mat-header-cell *matHeaderCellDef i18n>Author</th>
+                            <td mat-cell *matCellDef="let profile">
+                                <div class="author-name">{{ profile.author ?? 'N/A' }}</div>
+                                <div class="author-date">{{ formatDate(profile.creationDate) }}</div>
+                            </td>
+                        </ng-container>
+
+                        <!-- Description Column -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef i18n>Description</th>
+                            <td mat-cell *matCellDef="let profile">
+                                {{ profile.description ?? 'N/A' }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let profile">
+                                <button mat-icon-button (click)="exportFile(profile)" matTooltip="Export" i18n-matTooltip>
+                                    <mat-icon class="tertiary-color">share</mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="deleteProfile(profile)" matTooltip="Delete" i18n-matTooltip>
+                                    <mat-icon class="warn-color">delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCustom"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCustom;"></tr>
+                    </table>
+                } @else {
+                    <div class="empty-message" i18n>
+                        No custom distortion profiles found. Import a profile to get started.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2 class="section-header">
+                <span i18n>Built-in Distortion Profiles</span>
+                <span class="profile-count">{{ builtInProfiles().length }} <span i18n>profiles</span></span>
+            </h2>
+
+            <div class="table-container">
+                <table mat-table [dataSource]="builtInProfiles()" class="profile-table">
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef i18n>Name</th>
+                        <td mat-cell *matCellDef="let profile">{{ profile.name }}</td>
+                    </ng-container>
+
+                    <!-- Type Column (Device + Type + Points) -->
+                    <ng-container matColumnDef="details">
+                        <th mat-header-cell *matHeaderCellDef i18n>Type</th>
+                        <td mat-cell *matCellDef="let profile" class="details-cell">
+                            <div class="details-device" matTooltip="Target Device" i18n-matTooltip>{{ profile.device ?? 'Unknown' }}</div>
+                            <div class="details-meta">
+                                <span class="details-type" matTooltip="Distortion Algorithm" i18n-matTooltip>{{ profile.type ?? 'N/A' }}</span>
+                                <span class="details-separator">·</span>
+                                <span class="details-points" matTooltip="Distortion Control Points" i18n-matTooltip>{{ profile.distortionPoints ?? 'N/A' }}</span>@if(profile.hasChromaticAberration){ <span class="ca-badge" matTooltip="Chromatic Aberration Correction" i18n-matTooltip>+CA</span> }
+                            </div>
+                        </td>
+                    </ng-container>
+
+
+                    <!-- Author Column -->
+                    <ng-container matColumnDef="author">
+                        <th mat-header-cell *matHeaderCellDef i18n>Author</th>
+                        <td mat-cell *matCellDef="let profile">
+                            <div class="author-name">{{ profile.author ?? 'N/A' }}</div>
+                            <div class="author-date">{{ formatDate(profile.creationDate) }}</div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Description Column -->
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef i18n>Description</th>
+                        <td mat-cell *matCellDef="let profile">
+                            {{ profile.description ?? 'N/A' }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let profile">
+                            <button mat-icon-button (click)="exportBuiltIn(profile)" matTooltip="Export" i18n-matTooltip>
+                                <mat-icon class="tertiary-color">share</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsBuiltIn"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsBuiltIn;"></tr>
+                </table>
+            </div>
+        </div>
+    }
 </app-system-ready>

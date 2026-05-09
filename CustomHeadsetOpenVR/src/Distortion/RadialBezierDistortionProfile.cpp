@@ -387,8 +387,13 @@ void RadialBezierDistortionProfile::Initialize(){
 	// limit to max fov
 	float fovX = halfFovOuterX + halfFovInnerX;
 	float fovY = halfFovTopY + halfFovBottomY;
-	fovX = std::min(fovX, maxFovX);
-	fovY = std::min(fovY, maxFovY);
+	if(!disableFovClamping){
+		fovX = std::min(fovX, maxFovX);
+		fovY = std::min(fovY, maxFovY);
+	}else{
+		fovX = maxFovX;
+		fovY = maxFovY;
+	}
 	float multiplierX = fovX / (halfFovOuterX + halfFovInnerX);
 	float multiplierY = fovY / (halfFovTopY + halfFovBottomY);
 	halfFovOuterX *= multiplierX;

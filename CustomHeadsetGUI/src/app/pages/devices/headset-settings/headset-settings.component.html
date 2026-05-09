@@ -85,7 +85,7 @@
   <!-- Max FOV Horizontal -->
   <div class="field">
     <div class="title">
-      <span i18n>Max Fov Horizontal</span>
+      <span i18n>Max Per Eye Fov Horizontal</span>
       <app-field-tip i18n-info
           info="The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
       <app-reset-button [canReset]="settings.maxFovX !== defaults.maxFovX"
@@ -102,7 +102,7 @@
   <!-- Max FOV Vertical -->
   <div class="field">
     <div class="title">
-      <span i18n>Max Fov Vertical</span>
+      <span i18n>Max Per Eye Fov Vertical</span>
       <app-field-tip i18n-info
           info="The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
       <app-reset-button [canReset]="settings.maxFovY !== defaults.maxFovY"
@@ -119,7 +119,7 @@
   <!-- Resolution Info -->
   <div class="field">
     <div class="title">
-      <span i18n>Resolution Info</span>
+      <span i18n>Resolution and FOV Info</span>
       <app-field-tip i18n-info info="Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the headset is actively running under this driver." />
     </div>
     <div class="control">
@@ -634,6 +634,21 @@
       </div>
       <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.fovBurnInPrevention"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+      </div>
+    </div>
+
+    <!-- Disable FOV Clamping -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Disable FOV Clamping</span>
+        <app-field-tip i18n-info
+            info="When enabled, the distortion profile will not clamp the image to the bounds of the display. This allows lighting up more of the corners or providing more FOV in the desktop view for streaming. This will also cause a blue glow at the edge of the display." />
+        <app-reset-button [canReset]="settings.disableFovClamping !== defaults.disableFovClamping"
+            (resetClick)="resetOption('disableFovClamping')"></app-reset-button>
+      </div>
+      <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.disableFovClamping"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
       </div>
     </div>

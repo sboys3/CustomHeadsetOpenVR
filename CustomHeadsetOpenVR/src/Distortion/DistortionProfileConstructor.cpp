@@ -45,17 +45,17 @@ bool PopulateBuiltInDistortionProfiles(){
 	meganeX8Kv1_0_0.creationDate = 1748554999.135;
 	meganeX8Kv1_0_0.type = "RadialBezier";
 	meganeX8Kv1_0_0.distortions = {
-		0.00000f, 0.0f,
-		5.00000f, 12.463f,
-		10.0000f, 24.750f,
-		15.00000f, 36.665f,
-		20.00000f, 48.103f,
-		25.00000f, 59.093f,
-		30.00000f, 69.749f,
-		35.00000f, 79.994f,
-		40.00000f, 89.147f,
-		45.00000f, 96.357f,
-		48.30730f, 100.0f
+		0.00000, 0.0,
+		5.00000, 12.463,
+		10.0000, 24.750,
+		15.00000, 36.665,
+		20.00000, 48.103,
+		25.00000, 59.093,
+		30.00000, 69.749,
+		35.00000, 79.994,
+		40.00000, 89.147,
+		45.00000, 96.357,
+		48.30730, 100.0,
 	};
 	builtInDistortionProfiles[meganeX8Kv1_0_0.name] = meganeX8Kv1_0_0;
 	
@@ -68,14 +68,14 @@ bool PopulateBuiltInDistortionProfiles(){
 	meganeX8Kv0_4_0.author = "SBoys3, Shiftall";
 	meganeX8Kv0_4_0.type = "RadialBezier";
 	meganeX8Kv0_4_0.distortions = {
-		0.00000f, 0.0f,
-		10.0000f, 24.7f,
-		20.0000f, 48.0f,
-		30.0000f, 69.6f,
-		35.0000f, 79.9f,
-		40.0000f, 89.06f,
-		45.0000f, 96.30f,
-		48.3073f, 100.0f
+		0.00000, 0.0,
+		10.0000, 24.7,
+		20.0000, 48.0,
+		30.0000, 69.6,
+		35.0000, 79.9,
+		40.0000, 89.06,
+		45.0000, 96.30,
+		48.3073, 100.0,
 	};
 	builtInDistortionProfiles[meganeX8Kv0_4_0.name] = meganeX8Kv0_4_0;
 	
@@ -88,22 +88,22 @@ bool PopulateBuiltInDistortionProfiles(){
 	meganeX8Kv0_3_0.author = "Shiftall";
 	meganeX8Kv0_3_0.type = "RadialBezier";
 	meganeX8Kv0_3_0.distortions = {
-		00.0000f, 0.0f,
-		10.0000f, 24.77952472f,
-		20.0000f, 48.32328161f,
-		30.0000f, 69.9136628f,
-		35.0000f, 79.99462488f,
-		40.0000f, 89.06057112f,
-		45.0000f, 96.29634484f,
-		48.3073f, 100.0f,
+		00.0000, 0.0,
+		10.0000, 24.77952472,
+		20.0000, 48.32328161,
+		30.0000, 69.9136628,
+		35.0000, 79.99462488,
+		40.0000, 89.06057112,
+		45.0000, 96.29634484,
+		48.3073, 100.0,
 	};
 	meganeX8Kv0_3_0.distortionsRed = {
-		0.f, 0.5f,
-		47.5f, 0.5f,
+		0., 0.5,
+		47.5, 0.5,
 	};
 	meganeX8Kv0_3_0.distortionsBlue = {
-		0.f, -0.42f,
-		47.5f, -0.42f,
+		0., -0.42,
+		47.5, -0.42,
 	};
 	builtInDistortionProfiles[meganeX8Kv0_3_0.name] = meganeX8Kv0_3_0;
 	
@@ -112,37 +112,37 @@ bool PopulateBuiltInDistortionProfiles(){
 	dreamAir.name = "Dream Air Default";
 	dreamAir.device = "DreamAir";
 	dreamAir.modifiedTime = 0;
-	dreamAir.description = "Dream Air Distortion Profile";
+	dreamAir.description = "Default distortion profile for the Dream Air in this driver. It is a custom distortion profile created for for the Dream Air by using a calibrated camera.";
 	dreamAir.author = "SBoys3";
 	dreamAir.creationDate = 1771922353.519;
 	dreamAir.type = "RadialBezier";
 	dreamAir.distortions = {
-		0.00f, 0.000f,
-		5.00f, 12.80f,
-		10.0f, 25.50f,
-		15.0f, 38.00f,
-		20.0f, 50.23f,
-		25.0f, 62.05f,
-		30.0f, 73.35f,
-		35.0f, 84.10f,
-		40.0f, 94.20f,
-		45.0f, 103.25f,
-		50.0f, 111.1f,
-		52.5f, 114.3f,
-		55.0f, 117.3f
+		0.00, 0.000,
+		5.00, 12.80,
+		10.0, 25.50,
+		15.0, 38.00,
+		20.0, 50.23,
+		25.0, 62.05,
+		30.0, 73.35,
+		35.0, 84.10,
+		40.0, 94.20,
+		45.0, 103.25,
+		50.0, 111.1,
+		52.5, 114.3,
+		55.0, 117.3,
 	};
 	dreamAir.distortionsRed = {
-		0.00f, 0.30f,
-		25.0f, 0.45f,
-		40.0f, 0.50f,
-		50.0f, 0.55f
+		0.00, 0.30,
+		25.0, 0.45,
+		40.0, 0.50,
+		50.0, 0.55,
 	};
 	dreamAir.distortionsBlue = {
-		0.00f, -0.2f,
-		25.0f, -0.4f,
-		30.0f, -0.5f,
-		40.0f, -0.7f,
-		50.0f, -0.7f
+		0.00, -0.2,
+		25.0, -0.4,
+		30.0, -0.5,
+		40.0, -0.7,
+		50.0, -0.7,
 	};
 	builtInDistortionProfiles[dreamAir.name] = dreamAir;
 	
@@ -241,6 +241,7 @@ void DistortionProfileConstructor::ReInitializeProfile(){
 	profile->maxFovX = distortionSettings.maxFovX;
 	profile->maxFovY = distortionSettings.maxFovY;
 	profile->fovZoom = distortionSettings.fovZoom;
+	profile->disableFovClamping = distortionSettings.disableFovClamping;
 	if(profile->fovZoom == 0.0f){
 		// avoid division by zero in calculations because invalid distortion data can prevent the compositor from starting
 		profile->fovZoom = 1.0f; 

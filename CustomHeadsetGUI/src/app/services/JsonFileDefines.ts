@@ -3,6 +3,7 @@ export type DistortionProfileConfig = {
   description: string;
   modifiedTime: number;
   type: string;
+  distortionProfileId: string;
   distortions: number[];
   distortionsRed: number[];
   distortionsBlue: number[];
@@ -101,6 +102,8 @@ export type BaseHeadsetConfig = {
   maxFovY: number;
   distortionMeshResolution: number;
   fovBurnInPrevention: boolean;
+  disableFovClamping: boolean;
+  distortionProfileDeviceType: string;
   renderResolutionMultiplierX: number;
   renderResolutionMultiplierY: number;
   superSamplingFilterPercent: number;
@@ -132,6 +135,7 @@ export type AppSetting = {
   updateMode: 'replace' | 'rewrite';
   advanceMode: boolean;
   defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';
+  showIncompatibleProfiles: boolean;
 }
 
 export const HeadsetType = {
@@ -165,6 +169,22 @@ export type ResolutionInfo = {
   renderResolution100PercentY: number
 }
 
+export type BuiltInDistortionProfile = {
+  device?: string;
+  distortionProfileId?: string;
+  description?: string;
+  author?: string;
+  creationDate?: number;
+  type?: string;
+  distortions?: number[];
+  distortionsRed?: number[];
+  distortionsBlue?: number[];
+  legacySmoothing?: boolean;
+  smoothAmount?: number;
+  offsetX?: number;
+  offsetY?: number;
+};
+
 export type BuiltInDistortionProfiles = {
-  [profileName: string]: {};
-}
+  [profileName: string]: BuiltInDistortionProfile;
+};

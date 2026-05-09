@@ -14,11 +14,16 @@ export type DistortionProfileEntry = {
   isDefault: boolean;
   file?: DirEntry;
 };
+export type DistortionProfileFile = {
+  name: string;
+  device?: string;
+  entry: DirEntry;
+};
 @Injectable({
   providedIn: 'root'
 })
 export class DriverSettingService extends JsonSettingServiceBase<Settings> {
-  private readonly _distortionProfileList = signal<DirEntry[]>([]);
+  private readonly _distortionProfileList = signal<DistortionProfileFile[]>([]);
   public readonly distortionProfileList = this._distortionProfileList.asReadonly();
   constructor(private pathService: PathsService, driverInfoService: DriverInfoService) {
     super(pathService.settingPath, pathService.appDataDirPath, computed(() => driverInfoService.values()?.defaultSettings ?? ({} as Settings)), false, true);
@@ -37,9 +42,27 @@ export class DriverSettingService extends JsonSettingServiceBase<Settings> {
     });
   }
   private async listDistortionProfiles() {
-    const list = (await readDir(this.pathService.distortionDirPath))
+    const files = (await readDir(this.pathService.distortionDirPath))
       .filter(x => x.isFile && x.name.endsWith('.json'))
-    this._distortionProfileList.set(list);
+    const profiles: DistortionProfileFile[] = [];
+    for (const file of files) {
+      const profile: DistortionProfileFile = {
+        name: file.name,
+        entry: file
+      };
+      try {
+        const fullPath = await join(this.pathService.distortionDirPath, file.name);
+        const content = await readTextFile(fullPath);
+        const parsed = JSON.parse(cleanJsonComments(content));
+        if (parsed.device) {
+          profile.device = parsed.device;
+        }
+      } catch (e) {
+        // ignore parse errors
+      }
+      profiles.push(profile);
+    }
+    this._distortionProfileList.set(profiles);
   }
 
   async delete(name: string) {

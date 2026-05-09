@@ -153,6 +153,10 @@ public:
 		int distortionMeshResolution = 127;
 		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
 		bool fovBurnInPrevention = true;
+		// if the distortion profile should not clamp the image to the bounds of the displayand instead render an image at whatever FOV is set
+		bool disableFovClamping = false;
+		// device type used to filter distortion profiles in the GUI
+		std::string distortionProfileDeviceType = "";
 		// multiply 100% render resolution width
 		double renderResolutionMultiplierX = 1.0;
 		// multiply 100% render resolution height
@@ -204,6 +208,7 @@ public:
 		MeganeX8KConfig(){
 			headsetType = HeadsetType::MeganeX8K;
 			distortionProfile = "MeganeX8K Default";
+			distortionProfileDeviceType = "MeganeX8K";
 			edidVendorId = 0xcc4c; // SFL
 			displayRotation = 1;
 		}
@@ -216,6 +221,7 @@ public:
 		DreamAirConfig(){
 			headsetType = HeadsetType::DreamAir;
 			distortionProfile = "Dream Air Default";
+			distortionProfileDeviceType = "DreamAir";
 			maxFovY = 86;
 			edidVendorId = 53826; // PVR
 			displayRotation = 3;

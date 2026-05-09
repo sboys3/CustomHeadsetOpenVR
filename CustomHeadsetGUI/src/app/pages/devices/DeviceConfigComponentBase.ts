@@ -73,14 +73,34 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 //special case : root settings
                 this.defaults = (info?.defaultSettings as any)
             }
-            this.profiles = [
-                ...Object.keys(defaultProfiles).map(name => ({ name, displayName: "", isDefault: true })),
-                ...this.dss.distortionProfileList().map(f => ({
-                    name: f.name.split('.').slice(0, -1).join('.'),
-                    displayName: "",
-                    isDefault: false,
-                    file: f
-                }))]
+            const headsetDeviceType = (this.settings as any)?.distortionProfileDeviceType as string | undefined;
+            const showIncompatible = this.ass.values()?.showIncompatibleProfiles ?? false;
+            
+            const defaultProfileEntries = Object.keys(defaultProfiles).map(name => ({
+                name,
+                displayName: "",
+                isDefault: true,
+                device: (defaultProfiles as any)[name]?.device as string | undefined
+            }));
+            const fileProfileEntries = this.dss.distortionProfileList().map(f => ({
+                name: f.name.split('.').slice(0, -1).join('.'),
+                displayName: "",
+                isDefault: false,
+                file: f.entry,
+                device: f.device
+            }));
+            
+            let allProfiles = [...defaultProfileEntries, ...fileProfileEntries];
+            
+            // Filter/sort profiles based on device compatibility
+            if (headsetDeviceType) {
+                const matching = allProfiles.filter(p => p.device === headsetDeviceType);
+                const noDevice = allProfiles.filter(p => !p.device);
+                const incompatible = allProfiles.filter(p => p.device && p.device !== headsetDeviceType);
+                allProfiles = showIncompatible ? [...matching, ...noDevice, ...incompatible] : [...matching, ...noDevice];
+            }
+            
+            this.profiles = allProfiles;
             
             this.profiles = this.profiles.map((profile) => ({...profile, displayName: this.displayNames.get(profile.name) || profile.name}))
             

@@ -80,6 +80,12 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["fovBurnInPrevention"].is_boolean()){
 		headsetConfig.fovBurnInPrevention = headsetData["fovBurnInPrevention"].get<bool>();
 	}
+	if(headsetData["disableFovClamping"].is_boolean()){
+		headsetConfig.disableFovClamping = headsetData["disableFovClamping"].get<bool>();
+	}
+	if(headsetData["distortionProfileDeviceType"].is_string()){
+		headsetConfig.distortionProfileDeviceType = headsetData["distortionProfileDeviceType"].get<std::string>();
+	}
 	if(headsetData["renderResolutionMultiplierX"].is_number()){
 		headsetConfig.renderResolutionMultiplierX = headsetData["renderResolutionMultiplierX"].get<double>();
 	}
@@ -394,6 +400,8 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"maxFovY", headsetConfig.maxFovY},
 		{"distortionMeshResolution", headsetConfig.distortionMeshResolution},
 		{"fovBurnInPrevention", headsetConfig.fovBurnInPrevention},
+		{"disableFovClamping", headsetConfig.disableFovClamping},
+		{"distortionProfileDeviceType", headsetConfig.distortionProfileDeviceType},
 		{"renderResolutionMultiplierX", headsetConfig.renderResolutionMultiplierX},
 		{"renderResolutionMultiplierY", headsetConfig.renderResolutionMultiplierY},
 		{"superSamplingFilterPercent", headsetConfig.superSamplingFilterPercent},
@@ -531,7 +539,10 @@ void ConfigLoader::WriteInfo(){
 			{"distortions", profile.distortions},
 			{"distortionsRed", profile.distortionsRed},
 			{"distortionsBlue", profile.distortionsBlue},
+			{"legacySmoothing", profile.legacySmoothing},
 			{"smoothAmount", profile.smoothAmount},
+			{"offsetX", profile.offsetX},
+			{"offsetY", profile.offsetY},
 		};
 		distortionProfilesJson[profile.name] = profileJson;
 	}
