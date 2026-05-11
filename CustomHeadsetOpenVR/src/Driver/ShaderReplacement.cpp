@@ -625,8 +625,8 @@ void ShaderReplacement::WatchShadersThread(){
 		pNotify = (FILE_NOTIFY_INFORMATION*)buffer;
 		do{
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
-			if(fileName.find(L".hlsl") != std::wstring::npos && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
-				DriverLog("Shader changed, reloading... %s %i", fileName.c_str(), pNotify->Action);
+			if(fileName.size() >= 5 && fileName.substr(fileName.size() - 5) == L".hlsl" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
+				DriverLog("Shader changed, reloading... %ls %i", fileName.c_str(), pNotify->Action);
 				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				ReloadShaders();
 				break;

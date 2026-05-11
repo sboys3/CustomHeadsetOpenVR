@@ -191,6 +191,13 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         return true;
     }
     
+    switchToGeneralTab() {
+        const generalTab = this._tabs().find(tab => tab.type === 'General');
+        if (generalTab) {
+            this._selectedTab.set(generalTab);
+        }
+    }
+    
     async enableDriver() {
         await this.sds.enableSteamVRDriver("CustomHeadsetOpenVR")
     }

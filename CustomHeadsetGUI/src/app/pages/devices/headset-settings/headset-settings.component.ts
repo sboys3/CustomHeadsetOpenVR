@@ -66,6 +66,7 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   config = input.required<HeadsetSettingsConfig>();
   override settingField = input.required<string>();
   override driverName = input.required<string | string[]>();
+  navigateToGeneralTab = output<void>();
   
   resolutionModel?: number;
   subpixelShiftOptions = [-1, 0, 1];

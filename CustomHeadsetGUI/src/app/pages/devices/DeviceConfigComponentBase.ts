@@ -5,7 +5,7 @@ import { DistortionProfileEntry, DriverSettingService } from "../../services/dri
 import { SystemDiagnosticService } from "../../services/system-diagnostic.service";
 import { PullingService } from "../../services/PullingService";
 import { is_vrmonitor_running } from "../../tauri_wrapper";
-import { DriverInfo, Settings } from "../../services/JsonFileDefines";
+import { DriverInfo, HeadsetType, Settings } from "../../services/JsonFileDefines";
 import { deepCopy } from "../../helpers";
 
 type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
@@ -41,6 +41,16 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
         ["Dream Air Default", "Dream Air Custom Default"],
     ])
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
+    customShaderOtherWarning = computed(() => {
+        const info = this.dis.values();
+        const settings = this.dss.values();
+        // Not a headset with explicit toggles
+        const isOtherHeadset = info?.connectedHeadset !== HeadsetType.MeganeX8K && info?.connectedHeadset !== HeadsetType.DreamAir;
+        const noDirectMode = !info?.nonNativeHeadsetFound;
+        const customShaderEnabled = settings?.customShader?.enableForOther ?? false;
+        console.log(isOtherHeadset, noDirectMode, !customShaderEnabled)
+        return isOtherHeadset && noDirectMode && !customShaderEnabled;
+    })
     driverWarning = signal(false)
     driverEnablePrompt = signal(false)
     steamVRRunning = signal({ updated: false, running: false }, { equal: (a, b) => a.running === b.running && a.updated === b.updated })

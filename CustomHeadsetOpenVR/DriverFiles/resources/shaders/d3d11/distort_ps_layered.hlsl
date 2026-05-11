@@ -487,6 +487,7 @@ OutputStruct main(in InputStruct IN)
 	OutputStruct OUT = (OutputStruct)0;
 	
 	
+	uint2 outputPixel = uint2(IN.Position.xy);
 	
 	#ifndef NO_DISTORTION
 	
@@ -494,7 +495,6 @@ OutputStruct main(in InputStruct IN)
 	float2 uvDy = ddy(IN.uv2.xy);
 	float2 uvDxOverlay = ddx(IN.uv2.zw);
 	float2 uvDyOverlay = ddy(IN.uv2.zw);
-	uint2 outputPixel = uint2(IN.Position.xy);
 	int2 outputPixelOdd2D = uint2(frac(outputPixel/2.0f)*2.0f) % 2;
 	
 	#ifdef SUBPIXEL_SHIFT_MEGANEX8K
@@ -714,7 +714,6 @@ OutputStruct main(in InputStruct IN)
 	#endif
 	
 	#ifdef LENS_COLOR_CORRECTION
-	#ifdef MEGANEX8K
 	// correct for warmer colored center of the lens on the MeganeX
 	#ifdef OUTPUT_RESOLUTION_X
 	// distance from 0 to silghtly above 1 from the display not being square
@@ -725,6 +724,7 @@ OutputStruct main(in InputStruct IN)
 	// fallback to this if the resolution is not defined, but this scales with FOV
 	float distanceFromCenter = length(IN.uv2.zw - 0.5) * 2;
 	#endif
+	#ifdef MEGANEX8K
 	// try 1
 	// col.b *= 1 - min(pow(distanceFromCenter, 2), 0.15) * 1.5;
 	// col.rg *= 0.9;
@@ -741,6 +741,12 @@ OutputStruct main(in InputStruct IN)
 	// float fadeOutPoint = 0.9;
 	// float fadeCenterPoint = (fadeInPoint + fadeOutPoint) / 2;
 	// col.rgb *= 1 - lerp(pow(smoothstep(fadeInPoint, fadeOutPoint, distanceFromCenter), 3), pow(smoothstep(fadeInPoint, fadeOutPoint, distanceFromCenter), 0.2), smoothstep((fadeInPoint - fadeCenterPoint) * 0.7 + fadeCenterPoint, (fadeOutPoint - fadeCenterPoint) * 0.7 + fadeCenterPoint, distanceFromCenter));
+	#endif
+	#ifdef DREAMAIR
+	float scaledDistanceFromCenter = max(0, distanceFromCenter * 0.5 - 0.15);
+	float sideAmount = min(scaledDistanceFromCenter * scaledDistanceFromCenter, 0.08);
+	col.r *= 1 - sideAmount * 2.0;
+	col.g *= 1 - sideAmount * 0.3;
 	#endif
 	#endif
 	

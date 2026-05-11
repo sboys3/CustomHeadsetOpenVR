@@ -665,7 +665,7 @@ void ConfigLoader::WatcherThreadDistortions(){
 		pNotify = (FILE_NOTIFY_INFORMATION*)buffer;
 		do{
 			std::wstring fileName(pNotify->FileName, pNotify->FileNameLength / sizeof(wchar_t));
-			if(fileName.find(L".json") != std::wstring::npos && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
+			if(fileName.size() >= 5 && fileName.substr(fileName.size() - 5) == L".json" && (pNotify->Action == FILE_ACTION_MODIFIED || pNotify->Action == FILE_ACTION_ADDED || pNotify->Action == FILE_ACTION_RENAMED_NEW_NAME)){
 				DriverLog("Distortion profile changed, reloading...");
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				while(driverConfig.hasBeenUpdated){
@@ -768,7 +768,7 @@ void ConfigLoader::WatcherThreadDistortions(){
 			if(event->mask & IN_MODIFY || event->mask & IN_CREATE){
 				if(event->len){
 					std::string fileName = event->name;
-					if(fileName.find(".json") != std::string::npos){
+					if(fileName.size() >= 5 && fileName.substr(fileName.size() - 5) == ".json"){
 						DriverLog("Distortion profile changed, reloading...");
 							std::this_thread::sleep_for(std::chrono::milliseconds(10));
 							while(driverConfig.hasBeenUpdated){

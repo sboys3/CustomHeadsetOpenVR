@@ -5,7 +5,7 @@
 <div class="field">
     <div class="section-title">
         <span i18n>Custom Shader</span>
-        <a href="https://github.com/sboys3/CustomHeadsetOpenVR/wiki/Custom-Shader" target="_blank" style="color: #1a73e8;">
+        <a href="https://github.com/sboys3/CustomHeadsetOpenVR/wiki/Custom-Shader" target="_blank" class="info-link">
             <app-field-tip i18n-info
                 info="Replaces the distortion shader in SteamVR's compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR's compositor. Click for more information." />
         </a>
@@ -31,8 +31,8 @@
 </div>
 @if(settings.customShader.enable){
 <div class="field">
-    <div class="note">
-        <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This custom shader has the possibility to completely break SteamVR after a future SteamVR update. Valve has no obligation to maintain compatibility with this modification. Disable it if you have issues or compatibility problems.</span>
+    <div class="note small-warning">
+        <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This custom shader has the possibility to completely break SteamVR while enabled after a future SteamVR update. Disable it if you have issues or compatibility problems.</span>
     </div>
 </div>
 <div class="field">
@@ -40,6 +40,9 @@
         <span i18n>Enable for Other Native HMDs</span>
         <app-field-tip i18n-info
             info="Enables the custom shader for all other native HMDs that don't have specific toggles at the bottom. This includes all native SteamVR headsets like the Index, Vive, BSB, etc. Non-native SteamVR headsets like the Quest, Pimax, etc will not work." />
+        @if(customShaderOtherWarning()){
+        <mat-icon class="warn-color" matTooltip="The custom shader is not enabled for the current headset." matTooltipPosition="above" style="vertical-align: middle; cursor: help;">priority_high</mat-icon>
+        }
         <app-reset-button
             [canReset]="settings.customShader.enableForOther!=defaults.customShader.enableForOther"
             (resetClick)="nested('customShader').resetOption('enableForOther')"></app-reset-button>
@@ -53,8 +56,10 @@
 <div class="field">
     <div class="title">
         <span i18n>Filter</span>
-        <app-field-tip i18n-info
-            info="The sampling filter to use for the custom shader. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing. However these filters increase GPU memory bandwidth usage." />
+        <a href="https://github.com/sboys3/CustomHeadsetOpenVR/wiki/Custom-Shader#sampling-filter" target="_blank" class="info-link">
+            <app-field-tip i18n-info
+                info="The sampling filter to use for the custom shader. These filters are one of the best ways to increase image quality in this driver. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing. However these filters increase GPU memory bandwidth usage. Click for more information." />
+        </a>
         <app-reset-button [canReset]="settings.customShader.samplingFilter!=defaults.customShader.samplingFilter"
             (resetClick)="nested('customShader').resetOption('samplingFilter')"></app-reset-button>
     </div>
@@ -510,7 +515,7 @@
     <div class="title">
         <span i18n>Lens Color Correction</span>
         <app-field-tip i18n-info
-            info="This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses." />
+            info="This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses. On the Dream Air this fixes the red tint around the edges." />
         <app-reset-button [canReset]="settings.customShader.lensColorCorrection!=defaults.customShader.lensColorCorrection"
             (resetClick)="nested('customShader').resetOption('lensColorCorrection')"></app-reset-button>
     </div>

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DreamAirConfig } from '../../../services/JsonFileDefines';
@@ -13,6 +13,7 @@ import { openUrl } from '@tauri-apps/plugin-opener';
   styleUrl: './dream-air.component.scss'
 })
 export class DreamAirComponent {
+  navigateToGeneralTab = output<void>();
   constructor(private cdr: ChangeDetectorRef) {}
   
   headsetConfig: HeadsetSettingsConfig = {

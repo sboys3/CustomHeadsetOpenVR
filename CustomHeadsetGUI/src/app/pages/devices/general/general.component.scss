@@ -2,4 +2,9 @@
 
 :host {
     @include sf.formStyle();
+
+    .small-warning {
+        font-size: 85% !important;
+        padding: 0.25rem 1rem !important;
+    }
 }
