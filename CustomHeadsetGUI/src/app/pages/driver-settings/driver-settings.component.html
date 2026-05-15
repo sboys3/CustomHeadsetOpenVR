@@ -25,7 +25,7 @@
     @for (tab of orderedTabs; track tab.headsetType) {
     <mat-tab label="MeganeX 8K" i18n-label *ngIf="tab.type === 'MeganeX8K'">
       <ng-template matTabContent>
-        @if(orderedTabs[0].type !== "MeganeX8K"){
+        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.MeganeX8K){
           <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
         }
         <app-meganex-x8-k (navigateToGeneralTab)="switchToGeneralTab()" />
@@ -33,7 +33,7 @@
     </mat-tab>
     <mat-tab label="Dream Air" i18n-label *ngIf="tab.type === 'DreamAir'">
       <ng-template matTabContent>
-        @if(orderedTabs[0].type !== "DreamAir"){
+        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.DreamAir){
           <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
         }
         <app-dream-air (navigateToGeneralTab)="switchToGeneralTab()" />

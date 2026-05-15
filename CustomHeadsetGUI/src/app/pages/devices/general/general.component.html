@@ -41,7 +41,7 @@
         <app-field-tip i18n-info
             info="Enables the custom shader for all other native HMDs that don't have specific toggles at the bottom. This includes all native SteamVR headsets like the Index, Vive, BSB, etc. Non-native SteamVR headsets like the Quest, Pimax, etc will not work." />
         @if(customShaderOtherWarning()){
-        <mat-icon class="warn-color" matTooltip="The custom shader is not enabled for the current headset." matTooltipPosition="above" style="vertical-align: middle; cursor: help;">priority_high</mat-icon>
+        <mat-icon class="warn-color" matTooltip="The custom shader is not enabled for the current headset." i18n-matTooltip matTooltipPosition="above" style="vertical-align: middle; cursor: help;">priority_high</mat-icon>
         }
         <app-reset-button
             [canReset]="settings.customShader.enableForOther!=defaults.customShader.enableForOther"
@@ -459,6 +459,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+@if(advanceMode()){
 <div class="field">
     <div class="title">
         <span i18n>Disable Mura Correction</span>
@@ -472,6 +473,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
 <div class="field">
     <div class="title">
         <span i18n>Disable Black Levels</span>
@@ -524,6 +526,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+@if(advanceMode()){
 <div class="field">
     <div class="title">
         <span i18n>10 Bit Dithering</span>
@@ -537,6 +540,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
 
 @if(defaults.customShader.colorMultiplier){
 <div class="field">

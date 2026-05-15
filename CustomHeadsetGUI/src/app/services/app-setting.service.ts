@@ -14,7 +14,8 @@ export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
       updateMode: 'rewrite',
       advanceMode: false,
       defaultSettingsTab: 'auto',
-      showIncompatibleProfiles: false
+      showIncompatibleProfiles: false,
+      launchPimaxOnStartup: false
     }), true, true)
     const appSettingHolder = inject(AppSettingHolder)
     effect(() => {

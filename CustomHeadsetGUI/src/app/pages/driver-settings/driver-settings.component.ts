@@ -48,10 +48,11 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     driverBlocked = signal(false)
     nonNativeWarning = signal(false)
 
-    // Expose component classes to template
+    // Expose component classes and enums to template
     MeganexX8KComponent = MeganexX8KComponent;
     GeneralComponent = GeneralComponent;
     DreamAirComponent = DreamAirComponent;
+    HeadsetType = HeadsetTypeEnum;
 
     constructor(private dis: DriverInfoService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
         // Register tab configurations

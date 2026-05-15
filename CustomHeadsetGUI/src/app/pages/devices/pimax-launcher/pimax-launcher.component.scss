@@ -1,0 +1,33 @@
+.launch-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: rgba(33, 150, 243, 0.1);
+    border: 1px solid rgba(33, 150, 243, 0.3);
+    border-radius: 4px;
+}
+
+.launch-section button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.launch-info {
+    margin: 0;
+}
+
+.launch-startup-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 0.85em;
+    color: var(--mat-sys-on-surface, rgba(255, 255, 255, 0.7));
+}
+
+.launch-startup-toggle mat-slide-toggle {
+    --mat-slide-toggle-label-text-size: 0.75em;
+}

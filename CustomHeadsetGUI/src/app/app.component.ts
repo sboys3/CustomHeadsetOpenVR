@@ -5,6 +5,7 @@ import { DOCUMENT } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AppSettingService } from './services/app-setting.service';
 import { AppUpdateService } from './services/app-update.service';
+import { PimaxLauncherService } from './services/pimax-launcher.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterModule, MatTabsModule, MatIconModule],
@@ -26,7 +27,7 @@ export class AppComponent {
       route: '/app-settings'
     }
   ];
-  constructor(appSettingService: AppSettingService,public appUpdateService: AppUpdateService, @Inject(DOCUMENT) document: Document) {
+  constructor(appSettingService: AppSettingService, public appUpdateService: AppUpdateService, @Inject(DOCUMENT) document: Document, @Inject(PimaxLauncherService) _launcher: PimaxLauncherService) {
     effect(() => {
       const settings = appSettingService.values();
       if (settings) {
