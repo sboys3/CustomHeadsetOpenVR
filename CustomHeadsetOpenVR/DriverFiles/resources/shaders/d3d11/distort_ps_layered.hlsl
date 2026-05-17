@@ -482,6 +482,11 @@ float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, 
 	return inputColorProcessor(color);
 }
 
+float4 sampleSceneTextureBasic(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy){
+	float4 color = tex.Sample(g_sScene, uv);
+	return inputColorProcessor(color);
+}
+
 OutputStruct main(in InputStruct IN)
 {
 	OutputStruct OUT = (OutputStruct)0;
@@ -650,9 +655,15 @@ OutputStruct main(in InputStruct IN)
 	
 	#ifndef NO_LAYER
  	// sample and combine existing overlay
+	#ifdef NO_OVERLAY_FILTER
+	float2 layerRA = sampleSceneTextureBasic(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay).ra;
+ 	float2 layerGA = sampleSceneTextureBasic(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
+ 	float2 layerBA = sampleSceneTextureBasic(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
+	#else
  	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay).ra;
  	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
  	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
+	#endif
 	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
 	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);
 	// layerAlphas = layerRA.x > 0;

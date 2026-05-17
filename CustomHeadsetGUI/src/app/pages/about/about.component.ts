@@ -38,7 +38,8 @@ export class AboutComponent {
         this.oldDreamAirEidVendor = newSettings?.dreamAir?.edidVendorIdOverride
     });
   }
-  async openExternal(url: string) {
+  async openExternal(event: Event, url: string) {
+    event.preventDefault()
     await open(url)
   }
 

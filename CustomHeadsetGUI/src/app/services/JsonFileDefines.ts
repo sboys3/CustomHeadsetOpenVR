@@ -67,6 +67,7 @@ export type CustomShaderConfig = {
   srgbColorCorrectionMatrix: number[]; // 3x3 matrix as a flat array of 9 elements
   lensColorCorrection: boolean;
   dither10Bit: boolean;
+  enableFilterForOverlay: boolean;
   samplingFilter: string;
   samplingFilterFXAA2SharpenStrength: number;
   samplingFilterFXAA2SharpenClamp: number;

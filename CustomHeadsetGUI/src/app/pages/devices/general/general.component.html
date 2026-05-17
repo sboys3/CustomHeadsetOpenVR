@@ -270,6 +270,21 @@
     </div>
 </div>
 }
+@if(typeof defaults.customShader.enableFilterForOverlay != "undefined"){
+<div class="field">
+    <div class="title">
+        <span i18n>Use Filter for Dashboard/Overlays</span>
+        <app-field-tip i18n-info
+            info="Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so there the filters will have no effects outside of games when this is off." />
+        <app-reset-button [canReset]="settings.customShader.enableFilterForOverlay!=defaults.customShader.enableFilterForOverlay"
+            (resetClick)="nested('customShader').resetOption('enableFilterForOverlay')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableFilterForOverlay"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
 <div class="field">
     <div class="title">
         <span i18n>Contrast</span>
@@ -541,7 +556,6 @@
     </div>
 </div>
 }
-
 @if(defaults.customShader.colorMultiplier){
 <div class="field">
     <div class="title">

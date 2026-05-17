@@ -352,6 +352,9 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
 	}
+	if(!driverConfig.customShader.enableFilterForOverlay){
+		defines[definesCount++] = {"NO_OVERLAY_FILTER", "1"};
+	}
 	std::string samplingFilterString = "FILTER_" + driverConfig.customShader.samplingFilter;
 	std::transform(samplingFilterString.begin(), samplingFilterString.end(), samplingFilterString.begin(), ::toupper);
 	defines[definesCount++] = {samplingFilterString.c_str(), "1"};
@@ -695,6 +698,7 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix.size() != driverConfigOld.customShader.srgbColorCorrectionMatrix.size();
 				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				reloadShaders |= driverConfig.customShader.dither10Bit != driverConfigOld.customShader.dither10Bit;
+				reloadShaders |= driverConfig.customShader.enableFilterForOverlay != driverConfigOld.customShader.enableFilterForOverlay;
 				reloadShaders |= driverConfig.customShader.samplingFilter != driverConfigOld.customShader.samplingFilter;
 				reloadShaders |= driverConfig.customShader.samplingFilterFXAA2SharpenStrength != driverConfigOld.customShader.samplingFilterFXAA2SharpenStrength;
 				reloadShaders |= driverConfig.customShader.samplingFilterFXAA2SharpenClamp != driverConfigOld.customShader.samplingFilterFXAA2SharpenClamp;

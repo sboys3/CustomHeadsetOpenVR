@@ -265,6 +265,9 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["dither10Bit"].is_boolean()){
 				newConfig.customShader.dither10Bit = customShaderData["dither10Bit"].get<bool>();
 			}
+			if(customShaderData["enableFilterForOverlay"].is_boolean()){
+				newConfig.customShader.enableFilterForOverlay = customShaderData["enableFilterForOverlay"].get<bool>();
+			}
 			if(customShaderData["samplingFilter"].is_string()){
 				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
 			}
@@ -484,6 +487,7 @@ void ConfigLoader::WriteInfo(){
 				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
+				{"enableFilterForOverlay", defaultSettings.customShader.enableFilterForOverlay},
 				{"samplingFilter", defaultSettings.customShader.samplingFilter},
 				{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
 				{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},

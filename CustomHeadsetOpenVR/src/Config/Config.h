@@ -84,6 +84,8 @@ struct CustomShaderConfig{
 	bool lensColorCorrection = true;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
+	// if the overlay filter should be enabled (defaults false to avoid performance hit when no overlay is shown)
+	bool enableFilterForOverlay = false;
 	// filters on the sampling of the texture,  "None", "NearestNeighbor", "FXAA2", "FXAA2CAS", "LumaSharpen", and "CAS"
 	std::string samplingFilter = "None";
 	// FXAA2 filter parameters

@@ -31,3 +31,9 @@
 .launch-startup-toggle mat-slide-toggle {
     --mat-slide-toggle-label-text-size: 0.75em;
 }
+
+.launch-startup-toggle .small-toggle {
+    transform: scale(0.75);
+    transform-origin: left center;
+    margin-right: -8px;
+}

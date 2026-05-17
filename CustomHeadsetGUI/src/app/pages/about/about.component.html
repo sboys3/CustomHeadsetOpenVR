@@ -9,7 +9,7 @@
         @if(aus.updateInfo();as update){
         <span>{{update.currentVersion}}</span>
         @if(update.updateAvailable){
-        <a (click)="openExternal(update.url)" href="javascript:;">
+        <a (click)="openExternal($event, update.url)" [href]="update.url">
             <span i18n>New version available</span><mat-icon class="warn-color" style="vertical-align: middle;">priority_high</mat-icon>
         </a>
         }@else{
@@ -87,9 +87,12 @@
 <div class="field">
     <div class="title" i18n>Updates, Source Code, and Documentation</div>
     <div class="control">
-        <a (click)="openExternal('https://github.com/sboys3/CustomHeadsetOpenVR')" href="javascript:;" class="donation-link">
+        <a (click)="openExternal($event, 'https://github.com/sboys3/CustomHeadsetOpenVR')" href="https://github.com/sboys3/CustomHeadsetOpenVR" class="donation-link">
             <img src="CustomHeadsetCropped.png" alt="CustomHeadset" class="donation-logo">
             <span i18n>Github Page</span>
+        </a>
+        <a (click)="openExternal($event, 'https://github.com/sboys3/CustomHeadsetOpenVR')" href="https://github.com/sboys3/CustomHeadsetOpenVR" style="margin-left: 16px;">
+            <span i18n>github.com/sboys3/CustomHeadsetOpenVR</span>
         </a>
     </div>
 </div>
@@ -98,11 +101,11 @@
         Donation Links
     </div>
     <div class="control">
-        <a (click)="openExternal('https://patreon.com/SBoys3')" href="javascript:;" class="donation-link">
+        <a (click)="openExternal($event, 'https://patreon.com/SBoys3')" href="https://patreon.com/SBoys3" class="donation-link">
             <img src="patreon-logo.svg" alt="Patreon" class="donation-logo">
             <span i18n>Patreon</span>
         </a>
-        <a (click)="openExternal('https://ko-fi.com/sboys3')" href="javascript:;" class="donation-link">
+        <a (click)="openExternal($event, 'https://ko-fi.com/sboys3')" href="https://ko-fi.com/sboys3" class="donation-link">
             <img src="ko-fi-logo.svg" alt="Ko-fi" class="donation-logo">
             <span i18n>Ko-fi</span>
         </a>
@@ -116,7 +119,7 @@
         Affiliate Links
     </div>
     <div class="control">
-        <a (click)="openExternal('https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3')" href="javascript:;" class="donation-link">
+        <a (click)="openExternal($event, 'https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3')" href="https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3" class="donation-link">
             <img src="DreamAirHD.png" alt="Pimax Dream Air" class="donation-logo">
             <div>
                 <div i18n>Pimax</div>
