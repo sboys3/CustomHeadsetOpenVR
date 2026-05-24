@@ -106,10 +106,13 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 		shimActive = false;
 	}
 	
+	SubActivate(container);
+	
 	DriverLog("Starting headset %s with code %i", modelNumber.c_str(), returnValue);
 }
 void BaseHeadsetShim::PosTrackedDeviceDeactivate(){
 	isActive = false;
+	SubDeactivate();
 	DriverLog("PosTrackedDeviceDeactivate");
 }
 
@@ -412,14 +415,11 @@ void BaseHeadsetShim::RunFrame(){
 	}
 	
 	
-
-	
-	
-	
-	
 	if(driverConfig.hasBeenUpdated || ((now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization)){
 		UpdateSettings();
 	}
+	
+	SubRunFrame();
 }
 
 void BaseHeadsetShim::UpdateSettings(){

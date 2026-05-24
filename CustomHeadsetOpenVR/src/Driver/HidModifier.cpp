@@ -278,8 +278,10 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	if(driverConfig.dreamAir.enable){
 		jsonOverrides["Pimax Dream Air"] = {
 			{"device", {
-				{"eye_target_height_in_pixels", 3840},
-				{"eye_target_width_in_pixels", 3552},
+				// {"eye_target_width_in_pixels", 3552},
+				// {"eye_target_height_in_pixels", 3840},
+				{"eye_target_width_in_pixels", driverConfig.dreamAir.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.dreamAir.resolutionX},
 			}},
 			{"direct_mode_edid_vid", 53826}, // PVR
 			// {"device_class", "controller"}, 
@@ -288,14 +290,14 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	if(driverConfig.meganeX8K.enable){
 		jsonOverrides["MeganeX superlight 8K"] = {
 			{"device", {
-				{"eye_target_height_in_pixels", 3840},
-				{"eye_target_width_in_pixels", 3552},
+				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
 			}},
 		};
 		jsonOverrides["MeganeX 8K Mark II"] = {
 			{"device", {
-				{"eye_target_height_in_pixels", 3840},
-				{"eye_target_width_in_pixels", 3552},
+				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
 			}},
 		};
 	}

@@ -18,6 +18,12 @@ public:
 	virtual Config::BaseHeadsetConfig& GetConfig() = 0;
 	// function that returns the old config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfigOld() = 0;
+	// called when the headset is initializing. this is for classes to override
+	virtual void SubActivate(vr::PropertyContainerHandle_t container){};
+	// called when the headset is deactivating. this is for classes to override
+	virtual void SubDeactivate(){};
+	// called for every frame. this is for classes to override
+	virtual void SubRunFrame(){};
 	
 	// SteamVR device index
 	int deviceIndex = -1;

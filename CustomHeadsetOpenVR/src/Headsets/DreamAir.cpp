@@ -18,6 +18,23 @@ Config::BaseHeadsetConfig& DreamAirShim::GetConfigOld(){
 }
 
 
+void DreamAirShim::SubActivate(vr::PropertyContainerHandle_t container){
+	eyeTracking.eyeRotation = defaultDriverConfig.dreamAir.eyeRotation;
+	eyeTracking.enabled = GetConfig().enableEyeTracking;
+	eyeTracking.Initialize();
+}
+
+void DreamAirShim::SubDeactivate(){
+	eyeTracking.Shutdown();
+}
+
+void DreamAirShim::SubRunFrame(){
+	eyeTracking.ipd = GetConfig().ipd + GetConfig().ipdOffset;
+	eyeTracking.enabled = GetConfig().enableEyeTracking;
+	// eyeTracking.eyeRotation = GetConfig().eyeRotation;
+	eyeTracking.RunFrame();
+}
+
 
 extern "C" {
 // cant be bothered, implement them here

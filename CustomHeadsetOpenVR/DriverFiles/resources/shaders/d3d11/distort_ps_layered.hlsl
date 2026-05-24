@@ -733,7 +733,11 @@ OutputStruct main(in InputStruct IN)
 	float distanceFromCenter = length(scaledUV) * 2;
 	#else
 	// fallback to this if the resolution is not defined, but this scales with FOV
-	float distanceFromCenter = length(IN.uv2.zw - 0.5) * 2;
+	#ifdef NO_LAYER
+	float distanceFromCenter = length(IN.uv1.xy - 0.5) * 2;
+	#else
+	float distanceFromCenter = length(IN.uv1.zw - 0.5) * 2;
+	#endif
 	#endif
 	#ifdef MEGANEX8K
 	// try 1

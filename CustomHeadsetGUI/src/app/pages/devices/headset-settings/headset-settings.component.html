@@ -115,6 +115,21 @@
       </mat-slider>
     </div>
   </div>
+  
+  <!-- Disable FOV Clamping -->
+  <div class="field">
+    <div class="title">
+      <span i18n>Disable FOV Clamping</span>
+      <app-field-tip i18n-info
+          info="When enabled, the distortion profile FOV will not clamp the image to fit entirely on the display. This allows lighting up more of the corners or providing more FOV in the desktop view for streaming. This will also cause a blue glow at the edge of the display. That is because the red channel is already touching the centers of each of the edges of the display and can not be expanded any more without cutting off." />
+      <app-reset-button [canReset]="settings.disableFovClamping !== defaults.disableFovClamping"
+          (resetClick)="resetOption('disableFovClamping')"></app-reset-button>
+    </div>
+    <div class="control">
+      <mat-slide-toggle [(ngModel)]="settings.disableFovClamping"
+          (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+  </div>
 
   <!-- Resolution Info -->
   <div class="field">
@@ -529,6 +544,23 @@
       </div>
     </div>
 
+    <!-- Enable Eye Tracking -->
+    @if(defaults.enableEyeTracking) {
+    <div class="field">
+      <div class="title">
+        <span i18n>Enable Eye Tracking</span>
+        <app-field-tip i18n-info
+            info="Enables eye tracking support for the headset. Pimax headsets require the pi_server runtime. Use mbucchia/Quad-Views-Foveated for foveated rendering." />
+        <app-reset-button [canReset]="settings.enableEyeTracking !== defaults.enableEyeTracking"
+            (resetClick)="resetOption('enableEyeTracking')"></app-reset-button>
+      </div>
+      <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.enableEyeTracking"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+      </div>
+    </div>
+    }
+
     <!-- Distortion Zoom -->
     <div class="field">
       <div class="title">
@@ -634,21 +666,6 @@
       </div>
       <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.fovBurnInPrevention"
-            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
-      </div>
-    </div>
-
-    <!-- Disable FOV Clamping -->
-    <div class="field">
-      <div class="title">
-        <span i18n>Disable FOV Clamping</span>
-        <app-field-tip i18n-info
-            info="When enabled, the distortion profile will not clamp the image to the bounds of the display. This allows lighting up more of the corners or providing more FOV in the desktop view for streaming. This will also cause a blue glow at the edge of the display." />
-        <app-reset-button [canReset]="settings.disableFovClamping !== defaults.disableFovClamping"
-            (resetClick)="resetOption('disableFovClamping')"></app-reset-button>
-      </div>
-      <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.disableFovClamping"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
       </div>
     </div>

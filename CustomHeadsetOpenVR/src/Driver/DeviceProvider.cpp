@@ -10,6 +10,7 @@
 #include "../Headsets/DreamAir.h"
 #include "../Headsets/GenericHeadset.h"
 #include "../Headsets/FakeHeadset.h"
+#include "../Helpers/EyeTrackingOutput.h"
 
 #include "../Config/ConfigLoader.h"
 
@@ -129,6 +130,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		InjectCompositorPlugin();
 		customShaderEnabled = true;
 	}
+	eyeTrackingOutput.RunFrame();
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
 }

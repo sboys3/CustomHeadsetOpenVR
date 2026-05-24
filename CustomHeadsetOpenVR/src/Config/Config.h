@@ -199,6 +199,8 @@ public:
 		bool forceEnable = false;
 		// if parallel projection should be used for rendering
 		bool parallelProjection = true;
+		// if eye tracking should be enabled
+		bool enableEyeTracking = false;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
@@ -213,6 +215,7 @@ public:
 			distortionProfileDeviceType = "MeganeX8K";
 			edidVendorId = 0xcc4c; // SFL
 			displayRotation = 1;
+			subpixelOffsets = {-0.33 / 3552.0, 0, 0, 0, 0.33 / 3552.0, 0};
 		}
 	};
 	// config for the MeganeX superlight 8K
@@ -229,6 +232,7 @@ public:
 			displayRotation = 3;
 			subpixelOffsets = {0.33 / 3552.0, 0, 0, 0, -0.33 / 3552.0, 0};
 			eyeRotation = 2;
+			enableEyeTracking = true;
 		}
 	};
 	// config for the Dream Air
@@ -318,6 +322,9 @@ extern Config driverConfig;
 
 // config from before the last reload
 extern Config driverConfigOld;
+
+// config with default values
+extern Config defaultDriverConfig;
 
 // lock for the config to prevent updates while reading
 extern std::mutex driverConfigLock;

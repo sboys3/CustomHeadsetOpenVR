@@ -117,6 +117,7 @@ export type BaseHeadsetConfig = {
   hiddenArea: HiddenAreaMeshConfig;
   stationaryDimming: StationaryDimmingConfig;
   parallelProjection: boolean;
+  enableEyeTracking: boolean;
 };
 
 export type MeganeX8KConfig = BaseHeadsetConfig & {
