@@ -80,8 +80,8 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["fovBurnInPrevention"].is_boolean()){
 		headsetConfig.fovBurnInPrevention = headsetData["fovBurnInPrevention"].get<bool>();
 	}
-	if(headsetData["disableFovClamping"].is_boolean()){
-		headsetConfig.disableFovClamping = headsetData["disableFovClamping"].get<bool>();
+	if(headsetData["fovClamping"].is_boolean()){
+		headsetConfig.fovClamping = headsetData["fovClamping"].get<bool>();
 	}
 	if(headsetData["distortionProfileDeviceType"].is_string()){
 		headsetConfig.distortionProfileDeviceType = headsetData["distortionProfileDeviceType"].get<std::string>();
@@ -406,7 +406,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"maxFovY", headsetConfig.maxFovY},
 		{"distortionMeshResolution", headsetConfig.distortionMeshResolution},
 		{"fovBurnInPrevention", headsetConfig.fovBurnInPrevention},
-		{"disableFovClamping", headsetConfig.disableFovClamping},
+		{"fovClamping", headsetConfig.fovClamping},
 		{"distortionProfileDeviceType", headsetConfig.distortionProfileDeviceType},
 		{"renderResolutionMultiplierX", headsetConfig.renderResolutionMultiplierX},
 		{"renderResolutionMultiplierY", headsetConfig.renderResolutionMultiplierY},

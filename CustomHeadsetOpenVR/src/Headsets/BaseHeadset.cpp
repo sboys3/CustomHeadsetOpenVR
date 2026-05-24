@@ -508,10 +508,12 @@ void BaseHeadsetShim::UpdateSettings(){
 	distortionProfileConstructor.distortionSettings.maxFovX = (float)GetConfig().maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = (float)GetConfig().maxFovY;
 	distortionProfileConstructor.distortionSettings.fovZoom = (float)GetConfig().fovZoom;
-	distortionProfileConstructor.distortionSettings.disableFovClamping = GetConfig().disableFovClamping;
+	distortionProfileConstructor.distortionSettings.fovClamping = GetConfig().fovClamping;
 	if(GetConfig().fovBurnInPrevention){
-		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffset;
-		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffset;
+		float fovBurnInOffsetX = std::max(std::min((float)driverConfigLoader.info.renderFovMaxX - (float)GetConfig().maxFovX, fovBurnInOffset), 0.0f);
+		float fovBurnInOffsetY = std::max(std::min((float)driverConfigLoader.info.renderFovMaxY - (float)GetConfig().maxFovY, fovBurnInOffset), 0.0f);
+		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffsetX;
+		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffsetY;
 	}
 	
 	
@@ -522,7 +524,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierX != GetConfig().renderResolutionMultiplierX;
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierY != GetConfig().renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= GetConfigOld().fovBurnInPrevention != GetConfig().fovBurnInPrevention;
-	shouldReInitializeDistortion |= GetConfigOld().disableFovClamping != GetConfig().disableFovClamping;
+	shouldReInitializeDistortion |= GetConfigOld().fovClamping != GetConfig().fovClamping;
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(GetConfig().distortionProfile);
@@ -575,10 +577,20 @@ void BaseHeadsetShim::UpdateSettings(){
 			maxFovConstructor.distortionSettings = distortionProfileConstructor.distortionSettings;
 			maxFovConstructor.distortionSettings.maxFovX = 170;
 			maxFovConstructor.distortionSettings.maxFovY = 170;
+			// When FOV clamping is disabled on the main profile, keep FOV clamping enabled on the test instance.
+			// Instead, take the results and multiply by 1.1 to approximate the unclamped profile.
+			maxFovConstructor.distortionSettings.fovClamping = true;
 			maxFovConstructor.LoadDistortionProfile(GetConfig().distortionProfile);
 			maxFovConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
-			driverConfigLoader.info.renderFovMaxX = (std::atan(leftEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi;
-			driverConfigLoader.info.renderFovMaxY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
+			double renderFovMaxX = (std::atan(leftEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi;
+			double renderFovMaxY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
+			// When FOV clamping is disabled, multiply the test instance results by 1.1
+			if(!GetConfig().fovClamping){
+				renderFovMaxX *= 1.1;
+				renderFovMaxY *= 1.1;
+			}
+			driverConfigLoader.info.renderFovMaxX = renderFovMaxX;
+			driverConfigLoader.info.renderFovMaxY = renderFovMaxY;
 			// update render target size
 			uint32_t renderResolutionX, renderResolutionY;
 			GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);

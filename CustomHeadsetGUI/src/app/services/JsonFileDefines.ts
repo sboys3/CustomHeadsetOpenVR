@@ -103,7 +103,7 @@ export type BaseHeadsetConfig = {
   maxFovY: number;
   distortionMeshResolution: number;
   fovBurnInPrevention: boolean;
-  disableFovClamping: boolean;
+  fovClamping: boolean;
   distortionProfileDeviceType: string;
   renderResolutionMultiplierX: number;
   renderResolutionMultiplierY: number;

@@ -155,8 +155,8 @@ public:
 		int distortionMeshResolution = 127;
 		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
 		bool fovBurnInPrevention = true;
-		// if the distortion profile should not clamp the image to the bounds of the displayand instead render an image at whatever FOV is set
-		bool disableFovClamping = false;
+		// if the distortion profile should clamp the image to the bounds of the display or if it will instead render an image at whatever FOV is set
+		bool fovClamping = true;
 		// device type used to filter distortion profiles in the GUI
 		std::string distortionProfileDeviceType = "";
 		// multiply 100% render resolution width

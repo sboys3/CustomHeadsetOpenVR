@@ -33,8 +33,8 @@ public:
 	float maxFovY = 175;
 	// amount to divide the fov by
 	float fovZoom = 1;
-	// if true, the distortion profile will not clamp the image to the bounds of the display
-	bool disableFovClamping = false;
+	// if true, the distortion profile will clamp the image to the bounds of the display
+	bool fovClamping = true;
 	
 	
 	

@@ -119,14 +119,14 @@
   <!-- Disable FOV Clamping -->
   <div class="field">
     <div class="title">
-      <span i18n>Disable FOV Clamping</span>
+      <span i18n>Enable FOV Clamping</span>
       <app-field-tip i18n-info
-          info="When enabled, the distortion profile FOV will not clamp the image to fit entirely on the display. This allows lighting up more of the corners or providing more FOV in the desktop view for streaming. This will also cause a blue glow at the edge of the display. That is because the red channel is already touching the centers of each of the edges of the display and can not be expanded any more without cutting off." />
-      <app-reset-button [canReset]="settings.disableFovClamping !== defaults.disableFovClamping"
-          (resetClick)="resetOption('disableFovClamping')"></app-reset-button>
+          info="When FOV Clamping is enabled, the distortion profile FOV will clamp the image to fit entirely on the display. Disabling this allows lighting up more of the corners or providing more FOV in the desktop view for streaming, but will also cause a blue glow at the edge of the display. That is because the red channel is already touching the centers of each of the edges of the display and can not be expanded any more without cutting off." />
+      <app-reset-button [canReset]="settings.fovClamping !== defaults.fovClamping"
+          (resetClick)="resetOption('fovClamping')"></app-reset-button>
     </div>
     <div class="control">
-      <mat-slide-toggle [(ngModel)]="settings.disableFovClamping"
+      <mat-slide-toggle [(ngModel)]="settings.fovClamping"
           (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
   </div>
@@ -134,7 +134,7 @@
   <!-- Resolution Info -->
   <div class="field">
     <div class="title">
-      <span i18n>Resolution and FOV Info</span>
+      <span i18n>FOV and Resolution Info</span>
       <app-field-tip i18n-info info="Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the headset is actively running under this driver." />
     </div>
     <div class="control">
@@ -153,17 +153,17 @@
             <div class="note">
               @if(res.fovX) {
                 <p>
+                  <span i18n="@@combinedHfov">Current Combined HFOV</span>
+                  <span>&nbsp;:&nbsp;</span>
+                  <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
+                </p>
+                <p>
                   <span i18n>Current rendered per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovX.toFixed(1)}}x{{res.fovY.toFixed(1)}}</span>
                   @if(showBurnInDeviationNote(res.fovMaxX, res.fovMaxY)) {
                     <span i18n="@@currentRenderedFovBurnInNote">&nbsp;(deviates by a random value to reduce burn-in)</span>
                   }
-                </p>
-                <p>
-                  <span i18n="@@combinedHfov">Current Combined HFOV</span>
-                  <span>&nbsp;:&nbsp;</span>
-                  <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
                 </p>
                 <p>
                   <span i18n="@@binocularOverlap">Current Binocular Overlap</span>

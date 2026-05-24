@@ -25,7 +25,9 @@ bool PimaxEyeTrackingBridge::Initialize(){
 #ifdef PVR_EXISTS
 	// Initialize the eye tracking output component
 	eyeTrackingOutput.ipd = ipd;
-	eyeTrackingOutput.Initialize();
+	if(initializeCount < 3){
+		eyeTrackingOutput.Initialize();
+	}
 	
 	if(!enabled){
 		return false;
@@ -119,7 +121,9 @@ void PimaxEyeTrackingBridge::RunFrame(){
 			}
 			if(secondsSinceLastRestart >= 10.0){
 				lastRestartTime = now;
-				DriverLog("PimaxEyeTrackingBridge: Attempting to re-initialize PVR API");
+				if(initializeCount < 10){
+					DriverLog("PimaxEyeTrackingBridge: Attempting to re-initialize PVR API");
+				}
 				Initialize();
 			}
 		}
@@ -172,9 +176,7 @@ void PimaxEyeTrackingBridge::EyeTrackingThread(){
 		pvrHmdStatus hmdStatus = {};
 		result = pvr_getHmdStatus(sessionHandle, &hmdStatus);
 		if(result != pvr_success || hmdStatus.ShouldQuit){
-			if(initializeCount < 10){
-				DriverLog("PimaxEyeTrackingBridge: HMD session ending, result: %d, serviceReady: %d, hmdPresent: %d, hmdMounted: %d, shouldQuit: %d\n", result, hmdStatus.ServiceReady, hmdStatus.HmdPresent, hmdStatus.HmdMounted, hmdStatus.ShouldQuit);
-			}
+			DriverLog("PimaxEyeTrackingBridge: HMD session ending, result: %d, serviceReady: %d, hmdPresent: %d, hmdMounted: %d, shouldQuit: %d\n", result, hmdStatus.ServiceReady, hmdStatus.HmdPresent, hmdStatus.HmdMounted, hmdStatus.ShouldQuit);
 			threadRunning = false;
 			break;
 		}

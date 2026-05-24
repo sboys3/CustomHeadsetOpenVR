@@ -79,6 +79,7 @@ void EyeTrackingOutput::RunFrame(){
 		double timeOffset = localData.timestamp - now;
 		double timeSinceUpdate = now - localData.timestamp;
 		if(timeSinceUpdate < 1.0){
+			// Set eye tracking data if less than one second old
 			eyeTrackingData.bActive = true;
 			eyeTrackingData.bValid = true;
 			eyeTrackingData.bTracked = true;
@@ -89,7 +90,8 @@ void EyeTrackingOutput::RunFrame(){
 			eyeTrackingData.vGazeTarget.v[1] = localData.focalPointY;
 			eyeTrackingData.vGazeTarget.v[2] = -localData.focalPointZ;
 		} else {
-			bool valid = timeSinceUpdate < 1.5;
+			// Report a center position for two seconds and then report no data.
+			bool valid = timeSinceUpdate < 3.0;
 			eyeTrackingData.bActive = valid;
 			eyeTrackingData.bValid = valid;
 			eyeTrackingData.bTracked = valid;
@@ -98,7 +100,7 @@ void EyeTrackingOutput::RunFrame(){
 			eyeTrackingData.vGazeOrigin.v[2] = 0.0f;
 			eyeTrackingData.vGazeTarget.v[0] = 0.0f;
 			eyeTrackingData.vGazeTarget.v[1] = 0.0f;
-			eyeTrackingData.vGazeTarget.v[2] = 1.0f;
+			eyeTrackingData.vGazeTarget.v[2] = -1.0f;
 			timeOffset = 0;
 		}
 			
