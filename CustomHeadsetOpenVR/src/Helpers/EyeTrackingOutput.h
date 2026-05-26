@@ -39,7 +39,8 @@ public:
 	void SetEyeTrackingData(EyeTrackingData data);
 	
 	// Set the eye tracking data from angles only
-	void SetEyeTrackingData(float leftAngleX, float leftAngleY, float rightAngleX, float rightAngleY, double timestamp=0);
+	// Make sure to set IPD correctly here or on the object as it is used in calculations
+	void SetEyeTrackingData(float leftAngleX, float leftAngleY, float rightAngleX, float rightAngleY, float ipd=0, double timestamp=0);
 	
 	// Called every frame to pass the eye tracking data to SteamVR
 	// Probably needs to be called from the main thread

@@ -35,12 +35,17 @@ void EyeTrackingOutput::SetEyeTrackingData(EyeTrackingData data){
 	eyeData = data;
 }
 
-void EyeTrackingOutput::SetEyeTrackingData(float leftAngleX, float leftAngleY, float rightAngleX, float rightAngleY, double timestamp){
+void EyeTrackingOutput::SetEyeTrackingData(float leftAngleX, float leftAngleY, float rightAngleX, float rightAngleY, float ipd, double timestamp){
 	float tanLeftX = tan(leftAngleX);
 	float tanLeftY = tan(leftAngleY);
 	float tanRightX = tan(rightAngleX);
 	float tanRightY = tan(rightAngleY);
 	
+	if(!ipd){
+		ipd = this->ipd;
+	}else{
+		this->ipd = ipd;
+	}
 	float intersectionDistance = ipd / 1000.0f / (tanLeftX - tanRightX);
 	if(intersectionDistance < 0.001f || intersectionDistance > 20.0f || !isfinite(intersectionDistance)) {
 		intersectionDistance = 20.0f;

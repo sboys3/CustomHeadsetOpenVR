@@ -346,6 +346,15 @@ void RadialBezierDistortionProfile::Initialize(){
 		// halfFov = std::max(halfFov, distortionsSmoothGreen[i].degree);
 	}
 	
+	// flat fov zoom using tangent-based scaling
+	if(flatFovZoom != 1.0f){
+		for(size_t i = 0; i < distortionsSmoothGreen.size(); i++){
+			distortionsSmoothRed[i].degree   = std::atan(std::tan(distortionsSmoothRed[i].degree * kPi / 180.0f) / flatFovZoom) * 180.0f / kPi;
+			distortionsSmoothGreen[i].degree = std::atan(std::tan(distortionsSmoothGreen[i].degree * kPi / 180.0f) / flatFovZoom) * 180.0f / kPi;
+			distortionsSmoothBlue[i].degree  = std::atan(std::tan(distortionsSmoothBlue[i].degree * kPi / 180.0f) / flatFovZoom) * 180.0f / kPi;
+		}
+	}
+	
 	// zoom fov
 	for(size_t i = 0; i < distortionsSmoothGreen.size(); i++){
 		distortionsSmoothRed[i].degree /= fovZoom;

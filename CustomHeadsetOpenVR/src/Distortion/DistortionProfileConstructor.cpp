@@ -241,6 +241,7 @@ void DistortionProfileConstructor::ReInitializeProfile(){
 	profile->maxFovX = distortionSettings.maxFovX;
 	profile->maxFovY = distortionSettings.maxFovY;
 	profile->fovZoom = distortionSettings.fovZoom;
+	profile->flatFovZoom = distortionSettings.flatFovZoom;
 	profile->fovClamping = distortionSettings.fovClamping;
 	if(profile->fovZoom == 0.0f){
 		// avoid division by zero in calculations because invalid distortion data can prevent the compositor from starting

@@ -33,6 +33,8 @@ public:
 	float maxFovY = 175;
 	// amount to divide the fov by
 	float fovZoom = 1;
+	// amount to zoom in the FOV using tangent-based scaling for flatter perception
+	float flatFovZoom = 1;
 	// if true, the distortion profile will clamp the image to the bounds of the display
 	bool fovClamping = true;
 	

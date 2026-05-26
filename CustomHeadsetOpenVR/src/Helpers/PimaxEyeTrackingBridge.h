@@ -32,7 +32,7 @@ public:
 	// Called every frame to attempt re-initialization if not connected and forward eye tracking data to SteamVR
 	void RunFrame();
 
-	float ipd = 0.063f;
+	float ipd = 63.0f;
 	float eyeRotation = 0;
 	bool enabled = true;
 private:

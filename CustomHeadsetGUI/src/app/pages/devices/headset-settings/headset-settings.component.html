@@ -212,7 +212,7 @@
     <div class="title">
       <span i18n>FOV Zoom</span>
       <app-field-tip i18n-info
-          info="Adjusts how zoomed in the FOV is. This can affect world scale. If you don't mind distortion this can be decreased too far to increase visible FOV." />
+          info="Adjusts how zoomed the FOV is. Decreasing this will allow the FOV sliders to go higher, but will introduce fish-eye distortion. These zoom settings can be combined for different effects." />
       <app-reset-button [canReset]="settings.fovZoom !== defaults.fovZoom"
           (resetClick)="resetOption('fovZoom')"></app-reset-button>
     </div>
@@ -220,6 +220,23 @@
       <input matInput [(ngModel)]="settings.fovZoom" step="0.005" (ngModelChange)="saveConfigSettings()" type="number">
       <mat-slider max="1.1" min="0.8" step="0.005" showTickMarks>
         <input matSliderThumb [(ngModel)]="settings.fovZoom" (ngModelChange)="saveConfigSettings()">
+      </mat-slider>
+    </div>
+  </div>
+
+  <!-- Flat FOV Zoom -->
+  <div class="field">
+    <div class="title">
+      <span i18n>Flat FOV Zoom</span>
+      <app-field-tip i18n-info
+          info="Similar to FOV Zoom but keeps strait lines straight at the expense of more distortion when rotating your head. Decreasing this will allow the FOV sliders to go higher, but will introduce distortion. These zoom settings can be combined for different effects." />
+      <app-reset-button [canReset]="settings.flatFovZoom !== defaults.flatFovZoom"
+          (resetClick)="resetOption('flatFovZoom')"></app-reset-button>
+    </div>
+    <div class="control">
+      <input matInput [(ngModel)]="settings.flatFovZoom" step="0.005" (ngModelChange)="saveConfigSettings()" type="number">
+      <mat-slider max="1.15" min="0.7" step="0.005" showTickMarks>
+        <input matSliderThumb [(ngModel)]="settings.flatFovZoom" (ngModelChange)="saveConfigSettings()">
       </mat-slider>
     </div>
   </div>

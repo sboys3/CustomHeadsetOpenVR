@@ -95,6 +95,7 @@ export type BaseHeadsetConfig = {
   distortionProfile: string;
   distortionZoom: number;
   fovZoom: number;
+  flatFovZoom: number;
   subpixelShift: number;
   subpixelOffsets: number[];
   resolutionX: number;

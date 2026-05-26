@@ -508,6 +508,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	distortionProfileConstructor.distortionSettings.maxFovX = (float)GetConfig().maxFovX;
 	distortionProfileConstructor.distortionSettings.maxFovY = (float)GetConfig().maxFovY;
 	distortionProfileConstructor.distortionSettings.fovZoom = (float)GetConfig().fovZoom;
+	distortionProfileConstructor.distortionSettings.flatFovZoom = (float)GetConfig().flatFovZoom;
 	distortionProfileConstructor.distortionSettings.fovClamping = GetConfig().fovClamping;
 	if(GetConfig().fovBurnInPrevention){
 		float fovBurnInOffsetX = std::max(std::min((float)driverConfigLoader.info.renderFovMaxX - (float)GetConfig().maxFovX, fovBurnInOffset), 0.0f);
@@ -521,6 +522,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldReInitializeDistortion |= GetConfigOld().maxFovX != GetConfig().maxFovX;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovY != GetConfig().maxFovY;
 	shouldReInitializeDistortion |= GetConfigOld().fovZoom != GetConfig().fovZoom;
+	shouldReInitializeDistortion |= GetConfigOld().flatFovZoom != GetConfig().flatFovZoom;
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierX != GetConfig().renderResolutionMultiplierX;
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierY != GetConfig().renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= GetConfigOld().fovBurnInPrevention != GetConfig().fovBurnInPrevention;

@@ -53,6 +53,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["fovZoom"].is_number()){
 		headsetConfig.fovZoom = headsetData["fovZoom"].get<double>();
 	}
+	if(headsetData["flatFovZoom"].is_number()){
+		headsetConfig.flatFovZoom = headsetData["flatFovZoom"].get<double>();
+	}
 	if(headsetData["subpixelShift"].is_number()){
 		headsetConfig.subpixelShift = headsetData["subpixelShift"].get<double>();
 	}
@@ -397,6 +400,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"distortionProfile", headsetConfig.distortionProfile},
 		{"distortionZoom", headsetConfig.distortionZoom},
 		{"fovZoom", headsetConfig.fovZoom},
+		{"flatFovZoom", headsetConfig.flatFovZoom},
 		{"subpixelShift", headsetConfig.subpixelShift},
 		{"subpixelOffsets", headsetConfig.subpixelOffsets},
 		{"resolutionX", headsetConfig.resolutionX},

@@ -53,9 +53,6 @@ bool PimaxEyeTrackingBridge::Initialize(){
 		return false;
 	}
 	
-	// Set IPD in PVR runtime (ipd is in meters)
-	pvr_setFloatConfig(sessionHandle, CONFIG_KEY_IPD, ipd);
-	
 	// Get HmdStatus to check if service is ready
 	pvrHmdStatus hmdStatus = {};
 	result = pvr_getHmdStatus(sessionHandle, &hmdStatus);
@@ -167,7 +164,7 @@ void PimaxEyeTrackingBridge::EyeTrackingThread(){
 			// rightAngleX += eyeRotationRad;
 
 			// Set the eye tracking data
-			eyeTrackingOutput.SetEyeTrackingData(leftAngleX, leftAngleY, rightAngleX, rightAngleY);
+			eyeTrackingOutput.SetEyeTrackingData(leftAngleX, leftAngleY, rightAngleX, rightAngleY, ipd);
 		}else{
 			DriverLog("PimaxEyeTrackingBridge: Failed to get eye tracking info, result: %d", result);
 			std::this_thread::sleep_for(std::chrono::seconds(10));
