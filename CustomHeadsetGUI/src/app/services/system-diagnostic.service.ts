@@ -9,6 +9,8 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
 import { cleanJsonComments } from '../helpers';
+import { launch_process } from '../tauri_wrapper';
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 @Injectable({providedIn: "root", })
 export class SystemDiagnosticService implements OnDestroy {
@@ -20,6 +22,11 @@ export class SystemDiagnosticService implements OnDestroy {
   public readonly driverInstalled = this._driverInstalled.asReadonly();
   public readonly settingFileInited = computed(() => this.dss.values() && this.dis.values());
   public readonly systemReady = computed(() => this.steamVRinstalled() && this.driverInstalled() && this.settingFileInited())
+  public readonly driverVersionMismatch = computed(() => {
+    const installed = this.driverInstalled();
+    const lastRun = this.dis.values()?.driverVersion;
+    return !!installed && !!lastRun && installed !== lastRun;
+  });
   private _steamVrConfig = signal<any>(undefined);
   public readonly steamVrConfig = this._steamVrConfig.asReadonly();
   private cleanUp: (() => void)[] = []
@@ -311,5 +318,27 @@ export class SystemDiagnosticService implements OnDestroy {
   }
   public async restartCompositor() {
     return await restart_vrcompositor()
+  }
+  public async launchSteamVR(){
+    // Try direct SteamVR executable paths first
+    const steamvrPaths = [
+      'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
+      'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
+    ];
+    for (const path of steamvrPaths) {
+      const success = await launch_process(path, []);
+      if (success) {
+        console.log('SteamVR launched successfully from', path);
+        return;
+      }
+    }
+
+    // Fallback to Steam protocol URL
+    try {
+      await openUrl('steam://rungameid/250820');
+      console.log('SteamVR launch requested via Steam protocol');
+    } catch (error) {
+      console.log('Failed to launch SteamVR:', error);
+    }
   }
 }

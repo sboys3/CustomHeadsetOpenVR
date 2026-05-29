@@ -137,8 +137,8 @@ void PimaxEyeTrackingBridge::RunFrame(){
 void PimaxEyeTrackingBridge::EyeTrackingThread(){
 
 #ifdef PVR_EXISTS
-	auto now = std::chrono::steady_clock::now();
-	static std::chrono::steady_clock::time_point lastLogTime = now;
+	auto now = std::chrono::high_resolution_clock::now();
+	static std::chrono::high_resolution_clock::time_point lastLogTime = now;
 	while(threadRunning){
 		auto startTime = std::chrono::high_resolution_clock::now();
 		now = startTime;
@@ -167,7 +167,7 @@ void PimaxEyeTrackingBridge::EyeTrackingThread(){
 			eyeTrackingOutput.SetEyeTrackingData(leftAngleX, leftAngleY, rightAngleX, rightAngleY, ipd);
 		}else{
 			DriverLog("PimaxEyeTrackingBridge: Failed to get eye tracking info, result: %d", result);
-			std::this_thread::sleep_for(std::chrono::seconds(10));
+			std::this_thread::sleep_for(std::chrono::seconds(3));
 		}
 		
 		pvrHmdStatus hmdStatus = {};

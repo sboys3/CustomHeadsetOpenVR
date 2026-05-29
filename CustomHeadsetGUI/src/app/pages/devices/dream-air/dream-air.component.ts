@@ -1,5 +1,5 @@
 import { Component, output } from '@angular/core';
-import { DreamAirConfig } from '../../../services/JsonFileDefines';
+import { DreamAirConfig, HeadsetType } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
 
@@ -11,6 +11,7 @@ import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.compone
 })
 export class DreamAirComponent {
   navigateToGeneralTab = output<void>();
+  HeadsetType = HeadsetType;
   headsetConfig: HeadsetSettingsConfig = {
     driverName: [],
     settingField: 'dreamAir',

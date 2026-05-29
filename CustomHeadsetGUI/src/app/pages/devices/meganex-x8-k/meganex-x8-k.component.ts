@@ -1,5 +1,5 @@
 import { Component, output } from '@angular/core';
-import { MeganeX8KConfig } from '../../../services/JsonFileDefines';
+import { HeadsetType, MeganeX8KConfig } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 
 @Component({
@@ -10,6 +10,7 @@ import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-sett
 })
 export class MeganexX8KComponent {
   navigateToGeneralTab = output<void>();
+  HeadsetType = HeadsetType;
   headsetConfig: HeadsetSettingsConfig = {
     driverName: ['MeganeXSuperlight','MeganeX8KMark2','MeganeXsuperlight8K_Native','MeganeX8KMark2_Native'],
     settingField: 'meganeX8K',

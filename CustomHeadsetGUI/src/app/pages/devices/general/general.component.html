@@ -1,6 +1,6 @@
 @if(settings && defaults){
 <div class="field">
-    <div class="note">These can settings apply to all SteamVR headsets. However most are limited to native headsets. The custom shader is allows significant customization of the image on all SteamVR native tethered headsets. Check the other tabs for headset specific settings.</div>
+    <div class="note">These settings can apply to all SteamVR headsets. However most are limited to native headsets. The custom shader allows significant customization of the image on all SteamVR native tethered headsets. Check the other tabs for headset specific settings.</div>
 </div>
 <div class="field">
     <div class="section-title">
@@ -275,7 +275,7 @@
     <div class="title">
         <span i18n>Use Filter for Dashboard/Overlays</span>
         <app-field-tip i18n-info
-            info="Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so there the filters will have no effects outside of games when this is off." />
+            info="Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so the filters will have no effects outside of games when this is off." />
         <app-reset-button [canReset]="settings.customShader.enableFilterForOverlay!=defaults.customShader.enableFilterForOverlay"
             (resetClick)="nested('customShader').resetOption('enableFilterForOverlay')"></app-reset-button>
     </div>
@@ -325,7 +325,7 @@
     <div class="title">
         <span i18n>Linear Contrast</span>
         <app-field-tip i18n-info
-            info="Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects." />
+            info="Applies linear contrast to the image before gamma correction instead of after. Generally contrast looks better with this option off but it can be useful for some effects." />
         <app-reset-button
             [canReset]="settings.customShader.contrastLinear!=defaults.customShader.contrastLinear"
             (resetClick)="nested('customShader').resetOption('contrastLinear')"></app-reset-button>
@@ -448,7 +448,7 @@
     <div class="title">
         <span i18n>Gamma</span>
         <app-field-tip i18n-info
-            info="Adjusts the gamma of the image. This controls brightness is mapped to the display's brightness. Higher gamma values make darker areas of the image brighter." />
+            info="Adjusts the gamma of the image. This controls how brightness is mapped to the display's brightness. Higher gamma values make darker areas of the image brighter." />
         <app-reset-button [canReset]="settings.customShader.gamma!=defaults.customShader.gamma"
             (resetClick)="nested('customShader').resetOption('gamma')"></app-reset-button>
     </div>
@@ -546,7 +546,7 @@
     <div class="title">
         <span i18n>10 Bit Dithering</span>
         <app-field-tip i18n-info
-            info="Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications." />
+            info="Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications. There may be some slight benefit to having this on when other color corrections are used." />
         <app-reset-button [canReset]="settings.customShader.dither10Bit!=defaults.customShader.dither10Bit"
             (resetClick)="nested('customShader').resetOption('dither10Bit')"></app-reset-button>
     </div>

@@ -135,9 +135,20 @@
   <div class="field">
     <div class="title">
       <span i18n>FOV and Resolution Info</span>
-      <app-field-tip i18n-info info="Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the headset is actively running under this driver." />
+      <app-field-tip i18n-info info="Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will affect this. This will only be updated while the headset is actively running under this driver." />
     </div>
     <div class="control">
+      @if(headsetMatches() && steamVRRunning()?.running && dis.values(); as info) {
+        @if(info.resolution; as res) {
+          @if(res.fovX) {
+            <p>
+              <span i18n="@@combinedHfov">Combined HFOV</span>
+              <span>&nbsp;:&nbsp;</span>
+              <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
+            </p>
+          }
+        }
+      }
       <button mat-raised-button (click)="toggleResolutionDisplay()">
         <span i18n *ngIf="!resolutionInfoDisplay()">Show Details</span>
         <span i18n *ngIf="resolutionInfoDisplay()">Hide Details</span>
@@ -148,15 +159,11 @@
   @if(resolutionInfoDisplay()) {
     <div class="field">
       <div class="note">
+        @if(headsetMatches()) {
         @if(dis.values(); as info) {
           @if(info.resolution; as res) {
             <div class="note">
               @if(res.fovX) {
-                <p>
-                  <span i18n="@@combinedHfov">Current Combined HFOV</span>
-                  <span>&nbsp;:&nbsp;</span>
-                  <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
-                </p>
                 <p>
                   <span i18n>Current rendered per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
@@ -202,6 +209,9 @@
               }
             </div>
           }
+        }
+        } @else {
+          <p><span class="warn-color" i18n>This headset is not currently being run by this driver.</span></p>
         }
       </div>
     </div>
@@ -278,7 +288,7 @@
     <div class="section-title">
       <span i18n>Stationary Dimming Settings</span>
       <app-field-tip i18n-info
-          info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold'." />
+          info="This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold." />
     </div>
   </div>
 
@@ -770,7 +780,7 @@
         <span i18n>Seconds From Photons to Vblank</span>
         <app-field-note type="steamvrRestart" />
         <app-field-tip i18n-info
-            info="The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side." />
+            info="The time it takes for the display to show the first and last line. This is to combat the same effect you see on your desktop if you follow a window while you quickly move it side to side." />
         <app-reset-button [canReset]="settings.secondsFromPhotonsToVblank !== defaults.secondsFromPhotonsToVblank"
             (resetClick)="resetOption('secondsFromPhotonsToVblank')"></app-reset-button>
       </div>
@@ -789,7 +799,7 @@
       <div class="title">
         <span i18n>Eye Rotation</span>
         <app-field-tip i18n-info
-            info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
+            info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense of binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
         @if(settings.eyeRotation !== defaults.eyeRotation) {
           &nbsp;&nbsp;
           <mat-icon class="warn-color-flash" matTooltip="This may cause vision problems outside of the headset." i18n-matTooltip>warning</mat-icon>
@@ -812,7 +822,7 @@
         <span i18n>Disable Eye</span>
         <app-field-note type="gameRestart" />
         <app-field-tip i18n-info
-            info="Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues." />
+            info="Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also set the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues." />
         <app-reset-button [canReset]="settings.disableEye !== defaults.disableEye"
             (resetClick)="resetOption('disableEye')"></app-reset-button>
       </div>

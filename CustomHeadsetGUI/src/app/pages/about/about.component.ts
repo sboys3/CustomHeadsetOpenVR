@@ -24,7 +24,13 @@ export class AboutComponent {
   public dss = inject(DriverSettingService)
   private oldMeganeXEdidVendor: number | undefined = undefined
   private oldDreamAirEidVendor: number | undefined = undefined
+  public driverVersionMismatch = signal<boolean>(false);
   constructor(public aus: AppUpdateService, public dis: DriverInfoService, public sds: SystemDiagnosticService, private dialog: DialogService) {
+    effect(() => {
+      const installedVersion = this.sds.driverInstalled();
+      const lastRunVersion = this.dis.values()?.driverVersion;
+      this.driverVersionMismatch.set(!!installedVersion && !!lastRunVersion && installedVersion !== lastRunVersion);
+    });
     effect(() => {
         let newSettings = this.dss.values()
         

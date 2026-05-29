@@ -460,7 +460,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	}
 	if(GetConfig().edidProductIdOverride != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, GetConfig().edidProductIdOverride);
-	}if(GetConfig().edidProductId != 0 && GetConfig().directMode){
+	}else if(GetConfig().edidProductId != 0 && GetConfig().directMode){
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, GetConfig().edidProductId);
 	}else{
 		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);

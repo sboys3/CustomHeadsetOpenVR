@@ -1,4 +1,4 @@
-import { Component, effect, input, output } from '@angular/core';
+import { Component, computed, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.compon
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
 import { ColorPickerComponent } from '../../../utilities/color-picker/color-picker.component';
 import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
-import { BaseHeadsetConfig } from '../../../services/JsonFileDefines';
+import { BaseHeadsetConfig, HeadsetType } from '../../../services/JsonFileDefines';
 
 export interface ResolutionOption {
   name: string;
@@ -66,7 +66,12 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   config = input.required<HeadsetSettingsConfig>();
   override settingField = input.required<string>();
   override driverName = input.required<string | string[]>();
+  headsetType = input.required<HeadsetType>();
   navigateToGeneralTab = output<void>();
+  headsetMatches = computed(() => {
+    const connectedHeadset = this.dis.values()?.connectedHeadset;
+    return connectedHeadset !== undefined && connectedHeadset === this.headsetType();
+  });
   
   resolutionModel?: number;
   subpixelShiftOptions = [-1, 0, 1];

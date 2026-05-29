@@ -43,7 +43,7 @@ If my driver is a major factor in your decision of purchasing the Dream Air, use
 [<img src="./CustomHeadsetGUI/public/DreamAirHD.png" height="24" alt="Pimax"> Pimax with $25 off](https://pimax.com/products/pimax-dream-air/?discount=25SBOY3&ref=sboys3)  
 
 ## Building
-1. Clone the repository wit `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
+1. Clone the repository with `git clone https://github.com/sboys3/CustomHeadsetOpenVR.git`
 2. Navigate to the repository folder with `cd CustomHeadsetOpenVR` in the terminal.
 3. Pull the submodules with `git submodule update --init --recursive` then `git pull --recurse-submodules`
 4. Open the solution in Visual Studio.

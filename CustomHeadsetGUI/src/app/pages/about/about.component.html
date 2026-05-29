@@ -59,6 +59,13 @@
     <div class="control">
         @if(dis.values();as info){
         <span>{{info.driverVersion}}</span>
+        @if(driverVersionMismatch()){
+        <mat-icon class="warn-color">priority_high</mat-icon>
+        <span>&nbsp;&nbsp;</span>
+        <button mat-stroked-button (click)="sds.launchSteamVR()">
+            <span i18n>Launch SteamVR</span>
+        </button>
+        }
         @if(aus.updateInfo();as updateInfo){
         <span>&nbsp;&nbsp;</span>
         <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">

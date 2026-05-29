@@ -314,7 +314,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 		// DriverLogString(newConfigStr.c_str());
 		
 		unsigned char* configRecompressed = new unsigned char[size * 10]{};
-		uLongf recompressedSize = size * 10;
+		uLongf recompressedSize = size * 10 - 2;
 		result = compress(configRecompressed, &recompressedSize, (unsigned char*)newConfigStr.c_str(), newConfigStr.length());
 		if(result == Z_OK){
 			DriverLog("Recompressed lighthouse config");
