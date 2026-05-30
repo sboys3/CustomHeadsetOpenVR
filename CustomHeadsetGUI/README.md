@@ -21,7 +21,7 @@ Translations are located in `src/locale` folder.
 ## Project Structure
 
 ```
-CustomeHeadsetGUI
+CustomHeadsetGUI
 ├───public //angular static files
 ├───src //angular sources
 │    ├────app

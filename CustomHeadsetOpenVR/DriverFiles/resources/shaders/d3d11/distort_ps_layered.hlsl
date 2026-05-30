@@ -684,7 +684,7 @@ OutputStruct main(in InputStruct IN)
 	// this prevents effects from brightening up the outside of the texture.
 	col.rgb += layerAlphas > 0 ? 0 : -1000 * inRangeMultiplier;
 	#else
-	col.rgb += -1000 * inRangeMultiplier
+	col.rgb += -1000 * inRangeMultiplier;
 	#endif
 	#endif
 	

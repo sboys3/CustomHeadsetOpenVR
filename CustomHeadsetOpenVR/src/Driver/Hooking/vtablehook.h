@@ -37,12 +37,16 @@ inline int vtablehook_unprotect(void* region) {
 #ifdef _WIN32
 	MEMORY_BASIC_INFORMATION mbi;
 	VirtualQuery((LPCVOID)region, &mbi, sizeof(mbi));
-	VirtualProtect(mbi.BaseAddress, mbi.RegionSize, PAGE_READWRITE, &mbi.Protect);
+	if(!VirtualProtect(mbi.BaseAddress, mbi.RegionSize, PAGE_READWRITE, &mbi.Protect)){
+		return -1;
+	}
 	return mbi.Protect;
 #elif __linux__
 	int vtablehook_pagesize = sysconf(_SC_PAGE_SIZE);
 	int vtablehook_pagemask = ~(vtablehook_pagesize-1);
-	mprotect((void*) ((intptr_t)region & vtablehook_pagemask), vtablehook_pagesize, PROT_READ|PROT_WRITE|PROT_EXEC);
+	if(mprotect((void*) ((intptr_t)region & vtablehook_pagemask), vtablehook_pagesize, PROT_READ|PROT_WRITE|PROT_EXEC)){
+		return -1;
+	}
 	return PROT_READ|PROT_EXEC;
 #endif
 }
@@ -70,8 +74,15 @@ inline void* vtablehook_hook(void* instance, void* hook, int offset) {
 	intptr_t vtable = *((intptr_t*)instance);
 	intptr_t entry = vtable + sizeof(intptr_t) * offset;
 	intptr_t original = *((intptr_t*) entry);
-
+	
+	if(!hook){
+		return (void*)original;
+	}
+	
 	int original_protection = vtablehook_unprotect((void*)entry);
+	if(original_protection == -1){
+		return nullptr;
+	}
 	*((intptr_t*)entry) = (intptr_t)hook;
 	vtablehook_protect((void*)entry, original_protection);
 

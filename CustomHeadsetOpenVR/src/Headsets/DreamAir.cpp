@@ -44,5 +44,5 @@ void* zcalloc(void* opaque, unsigned int items, unsigned int size){
 void zcfree(void* opaque, void* address){
 	free(address);
 }
-const char * z_errmsg[10]{"","","","","","","","","",""};
+const char * z_errmsg[12]{"","","","","","","","","","","",""};
 }

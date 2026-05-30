@@ -232,8 +232,8 @@ bool InjectCompositorPlugin(int forProcessId){
 	
 	DriverLog("driver successfully injected into compositor process id: %i", processId);
 
-	CloseHandle(targetProcess);
 	VirtualFreeEx(targetProcess, nameInTargetProcess, size, MEM_RELEASE);
+	CloseHandle(targetProcess);
 	
 	return true;
 }

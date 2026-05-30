@@ -3,7 +3,7 @@
 
 class FakeHeadset : public BaseHeadsetShim{
 public:
-	// function that returns if this is a MeganeX8K headset
+	// returns true as it is not shimming devices
 	virtual bool IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container) override;
 	// function that returns the config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfig() override;
