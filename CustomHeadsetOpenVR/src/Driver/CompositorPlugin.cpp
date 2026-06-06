@@ -187,6 +187,7 @@ bool InjectCompositorPlugin(int forProcessId){
 	auto WriteProcessMemory = (WriteProcessMemory_t)GetProcAddress(hKernel32, full.c_str());
 	if(WriteProcessMemory == NULL){
 		DriverLog("failed to get %s", full.c_str());
+		return false;
 	}
 	auto bStatus = WriteProcessMemory(targetProcess, nameInTargetProcess, dllPath, size, nullptr);
 	if(bStatus == 0){
@@ -215,6 +216,7 @@ bool InjectCompositorPlugin(int forProcessId){
 	auto CreateRemoteThread = (CreateRemoteThread_t)GetProcAddress(hKernel32, full.c_str());
 	if(CreateRemoteThread == NULL){
 		DriverLog("failed to get %s", full.c_str());
+		return false;
 	}
 	auto hThreadId = CreateRemoteThread(targetProcess,
 		nullptr,

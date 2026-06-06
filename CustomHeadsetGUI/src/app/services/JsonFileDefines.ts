@@ -68,6 +68,7 @@ export type CustomShaderConfig = {
   lensColorCorrection: boolean;
   dither10Bit: boolean;
   enableFilterForOverlay: boolean;
+  enableFilterForDashboard: boolean;
   samplingFilter: string;
   samplingFilterFXAA2SharpenStrength: number;
   samplingFilterFXAA2SharpenClamp: number;
@@ -90,6 +91,7 @@ export type BaseHeadsetConfig = {
   enable: boolean;
   ipd: number;
   ipdOffset: number;
+  horizontalIPDOffset: number;
   blackLevel: number;
   colorMultiplier: LinearColor;
   distortionProfile: string;
@@ -166,6 +168,8 @@ export type ResolutionInfo = {
   fovY: number,
   fovMaxX: number,
   fovMaxY: number,
+  combinedFovX: number,
+  combinedFovY: number,
   renderResolution1To1X: number,
   renderResolution1To1Y: number,
   renderResolution1To1Percent: number,

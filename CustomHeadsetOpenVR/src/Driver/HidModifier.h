@@ -115,6 +115,6 @@ public:
 
 extern HidModifier hidModifier;
 
-#if __has_include("HidModifierPrivate.cpp")
-#define HAS_PRIVATE 1
-#endif
+// #if __has_include("HidModifierPrivate.cpp")
+// #define HAS_PRIVATE 1
+// #endif

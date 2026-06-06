@@ -273,7 +273,7 @@
 @if(typeof defaults.customShader.enableFilterForOverlay != "undefined"){
 <div class="field">
     <div class="title">
-        <span i18n>Use Filter for Dashboard/Overlays</span>
+        <span i18n>Use Filter for Overlays</span>
         <app-field-tip i18n-info
             info="Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so the filters will have no effects outside of games when this is off." />
         <app-reset-button [canReset]="settings.customShader.enableFilterForOverlay!=defaults.customShader.enableFilterForOverlay"
@@ -281,6 +281,21 @@
     </div>
     <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.customShader.enableFilterForOverlay"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
+@if(typeof defaults.customShader.enableFilterForDashboard != "undefined"){
+<div class="field">
+    <div class="title">
+        <span i18n>Use Filter for Dashboard</span>
+        <app-field-tip i18n-info
+            info="Enables the filters when the SteamVR dashboard is open. This only activates when the dashboard is actually visible, so there is no performance impact when the dashboard is closed. This does cause a lag spike when opening or closing the dashboard. The driver can not detect if the menu is open at startup, so the menu will have to be re-opened for this to take effect." />
+        <app-reset-button [canReset]="settings.customShader.enableFilterForDashboard!=defaults.customShader.enableFilterForDashboard"
+            (resetClick)="nested('customShader').resetOption('enableFilterForDashboard')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableFilterForDashboard"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>

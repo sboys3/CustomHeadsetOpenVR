@@ -1,5 +1,6 @@
 #include "EyeTrackingOutput.h"
 #include "../Driver/DriverLog.h"
+#include "../Config/ConfigLoader.h"
 
 #include <chrono>
 
@@ -110,6 +111,16 @@ void EyeTrackingOutput::RunFrame(){
 		}
 			
 		driverInput->UpdateEyeTrackingComponent(eyeTrackingComponentHandle, &eyeTrackingData, timeOffset);
+		
+		
+		driverConfigLoader.diagnosticInfo.eyeTrackingValid = eyeTrackingData.bValid;
+		driverConfigLoader.diagnosticInfo.leftAngleX = localData.leftAngleX;
+		driverConfigLoader.diagnosticInfo.leftAngleY = localData.leftAngleY;
+		driverConfigLoader.diagnosticInfo.rightAngleX = localData.rightAngleX;
+		driverConfigLoader.diagnosticInfo.rightAngleY = localData.rightAngleY;
+		driverConfigLoader.diagnosticInfo.focalPointX = localData.focalPointX;
+		driverConfigLoader.diagnosticInfo.focalPointY = localData.focalPointY;
+		driverConfigLoader.diagnosticInfo.focalPointZ = localData.focalPointZ;
 	}
 }
 

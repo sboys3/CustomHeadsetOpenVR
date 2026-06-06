@@ -4,11 +4,16 @@
 #include "../Config/ConfigLoader.h"
 #include <mutex>
 #include <map>
+#include <unordered_map>
+#include <list>
+#include <algorithm>
+#include <vector>
 #include <locale>
 #include <codecvt>
 #include <filesystem>
 #include <fstream>
 #include <thread>
+#include <cstdint>
 
 #include "../../../ThirdParty/easywsclient/easywsclient.hpp"
 
@@ -53,6 +58,209 @@ struct Bytecode{
 
 // map of functions to replace shader bytecode with based on the first 32 bytes of the shader bytecode
 static std::map<std::string, Bytecode(*)()> shaderReplacements;
+
+// Shader cache configuration
+static const size_t MAX_SHADER_CACHE_SIZE = 100;
+
+// Mutex for thread-safe access to the shader cache
+static std::mutex shaderCacheMutex;
+
+// Cached shader bytecode structure
+struct CachedShader {
+	char* data;
+	size_t length;
+	CachedShader() : data(nullptr), length(0) {}
+	~CachedShader() {
+		delete[] data;
+	}
+	// Move constructor
+	CachedShader(CachedShader&& other) noexcept : data(other.data), length(other.length) {
+		other.data = nullptr;
+		other.length = 0;
+	}
+	// Move assignment operator
+	CachedShader& operator=(CachedShader&& other) noexcept {
+		if(this != &other){
+			delete[] data;
+			data = other.data;
+			length = other.length;
+			other.data = nullptr;
+			other.length = 0;
+		}
+		return *this;
+	}
+	// Disable copy constructor and copy assignment
+	CachedShader(const CachedShader&) = delete;
+	CachedShader& operator=(const CachedShader&) = delete;
+};
+
+// Hash map for quick lookup of compiled shaders by configuration hash
+static std::unordered_map<uint64_t, CachedShader> shaderCache;
+
+// Ordered list of hashes for LRU eviction (oldest at front)
+static std::list<uint64_t> shaderCacheOrder;
+
+// FNV-1a hash function for generating unique hashes from data
+static uint64_t FNV1aHash(const void* data, size_t length){
+	uint64_t hash = 0xCBF29CE484222325; // FNV offset basis
+	for(size_t i = 0; i < length; i++){
+		hash ^= ((const uint8_t*)data)[i];
+		hash *= 0x100000001B3; // FNV prime
+	}
+	return hash;
+}
+
+// Combine multiple hashes into a single hash
+static uint64_t CombineHashes(uint64_t hash1, uint64_t hash2){
+	// XOR the second hash into the first and then hash the result
+	uint64_t combined = hash1 ^ hash2;
+	combined ^= combined >> 33;
+	combined *= 0xFF51AFD7ED558CCD;
+	combined ^= combined >> 33;
+	combined *= 0xC4CEB9FE1A85EC53;
+	combined ^= combined >> 33;
+	return combined;
+}
+
+// Remove the oldest cached shader entry when the cache exceeds the maximum size
+static void EvictOldestShaderCacheEntry(){
+	if(shaderCacheOrder.empty()){
+		return;
+	}
+	uint64_t oldestHash = shaderCacheOrder.front();
+	shaderCacheOrder.pop_front();
+	auto it = shaderCache.find(oldestHash);
+	if(it != shaderCache.end()){
+		shaderCache.erase(it);
+	}
+}
+
+// Compile a shader from file with caching based on file content and defines
+// Hashes all shader files in the directory together with all defines to create a unique cache key
+// Returns the compiled shader bytecode (either from cache or newly compiled)
+// Failures are not cached
+// errorBlob is optionally output on failure for error reporting
+static Bytecode D3DCompileFromFileCached(const wchar_t* filePath, D3D_SHADER_MACRO* defines, LPCSTR entryPoint, LPCSTR shaderModel, UINT flags, ID3DBlob** errorBlob = nullptr){
+	// Hash all shader files in the directory to detect any changes to included files
+	uint64_t directoryHash = 0;
+	std::string shaderDir = getShaderPath();
+	std::vector<std::filesystem::directory_entry> entries;
+	for(const auto& entry : std::filesystem::directory_iterator(shaderDir)){
+		if(entry.is_regular_file()){
+			entries.push_back(entry);
+		}
+	}
+	std::sort(entries.begin(), entries.end(), [](const auto& a, const auto& b){
+		return a.path() < b.path();
+	});
+	for(const auto& entry : entries){
+		std::string fullPath = entry.path().string();
+		std::ifstream file(fullPath, std::ios::binary);
+		if(file){
+			file.seekg(0, std::ios::end);
+			size_t fileSize = file.tellg();
+			file.seekg(0, std::ios::beg);
+			std::vector<char> fileData(fileSize);
+			file.read(fileData.data(), fileSize);
+			
+			// Hash the filename to ensure different filenames produce different hashes
+			uint64_t fileNameHash = FNV1aHash(fullPath.c_str(), fullPath.length());
+			// Hash the file contents
+			uint64_t fileContentsHash = FNV1aHash(fileData.data(), fileSize);
+			// Combine into directory hash
+			directoryHash = CombineHashes(directoryHash, CombineHashes(fileNameHash, fileContentsHash));
+		}
+	}
+	
+	// Hash all the defines to create a unique configuration hash
+	uint64_t definesHash = 0;
+	if(defines){
+		for(int i = 0; defines[i].Name != nullptr && defines[i].Name[0] != '\0'; i++){
+			uint64_t nameHash = FNV1aHash(defines[i].Name, strlen(defines[i].Name));
+			uint64_t valueHash = 0;
+			if(defines[i].Definition){
+				valueHash = FNV1aHash(defines[i].Definition, strlen(defines[i].Definition));
+			}
+			definesHash = CombineHashes(definesHash, CombineHashes(nameHash, valueHash));
+		}
+	}
+	
+	// Combine directory hash and defines hash into a single cache key
+	uint64_t cacheKey = CombineHashes(directoryHash, definesHash);
+	
+	// Check cache with lock
+	{
+		std::lock_guard<std::mutex> lock(shaderCacheMutex);
+		auto it = shaderCache.find(cacheKey);
+		if(it != shaderCache.end()){
+			// Cache hit - return a copy of the cached bytecode
+			DriverLog("Shader cache hit for key %llu", (unsigned long long)cacheKey);
+			Bytecode result = {new char[it->second.length], it->second.length};
+			memcpy(result.data, it->second.data, it->second.length);
+			return result;
+		}
+	}
+	
+	// Cache miss - compile the shader using D3DCompileFromFile
+	ID3DBlob* shaderBlob = nullptr;
+	ID3DBlob* localErrorBlob = nullptr;
+	HRESULT hr = D3DCompileFromFile(
+		filePath,
+		defines,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE,
+		entryPoint,
+		shaderModel,
+		flags,
+		0,
+		&shaderBlob,
+		&localErrorBlob
+	);
+	
+	if(FAILED(hr) || !shaderBlob){
+		DriverLog("Failed to compile shader file: %ls", filePath);
+		if(localErrorBlob){
+			DriverLog("Error: %s", (char*)localErrorBlob->GetBufferPointer());
+			if(errorBlob){
+				*errorBlob = localErrorBlob;
+			}else{
+				localErrorBlob->Release();
+			}
+		}else if(errorBlob){
+			*errorBlob = nullptr;
+		}
+		if(shaderBlob){
+			shaderBlob->Release();
+		}
+		return {nullptr, 0};
+	}
+	
+	// Store in cache
+	{
+		std::lock_guard<std::mutex> lock(shaderCacheMutex);
+		
+		// Evict oldest entries if cache is full
+		while(shaderCache.size() >= MAX_SHADER_CACHE_SIZE){
+			EvictOldestShaderCacheEntry();
+		}
+		
+		CachedShader cached;
+		cached.data = new char[shaderBlob->GetBufferSize()];
+		cached.length = shaderBlob->GetBufferSize();
+		memcpy(cached.data, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
+		
+		shaderCache[cacheKey] = std::move(cached);
+		shaderCacheOrder.push_back(cacheKey);
+		
+		DriverLog("Shader cached with key %llu, cache size: %zu", (unsigned long long)cacheKey, shaderCache.size());
+	}
+	
+	// Return the compiled bytecode
+	Bytecode result = {new char[shaderBlob->GetBufferSize()], shaderBlob->GetBufferSize()};
+	memcpy(result.data, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
+	
+	shaderBlob->Release();
+	return result;
+}
 
 // debug shaders by logging the first 32 bytes of the shader bytecode
 void LogShaderIdentifier(std::string identifierString, size_t length){
@@ -140,17 +348,17 @@ _In_opt_  const D3D11_BOX *pSrcBox) = 0;
 // }
 
 std::string ConvertWideToUtf8(const std::wstring& wstr){
-    int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), NULL, 0, NULL, NULL);
-    std::string str(count, 0);
-    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], (int)count, NULL, NULL);
-    return str;
+	int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(), NULL, 0, NULL, NULL);
+	std::string str(count, 0);
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], (int)count, NULL, NULL);
+	return str;
 }
 
 std::wstring ConvertUtf8ToWide(const std::string& str){
-    int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), NULL, 0);
-    std::wstring wstr(count, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), &wstr[0], count);
-    return wstr;
+	int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), NULL, 0);
+	std::wstring wstr(count, 0);
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), &wstr[0], count);
+	return wstr;
 }
 
 
@@ -352,7 +560,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	if(driverConfig.customShader.dither10Bit){
 		defines[definesCount++] = {"DITHER_10BIT", "1"};
 	}
-	if(!driverConfig.customShader.enableFilterForOverlay){
+	if(!driverConfig.customShader.enableFilterForOverlay && !(driverConfig.customShader.enableFilterForDashboard && driverConfigLoader.info.isDashboardOpen)){
 		defines[definesCount++] = {"NO_OVERLAY_FILTER", "1"};
 	}
 	std::string samplingFilterString = "FILTER_" + driverConfig.customShader.samplingFilter;
@@ -405,20 +613,17 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	
 	std::string errorPath = fullPath + "_error" + (muraCorrection ? "_mura" : "") + (noDistortion ? "_nd" : "") + ".txt";
 	
-	// compile shader from hlsl using D3DCompileFromFile
-	ID3DBlob* shaderBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr; 
-	if(FAILED(D3DCompileFromFile(
+	// compile shader from hlsl using cached compilation
+	ID3DBlob* errorBlob = nullptr;
+	Bytecode bytecode = D3DCompileFromFileCached(
 		ConvertUtf8ToWide(fullPath).c_str(),
 		defines,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE,
 		"main",
 		"ps_5_0",
 		D3DCOMPILE_OPTIMIZATION_LEVEL3,
-		0,
-		&shaderBlob,
 		&errorBlob
-	))){
+	);
+	if(bytecode.data == nullptr || bytecode.length == 0){
 		DriverLog("Failed to compile shader file: %s", fullPath.c_str());
 		if(errorBlob){
 			DriverLog("Error: %s", (char*)errorBlob->GetBufferPointer());
@@ -428,13 +633,11 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 				fwrite(errorBlob->GetBufferPointer(), 1, errorBlob->GetBufferSize() - 1, errorFile);
 				fclose(errorFile);
 			}
+			errorBlob->Release();
 		}
 		return {nullptr, 0};
 	}else{
 		DriverLog("Successfully compiled shader file: %s", fullPath.c_str());
-		Bytecode bytecode = {new char[shaderBlob->GetBufferSize()], shaderBlob->GetBufferSize()};
-		memcpy(bytecode.data, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize());
-		shaderBlob->Release();
 		// delete error file
 		remove(errorPath.c_str());
 		return bytecode;
@@ -463,6 +666,24 @@ Bytecode DistortionShaderNoDistortion(){
 		return {nullptr, 0};
 	}
 	return DistortionShader(false, true);
+}
+
+// Precompile all registered shaders to populate the cache before they are needed in the hot path
+void PrecompileShaders(){
+	if(!IsCustomShaderEnabled()){
+		return;
+	}
+	DriverLog("Precompiling all registered shaders...");
+	// Iterate over all registered shader replacement functions and call them to populate the cache
+	for(auto& pair : shaderReplacements){
+		Bytecode bytecode = pair.second();
+		// Free the returned bytecode since we only need the cache entry
+		if(bytecode.data){
+			delete[] bytecode.data;
+			bytecode.data = nullptr;
+		}
+	}
+	DriverLog("Precompiled all registered shaders, cache size: %zu", shaderCache.size());
 }
 
 
@@ -648,6 +869,9 @@ void ShaderReplacement::Initialize(){
 
 
 void ShaderReplacement::ReloadShaders(){
+	// Precompile all shaders before sending the reload signal to populate the cache
+	PrecompileShaders();
+	
 	DriverLog("ShaderReplacement::ReloadShaders called");
 	easywsclient::WebSocket* websocket = easywsclient::WebSocket::from_url("ws://127.0.0.1:27062/", "http://127.0.0.1:27062");
 	if(websocket == nullptr){
@@ -669,13 +893,11 @@ void ShaderReplacement::CheckSettingsThread(){
 			if(!driverConfig.hasBeenUpdated && !driverConfigLoader.info.hasBeenUpdated){
 				continue;
 			}
-			driverConfig.hasBeenUpdated = false;
-			driverConfigLoader.info.hasBeenUpdated = false;
 			bool reloadShaders = false;
 			bool isNowEnabled = IsCustomShaderEnabled();
 			reloadShaders |= isNowEnabled != enabled;
 			enabled = isNowEnabled;
-			if(isNowEnabled){
+			if(isNowEnabled && driverConfig.hasBeenUpdated){
 				reloadShaders |= driverConfig.meganeX8K.subpixelShift != driverConfigOld.meganeX8K.subpixelShift;
 				reloadShaders |= driverConfig.dreamAir.subpixelShift != driverConfigOld.dreamAir.subpixelShift;
 				reloadShaders |= driverConfig.customShader.enable != driverConfigOld.customShader.enable;
@@ -699,6 +921,7 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.lensColorCorrection != driverConfigOld.customShader.lensColorCorrection;
 				reloadShaders |= driverConfig.customShader.dither10Bit != driverConfigOld.customShader.dither10Bit;
 				reloadShaders |= driverConfig.customShader.enableFilterForOverlay != driverConfigOld.customShader.enableFilterForOverlay;
+				reloadShaders |= driverConfig.customShader.enableFilterForDashboard != driverConfigOld.customShader.enableFilterForDashboard;
 				reloadShaders |= driverConfig.customShader.samplingFilter != driverConfigOld.customShader.samplingFilter;
 				reloadShaders |= driverConfig.customShader.samplingFilterFXAA2SharpenStrength != driverConfigOld.customShader.samplingFilterFXAA2SharpenStrength;
 				reloadShaders |= driverConfig.customShader.samplingFilterFXAA2SharpenClamp != driverConfigOld.customShader.samplingFilterFXAA2SharpenClamp;
@@ -720,10 +943,30 @@ void ShaderReplacement::CheckSettingsThread(){
 				}
 			}
 			
+			
+			if(isNowEnabled && driverConfigLoader.info.hasBeenUpdated){
+				reloadShaders |= driverConfigLoader.info.connectedHeadset != lastConnectedHeadset;
+				lastConnectedHeadset = driverConfigLoader.info.connectedHeadset;
+				// reload shaders when dashboard state changes and dashboard filter is enabled
+				if(driverConfig.customShader.enableFilterForDashboard && !driverConfig.customShader.enableFilterForOverlay && driverConfig.customShader.samplingFilter != "None"){
+					bool dashboardStateChanged = driverConfigLoader.info.isDashboardOpen != lastDashboardOpenState;
+					lastDashboardOpenState = driverConfigLoader.info.isDashboardOpen;
+					if(dashboardStateChanged){
+						reloadShaders = true;
+					}
+				}
+			}
+			
+			
+			
 			if(reloadShaders){
 				DriverLog("Shader settings changed, reloading...");
 				ReloadShaders();
 			}
+			
+			
+			driverConfig.hasBeenUpdated = false;
+			driverConfigLoader.info.hasBeenUpdated = false;
 		}
 	}
 }

@@ -4,7 +4,8 @@ import { DriverInfoService } from "../../services/driver-info.service";
 import { DistortionProfileEntry, DriverSettingService } from "../../services/driver-setting.service";
 import { SystemDiagnosticService } from "../../services/system-diagnostic.service";
 import { PullingService } from "../../services/PullingService";
-import { is_vrmonitor_running } from "../../tauri_wrapper";
+import { PathsService } from "../../services/paths.service";
+import { stat } from "@tauri-apps/plugin-fs";
 import { DriverInfo, HeadsetType, Settings } from "../../services/JsonFileDefines";
 import { deepCopy } from "../../helpers";
 
@@ -32,6 +33,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     public dis = inject(DriverInfoService)
     public ass = inject(AppSettingService)
     public sds = inject(SystemDiagnosticService)
+    public ps = inject(PathsService)
     // private cdr = inject(ChangeDetectorRef)
     public Math = Math
     resolutionInfoDisplay = signal(false)
@@ -54,12 +56,32 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     driverWarning = signal(false)
     driverEnablePrompt = signal(false)
     steamVRRunning = signal({ updated: false, running: false }, { equal: (a, b) => a.running === b.running && a.updated === b.updated })
-    static steamVRStatePulling = new PullingService(async () => await is_vrmonitor_running(), 'steamVRStatePulling').shared();
+    private static _diagnosticPath: string | null = null;
+    static steamVRStatePulling = new PullingService(async () => {
+        try {
+            const diagnosticPath = DeviceConfigComponentBase._diagnosticPath;
+            if(!diagnosticPath){
+                return false
+            }
+            const stats = await stat(diagnosticPath);
+            const modifiedTime = stats.mtime;
+            if (!modifiedTime) {
+                return false;
+            }
+            const fourSecondsAgo = new Date(Date.now() - 4000);
+            return modifiedTime >= fourSecondsAgo;
+        } catch {
+            return false;
+        }
+    }, 'steamVRStatePulling').shared();
     pullingRef = DeviceConfigComponentBase.steamVRStatePulling.createRef(value => {
         this.steamVRRunning.set({ updated: true, running: value })
     })
     @HostBinding('class.page-disabled') get pageDisabled() { return this.settingField() && !this.settings?.enable }
     constructor() {
+        if (!DeviceConfigComponentBase._diagnosticPath) {
+            DeviceConfigComponentBase._diagnosticPath = this.ps.diagnosticPath;
+        }
         effect(() => {
             this.rootSetting = this.dss.values()
             const field = this.settingField();
@@ -133,14 +155,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 this.driverEnablePrompt.set(shiftallEnabled.every(x => !x) && !(config?.meganeX8K?.enable ?? true));
             }
         })
-        effect(() => {
-            this.steamVRRunning.set({ running: false, updated: false })
-            if (this.resolutionInfoDisplay()) {
-                this.pullingRef.start()
-            } else {
-                this.pullingRef.stop()
-            }
-        })
+        this.pullingRef.start()
     }
     resetOption(key: keyof T) {
         if (this.settings && this.defaults) {

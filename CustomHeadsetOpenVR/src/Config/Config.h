@@ -84,8 +84,10 @@ struct CustomShaderConfig{
 	bool lensColorCorrection = true;
 	// if a 10 bit input will be dithered down to 8 bit
 	bool dither10Bit = false;
-	// if the overlay filter should be enabled (defaults false to avoid performance hit when no overlay is shown)
+	// if the filter should be enabled for overlays (defaults false to avoid performance hit when no overlay is shown)
 	bool enableFilterForOverlay = false;
+	// if the filter should be enabled when the SteamVR dashboard is open
+	bool enableFilterForDashboard = true;
 	// filters on the sampling of the texture,  "None", "NearestNeighbor", "FXAA2", "FXAA2CAS", "LumaSharpen", and "CAS"
 	std::string samplingFilter = "None";
 	// FXAA2 filter parameters
@@ -127,6 +129,8 @@ public:
 		double ipd = 63.0;
 		// ipd offset from the ipd value in mm
 		double ipdOffset = 0.0;
+		// horizontal offset in mm to shift both eyes to the right
+		double horizontalIPDOffset = 0.0;
 		// minimum black levels from 0 to 1
 		double blackLevel = 0;
 		// tint the display this color
@@ -334,3 +338,8 @@ extern std::mutex driverConfigLock;
 
 // version of the application
 extern std::string driverVersion;
+
+
+#if __has_include("../Driver/HidModifierPrivate.cpp")
+#define HAS_PRIVATE 1
+#endif

@@ -141,11 +141,13 @@
       @if(headsetMatches() && steamVRRunning()?.running && dis.values(); as info) {
         @if(info.resolution; as res) {
           @if(res.fovX) {
-            <p>
-              <span i18n="@@combinedHfov">Combined HFOV</span>
-              <span>&nbsp;:&nbsp;</span>
-              <span>{{combinedHfov(res.fovX).toFixed(1)}}</span>
-            </p>
+            @if(res.combinedFovX) {
+              <p>
+                <span i18n="@@combinedHfov">Combined HFOV</span>
+                <span>&nbsp;:&nbsp;</span>
+                <span>{{res.combinedFovX.toFixed(1)}}</span>
+              </p>
+            }
           }
         }
       }
@@ -164,6 +166,13 @@
           @if(info.resolution; as res) {
             <div class="note">
               @if(res.fovX) {
+                @if(res.combinedFovX) {
+                  <p>
+                    <span i18n="@@currentCombinedHfov">Current Combined HFOV</span>
+                    <span>&nbsp;:&nbsp;</span>
+                    <span>{{res.combinedFovX.toFixed(1)}}</span>
+                  </p>
+                }
                 <p>
                   <span i18n>Current rendered per eye FOV</span>
                   <span>&nbsp;:&nbsp;</span>
@@ -202,10 +211,10 @@
               }
               @if(steamVRRunning(); as steamvr) {
                 @if(!steamvr.updated || !steamvr.running) {
-                  <p><span class="warn-color" i18n>SteamVR is not running, so this information is not updated.</span></p>
+                  <p><span class="warn-color" i18n>The SteamVR driver is not running, so this information is not updated.</span></p>
                 }
               } @else {
-                <p><span class="warn-color" i18n>SteamVR is not running, so this information is not updated.</span></p>
+                <p><span class="warn-color" i18n>The SteamVR driver is not running, so this information is not updated.</span></p>
               }
             </div>
           }
@@ -576,8 +585,9 @@
     <div class="field">
       <div class="title">
         <span i18n>Enable Eye Tracking</span>
+        <app-field-note type="gameRestart" />
         <app-field-tip i18n-info
-            info="Enables eye tracking support for the headset. Pimax headsets require the pi_server runtime. Use mbucchia/Quad-Views-Foveated for foveated rendering." />
+            info="Enables eye tracking support for the headset. Pimax headsets require the pi_server runtime. Use mbucchia/Quad-Views-Foveated for foveated rendering. This may require restarting the game if turned on after a game is started." />
         <app-reset-button [canReset]="settings.enableEyeTracking !== defaults.enableEyeTracking"
             (resetClick)="resetOption('enableEyeTracking')"></app-reset-button>
       </div>
@@ -627,7 +637,7 @@
     <!-- IPD Offset -->
     <div class="field">
       <div class="title">
-        <span i18n>IPD Offset</span>
+        <span i18n>Additional IPD</span>
         <app-field-tip i18n-info
             info="This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon." />
         <app-reset-button [canReset]="settings.ipdOffset !== defaults.ipdOffset"
@@ -638,6 +648,24 @@
             type="number">
         <mat-slider max="20" min="-20" step="0.5" showTickMarks>
           <input matSliderThumb [(ngModel)]="settings.ipdOffset" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
+    </div>
+
+    <!-- Horizontal IPD Offset -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Horizontal IPD Offset</span>
+        <app-field-tip i18n-info
+            info="Offsets both eyes to the right by the specified amount in millimeters. This can be used to accommodate hardware horizontal offsets." />
+        <app-reset-button [canReset]="settings.horizontalIPDOffset !== defaults.horizontalIPDOffset"
+            (resetClick)="resetOption('horizontalIPDOffset')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.horizontalIPDOffset" step="0.5" (ngModelChange)="saveConfigSettings()"
+            type="number">
+        <mat-slider max="10" min="-10" step="0.5" showTickMarks>
+          <input matSliderThumb [(ngModel)]="settings.horizontalIPDOffset" (ngModelChange)="saveConfigSettings()">
         </mat-slider>
       </div>
     </div>

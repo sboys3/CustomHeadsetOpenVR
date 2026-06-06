@@ -112,6 +112,18 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 				}
 			}
 		}
+		if(vrevent.eventType == vr::VREvent_DashboardActivated){
+			if(!driverConfigLoader.info.isDashboardOpen){
+				driverConfigLoader.info.isDashboardOpen = true;
+				driverConfigLoader.WriteInfo();
+			}
+		}
+		if(vrevent.eventType == vr::VREvent_DashboardDeactivated){
+			if(driverConfigLoader.info.isDashboardOpen){
+				driverConfigLoader.info.isDashboardOpen = false;
+				driverConfigLoader.WriteInfo();
+			}
+		}
 		if(vrevent.eventType == vr::VREvent_ProcessConnected && customShaderEnabled){
 			// check new processes and inject if they are the compositor
 			InjectCompositorPlugin(vrevent.data.process.pid);

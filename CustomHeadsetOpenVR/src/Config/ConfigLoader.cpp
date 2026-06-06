@@ -3,11 +3,14 @@
 #include <thread>
 #include <fstream>
 #include <filesystem>
+#include <chrono>
 #include "nlohmann/json.hpp"
 #include "../Driver/DriverLog.h"
 #include "../Distortion/DistortionProfileConstructor.h"
 #ifdef _WIN32
 #include "Windows.h"
+#else
+#include <unistd.h>
 #endif
 
 using json = nlohmann::json;
@@ -34,6 +37,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	}
 	if(headsetData["ipdOffset"].is_number()){
 		headsetConfig.ipdOffset = headsetData["ipdOffset"].get<double>();
+	}
+	if(headsetData["horizontalIPDOffset"].is_number()){
+		headsetConfig.horizontalIPDOffset = headsetData["horizontalIPDOffset"].get<double>();
 	}
 	if(headsetData["blackLevel"].is_number()){
 		headsetConfig.blackLevel = headsetData["blackLevel"].get<double>();
@@ -274,6 +280,9 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["enableFilterForOverlay"].is_boolean()){
 				newConfig.customShader.enableFilterForOverlay = customShaderData["enableFilterForOverlay"].get<bool>();
 			}
+			if(customShaderData["enableFilterForDashboard"].is_boolean()){
+				newConfig.customShader.enableFilterForDashboard = customShaderData["enableFilterForDashboard"].get<bool>();
+			}
 			if(customShaderData["samplingFilter"].is_string()){
 				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
 			}
@@ -391,6 +400,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"enable", headsetConfig.enable},
 		{"ipd", headsetConfig.ipd},
 		{"ipdOffset", headsetConfig.ipdOffset},
+		{"horizontalIPDOffset", headsetConfig.horizontalIPDOffset},
 		{"blackLevel", headsetConfig.blackLevel},
 		{"colorMultiplier", {
 			{"r", headsetConfig.colorMultiplier.r},
@@ -451,6 +461,8 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 	};
 }
 void ConfigLoader::WriteInfo(){
+	std::lock_guard<std::mutex> lock(infoWriteLock);
+	info.needToWrite = false;
 	std::string infoPath = GetConfigFolder() + "info.json";
 	std::ofstream infoFile(infoPath);
 	if(!infoFile.is_open()){
@@ -496,6 +508,7 @@ void ConfigLoader::WriteInfo(){
 				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
 				{"dither10Bit", defaultSettings.customShader.dither10Bit},
 				{"enableFilterForOverlay", defaultSettings.customShader.enableFilterForOverlay},
+				{"enableFilterForDashboard", defaultSettings.customShader.enableFilterForDashboard},
 				{"samplingFilter", defaultSettings.customShader.samplingFilter},
 				{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
 				{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
@@ -524,6 +537,8 @@ void ConfigLoader::WriteInfo(){
 			{"fovY", info.renderFovY},
 			{"fovMaxX", info.renderFovMaxX},
 			{"fovMaxY", info.renderFovMaxY},
+			{"combinedFovX", info.combinedFovX},
+			{"combinedFovY", info.combinedFovY},
 			{"renderResolution1To1X", info.renderResolution1To1X},
 			{"renderResolution1To1Y", info.renderResolution1To1Y},
 			{"renderResolution1To1Percent", info.renderResolution1To1Percent},
@@ -534,6 +549,7 @@ void ConfigLoader::WriteInfo(){
 		}},
 		{"connectedHeadset", (int)info.connectedHeadset},
 		{"nonNativeHeadsetFound", info.nonNativeHeadsetFound},
+		{"isDashboardOpen", info.isDashboardOpen},
 		{"debugLog", info.debugLog},
 		{"driverResources", info.driverResources},
 		{"steamvrResources", info.steamvrResources},
@@ -591,6 +607,8 @@ void ConfigLoader::ReadInfo(){
 			if(res["fovY"].is_number()) info.renderFovY = res["fovY"].get<double>();
 			if(res["fovMaxX"].is_number()) info.renderFovMaxX = res["fovMaxX"].get<double>();
 			if(res["fovMaxY"].is_number()) info.renderFovMaxY = res["fovMaxY"].get<double>();
+			if(res["combinedFovX"].is_number()) info.combinedFovX = res["combinedFovX"].get<double>();
+			if(res["combinedFovY"].is_number()) info.combinedFovY = res["combinedFovY"].get<double>();
 			if(res["renderResolution1To1X"].is_number()) info.renderResolution1To1X = res["renderResolution1To1X"].get<int>();
 			if(res["renderResolution1To1Y"].is_number()) info.renderResolution1To1Y = res["renderResolution1To1Y"].get<int>();
 			if(res["renderResolution1To1Percent"].is_number()) info.renderResolution1To1Percent = res["renderResolution1To1Percent"].get<double>();
@@ -599,10 +617,60 @@ void ConfigLoader::ReadInfo(){
 			if(res["outputResolutionX"].is_number()) info.outputResolutionX = res["outputResolutionX"].get<int>();
 			if(res["outputResolutionY"].is_number()) info.outputResolutionY = res["outputResolutionY"].get<int>();
 		}
-		info.hasBeenUpdated = true; 
+		if(data["isDashboardOpen"].is_boolean()){
+			info.isDashboardOpen = data["isDashboardOpen"].get<bool>();
+		}
+		info.hasBeenUpdated = true;
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse info.json: %s", e.what());
 		return;
+	}
+}
+
+void ConfigLoader::WriteDiagnosticInfo(){
+	std::lock_guard<std::mutex> lock(diagnosticWriteLock);
+	std::string diagnosticPath = GetConfigFolder() + "diagnostic.json";
+	std::ofstream diagnosticFile(diagnosticPath);
+	if(!diagnosticFile.is_open()){
+		#ifdef _WIN32
+		DriverLog("Failed to open diagnostic.json for writing: %d", GetLastError());
+		#else
+		DriverLog("Failed to open diagnostic.json for writing");
+		#endif
+		return;
+	}
+	ordered_json data = {
+		{"about", "This file provides diagnostic information from the driver, updated 4 times per second."},
+		{"vrserverPID", diagnosticInfo.vrserverPID},
+		{"eyeTracking", {
+			{"valid", diagnosticInfo.eyeTrackingValid},
+			{"left", {
+				{"angleX", diagnosticInfo.leftAngleX},
+				{"angleY", diagnosticInfo.leftAngleY},
+			}},
+			{"right", {
+				{"angleX", diagnosticInfo.rightAngleX},
+				{"angleY", diagnosticInfo.rightAngleY},
+			}},
+			{"focalPoint", {
+				{"x", diagnosticInfo.focalPointX},
+				{"y", diagnosticInfo.focalPointY},
+				{"z", diagnosticInfo.focalPointZ},
+			}},
+		}},
+	};
+	diagnosticFile << data.dump(1, '\t');
+	diagnosticFile.close();
+}
+
+void ConfigLoader::WriteDiagnosticInfoThread(){
+	while(started){
+		if(info.needToWrite){
+			// also handle writing info asynchronously
+			WriteInfo();
+		}
+		WriteDiagnosticInfo();
+		std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	}
 }
 
@@ -834,8 +902,13 @@ void ConfigLoader::Start(){
 	// load config for the first time
 	ParseConfig();
 	
+	bool onlyHandlePrivateFunctionality = false;
+	#ifdef HAS_PRIVATE
+	onlyHandlePrivateFunctionality = driverConfig.onlyHandlePrivateFunctionality;
+	#endif
+	
 	try{
-		if(watchInfo || driverConfig.onlyHandlePrivateFunctionality){
+		if(watchInfo || onlyHandlePrivateFunctionality){
 			ReadInfo();
 		}else{
 			WriteInfo();
@@ -845,6 +918,21 @@ void ConfigLoader::Start(){
 		}
 	}catch(const std::exception& e){
 		DriverLog("Failed to manage info.json: %s", e.what());
+	}
+	if(!watchInfo && !onlyHandlePrivateFunctionality){
+		// Set the current process ID
+		#ifdef _WIN32
+		diagnosticInfo.vrserverPID = (uint32_t)GetCurrentProcessId();
+		#else
+		diagnosticInfo.vrserverPID = (uint32_t)getpid();
+		#endif
+		try{
+			// start diagnostic info thread
+			std::thread diagnosticThread(&ConfigLoader::WriteDiagnosticInfoThread, this);
+			diagnosticThread.detach();
+		}catch(const std::exception& e){
+			DriverLog("Failed to start diagnostic thread: %s", e.what());
+		}
 	}
 	try{	
 		// start watcher thread

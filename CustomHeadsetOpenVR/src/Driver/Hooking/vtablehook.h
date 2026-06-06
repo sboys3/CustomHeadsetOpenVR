@@ -35,7 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 inline int vtablehook_unprotect(void* region) {
 #ifdef _WIN32
-	MEMORY_BASIC_INFORMATION mbi;
+	MEMORY_BASIC_INFORMATION mbi = {};
 	VirtualQuery((LPCVOID)region, &mbi, sizeof(mbi));
 	if(!VirtualProtect(mbi.BaseAddress, mbi.RegionSize, PAGE_READWRITE, &mbi.Protect)){
 		return -1;
@@ -53,7 +53,7 @@ inline int vtablehook_unprotect(void* region) {
 
 inline void vtablehook_protect(void* region, int protection) {
 #ifdef _WIN32
-	MEMORY_BASIC_INFORMATION mbi;
+	MEMORY_BASIC_INFORMATION mbi = {};
 	VirtualQuery((LPCVOID)region, &mbi, sizeof(mbi));
 	VirtualProtect(mbi.BaseAddress, mbi.RegionSize, protection, &mbi.Protect);
 #elif __linux__

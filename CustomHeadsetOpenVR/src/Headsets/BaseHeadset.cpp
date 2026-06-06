@@ -318,7 +318,7 @@ void BaseHeadsetShim::GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint
 		(double)(driverConfigLoader.info.renderResolution100PercentY * driverConfigLoader.info.renderResolution100PercentY);
 	double requiredPercent = std::max(requiredPercentX, requiredPercentY);
 	driverConfigLoader.info.renderResolution1To1Percent = requiredPercent * 100.0;
-	driverConfigLoader.WriteInfo();
+	driverConfigLoader.info.needToWrite = true;
 	
 	// write advanced super sampling resolution, this won't apply until the game is relaunched
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
@@ -333,18 +333,18 @@ bool BaseHeadsetShim::PreDisplayComponentGetRecommendedRenderTargetSize(uint32_t
 }
 
 // set ipd and adjust eye to head transform accordingly. ipd is in meters. angle it in radians
-void BaseHeadsetShim::SetIPD(float ipd, float angle){
+void BaseHeadsetShim::SetIPD(float ipd, float angle, float horizontalOffset){
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_UserIpdMeters_Float, ipd);
 	float c = std::cos(angle);
 	float s = std::sin(angle);
 	vr::HmdMatrix34_t leftEye = {{
-		{ c, 0, s, -ipd / 2.0f},
+		{ c, 0, s, -ipd / 2.0f + horizontalOffset},
 		{ 0, 1, 0, 0},
 		{-s, 0, c, 0},
 	}};
 	vr::HmdMatrix34_t rightEye = {{
-		{c, 0, -s, ipd / 2.0f},
+		{c, 0, -s, ipd / 2.0f + horizontalOffset},
 		{0, 1,  0, 0},
 		{s, 0,  c, 0},
 	}};
@@ -427,7 +427,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD((float)(GetConfig().ipd + GetConfig().ipdOffset) / 1000.f, (float)(GetConfig().eyeRotation * kPi / 180.0f));
+	SetIPD((float)(GetConfig().ipd + GetConfig().ipdOffset) / 1000.f, (float)(GetConfig().eyeRotation * kPi / 180.0f), (float)GetConfig().horizontalIPDOffset / 1000.f);
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)GetConfig().blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)GetConfig().secondsFromVsyncToPhotons);
@@ -539,6 +539,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldUpdateDistortion |= GetConfigOld().disableEyeDecreaseFov != GetConfig().disableEyeDecreaseFov;
 	shouldUpdateDistortion |= GetConfigOld().displayRotation != GetConfig().displayRotation;
 	shouldUpdateDistortion |= GetConfigOld().parallelProjection != GetConfig().parallelProjection;
+	shouldUpdateDistortion |= GetConfig().parallelProjection && (GetConfigOld().eyeRotation != GetConfig().eyeRotation);
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
 
 	
@@ -598,6 +599,28 @@ void BaseHeadsetShim::UpdateSettings(){
 			GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);
 			vr::VRServerDriverHost()->SetRecommendedRenderTargetSize(0, renderResolutionX, renderResolutionY);
 		}
+	}
+	
+	// Update combined FOV when distortion updates or eye rotation changes
+	if(shouldUpdateDistortion || GetConfigOld().eyeRotation != GetConfig().eyeRotation){
+		float leftEyeLeft, leftEyeRight, leftEyeTop, leftEyeBottom;
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
+		float rightEyeLeft, rightEyeRight, rightEyeTop, rightEyeBottom;
+		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Right, &rightEyeLeft, &rightEyeRight, &rightEyeBottom, &rightEyeTop);
+		if(GetConfig().disableEye & 1 && GetConfig().disableEyeDecreaseFov){
+			leftEyeRight = leftEyeTop = 0.000001f;
+			leftEyeBottom = leftEyeLeft = -leftEyeTop;
+		}
+		if(GetConfig().disableEye & 2 && GetConfig().disableEyeDecreaseFov){
+			rightEyeLeft = rightEyeTop = 0.000001f;
+			rightEyeBottom = rightEyeRight = -rightEyeTop;
+		}
+		// calculate combined FOV from the full span of both eyes' clip planes, including eye rotation
+		double combinedFovX = (std::atan(rightEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi + GetConfig().eyeRotation * 2;
+		double combinedFovY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
+		driverConfigLoader.info.combinedFovX = combinedFovX;
+		driverConfigLoader.info.combinedFovY = combinedFovY;
+		driverConfigLoader.info.needToWrite = true;
 	}
 }
 

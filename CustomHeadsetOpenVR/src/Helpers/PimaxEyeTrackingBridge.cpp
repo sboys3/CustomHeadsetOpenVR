@@ -23,15 +23,17 @@ bool PimaxEyeTrackingBridge::Initialize(){
 	initializeCount++;
 	
 #ifdef PVR_EXISTS
+	if(!enabled){
+		return false;
+	}
+
 	// Initialize the eye tracking output component
+	// Once this is initialized, eye tracking will be advertised over OpenXR
 	eyeTrackingOutput.ipd = ipd;
 	if(initializeCount < 3){
 		eyeTrackingOutput.Initialize();
 	}
 	
-	if(!enabled){
-		return false;
-	}
 	
 	// Initialize PVR environment
 	pvrResult result = pvr_initialise(&envHandle);
@@ -139,7 +141,7 @@ void PimaxEyeTrackingBridge::EyeTrackingThread(){
 #ifdef PVR_EXISTS
 	auto now = std::chrono::high_resolution_clock::now();
 	static std::chrono::high_resolution_clock::time_point lastLogTime = now;
-	while(threadRunning){
+	while(threadRunning && envHandle && sessionHandle){
 		auto startTime = std::chrono::high_resolution_clock::now();
 		now = startTime;
 
