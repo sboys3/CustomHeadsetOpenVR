@@ -22,10 +22,10 @@ public:
 	PimaxCommon();
 	virtual ~PimaxCommon() = default;
 	static PimaxInfo GetInfo();
-
-protected:
 	static pvrSessionHandle GetPvrSession();
 	static double GetPvrTime();
+
+protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
 	bool HasEyeTracking() const { return hasEyeTracking; }
 
