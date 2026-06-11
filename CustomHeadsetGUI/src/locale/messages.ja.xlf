@@ -20,7 +20,7 @@
       </trans-unit>
       <trans-unit id="8720977247725652816" datatype="html">
         <source>Ok</source>
-        <target state="translated">はい</target>
+        <target state="translated">OK</target>
       </trans-unit>
       <trans-unit id="3656080382305974312" datatype="html">
         <source>Color Scheme</source>
@@ -104,7 +104,7 @@
       </trans-unit>
       <trans-unit id="3119794609322363234" datatype="html">
         <source>Advanced Mode</source>
-        <target state="translated">アドバンスモード</target>
+        <target state="translated">上級モード</target>
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
@@ -114,21 +114,9 @@
         <source>Reset to default</source>
         <target state="translated">デフォルトにリセット</target>
       </trans-unit>
-      <trans-unit id="4831283424104605009" datatype="html">
-        <source>IPD Offset</source>
-        <target state="translated">IPDオフセット</target>
-      </trans-unit>
       <trans-unit id="2133427521398732619" datatype="html">
         <source>Black Level</source>
-        <target state="translated">ブラックレベル</target>
-      </trans-unit>
-      <trans-unit id="1960460633115255569" datatype="html">
-        <source>Max Fov Horizontal</source>
-        <target state="translated">最大水平FOV</target>
-      </trans-unit>
-      <trans-unit id="7702362431118838491" datatype="html">
-        <source>Max Fov Vertical</source>
-        <target state="translated">最大垂直FOV</target>
+        <target state="translated">黒レベル</target>
       </trans-unit>
       <trans-unit id="1537728937939680401" datatype="html">
         <source>Distortion Mesh Resolution</source>
@@ -146,26 +134,6 @@
         <source>High (<x id="PH" equiv-text="255"/>)</source>
         <target state="translated">高 (<x id="PH" equiv-text="255"/>)</target>
       </trans-unit>
-      <trans-unit id="6309735826442522713" datatype="html">
-        <source>Current Profile : </source>
-        <target state="translated">現在のプロファイル：</target>
-      </trans-unit>
-      <trans-unit id="8461842260159597706" datatype="html">
-        <source>Show</source>
-        <target state="translated">表示</target>
-      </trans-unit>
-      <trans-unit id="4391289919356861627" datatype="html">
-        <source>Apply</source>
-        <target state="translated">適用</target>
-      </trans-unit>
-      <trans-unit id="7358890221143927213" datatype="html">
-        <source>Radius from center of the output (%)</source>
-        <target state="translated">出力中心からの半径 (%)</target>
-      </trans-unit>
-      <trans-unit id="5731056400307534906" datatype="html">
-        <source>Radius from center of the input (degrees)</source>
-        <target state="translated">入力中心からの半径 (度)</target>
-      </trans-unit>
       <trans-unit id="8360107325291301836" datatype="html">
         <source>Advanced Settings</source>
         <target state="translated">上級設定</target>
@@ -182,8 +150,8 @@
         <source>About</source>
         <target state="translated">このアプリについて</target>
       </trans-unit>
-      <trans-unit id="765305289258005204" datatype="html">
-        <source>app version</source>
+      <trans-unit id="3566499104491231785" datatype="html">
+        <source>App Version</source>
         <target state="translated">アプリバージョン</target>
       </trans-unit>
       <trans-unit id="6915767768628367173" datatype="html">
@@ -192,7 +160,7 @@
       </trans-unit>
       <trans-unit id="7047036364814348431" datatype="html">
         <source>New version available</source>
-        <target state="new">新しいバージョンが利用可能です！</target>
+        <target state="translated">新しいバージョンが利用可能です！</target>
       </trans-unit>
       <trans-unit id="8491984279391991305" datatype="html">
         <source>(Up to date)</source>
@@ -260,7 +228,7 @@
       </trans-unit>
       <trans-unit id="7625955582398874896" datatype="html">
         <source>Driver settings invalid</source>
-        <target state="new">ドライバー設定有効</target>
+        <target state="translated">ドライバー設定無効</target>
       </trans-unit>
       <trans-unit id="5254833004479203580" datatype="html">
         <source>Reset Setting</source>
@@ -268,11 +236,11 @@
       </trans-unit>
       <trans-unit id="4454114648752183451" datatype="html">
         <source>Driver settings are not valid</source>
-        <target state="new">ドライバー設定無効</target>
+        <target state="translated">ドライバー設定は無効です</target>
       </trans-unit>
       <trans-unit id="1753866341555293468" datatype="html">
         <source>Shiftall driver is not disabled</source>
-        <target state="new">Shiftallドライバーが無効化されていません</target>
+        <target state="translated">Shiftallドライバーが無効化されていません</target>
       </trans-unit>
       <trans-unit id="9187855490716817910" datatype="html">
         <source>Disable</source>
@@ -302,10 +270,6 @@
         <source>please launch SteamVR to finish the installation</source>
         <target state="translated">インストールを完了するために、SteamVRを起動してください</target>
       </trans-unit>
-      <trans-unit id="3099842785070530061" datatype="html">
-        <source>Resolution Info</source>
-        <target state="translated">解像度情報</target>
-      </trans-unit>
       <trans-unit id="2109348818976292721" datatype="html">
         <source>Show Details</source>
         <target state="translated">詳細を表示</target>
@@ -323,7 +287,7 @@
         <target state="translated">有効化</target>
       </trans-unit>
       <trans-unit id="currentRenderedFovBurnInNote" datatype="html">
-        <source> (deviates by a random value to reduce burn-in)</source>
+        <source> (deviates by a random value to reduce burn-in)</source>
         <target state="translated">（焼き付き軽減のためランダムな値だけ変動します）</target>
       </trans-unit>
       <trans-unit id="4651117059363790056" datatype="html">
@@ -336,11 +300,11 @@
       </trans-unit>
       <trans-unit id="combinedHfov" datatype="html">
         <source>Combined HFOV</source>
-        <target state="translated">Combined HFOV</target>
+        <target state="translated">合計 HFOV</target>
       </trans-unit>
       <trans-unit id="binocularOverlap" datatype="html">
-        <source>Binocular overlap</source>
-        <target state="translated">両眼オーバーラップ</target>
+        <source>Current Binocular Overlap</source>
+        <target state="translated">現在の両眼オーバーラップ</target>
       </trans-unit>
       <trans-unit id="6190895239365336532" datatype="html">
         <source>Enable Hidden Area Meshes</source>
@@ -388,11 +352,11 @@
       </trans-unit>
       <trans-unit id="4869977764064716796" datatype="html">
         <source>Movement Time</source>
-        <target state="translated">静止時間</target>
+        <target state="translated">移動時間</target>
       </trans-unit>
       <trans-unit id="2548696539154999507" datatype="html">
         <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them. Click for more information.</source>
-        <target state="new">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。</target>
+        <target state="translated">これらの設定への変更を反映するには、ゲームの再起動が必要です。非表示領域メッシュは画面の隅をマスクするために使用され、対応するゲームではパフォーマンスを向上させることができます。クリックして詳細を表示します。</target>
       </trans-unit>
       <trans-unit id="2421348343423477743" datatype="html">
         <source>Inverts the meshes to only show the areas that will be hidden.</source>
@@ -400,11 +364,11 @@
       </trans-unit>
       <trans-unit id="5294445514709130519" datatype="html">
         <source>Requires restarting SteamVR to apply changes.</source>
-        <target state="new">変更を適用するには、SteamVRの再起動が必要です。</target>
+        <target state="translated">変更を適用するには、SteamVRの再起動が必要です。</target>
       </trans-unit>
       <trans-unit id="6569858061936517894" datatype="html">
         <source>Requires restarting the game to apply changes.</source>
-        <target state="new">変更を適用するには、ゲームの再起動が必要です。</target>
+        <target state="translated">変更を適用するには、ゲームの再起動が必要です。</target>
       </trans-unit>
       <trans-unit id="2856900395968306204" datatype="html">
         <source>Movement Threshold Degrees</source>
@@ -470,10 +434,6 @@
         <source>Contrast Midpoint Right Eye</source>
         <target state="translated">右目のコントラスト中点</target>
       </trans-unit>
-      <trans-unit id="5168298581436514754" datatype="html">
-        <source>Chroma</source>
-        <target state="translated">彩度</target>
-      </trans-unit>
       <trans-unit id="1840263869596556199" datatype="html">
         <source>Gamma</source>
         <target state="translated">ガンマ</target>
@@ -498,10 +458,6 @@
         <source>Enable for Other HMDs</source>
         <target state="translated">その他のHMD向けに有効化</target>
       </trans-unit>
-      <trans-unit id="5832230287995382782" datatype="html">
-        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
-        <target state="translated">SteamVRのコンポジターにある歪みシェーダーを、より多くのカスタマイズを可能にするカスタムシェーダーに置き換えます。</target>
-      </trans-unit>
       <trans-unit id="7634542220919712546" datatype="html">
         <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
         <target state="translated">カスタムシェーダーを有効にします。これはSteamVR内のシェーダーを置き換えます。</target>
@@ -514,20 +470,20 @@
         <source>Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect.</source>
         <target state="translated">コントラストの中点を調整します。これはコントラスト調整の中心点を制御します。例えば、この値を100にすると全ての色が白を基準に変化し、0にすると黒を基準に変化するため、全体を明るくしたり暗くしたりする効果が得られます。</target>
       </trans-unit>
-      <trans-unit id="6143642524180911701" datatype="html">
-        <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
+      <trans-unit id="5058044319848224995" datatype="html">
+        <source>Applies linear contrast to the image before gamma correction instead of after. Generally contrast looks better with this option off but it can be useful for some effects.</source>
         <target state="translated">ガンマ補正の後ではなく前に、リニアコントラストを画像に適用します。通常、このオプションをオフにした方がコントラストの見栄えは良くなりますが、一部のエフェクトには役立つ場合があります。</target>
       </trans-unit>
       <trans-unit id="1771517419511821401" datatype="html">
         <source>Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast.</source>
         <target state="translated">ディスプレイの個体差を補正するために、左右の目それぞれに個別のコントラストを適用します。この設定は上記のコントラスト設定に加えて適用されます。</target>
       </trans-unit>
-      <trans-unit id="273263793213207360" datatype="html">
-        <source>Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
+      <trans-unit id="5444309850677948407" datatype="html">
+        <source>Adjusts the saturation of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
         <target state="translated">画像の彩度を調整します。50より高い場合、色がより強調されます。0まで下げると、画像はグレースケールになります。</target>
       </trans-unit>
-      <trans-unit id="1101953333251248565" datatype="html">
-        <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
+      <trans-unit id="3200668587703093580" datatype="html">
+        <source>Adjusts the gamma of the image. This controls how brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
         <target state="translated">画像のガンマを調整します。これは輝度がディスプレイの明るさにどのようにマッピングされるかを制御します。ガンマ値が高いほど、画像の暗い部分が明るくなります。</target>
       </trans-unit>
       <trans-unit id="5868413981442823243" datatype="html">
@@ -562,21 +518,17 @@
         <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
         <target state="translated">ヘッドセットに使用する歪みプロファイル。「歪み」タブで他のオプションを確認できます。</target>
       </trans-unit>
-      <trans-unit id="8988091250221469673" datatype="html">
-        <source>installed driver version</source>
+      <trans-unit id="5731189063272671574" datatype="html">
+        <source>Installed Driver Version</source>
         <target state="translated">インストール済みのドライバーバージョン</target>
       </trans-unit>
-      <trans-unit id="3023147292772911329" datatype="html">
-        <source>last run driver version</source>
+      <trans-unit id="1507100678943453495" datatype="html">
+        <source>Last Run Driver Version</source>
         <target state="translated">最終実行時のドライバーバージョン</target>
       </trans-unit>
       <trans-unit id="238553294014386856" datatype="html">
         <source>Re-Install Driver</source>
         <target state="translated">ドライバーを再インストール</target>
-      </trans-unit>
-      <trans-unit id="7005778905519445414" datatype="html">
-        <source>This custom shader has the possibility to completely break SteamVR after a future SteamVR update. Valve has no obligation to maintain compatibility with this modification. Disable it if you have issues or compatibility problems.</source>
-        <target state="translated">このカスタムシェーダーは、将来のSteamVRアップデート後にSteamVRを完全に破損させる可能性があります。Valveには、この改造との互換性を維持する義務はありません。問題や互換性の問題が発生した場合は、この機能を無効にしてください。</target>
       </trans-unit>
       <trans-unit id="6835956377369507232" datatype="html">
         <source>Samples subpixels from the correct locations in the image to improve sharpness by lighting up individual subpixels. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
@@ -586,21 +538,17 @@
         <source>The inter pupillary distance of the virtual cameras in SteamVR applications. You set the headset&apos;s physical IPD in the Shiftall Configurator. This IPD should be matched with what you set in the Shiftall Configurator to get the correct world scale.</source>
         <target state="translated">SteamVRアプリケーションにおける仮想カメラの瞳孔間距離（IPD）です。ヘッドセットの物理的なIPDは「Shiftall設定ツール」で設定します。正しいワールドスケールを得るためには、このIPDを「Shiftall設定ツール」で設定した値と一致させる必要があります。</target>
       </trans-unit>
-      <trans-unit id="8207031890218332522" datatype="html">
-        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+      <trans-unit id="7567855955496644826" datatype="html">
+        <source>The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
         <target state="translated">ヘッドセットで水平方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。この設定を完全に適用するには、ゲームの再起動が必要な場合があります。</target>
       </trans-unit>
-      <trans-unit id="5955149998366331673" datatype="html">
-        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+      <trans-unit id="3389673497621788356" datatype="html">
+        <source>The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
         <target state="translated">ヘッドセットで垂直方向に表示される最大視野角（FOV）。歪み補正後にこの視野角が画面に収まらない場合、実際のFOVはこれより低くなることがあります。この設定を完全に適用するには、ゲームの再起動が必要な場合があります。</target>
       </trans-unit>
-      <trans-unit id="6958907557549298899" datatype="html">
-        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
-        <target state="translated">SteamVRが実行される解像度と最適な解像度に関する情報を表示します。視野角（FOV）などの設定がこれに影響します。この情報は、MeganeXがこのドライバーでアクティブに実行されている間のみ更新されます。</target>
-      </trans-unit>
-      <trans-unit id="3874277521893641331" datatype="html">
-        <source>Current rendered FOV</source>
-        <target state="translated">現在のレンダリングFOV</target>
+      <trans-unit id="3290461260302743456" datatype="html">
+        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will affect this. This will only be updated while the headset is actively running under this driver.</source>
+        <target state="translated">SteamVRが実行される解像度と最適な解像度に関する情報を表示します。視野角（FOV）などの設定がこれに影響します。この情報は、ヘッドセットがこのドライバーでアクティブに実行されている間のみ更新されます。</target>
       </trans-unit>
       <trans-unit id="8045582904723345362" datatype="html">
         <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
@@ -614,8 +562,8 @@
         <source>Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene.</source>
         <target state="translated">ヘッドセットの色を調整します。シーンの明るさを増減させるためにも使用できます。</target>
       </trans-unit>
-      <trans-unit id="6792221707733687579" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
+      <trans-unit id="3941655232889847865" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold.</source>
         <target state="translated">この機能は、ヘッドセットが静止しているときに自動的にディスプレイを減光し、パネルを焼き付きから保護します。しきい値を超えて動くたびに、ディスプレイは「移動時間」の間、明るいままになります。</target>
       </trans-unit>
       <trans-unit id="2861813522442601500" datatype="html">
@@ -746,41 +694,25 @@
         <source>Lens Color Correction</source>
         <target state="translated">レンズカラー補正</target>
       </trans-unit>
-      <trans-unit id="4754749553000622201" datatype="html">
-        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses.</source>
-        <target state="translated">レンズによって生じる色の均一性の問題を修正します。MeganeXでは、レンズ中央の暖色系の色合いを修正します。</target>
-      </trans-unit>
       <trans-unit id="2105504908065972608" datatype="html">
         <source>10 Bit Dithering</source>
         <target state="translated">10ビットディザリング</target>
-      </trans-unit>
-      <trans-unit id="2952968935550666852" datatype="html">
-        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications.</source>
-        <target state="translated">10ビットディザリングを有効にします。これにより、10ビットの入力を8ビットのディスプレイに表示できます。ピクセルは空間的および時間的にディザリングされ、より多くの色を表現できます。これはMeganeXおよび他のすべてのネイティブヘッドセットで機能しますが、10ビットVRアプリケーションでのみ効果があります。</target>
       </trans-unit>
       <trans-unit id="4499826397276637153" datatype="html">
         <source>You need to update your driver to use the custom shader.</source>
         <target state="translated">カスタムシェーダーを使用するには、ドライバーを更新する必要があります。</target>
       </trans-unit>
-      <trans-unit id="8266300035266908667" datatype="html">
-        <source>Maximum possible FOV</source>
-        <target state="translated">最大可能視野角 (FOV)</target>
-      </trans-unit>
       <trans-unit id="30427449539687573" datatype="html">
         <source>Headset not connected</source>
         <target state="translated">ヘッドセットが接続されていません</target>
       </trans-unit>
-      <trans-unit id="3031796914277964022" datatype="html">
-        <source>SteamVR is not running, so this information is not updated.</source>
+      <trans-unit id="2406129309783787457" datatype="html">
+        <source>The SteamVR driver is not running, so this information is not updated.</source>
         <target state="translated">SteamVRが実行されていないため、この情報は更新されません。</target>
       </trans-unit>
       <trans-unit id="7824054889084111041" datatype="html">
         <source>FOV Zoom</source>
         <target state="translated">視野角 (FOV) ズーム</target>
-      </trans-unit>
-      <trans-unit id="2076767309617511431" datatype="html">
-        <source>Adjusts how zoomed in the FOV is. This can affect world scale. If you don&apos;t mind distortion this can be decreased too far to increase visible FOV.</source>
-        <target state="translated">視野角のズームレベルを調整します。これはワールドスケールに影響を与える可能性があります。歪みが気にならない場合は、この値を下げすぎることで可視視野角を広げることができます。</target>
       </trans-unit>
       <trans-unit id="1655480221425894378" datatype="html">
         <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery.</source>
@@ -790,24 +722,24 @@
         <source>Seconds From Photons to Vblank</source>
         <target state="translated">光子からVblankまでの秒数</target>
       </trans-unit>
-      <trans-unit id="87217576573016893" datatype="html">
-        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side.</source>
+      <trans-unit id="3402973686579225537" datatype="html">
+        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on your desktop if you follow a window while you quickly move it side to side.</source>
         <target state="translated">ディスプレイが最初のラインと最後のラインを表示するのにかかる時間です。これは、デスクトップ上でウィンドウを素早く左右に動かしながら目で追うときに表示されるのと同じ効果を抑制するためのものです。</target>
       </trans-unit>
       <trans-unit id="4319231426791349112" datatype="html">
         <source>Eye Rotation</source>
         <target state="translated">目の回転角度</target>
       </trans-unit>
-      <trans-unit id="4206116216841321818" datatype="html">
-        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
+      <trans-unit id="2368944008461420911" datatype="html">
+        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense of binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
         <target state="translated">各目が外側に回転する角度。トレーニング次第では、両眼の重複範囲と快適性を犠牲にしてFOVを増やすことができるかもしれません。この値が1度増加するごとに、FOVが2度追加されます。ヘッドセットに極端な改造を施さない限り、VR内外で目に負担がかかります。</target>
       </trans-unit>
       <trans-unit id="8002186340510323483" datatype="html">
         <source>Disable Eye</source>
-        <target state="translated">片目の無効化</target>
+        <target state="translated">目の無効化</target>
       </trans-unit>
-      <trans-unit id="7190698682370260339" datatype="html">
-        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
+      <trans-unit id="8590979780416435469" datatype="html">
+        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also set the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
         <target state="translated">片方の目を無効にします。ゲームを再起動すると、残りの目により高いパフォーマンスを提供できます。SteamVRでは目を完全に無効にすることはできないため、非表示領域メッシュで目全体を覆います。非表示領域メッシュの変更には再起動が必要で、デスクトップビューがブラックアウトすることがあります。また、settings.jsonでdisableEyeDecreaseFovを手動で設定すると、FOVを極端に低く設定することもできますが、問題が発生する可能性があります。</target>
       </trans-unit>
       <trans-unit id="2084720747782315739" datatype="html">
@@ -845,6 +777,450 @@
       <trans-unit id="8168207416346173524" datatype="html">
         <source>Uninstall Failed, Make sure SteamVR is closed</source>
         <target state="translated">アンインストールに失敗しました。SteamVRが閉じていることを確認してください</target>
+      </trans-unit>
+      <trans-unit id="2820798961629882057" datatype="html">
+        <source>Restarting the compositor can fix some issues and allows changing various settings like refresh rate without restarting SteamVR or the game.</source>
+        <target state="translated">コンポジタの再起動により、一部の問題が解消されるほか、SteamVRやゲームを再起動せずにリフレッシュレートなどの各種設定を変更できます。</target>
+      </trans-unit>
+      <trans-unit id="5452742868722563179" datatype="html">
+        <source>Restart Compositor</source>
+        <target state="translated">コンポジタを再起動</target>
+      </trans-unit>
+      <trans-unit id="7565716024468232322" datatype="html">
+        <source>Links</source>
+        <target state="translated">リンク</target>
+      </trans-unit>
+      <trans-unit id="3344714277062496986" datatype="html">
+        <source>Updates, Source Code, and Documentation</source>
+        <target state="translated">アップデート、ソースコード、ドキュメント</target>
+      </trans-unit>
+      <trans-unit id="48399273127175183" datatype="html">
+        <source>github.com/sboys3/CustomHeadsetOpenVR</source>
+        <target state="translated">github.com/sboys3/CustomHeadsetOpenVR</target>
+      </trans-unit>
+      <trans-unit id="108697143877199110" datatype="html">
+        <source> Donation Links </source>
+        <target state="translated">寄付リンク</target>
+      </trans-unit>
+      <trans-unit id="9049291618807267906" datatype="html">
+        <source>Patreon</source>
+        <target state="translated">Patreon</target>
+      </trans-unit>
+      <trans-unit id="2382586004651960438" datatype="html">
+        <source>Ko-fi</source>
+        <target state="translated">Ko-fi</target>
+      </trans-unit>
+      <trans-unit id="2124172998294424662" datatype="html">
+        <source> Affiliate Links </source>
+        <target state="translated">アフィリエイトリンク</target>
+      </trans-unit>
+      <trans-unit id="3076617424804562566" datatype="html">
+        <source>Pimax</source>
+        <target state="translated">Pimax</target>
+      </trans-unit>
+      <trans-unit id="2878875963830731582" datatype="html">
+        <source>$25 Off</source>
+        <target state="translated">$25 オフ</target>
+      </trans-unit>
+      <trans-unit id="6866446009305101185" datatype="html">
+        <source>Default Settings Tab</source>
+        <target state="translated">デフォルト設定タブ</target>
+      </trans-unit>
+      <trans-unit id="2614717696232380606" datatype="html">
+        <source>Auto (based on headset)</source>
+        <target state="translated">自動（ヘッドセットに応じて）</target>
+      </trans-unit>
+      <trans-unit id="2088381581994595582" datatype="html">
+        <source>MeganeX8K</source>
+        <target state="translated">MeganeX8K</target>
+      </trans-unit>
+      <trans-unit id="7582797498140593002" datatype="html">
+        <source>Dream Air</source>
+        <target state="translated">Dream Air</target>
+      </trans-unit>
+      <trans-unit id="1440423095101259239" datatype="html">
+        <source>Show Incompatible Profiles</source>
+        <target state="translated">非対応プロファイルを表示</target>
+      </trans-unit>
+      <trans-unit id="1067866594366598865" datatype="html">
+        <source>Enable Dream Air Driver</source>
+        <target state="translated">Dream Air ドライバーを有効にする</target>
+      </trans-unit>
+      <trans-unit id="606988768018169130" datatype="html">
+        <source>When enabled, the Custom Headset driver will run the Pimax Dream Air.</source>
+        <target state="translated">有効にすると、カスタムヘッドセットドライバーがPimax Dream Airを動作させます。</target>
+      </trans-unit>
+      <trans-unit id="2886905340153306704" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications. This IPD should be matched with what you set for the headset&apos;s physical IPD to get the correct world scale.</source>
+        <target state="translated">SteamVR アプリケーションにおける仮想カメラの瞳孔間距離 (IPD)。この IPD は、ヘッドセットの物理的な IPD と一致させることで、正しいワールドスケールを実現します。</target>
+      </trans-unit>
+      <trans-unit id="2251105634900060826" datatype="html">
+        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR&apos;s compositor. Click for more information.</source>
+        <target state="translated">SteamVR コンポジター内のディストーションシェーダーをカスタムシェーダーに置き換え、より高度なカスタマイズを可能にします。SteamVRコンポジターを直接使用する任意のヘッドセットと互換性があります。クリックして詳細を表示します。</target>
+      </trans-unit>
+      <trans-unit id="5233274972558690878" datatype="html">
+        <source>This custom shader has the possibility to completely break SteamVR while enabled after a future SteamVR update. Disable it if you have issues or compatibility problems.</source>
+        <target state="translated">このカスタムシェーダーは、将来のSteamVRアップデート後に有効なままにしておくと、SteamVRを完全に壊す可能性があります。問題や互換性の問題が発生した場合は無効にしてください。</target>
+      </trans-unit>
+      <trans-unit id="6717304138460300521" datatype="html">
+        <source>Enable for Other Native HMDs</source>
+        <target state="translated">他のネイティブHMD用に有効化</target>
+      </trans-unit>
+      <trans-unit id="5052404124223641771" datatype="html">
+        <source>Enables the custom shader for all other native HMDs that don&apos;t have specific toggles at the bottom. This includes all native SteamVR headsets like the Index, Vive, BSB, etc. Non-native SteamVR headsets like the Quest, Pimax, etc will not work.</source>
+        <target state="translated">下部に個別のトグルがない他のすべてのネイティブHMDに対してカスタムシェーダーを有効にします。これにはIndex、Vive、BSBなどのすべてのネイティブSteamVRヘッドセットが含まれます。QuestやPimaxなどの非ネイティブSteamVRヘッドセットでは動作しません。</target>
+      </trans-unit>
+      <trans-unit id="6907320896515802256" datatype="html">
+        <source>The custom shader is not enabled for the current headset.</source>
+        <target state="translated">カスタムシェーダーは現在のヘッドセットに対して有効になっていません。</target>
+      </trans-unit>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
+        <target state="translated">フィルター</target>
+      </trans-unit>
+      <trans-unit id="8740052564073898510" datatype="html">
+        <source>The sampling filter to use for the custom shader. These filters are one of the best ways to increase image quality in this driver. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing. However these filters increase GPU memory bandwidth usage. Click for more information.</source>
+        <target state="translated">カスタムシェーダーで使用するサンプリングフィルターです。これらのフィルターは、このドライバーで画質を向上させる最も効果的な方法の一つです。デフォルトは標準のリニアフィルターですが、他のオプションではシャープネスを高めたりエイリアシングを軽減したりできる場合があります。ただし、これらのフィルターはGPUメモリーバンド幅の使用量が増加します。クリックして詳細を表示します。</target>
+      </trans-unit>
+      <trans-unit id="9128435957530270398" datatype="html">
+        <source>Start SteamVR with the new driver to see new settings.</source>
+        <target state="translated">新しいドライバーでSteamVRを起動して、新しい設定を確認してください。</target>
+      </trans-unit>
+      <trans-unit id="2490288831053996036" datatype="html">
+        <source>FXAA2 Sharpen Strength</source>
+        <target state="translated">FXAA2 シャープニング強度</target>
+      </trans-unit>
+      <trans-unit id="6726288189272950602" datatype="html">
+        <source>Strength of the FXAA2 sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">FXAA2のシャープニング効果の強度。値が高いほどシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="4231987725628572123" datatype="html">
+        <source>FXAA2 Sharpen Clamp</source>
+        <target state="translated">FXAA2 シャープニングクランプ</target>
+      </trans-unit>
+      <trans-unit id="6419211388774975848" datatype="html">
+        <source>Limits maximum amount of sharpening a pixel receives. Lower values reduce artifacts at the cost of some sharpness.</source>
+        <target state="translated">画素が受けるシャープニングの最大量を制限します。値を下げるとアーティファクトが軽減されますが、シャープさがやや低下します。</target>
+      </trans-unit>
+      <trans-unit id="8099751105392814915" datatype="html">
+        <source>FXAA2 CAS Strength</source>
+        <target state="translated">FXAA2 CAS 強度</target>
+      </trans-unit>
+      <trans-unit id="32490824642298852" datatype="html">
+        <source>Strength of the FXAA 2CAS sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">FXAA 2CASのシャープニング効果の強度。値が高いほどシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="5470658539933989942" datatype="html">
+        <source>FXAA2 CAS Contrast</source>
+        <target state="translated">FXAA2 CAS コントラスト</target>
+      </trans-unit>
+      <trans-unit id="6743164523482590482" datatype="html">
+        <source>Contrast of the FXAA2 CAS sharpening effect. Higher values increase the sharpness of the image.</source>
+        <target state="translated">FXAA2 CAS シャープニング効果のコントラスト。値が高いほど画像がシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="5057861628768897438" datatype="html">
+        <source>Luma Sharpen Strength</source>
+        <target state="translated">輝度シャープニング強度</target>
+      </trans-unit>
+      <trans-unit id="1702332711364907551" datatype="html">
+        <source>Strength of the sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">シャープニング効果の強度。値が高いほどシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="5943953416252309713" datatype="html">
+        <source>Luma Sharpen Clamp</source>
+        <target state="translated">輝度シャープニングクランプ</target>
+      </trans-unit>
+      <trans-unit id="943448628013046188" datatype="html">
+        <source>Luma Sharpen Pattern</source>
+        <target state="translated">輝度シャープニングパターン</target>
+      </trans-unit>
+      <trans-unit id="4944344393444797399" datatype="html">
+        <source>The sample pattern to use for the sharpening effect. Different patterns produce slightly different results.</source>
+        <target state="translated">シャープニング効果に使用するサンプリングパターン。パターンによって結果がやや異なります。</target>
+      </trans-unit>
+      <trans-unit id="4741383493660686438" datatype="html">
+        <source>Luma Sharpen Radius</source>
+        <target state="translated">輝度シャープニング半径</target>
+      </trans-unit>
+      <trans-unit id="3490519526111686072" datatype="html">
+        <source>Radius of the sampling pattern. Higher values produce a wider effect. 1.0 is best in most cases, but higher values may help some blurry content.</source>
+        <target state="translated">サンプリングパターンの半径。値が高いほど効果範囲が広くなります。1.0がほとんどの場合で最適ですが、高い値はぼやけたコンテンツに役立つことがあります。</target>
+      </trans-unit>
+      <trans-unit id="3862931790033488343" datatype="html">
+        <source>CAS Strength</source>
+        <target state="translated">CAS 強度</target>
+      </trans-unit>
+      <trans-unit id="8789560629923838358" datatype="html">
+        <source>The strength of the CAS filter. Higher values produce a sharper image.</source>
+        <target state="translated">CASフィルターの強度。値が高いほど画像がシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="395732623785174359" datatype="html">
+        <source>CAS Contrast</source>
+        <target state="translated">CAS コントラスト</target>
+      </trans-unit>
+      <trans-unit id="1293383617858674656" datatype="html">
+        <source>The contrast of the CAS filter. Higher values increase the sharpness of the image.</source>
+        <target state="translated">CASフィルターのコントラスト。値が高いほど画像がシャープになります。</target>
+      </trans-unit>
+      <trans-unit id="1418682465067354526" datatype="html">
+        <source>Use Filter for Overlays</source>
+        <target state="translated">オーバーレイにフィルターを適用</target>
+      </trans-unit>
+      <trans-unit id="5212335462525071748" datatype="html">
+        <source>Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so the filters will have no effects outside of games when this is off.</source>
+        <target state="translated">SteamVRメニューとオーバーレイに対してフィルターを有効にします。これを有効にすると、パフォーマンスに顕著な影響があります。メニューが閉じておりオーバーレイもない場合でも、パフォーマンスがいくらか低下します。SteamVRの背景もオーバーレイであるため、これをオフにするとゲーム外ではフィルターが適用されません。</target>
+      </trans-unit>
+      <trans-unit id="1410444841710470384" datatype="html">
+        <source>Use Filter for Dashboard</source>
+        <target state="translated">ダッシュボードにフィルターを適用</target>
+      </trans-unit>
+      <trans-unit id="4899348330292837235" datatype="html">
+        <source>Enables the filters when the SteamVR dashboard is open. This only activates when the dashboard is actually visible, so there is no performance impact when the dashboard is closed. This does cause a lag spike when opening or closing the dashboard. The driver can not detect if the menu is open at startup, so the menu will have to be re-opened for this to take effect.</source>
+        <target state="translated">SteamVRダッシュボードが開いている間にフィルターを有効にします。これはダッシュボードが実際に表示されているときのみ作動するため、ダッシュボードが閉じている間はパフォーマンスに影響ありません。ただし、ダッシュボードの開閉時にラグが発生します。ドライバーは起動時にメニューが開いているかどうかを検出できないため、設定を反映するにはメニューを一度閉じて再度開く必要があります。</target>
+      </trans-unit>
+      <trans-unit id="8228400188029177776" datatype="html">
+        <source>Saturation</source>
+        <target state="translated">彩度</target>
+      </trans-unit>
+      <trans-unit id="3951188764293952137" datatype="html">
+        <source>sRGB White Point Correction</source>
+        <target state="translated">sRGB 白点補正</target>
+      </trans-unit>
+      <trans-unit id="6694417376736419143" datatype="html">
+        <source>Corrects the sRGB white point in addition to the colors. This may result in a warmer image but more accurate colors to the sRGB standard.</source>
+        <target state="translated">色の補正に加えてsRGBの白点も補正します。画像は暖かみがかって見えるかもしれませんが、sRGB標準により正確な色合いになります。</target>
+      </trans-unit>
+      <trans-unit id="3650433553188506936" datatype="html">
+        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses. On the Dream Air this fixes the red tint around the edges.</source>
+        <target state="translated">レンズによって生じる色の均一性の問題を補正します。MeganeXではレンズ中央部の暖色寄りの色を修正し、Dream Airでは周辺部の赤い色かぶりを修正します。</target>
+      </trans-unit>
+      <trans-unit id="3501090981182430993" datatype="html">
+        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications. There may be some slight benefit to having this on when other color corrections are used.</source>
+        <target state="translated">10ビットディザリングを有効にします。これにより、10ビットの入力を8ビットディスプレイで表示できます。画素を空間的・時間的にディザリングすることで、より多くの色を表現できます。MeganeXとその他のネイティブヘッドセットすべてに対応していますが、10ビットのVRアプリケーションで使用した場合のみ効果があります。他のカラー補正を併用した場合、わずかな効果がある場合があります。</target>
+      </trans-unit>
+      <trans-unit id="2185525877914813434" datatype="html">
+        <source>Adjusts the color of the image for any headset that can use the custom shader. This can also be used to decrease or increase the brightness of the scene.</source>
+        <target state="translated">カスタムシェーダーを使用可能なすべてのヘッドセットで画像の色を調整します。シーンの明るさを下げる・上げる用途にも使用できます。</target>
+      </trans-unit>
+      <trans-unit id="6874124726590243001" datatype="html">
+        <source>Enable for Dream Air</source>
+        <target state="translated">Dream Air用に有効化</target>
+      </trans-unit>
+      <trans-unit id="6572848840051801784" datatype="html">
+        <source>Enables the custom shader for the Dream Air.</source>
+        <target state="translated">Dream Air に対してカスタムシェーダーを有効にします。</target>
+      </trans-unit>
+      <trans-unit id="5076719159866344759" datatype="html">
+        <source>General Headset Settings</source>
+        <target state="translated">一般的なヘッドセット設定</target>
+      </trans-unit>
+      <trans-unit id="7674403656412985763" datatype="html">
+        <source>These settings work with any SteamVR headset.</source>
+        <target state="translated">これらの設定は、すべての SteamVR ヘッドセットで使用できます。</target>
+      </trans-unit>
+      <trans-unit id="7213133553923604199" datatype="html">
+        <source>Take Compositor Screenshots</source>
+        <target state="translated">コンポジタースクリーンショットを撮影</target>
+      </trans-unit>
+      <trans-unit id="6046379908052840609" datatype="html">
+        <source>Makes SteamVR take compositor debug screenshots whenever a normal screenshot is taken. These screenshots are higher resolution and also include the exact output sent to the headset. The folder containing them will open when a screenshot is taken. In some cases standard screenshots do not work with the MeganeX but these are still functional. They are more performance intensive than normal screenshots.</source>
+        <target state="translated">通常のスクリーンショットを撮影した際に、SteamVR がコンポジターデバッグスクリーンショットを撮影するようになります。これらのスクリーンショットは高解像度で、ヘッドセットに送信される実際の出力も含まれます。スクリーンショットを撮影すると、それらが保存されているフォルダーが開きます。MeganeX では標準スクリーンショットが機能しない場合もありますが、これらは依然として使用可能です。通常のスクリーンショットよりもパフォーマンスに負荷がかかります。</target>
+      </trans-unit>
+      <trans-unit id="492689708075506397" datatype="html">
+        <source>Use Vive Bluetooth</source>
+        <target state="translated">Vive Bluetooth を使用する</target>
+      </trans-unit>
+      <trans-unit id="6555353275322017096" datatype="html">
+        <source>Enables the use of the original Vive&apos;s link box for any headset to control base stations directly with SteamVR.</source>
+        <target state="translated">どのヘッドセットでも、オリジナル Vive のリンクボックスを使用して、SteamVR からベースステーションを直接制御できるようにします。</target>
+      </trans-unit>
+      <trans-unit id="187187500641108332" datatype="html">
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{config().enableText}}"/>
+        </source>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{config().enableText}}"/>
+        </target>
+      </trans-unit>
+      <trans-unit id="794173200648103951" datatype="html">
+        <source>Max Per Eye Fov Horizontal</source>
+        <target state="translated">各眼最大水平視野角</target>
+      </trans-unit>
+      <trans-unit id="894113024692774525" datatype="html">
+        <source>Max Per Eye Fov Vertical</source>
+        <target state="translated">各眼最大垂直視野角</target>
+      </trans-unit>
+      <trans-unit id="3336830571393985792" datatype="html">
+        <source>Enable FOV Clamping</source>
+        <target state="translated">FOV クランピングを有効にする</target>
+      </trans-unit>
+      <trans-unit id="650832422229562869" datatype="html">
+        <source>When FOV Clamping is enabled, the distortion profile FOV will clamp the image to fit entirely on the display. Disabling this allows lighting up more of the corners or providing more FOV in the desktop view for streaming, but will also cause a blue glow at the edge of the display. That is because the red channel is already touching the centers of each of the edges of the display and can not be expanded any more without cutting off.</source>
+        <target state="translated">FOVクランピングを有効にすると、ディストーションプロファイルのFOVが画像をディスプレイに完全に収まるように制限します。これを無効にすると、画面の隅のピクセルをもっと点灯させたり、デスクトップビューのストリーミングでより広いFOVを提供できるようになりますが、ディスプレイの縁に青い光が発生します。これは、赤チャンネルがすでにディスプレイの各縁の中心に触れており、これ以上拡大すると切り捨てられてしまうためです。</target>
+      </trans-unit>
+      <trans-unit id="3416203478018524861" datatype="html">
+        <source>FOV and Resolution Info</source>
+        <target state="translated">FOV と解像度情報</target>
+      </trans-unit>
+      <trans-unit id="currentCombinedHfov" datatype="html">
+        <source>Current Combined HFOV</source>
+        <target state="translated">現在の合計 HFOV</target>
+      </trans-unit>
+      <trans-unit id="7873424066236224601" datatype="html">
+        <source>Current rendered per eye FOV</source>
+        <target state="translated">現在の各眼レンダリング FOV</target>
+      </trans-unit>
+      <trans-unit id="5623760081334087234" datatype="html">
+        <source>Maximum possible per eye FOV</source>
+        <target state="translated">各眼FOVの最大可能値</target>
+      </trans-unit>
+      <trans-unit id="2517258168771093272" datatype="html">
+        <source>This headset is not currently being run by this driver.</source>
+        <target state="translated">このヘッドセットは現在、本ドライバーによって実行されていません。</target>
+      </trans-unit>
+      <trans-unit id="5680149591658904592" datatype="html">
+        <source>Adjusts how zoomed the FOV is. Decreasing this will allow the FOV sliders to go higher, but will introduce fish-eye distortion. These zoom settings can be combined for different effects.</source>
+        <target state="translated">FOVのズーム度を調整します。この値を下げるとFOVスライダーでより高い値が設定可能になりますが、魚眼歪みが導入されます。これらのズーム設定を組み合わせることで異なる効果を実現できます。</target>
+      </trans-unit>
+      <trans-unit id="2217613917502349751" datatype="html">
+        <source>Flat FOV Zoom</source>
+        <target state="translated">フラット FOV ズーム</target>
+      </trans-unit>
+      <trans-unit id="405060426819658964" datatype="html">
+        <source>Similar to FOV Zoom but keeps straight lines straight at the expense of more distortion when rotating your head. Decreasing this will allow the FOV sliders to go higher, but will introduce distortion. These zoom settings can be combined for different effects.</source>
+        <target state="translated">FOVズームと同様ですが、頭を回転させたときに歪みが大きくなる代償を払い、直線を直線的に保ちます。この値を下げるとFOVスライダーでより高い値が設定可能になりますが、歪みが導入されます。これらのズーム設定を組み合わせることで異なる効果を実現できます。</target>
+      </trans-unit>
+      <trans-unit id="822068397074061211" datatype="html">
+        <source>Parallel Projection</source>
+        <target state="translated">パラレル投影</target>
+      </trans-unit>
+      <trans-unit id="6065348048961138520" datatype="html">
+        <source>Enabling parallel projection makes the virtual cameras always point in the same direction. It increases compatibility but slightly harms performance. This only applies when rendered binocular overlap is not 100%.</source>
+        <target state="translated">パラレル投影を有効にすると、仮想カメラは常に同じ方向を向きます。互換性を高めるものの、パフォーマンスがわずかに低下します。これはレンダリング両眼重複範囲が100%でない場合のみ適用されます。</target>
+      </trans-unit>
+      <trans-unit id="6894334009784471350" datatype="html">
+        <source>Enable Eye Tracking</source>
+        <target state="translated">視線追跡を有効にする</target>
+      </trans-unit>
+      <trans-unit id="2292160599470132016" datatype="html">
+        <source>Enables eye tracking support for the headset. Pimax headsets require the pi_server runtime. Use mbucchia/Quad-Views-Foveated for foveated rendering. This may require restarting the game if turned on after a game is started.</source>
+        <target state="translated">ヘッドセットの視線追跡サポートを有効にします。Pimax ヘッドセットには pi_server ランタイムが必要です。注視ポイントレンダリングには mbucchia/Quad-Views-Foveated を使用してください。ゲーム起動後に有効にした場合は、ゲームの再起動が必要になる場合があります。</target>
+      </trans-unit>
+      <trans-unit id="7005186918826158340" datatype="html">
+        <source>Additional IPD</source>
+        <target state="translated">追加 IPD</target>
+      </trans-unit>
+      <trans-unit id="7322772911204552921" datatype="html">
+        <source>Horizontal IPD Offset</source>
+        <target state="translated">水平IPDオフセット</target>
+      </trans-unit>
+      <trans-unit id="9202590891036999940" datatype="html">
+        <source>Offsets both eyes to the right by the specified amount in millimeters. This can be used to accommodate hardware horizontal offsets.</source>
+        <target state="translated">指定したミリメートル値分、両目を右にオフセットします。ハードウェアの水平オフセットを調整するために使用できます。</target>
+      </trans-unit>
+      <trans-unit id="7105237620645987051" datatype="html">
+        <source>This may cause vision problems outside of the headset.</source>
+        <target state="translated">これにより、ヘッドセットを外した状態で視覚的な問題が発生する可能性があります。</target>
+      </trans-unit>
+      <trans-unit id="452020748999779962" datatype="html">
+        <source>More settings are available on the </source>
+        <target state="translated">より多くの設定は</target>
+      </trans-unit>
+      <trans-unit id="2102961643795704214" datatype="html">
+        <source> tab.</source>
+        <target state="translated"> のタブで利用できます。</target>
+      </trans-unit>
+      <trans-unit id="7092489041770374525" datatype="html">
+        <source>Pimax Play must be open and logged in for this to work. Pimax has not provided me any integration with their DRM so this flaky method needs to be used. It has been <x id="INTERPOLATION" equiv-text="{{ daysSinceDreamAirBlocked }}"/> days since the Dream Air could start without Pimax Play if Pimax allowed it for everyone.</source>
+        <target state="translated">Pimax Playが開かれており、ログインしている状態である必要があります。PimaxはDRMとの統合を提供していないため、この不安定な方法を使用する必要があります。Pimaxがすべてのユーザーに許可していればPimax PlayなしでDream Airが起動できた状態から、<x id="INTERPOLATION" equiv-text="{{ daysSinceDreamAirBlocked }}"/>日が経過しています。</target>
+      </trans-unit>
+      <trans-unit id="963585036176740737" datatype="html">
+        <source>Automatically launch the Dream Air headset when the GUI is opened. This will only launch if a Pimax headset is enabled.</source>
+        <target state="translated">GUIを開いたときにDream Airヘッドセットを自動的に起動します。Pimaxヘッドセットが有効な場合にのみ起動します。</target>
+      </trans-unit>
+      <trans-unit id="7459620849547189151" datatype="html">
+        <source>Launch on GUI Startup</source>
+        <target state="translated">GUI起動時に自動起動</target>
+      </trans-unit>
+      <trans-unit id="1057377126114488911" datatype="html">
+        <source>Custom Distortion Profiles</source>
+        <target state="translated">カスタム歪みプロファイル</target>
+      </trans-unit>
+      <trans-unit id="6145377464534677042" datatype="html">
+        <source>profiles</source>
+        <target state="translated">件のプロファイル</target>
+      </trans-unit>
+      <trans-unit id="8953033926734869941" datatype="html">
+        <source>Name</source>
+        <target state="translated">名前</target>
+      </trans-unit>
+      <trans-unit id="8650499415827640724" datatype="html">
+        <source>Type</source>
+        <target state="translated">種類</target>
+      </trans-unit>
+      <trans-unit id="758358695235230670" datatype="html">
+        <source>Target Device</source>
+        <target state="translated">ターゲットデバイス</target>
+      </trans-unit>
+      <trans-unit id="945165561939660867" datatype="html">
+        <source>Distortion Algorithm</source>
+        <target state="translated">歪みアルゴリズム</target>
+      </trans-unit>
+      <trans-unit id="1984095847256711870" datatype="html">
+        <source>Distortion Control Points</source>
+        <target state="translated">歪みコントロールポイント</target>
+      </trans-unit>
+      <trans-unit id="5444145030429249111" datatype="html">
+        <source>Chromatic Aberration Correction</source>
+        <target state="translated">色収差補正</target>
+      </trans-unit>
+      <trans-unit id="7071470734400948493" datatype="html">
+        <source>Author</source>
+        <target state="translated">著者</target>
+      </trans-unit>
+      <trans-unit id="4902817035128594900" datatype="html">
+        <source>Description</source>
+        <target state="translated">説明</target>
+      </trans-unit>
+      <trans-unit id="8646491615394973493" datatype="html">
+        <source> No imported distortion profiles found. </source>
+        <target state="translated"> インポートした歪みプロファイルが見つかりません。 </target>
+      </trans-unit>
+      <trans-unit id="558638418339229928" datatype="html">
+        <source>Built-in Distortion Profiles</source>
+        <target state="translated">内蔵歪みプロファイル</target>
+      </trans-unit>
+      <trans-unit id="428362952849592897" datatype="html">
+        <source>A headset is currently running with a non-native driver. Many settings will not work.</source>
+        <target state="translated">ヘッドセットがネイティブでないドライバーで実行されています。多くの設定は機能しません。</target>
+      </trans-unit>
+      <trans-unit id="211892709611099413" datatype="html">
+        <source>You still need to install the driver into SteamVR on the About page.</source>
+        <target state="translated">About ページからドライバーを SteamVR にインストールする必要があります。</target>
+      </trans-unit>
+      <trans-unit id="7968144323126360768" datatype="html">
+        <source>Custom Headset&apos;s driver is disabled</source>
+        <target state="translated">Custom Headset のドライバーが無効です</target>
+      </trans-unit>
+      <trans-unit id="5409696716939740879" datatype="html">
+        <source>Unblock All</source>
+        <target state="translated">すべてブロック解除</target>
+      </trans-unit>
+      <trans-unit id="9113006425690094381" datatype="html">
+        <source>MeganeX 8K</source>
+        <target state="translated">MeganeX 8K</target>
+      </trans-unit>
+      <trans-unit id="365798284983671240" datatype="html">
+        <source>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</source>
+        <target state="translated">このヘッドセットは現在このドライバーで実行されていません。これらの設定は効果がありません。ドライバーを有効にし、ヘッドセットを接続した状態で SteamVR を再起動すると変更できます。</target>
+      </trans-unit>
+      <trans-unit id="5022766051224400249" datatype="html">
+        <source>Force Tracking</source>
+        <target state="translated">トラッキング強制</target>
+      </trans-unit>
+      <trans-unit id="8561844269846608277" datatype="html">
+        <source>Forces all tracked devices to always report as valid and tracking, even if no tracking data is received. This may reduce grey screens but also has the effect of making all tracked devices snap to the origin if they completely lose tracking.</source>
+        <target state="translated">すべての追跡デバイスを、トラッキングデータを受信していない場合でも、常に有効かつトラッキング中として報告するように強制します。これによりグレー画面が減少する可能性がありますが、追跡が完全に失われた場合に、すべての追跡デバイスが原点にスナップする効果もあります。</target>
       </trans-unit>
     </body>
   </file>

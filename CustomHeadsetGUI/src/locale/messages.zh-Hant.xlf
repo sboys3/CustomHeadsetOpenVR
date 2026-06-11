@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="7944521161821675937" datatype="html">
         <source>Distortion Profile</source>
-        <target state="translated">扭曲校正設定檔</target>
+        <target state="translated">失真設定檔</target>
       </trans-unit>
       <trans-unit id="7994506939670314559" datatype="html">
         <source>App Settings</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="1624999947532228823" datatype="html">
         <source>Distortion Zoom</source>
-        <target state="translated">扭曲設定檔縮放</target>
+        <target state="translated">失真設定檔縮放</target>
       </trans-unit>
       <trans-unit id="7892467764301667860" datatype="html">
         <source>Subpixel Shift</source>
@@ -114,25 +114,13 @@
         <source>Reset to default</source>
         <target state="translated">重設為預設值</target>
       </trans-unit>
-      <trans-unit id="4831283424104605009" datatype="html">
-        <source>IPD Offset</source>
-        <target state="translated">瞳距偏移</target>
-      </trans-unit>
       <trans-unit id="2133427521398732619" datatype="html">
         <source>Black Level</source>
         <target state="translated">黑階</target>
       </trans-unit>
-      <trans-unit id="1960460633115255569" datatype="html">
-        <source>Max Fov Horizontal</source>
-        <target state="translated">最大水平視野</target>
-      </trans-unit>
-      <trans-unit id="7702362431118838491" datatype="html">
-        <source>Max Fov Vertical</source>
-        <target state="translated">最大垂直視野</target>
-      </trans-unit>
       <trans-unit id="1537728937939680401" datatype="html">
         <source>Distortion Mesh Resolution</source>
-        <target state="translated">畸變網格解析度</target>
+        <target state="translated">失真網格解析度</target>
       </trans-unit>
       <trans-unit id="6607372754568222882" datatype="html">
         <source>Low (<x id="PH" equiv-text="63"/>)</source>
@@ -145,26 +133,6 @@
       <trans-unit id="2780234993728008588" datatype="html">
         <source>High (<x id="PH" equiv-text="255"/>)</source>
         <target state="translated">高 (<x id="PH" equiv-text="255"/>)</target>
-      </trans-unit>
-      <trans-unit id="6309735826442522713" datatype="html">
-        <source>Current Profile : </source>
-        <target state="translated">目前設定檔：</target>
-      </trans-unit>
-      <trans-unit id="8461842260159597706" datatype="html">
-        <source>Show</source>
-        <target state="translated">顯示</target>
-      </trans-unit>
-      <trans-unit id="4391289919356861627" datatype="html">
-        <source>Apply</source>
-        <target state="translated">套用</target>
-      </trans-unit>
-      <trans-unit id="7358890221143927213" datatype="html">
-        <source>Radius from center of the output (%)</source>
-        <target state="translated">距離輸出中心半徑 (%)</target>
-      </trans-unit>
-      <trans-unit id="5731056400307534906" datatype="html">
-        <source>Radius from center of the input (degrees)</source>
-        <target state="translated">距離輸入中心半徑 (度)</target>
       </trans-unit>
       <trans-unit id="8360107325291301836" datatype="html">
         <source>Advanced Settings</source>
@@ -182,8 +150,8 @@
         <source>About</source>
         <target state="translated">關於</target>
       </trans-unit>
-      <trans-unit id="765305289258005204" datatype="html">
-        <source>app version</source>
+      <trans-unit id="3566499104491231785" datatype="html">
+        <source>App Version</source>
         <target state="translated">應用程式版本</target>
       </trans-unit>
       <trans-unit id="6915767768628367173" datatype="html">
@@ -192,7 +160,7 @@
       </trans-unit>
       <trans-unit id="7047036364814348431" datatype="html">
         <source>New version available</source>
-        <target state="new">有可用的新版本！</target>
+        <target state="translated">有可用的新版本！</target>
       </trans-unit>
       <trans-unit id="8491984279391991305" datatype="html">
         <source>(Up to date)</source>
@@ -260,7 +228,7 @@
       </trans-unit>
       <trans-unit id="7625955582398874896" datatype="html">
         <source>Driver settings invalid</source>
-        <target state="new">驅動程式設定有效</target>
+        <target state="translated">驅動程式設定無效</target>
       </trans-unit>
       <trans-unit id="5254833004479203580" datatype="html">
         <source>Reset Setting</source>
@@ -268,11 +236,11 @@
       </trans-unit>
       <trans-unit id="4454114648752183451" datatype="html">
         <source>Driver settings are not valid</source>
-        <target state="new">驅動程式設定無效</target>
+        <target state="translated">驅動程式設定無效</target>
       </trans-unit>
       <trans-unit id="1753866341555293468" datatype="html">
         <source>Shiftall driver is not disabled</source>
-        <target state="new">Shiftall 驅動程式未停用</target>
+        <target state="translated">Shiftall 驅動程式未停用</target>
       </trans-unit>
       <trans-unit id="9187855490716817910" datatype="html">
         <source>Disable</source>
@@ -302,10 +270,6 @@
         <source>please launch SteamVR to finish the installation</source>
         <target state="translated">請啟動 SteamVR 以完成安裝</target>
       </trans-unit>
-      <trans-unit id="3099842785070530061" datatype="html">
-        <source>Resolution Info</source>
-        <target state="translated">解析度資訊</target>
-      </trans-unit>
       <trans-unit id="2109348818976292721" datatype="html">
         <source>Show Details</source>
         <target state="translated">顯示詳細資料</target>
@@ -323,7 +287,7 @@
         <target state="translated">啟用</target>
       </trans-unit>
       <trans-unit id="currentRenderedFovBurnInNote" datatype="html">
-        <source> (deviates by a random value to reduce burn-in)</source>
+        <source> (deviates by a random value to reduce burn-in)</source>
         <target state="translated">（會因隨機值而偏移，以減少烙印）</target>
       </trans-unit>
       <trans-unit id="4651117059363790056" datatype="html">
@@ -336,11 +300,11 @@
       </trans-unit>
       <trans-unit id="combinedHfov" datatype="html">
         <source>Combined HFOV</source>
-        <target state="translated">Combined HFOV</target>
+        <target state="translated">合併 HFOV</target>
       </trans-unit>
       <trans-unit id="binocularOverlap" datatype="html">
-        <source>Binocular overlap</source>
-        <target state="translated">雙眼重疊</target>
+        <source>Current Binocular Overlap</source>
+        <target state="translated">目前雙眼重疊</target>
       </trans-unit>
       <trans-unit id="6190895239365336532" datatype="html">
         <source>Enable Hidden Area Meshes</source>
@@ -388,11 +352,11 @@
       </trans-unit>
       <trans-unit id="4869977764064716796" datatype="html">
         <source>Movement Time</source>
-        <target state="translated">靜置時間</target>
+        <target state="translated">移動時間</target>
       </trans-unit>
       <trans-unit id="2548696539154999507" datatype="html">
         <source>Any changes to these settings will require a game restart to be visible. The hidden area meshes are used to mask out the corners of the screen. They can increase performance in games that use them. Click for more information.</source>
-        <target state="new">變更這些設定後，需重啟遊戲才會顯示效果。隱藏區域網格可用於遮蔽螢幕邊角，在有支援的遊戲中能提升效能。</target>
+        <target state="translated">變更這些設定後，需重啟遊戲才會顯示效果。隱藏區域網格可用於遮蔽螢幕邊角，在有支援的遊戲中能提升效能。點擊以取得更多資訊。</target>
       </trans-unit>
       <trans-unit id="2421348343423477743" datatype="html">
         <source>Inverts the meshes to only show the areas that will be hidden.</source>
@@ -400,11 +364,11 @@
       </trans-unit>
       <trans-unit id="5294445514709130519" datatype="html">
         <source>Requires restarting SteamVR to apply changes.</source>
-        <target state="new">需要重啟 SteamVR 以套用變更。</target>
+        <target state="translated">需要重啟 SteamVR 以套用變更。</target>
       </trans-unit>
       <trans-unit id="6569858061936517894" datatype="html">
         <source>Requires restarting the game to apply changes.</source>
-        <target state="new">需要重啟遊戲以套用變更。</target>
+        <target state="translated">需要重啟遊戲以套用變更。</target>
       </trans-unit>
       <trans-unit id="2856900395968306204" datatype="html">
         <source>Movement Threshold Degrees</source>
@@ -470,10 +434,6 @@
         <source>Contrast Midpoint Right Eye</source>
         <target state="translated">右眼對比度中點</target>
       </trans-unit>
-      <trans-unit id="5168298581436514754" datatype="html">
-        <source>Chroma</source>
-        <target state="translated">色度</target>
-      </trans-unit>
       <trans-unit id="1840263869596556199" datatype="html">
         <source>Gamma</source>
         <target state="translated">Gamma</target>
@@ -498,10 +458,6 @@
         <source>Enable for Other HMDs</source>
         <target state="translated">為其他 HMD 啟用</target>
       </trans-unit>
-      <trans-unit id="5832230287995382782" datatype="html">
-        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization.</source>
-        <target state="translated">以一個可提供更多自訂選項的著色器，取代 SteamVR 合成器中的預設失真著色器。</target>
-      </trans-unit>
       <trans-unit id="7634542220919712546" datatype="html">
         <source>Enables the custom shader. This will replace shaders in SteamVR.</source>
         <target state="translated">啟用自訂著色器。此選項將會取代 SteamVR 中的著色器。</target>
@@ -514,29 +470,29 @@
         <source>Adjusts the midpoint of the contrast. This controls the center of the contrast adjustment. For example when this is 100 all colors will move towards or away from white. When this is 0 all colors will move towards or away from black, which gives a brightening or darkening effect.</source>
         <target state="translated">調整對比度的中點，此設定控制對比度調整的基準顏色。例如：當設為 100，所有顏色會朝向白色或遠離白色變化；當設為 0，所有顏色則會朝向黑色或遠離黑色變化，進而產生整體變亮或變暗的效果。</target>
       </trans-unit>
-      <trans-unit id="6143642524180911701" datatype="html">
-        <source>Applies linear contrast to the image before gamma correction instead of after Generally contrast looks better with this option off but it can be useful for some effects.</source>
+      <trans-unit id="5058044319848224995" datatype="html">
+        <source>Applies linear contrast to the image before gamma correction instead of after. Generally contrast looks better with this option off but it can be useful for some effects.</source>
         <target state="translated">在 Gamma 校正前而非之後，對影像套用線性對比度。一般來說，關閉此選項的對比度效果較佳，但它對某些特殊效果可能有用。</target>
       </trans-unit>
       <trans-unit id="1771517419511821401" datatype="html">
         <source>Applies contrast to each eye separately which allows you to correct for differences in displays. This will be applied in addition to the above contrast.</source>
         <target state="translated">分別對左右眼套用對比度，讓您能校正兩眼顯示器的差異。此設定會附加在上述的通用對比度設定之上。</target>
       </trans-unit>
-      <trans-unit id="273263793213207360" datatype="html">
-        <source>Adjusts the chroma of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
-        <target state="translated">調整影像的色度。高於 50 時，顏色會變得更鮮豔；一路降至 0 時，影像會變成灰階。</target>
+      <trans-unit id="5444309850677948407" datatype="html">
+        <source>Adjusts the saturation of the image. When higher than 50, the colors in the image will be exaggerated. When lowered all the way to 0 the image will be grayscale.</source>
+        <target state="translated">調整影像的飽和度。高於 50 時，顏色會變得更鮮豔；一路降至 0 時，影像會變成灰階。</target>
       </trans-unit>
-      <trans-unit id="1101953333251248565" datatype="html">
-        <source>Adjusts the gamma of the image. This controls brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
+      <trans-unit id="3200668587703093580" datatype="html">
+        <source>Adjusts the gamma of the image. This controls how brightness is mapped to the display&apos;s brightness. Higher gamma values make darker areas of the image brighter.</source>
         <target state="translated">調整影像的 Gamma 值。它控制輸入亮度與顯示器亮度之間的映射關係。較高的 Gamma 值會使影像的暗部區域變得更亮。</target>
       </trans-unit>
       <trans-unit id="5868413981442823243" datatype="html">
         <source>This forcibly disables the mura correction on any headset that has it like the Vive.</source>
-        <target state="translated">在任何具備 Mura 校正的頭戴式顯示器（如 Vive）上強制停用該功能。</target>
+        <target state="translated">在任何具備 Mura 校正的 HMD（如 Vive）上強制停用該功能。</target>
       </trans-unit>
       <trans-unit id="3158413943708140326" datatype="html">
         <source>Forces the black level clamp to be disabled. This can make headsets like the Vive darker at the expense of more smearing.</source>
-        <target state="translated">強制停用黑階箝位。這能讓像 Vive 這類頭戴式顯示器的黑色變得更深，但代價是會增加拖影。</target>
+        <target state="translated">強制停用黑階箝位。這能讓像 Vive 這類 HMD 的黑色變得更深，但代價是會增加拖影。</target>
       </trans-unit>
       <trans-unit id="5106755418798621895" datatype="html">
         <source>Enables sRGB color correction. The MeganeX is a Display-P3 display and normally colors are oversaturated by mapping the srgb outputs of applications to the full color space. When this is enabled, only the srgb portion of the display is used, which can make colors look more accurate.</source>
@@ -548,11 +504,11 @@
       </trans-unit>
       <trans-unit id="7080815701953186727" datatype="html">
         <source>Enables the custom shader for all other HMDs. Non-native SteamVR headsets likely won&apos;t work yet.</source>
-        <target state="translated">為所有其他 HMD 啟用自訂著色器。非原生支援 SteamVR 的頭戴式顯示器可能尚無法運作。</target>
+        <target state="translated">為所有其他 HMD 啟用自訂著色器。非原生支援 SteamVR 的 HMD 可能尚無法運作。</target>
       </trans-unit>
       <trans-unit id="2210953895431071691" datatype="html">
         <source>When enabled, the Custom Headset driver will run the MeganeX superlight 8K.</source>
-        <target state="translated">啟用後，自訂頭戴式顯示器驅動程式將會以 MeganeX superlight 8K 模式運作。</target>
+        <target state="translated">啟用後，自訂 HMD 驅動程式將會以 MeganeX superlight 8K 模式運作。</target>
       </trans-unit>
       <trans-unit id="8242705724014165192" datatype="html">
         <source>The resolution to run the DisplayPort connection at.</source>
@@ -560,19 +516,19 @@
       </trans-unit>
       <trans-unit id="7471123579619673182" datatype="html">
         <source>The distortion profile to use for the headset. See the distortion tab for more options.</source>
-        <target state="translated">選擇頭戴式顯示器要使用的失真設定檔。請參閱「失真」分頁以獲得更多選項。</target>
+        <target state="translated">選擇 HMD 要使用的失真設定檔。請參閱「失真設定檔」分頁以獲得更多選項。</target>
       </trans-unit>
-      <trans-unit id="6958907557549298899" datatype="html">
-        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
-        <target state="translated">顯示 SteamVR 的運作解析度以及最佳解析度的相關資訊。視野 (FOV) 等設定會影響此結果。此資訊僅會在 MeganeX 以本驅動程式主動運作時更新。</target>
+      <trans-unit id="3290461260302743456" datatype="html">
+        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will affect this. This will only be updated while the headset is actively running under this driver.</source>
+        <target state="translated">顯示 SteamVR 的運作解析度以及最佳解析度的相關資訊。視野 (FOV) 等設定會影響此結果。此資訊僅會在 HMD 以本驅動程式主動運作時更新。</target>
       </trans-unit>
       <trans-unit id="8045582904723345362" datatype="html">
         <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
         <target state="translated">調整失真設定檔的縮放程度。此功能可用於校正屈光度，較高的屈光度設定需要正值的縮放。然而，這也會導致一定程度的影像扭曲。</target>
       </trans-unit>
-      <trans-unit id="6792221707733687579" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
-        <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。每當移動幅度超過閾值時，顯示器將在「移動時間」內保持明亮。</target>
+      <trans-unit id="3941655232889847865" datatype="html">
+        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold.</source>
+        <target state="translated">此功能會在 HMD 靜止時自動調暗螢幕，以保護面板並預防影像烙印。每當移動幅度超過閾值時，顯示器將在「移動時間」內保持明亮。</target>
       </trans-unit>
       <trans-unit id="2861813522442601500" datatype="html">
         <source>Enables or disables the stationary dimming feature.</source>
@@ -628,7 +584,7 @@
       </trans-unit>
       <trans-unit id="4595919550679720902" datatype="html">
         <source>The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets.</source>
-        <target state="translated">顯示器將達到的最低亮度級別。如果您喜愛 LCD 頭戴式顯示器那種帶有拖影的灰色，可以提高此值。</target>
+        <target state="translated">顯示器將達到的最低亮度級別。如果您喜愛 LCD HMD 那種帶有拖影的灰色，可以提高此值。</target>
       </trans-unit>
       <trans-unit id="9103482387790094220" datatype="html">
         <source>This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon.</source>
@@ -658,21 +614,17 @@
         <source>Seconds From VSync to Photons</source>
         <target state="translated">從 VSync 到光子產生的秒數</target>
       </trans-unit>
-      <trans-unit id="8988091250221469673" datatype="html">
-        <source>installed driver version</source>
+      <trans-unit id="5731189063272671574" datatype="html">
+        <source>Installed Driver Version</source>
         <target state="translated">已安裝的驅動程式版本</target>
       </trans-unit>
-      <trans-unit id="3023147292772911329" datatype="html">
-        <source>last run driver version</source>
-        <target state="translated">上次運行的驅動程式版本</target>
+      <trans-unit id="1507100678943453495" datatype="html">
+        <source>Last Run Driver Version</source>
+        <target state="translated">上次執行的驅動程式版本</target>
       </trans-unit>
       <trans-unit id="238553294014386856" datatype="html">
         <source>Re-Install Driver</source>
         <target state="translated">重新安裝驅動程式</target>
-      </trans-unit>
-      <trans-unit id="7005778905519445414" datatype="html">
-        <source>This custom shader has the possibility to completely break SteamVR after a future SteamVR update. Valve has no obligation to maintain compatibility with this modification. Disable it if you have issues or compatibility problems.</source>
-        <target state="translated">此自訂著色器在未來的 SteamVR 更新後，有可能完全毀損 SteamVR。Valve 沒有義務維持對此修改的相容性。若您遇到問題或相容性狀況，請停用此功能。</target>
       </trans-unit>
       <trans-unit id="6835956377369507232" datatype="html">
         <source>Samples subpixels from the correct locations in the image to improve sharpness by lighting up individual subpixels. This can have a remarkable effect on the MeganeX where it can extract detail from more than 300% of the 1:1 resolution. The Vive is also supported but the improvement is less noticeable.</source>
@@ -680,27 +632,15 @@
       </trans-unit>
       <trans-unit id="5683939155976813564" datatype="html">
         <source>The inter pupillary distance of the virtual cameras in SteamVR applications. You set the headset&apos;s physical IPD in the Shiftall Configurator. This IPD should be matched with what you set in the Shiftall Configurator to get the correct world scale.</source>
-        <target state="translated">設定 SteamVR 應用程式中虛擬攝影機的瞳孔間距 (IPD)。您應在「Shiftall 設定工具」中設定頭戴式裝置的實體 IPD。此處的 IPD 應與您在「Shiftall 設定工具」中設定的值相符，以獲得正確的世界比例。</target>
+        <target state="translated">設定 SteamVR 應用程式中虛擬攝影機的瞳孔間距 (IPD)。您應在「Shiftall 設定工具」中設定 HMD 的實體 IPD。此處的 IPD 應與您在「Shiftall 設定工具」中設定的值相符，以獲得正確的世界比例。</target>
       </trans-unit>
-      <trans-unit id="8207031890218332522" datatype="html">
-        <source>The maximum that will be displayed horizontally in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
-        <target state="translated">頭戴式顯示器將顯示的最大水平視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。此設定有時可能需要重啟遊戲才能完全套用。</target>
+      <trans-unit id="7567855955496644826" datatype="html">
+        <source>The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+        <target state="translated">HMD 將顯示的最大水平視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。此設定有時可能需要重啟遊戲才能完全套用。</target>
       </trans-unit>
-      <trans-unit id="5955149998366331673" datatype="html">
-        <source>The maximum that will be displayed vertically in the headset. The actual fov can be lower if this fov can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
-        <target state="translated">頭戴式顯示器將顯示的最大垂直視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。此設定有時可能需要重啟遊戲才能完全套用。</target>
-      </trans-unit>
-      <trans-unit id="6958907557549298899" datatype="html">
-        <source>Displays information about the resolution SteamVR will be run at and what the optimal resolution is. Settings like fov will effect this. This will only be updated while the MeganeX is actively running under this driver.</source>
-        <target state="translated">顯示 SteamVR 的運作解析度以及最佳解析度的相關資訊。視野 (FOV) 等設定會影響此結果。此資訊僅會在 MeganeX 以本驅動程式主動運作時更新。</target>
-      </trans-unit>
-      <trans-unit id="3874277521893641331" datatype="html">
-        <source>Current rendered FOV</source>
-        <target state="translated">當前渲染視野 (FOV)</target>
-      </trans-unit>
-      <trans-unit id="8045582904723345362" datatype="html">
-        <source>Adjusts how zoomed in the distortion profile is. This can be used to correct for diopters with higher set diopters needing a positive zoom. However it will induce some amount of warping.</source>
-        <target state="translated">調整失真設定檔的縮放程度。此功能可用於校正屈光度，較高的屈光度設定需要正值的縮放。然而，這也會導致一定程度的影像扭曲。</target>
+      <trans-unit id="3389673497621788356" datatype="html">
+        <source>The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can&apos;t fit on the screen after distortion. This may sometimes require restarting the game to fully apply.</source>
+        <target state="translated">HMD 將顯示的最大垂直視野 (FOV)。如果此視野大小在經過失真校正後無法容納於螢幕內，實際視野可能會較低。此設定有時可能需要重啟遊戲才能完全套用。</target>
       </trans-unit>
       <trans-unit id="3377187322102407397" datatype="html">
         <source>Color Tint</source>
@@ -708,91 +648,7 @@
       </trans-unit>
       <trans-unit id="6691168530218751172" datatype="html">
         <source>Adjusts the color of the headset. This can also be used to decrease or increase the brightness of the scene.</source>
-        <target state="translated">調整頭戴式顯示器的顏色。此功能也可用於降低或增加場景的亮度。</target>
-      </trans-unit>
-      <trans-unit id="6792221707733687579" datatype="html">
-        <source>This feature automatically dims the display to protect the panel from screen burn-in when the headset is stationary. The display remains bright for the movement time whenever it is moved more than the threshold&apos;.</source>
-        <target state="translated">此功能會在頭戴式裝置靜止時自動調暗螢幕，以保護面板並預防影像烙印。每當移動幅度超過閾值時，顯示器將在「移動時間」內保持明亮。</target>
-      </trans-unit>
-      <trans-unit id="2861813522442601500" datatype="html">
-        <source>Enables or disables the stationary dimming feature.</source>
-        <target state="translated">啟用或停用靜止時變暗功能。</target>
-      </trans-unit>
-      <trans-unit id="1293521252153505574" datatype="html">
-        <source>The minimum amount of rotation in degrees that will reset the stationary dimming timer.</source>
-        <target state="translated">重設靜止變暗計時器所需的最小旋轉角度 (度)。</target>
-      </trans-unit>
-      <trans-unit id="1865011951137718165" datatype="html">
-        <source>The amount of time in seconds that the display will remain bright after movement.</source>
-        <target state="translated">偵測到移動後，顯示器將保持明亮的時間長度 (秒)。</target>
-      </trans-unit>
-      <trans-unit id="2261913743249257236" datatype="html">
-        <source>The minimum brightness percentage that the display will dim to when stationary.</source>
-        <target state="translated">靜止時，顯示器會變暗至的最低亮度百分比。</target>
-      </trans-unit>
-      <trans-unit id="1488156220085285219" datatype="html">
-        <source>The amount of time it takes to go from bright to dim.</source>
-        <target state="translated">從明亮狀態轉為變暗狀態所需的時間。</target>
-      </trans-unit>
-      <trans-unit id="715138922561408923" datatype="html">
-        <source>The amount of time it takes to go from dim to bright.</source>
-        <target state="translated">從變暗狀態恢復為明亮狀態所需的時間。</target>
-      </trans-unit>
-      <trans-unit id="347583554594702753" datatype="html">
-        <source>Enables or disables the hidden area meshes.</source>
-        <target state="translated">啟用或停用隱藏區域網格。</target>
-      </trans-unit>
-      <trans-unit id="1013018539656511103" datatype="html">
-        <source>The radius of the visible area at the top of the hidden area mesh near your nose.</source>
-        <target state="translated">隱藏區域網格中，靠近鼻子之上方可見區域的半徑。</target>
-      </trans-unit>
-      <trans-unit id="85559335853494335" datatype="html">
-        <source>The radius of the visible area at the bottom of the hidden area mesh near your nose.</source>
-        <target state="translated">隱藏區域網格中，靠近鼻子之下方可見區域的半徑。</target>
-      </trans-unit>
-      <trans-unit id="300522424104416983" datatype="html">
-        <source>The radius of the visible area at the top of the hidden area mesh near your ears.</source>
-        <target state="translated">隱藏區域網格中，靠近耳朵之上方可見區域的半徑。</target>
-      </trans-unit>
-      <trans-unit id="4446503733054332206" datatype="html">
-        <source>The radius of the visible area at the bottom of the hidden area mesh near your ears.</source>
-        <target state="translated">隱藏區域網格中，靠近耳朵之下方可見區域的半徑。</target>
-      </trans-unit>
-      <trans-unit id="4891791018896428318" datatype="html">
-        <source>The number of vertices used to create each section of the hidden area mesh. Higher values increase the smoothness of the mesh.</source>
-        <target state="translated">用於建立各部分隱藏區域網格的頂點數量。較高的數值會增加網格的平滑度。</target>
-      </trans-unit>
-      <trans-unit id="1651122445619194508" datatype="html">
-        <source>These settings have defaults that should not need to be changed but are provided for experimentation.</source>
-        <target state="translated">這些設定具有預設值，通常不需變更，但我們仍提供這些選項供您實驗。</target>
-      </trans-unit>
-      <trans-unit id="4595919550679720902" datatype="html">
-        <source>The minimum brightness level that the display will reach. Increase this if you love the smeary grey of LCD headsets.</source>
-        <target state="translated">顯示器將達到的最低亮度級別。如果您喜愛 LCD 頭戴式顯示器那種帶有拖影的灰色，可以提高此值。</target>
-      </trans-unit>
-      <trans-unit id="9103482387790094220" datatype="html">
-        <source>This value is added to the IPD value. Just use the main ipd slider and leave this 0. This will probably be removed soon.</source>
-        <target state="translated">此數值會被加到 IPD 值上。請直接使用主 IPD 滑桿並將此處保持為 0。此選項可能很快會被移除。</target>
-      </trans-unit>
-      <trans-unit id="9157492168132046017" datatype="html">
-        <source>Shifts the subpixels of the display using the UV distortions to improve color fringing and sharpness. The default is correct for the oled panel.</source>
-        <target state="translated">利用 UV 失真來位移顯示器的子像素，以改善色邊和銳利度。預設值適用於 OLED 面板。</target>
-      </trans-unit>
-      <trans-unit id="2846574612210787191" datatype="html">
-        <source>The resolution of the distortion mesh. Higher values prevent small wavy artifacts in the corners of the lenses but makes other settings laggier. The default pretty much eliminates the artifacts.</source>
-        <target state="translated">失真網格的解析度。較高的數值可防止鏡片邊角出現微小的波浪狀瑕疵，但會使其他設定反應變慢。預設值基本上已可消除此類瑕疵。</target>
-      </trans-unit>
-      <trans-unit id="7975741758736447642" datatype="html">
-        <source>Randomly adds up to 3 degrees to the FOV on every run to prevent sharp burn in at the edge of the fov on the display. It is recommended you do not turn this off in case you or the next person wants to increase the fov.</source>
-        <target state="translated">每次執行時隨機增加最多 3 度的視野 (FOV)，以防止顯示器在視野邊緣產生清晰的烙印。為預防您或下一位使用者想要增加視野，建議您不要關閉此功能。</target>
-      </trans-unit>
-      <trans-unit id="7819125323126809048" datatype="html">
-        <source>The multiplier for the 100% render resolution width. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
-        <target state="translated">100% 渲染解析度寬度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。此設定可能需要重新啟動才能套用。</target>
-      </trans-unit>
-      <trans-unit id="3656135147187301413" datatype="html">
-        <source>The multiplier for the 100% render resolution height. This allows you to change the aspect ratio of the resolution as well as reach resolutions outside the 20%-500% range of the SteamVR slider. This may require a restart to apply.</source>
-        <target state="translated">100% 渲染解析度高度的乘數。這讓您能變更解析度的長寬比，並能達到超出 SteamVR 滑桿 20%-500% 範圍的解析度。此設定可能需要重新啟動才能套用。</target>
+        <target state="translated">調整 HMD 的顏色。此功能也可用於降低或增加場景的亮度。</target>
       </trans-unit>
       <trans-unit id="7681727633925076580" datatype="html">
         <source>Super Sampling Filter Percent</source>
@@ -801,10 +657,6 @@
       <trans-unit id="6265350536077157049" datatype="html">
         <source>The percentage of the 1:1 resolution that the super sampling downscale area filter is applied. The subpixel shifts with the custom shader can make use of the 500% resolution above 1:1. Without subpixel sampling this value can be lowered to downscale the input so that all pixels contribute to the output. Toggling off advanced supersample filtering in SteamVR will disable this.</source>
         <target state="translated">套用超級採樣縮小區域濾鏡的 1:1 解析度百分比。透過自訂著色器的子像素位移，可以利用超過 1:1 的 500% 解析度。在沒有子像素採樣的情況下，可以降低此值以縮小輸入，讓所有像素都對輸出有所貢獻。在 SteamVR 中關閉「進階超級採樣濾鏡」將會停用此功能。</target>
-      </trans-unit>
-      <trans-unit id="5518205125788028902" datatype="html">
-        <source>Seconds From VSync to Photons</source>
-        <target state="translated">從 VSync 到光子產生的秒數</target>
       </trans-unit>
       <trans-unit id="5251436848651467180" datatype="html">
         <source>Driver enabled</source>
@@ -822,7 +674,7 @@
         <source>General</source>
         <target state="translated">通用</target>
       </trans-unit>
-     <trans-unit id="470261502393586030" datatype="html">
+      <trans-unit id="470261502393586030" datatype="html">
         <source>Uninstall Driver</source>
         <target state="translated">解除安裝驅動程式</target>
       </trans-unit>
@@ -842,41 +694,25 @@
         <source>Lens Color Correction</source>
         <target state="translated">鏡片色彩校正</target>
       </trans-unit>
-      <trans-unit id="4754749553000622201" datatype="html">
-        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses.</source>
-        <target state="translated">修正由鏡片引起的色彩均勻度問題。在 MeganeX 上，此功能可修正鏡片中心的偏暖色調。</target>
-      </trans-unit>
       <trans-unit id="2105504908065972608" datatype="html">
         <source>10 Bit Dithering</source>
         <target state="translated">10 位元抖色</target>
-      </trans-unit>
-      <trans-unit id="2952968935550666852" datatype="html">
-        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications.</source>
-        <target state="translated">啟用 10 位元抖色。這允許 10 位元的輸入顯示在 8 位元的顯示器上。像素會透過空間和時間上的抖動來呈現更多色彩。此功能適用於 MeganeX 和所有其他原生頭戴式顯示器，但僅對支援 10 位元的 VR 應用程式有效。</target>
       </trans-unit>
       <trans-unit id="4499826397276637153" datatype="html">
         <source>You need to update your driver to use the custom shader.</source>
         <target state="translated">您需要更新驅動程式才能使用自訂著色器。</target>
       </trans-unit>
-      <trans-unit id="8266300035266908667" datatype="html">
-        <source>Maximum possible FOV</source>
-        <target state="translated">最大可能視野 (FOV)</target>
-      </trans-unit>
       <trans-unit id="30427449539687573" datatype="html">
         <source>Headset not connected</source>
-        <target state="translated">頭戴式顯示器未連接</target>
+        <target state="translated">HMD 未連接</target>
       </trans-unit>
-      <trans-unit id="3031796914277964022" datatype="html">
-        <source>SteamVR is not running, so this information is not updated.</source>
+      <trans-unit id="2406129309783787457" datatype="html">
+        <source>The SteamVR driver is not running, so this information is not updated.</source>
         <target state="translated">SteamVR 未執行，因此此資訊未更新。</target>
       </trans-unit>
       <trans-unit id="7824054889084111041" datatype="html">
         <source>FOV Zoom</source>
         <target state="translated">視野 (FOV) 縮放</target>
-      </trans-unit>
-      <trans-unit id="2076767309617511431" datatype="html">
-        <source>Adjusts how zoomed in the FOV is. This can affect world scale. If you don&apos;t mind distortion this can be decreased too far to increase visible FOV.</source>
-        <target state="translated">調整視野的縮放程度。這可能會影響世界比例。若您不介意失真，可以將其調得更低以增加可見視野。</target>
       </trans-unit>
       <trans-unit id="1655480221425894378" datatype="html">
         <source>The time it takes for the display to update after the GPU has finished rendering. This is used to calculate the time warp correction. Setting it too high or low causes tracking to overshoot or undershoot which makes tracking more jittery.</source>
@@ -886,24 +722,24 @@
         <source>Seconds From Photons to Vblank</source>
         <target state="translated">從光子到Vblank的秒數</target>
       </trans-unit>
-      <trans-unit id="87217576573016893" datatype="html">
-        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on yor desktop if you follow a window while you quickly move it side to side.</source>
+      <trans-unit id="3402973686579225537" datatype="html">
+        <source>The time it takes for the display to show the first and last line. This is to combat the same effect you see on your desktop if you follow a window while you quickly move it side to side.</source>
         <target state="translated">顯示器顯示第一行到最後一行所需的時間。這是為了對抗您在桌面上快速左右移動視窗時所看到的相同效果。</target>
       </trans-unit>
       <trans-unit id="4319231426791349112" datatype="html">
         <source>Eye Rotation</source>
         <target state="translated">眼睛旋轉角度</target>
       </trans-unit>
-      <trans-unit id="4206116216841321818" datatype="html">
-        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense if binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
-        <target state="translated">每隻眼睛向外旋轉的角度。經過一些訓練後，或許可以犧牲雙眼重疊範圍和舒適度來增加視野。此數值每增加 1 度，視野就會增加 2 度。除非您對頭戴式顯示器進行極端的改裝，否則這會在 VR 內外都對您的眼睛造成影響。</target>
+      <trans-unit id="2368944008461420911" datatype="html">
+        <source>The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense of binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset.</source>
+        <target state="translated">每隻眼睛向外旋轉的角度。經過一些訓練後，或許可以犧牲雙眼重疊範圍和舒適度來增加視野。此數值每增加 1 度，視野就會增加 2 度。除非您對 HMD 進行極端的改裝，否則這會在 VR 內外都對您的眼睛造成影響。</target>
       </trans-unit>
       <trans-unit id="8002186340510323483" datatype="html">
         <source>Disable Eye</source>
-        <target state="translated">停用單眼</target>
+        <target state="translated">停用眼睛</target>
       </trans-unit>
-      <trans-unit id="7190698682370260339" datatype="html">
-        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also sets the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
+      <trans-unit id="8590979780416435469" datatype="html">
+        <source>Disables an eye. This can provide more performance to the remaining eye once the game is restarted. Eyes can not be completely disabled in SteamVR so this covers the entire eye with the hidden area mesh. The hidden area mesh change does require a restart and may black out the desktop view. It can also set the FOV extremely low when disableEyeDecreaseFov is manually set in settings.json, but that can cause issues.</source>
         <target state="translated">停用單隻眼睛。遊戲重新啟動後，這可以為剩餘的眼睛提供更多效能。由於 SteamVR 無法完全停用單眼，此功能會使用隱藏區域網格遮蔽整隻眼睛。隱藏區域網格的變更需要重新啟動，且可能會使桌面檢視變黑。當在 settings.json 中手動設定 disableEyeDecreaseFov 時，它還可以將視野設定得極低，但這可能會導致問題。</target>
       </trans-unit>
       <trans-unit id="2084720747782315739" datatype="html">
@@ -941,6 +777,450 @@
       <trans-unit id="8168207416346173524" datatype="html">
         <source>Uninstall Failed, Make sure SteamVR is closed</source>
         <target state="translated">解除安裝失敗，請確認 SteamVR 已關閉</target>
+      </trans-unit>
+      <trans-unit id="2820798961629882057" datatype="html">
+        <source>Restarting the compositor can fix some issues and allows changing various settings like refresh rate without restarting SteamVR or the game.</source>
+        <target state="translated">重新啟動合成器可以修復某些問題，並且無需重啟 SteamVR 或遊戲即可更改刷新率等各種設定。</target>
+      </trans-unit>
+      <trans-unit id="5452742868722563179" datatype="html">
+        <source>Restart Compositor</source>
+        <target state="translated">重新啟動合成器</target>
+      </trans-unit>
+      <trans-unit id="7565716024468232322" datatype="html">
+        <source>Links</source>
+        <target state="translated">連結</target>
+      </trans-unit>
+      <trans-unit id="3344714277062496986" datatype="html">
+        <source>Updates, Source Code, and Documentation</source>
+        <target state="translated">更新、原始碼與說明文件</target>
+      </trans-unit>
+      <trans-unit id="48399273127175183" datatype="html">
+        <source>github.com/sboys3/CustomHeadsetOpenVR</source>
+        <target state="translated">github.com/sboys3/CustomHeadsetOpenVR</target>
+      </trans-unit>
+      <trans-unit id="108697143877199110" datatype="html">
+        <source> Donation Links </source>
+        <target state="translated">贊助連結</target>
+      </trans-unit>
+      <trans-unit id="9049291618807267906" datatype="html">
+        <source>Patreon</source>
+        <target state="translated">Patreon</target>
+      </trans-unit>
+      <trans-unit id="2382586004651960438" datatype="html">
+        <source>Ko-fi</source>
+        <target state="translated">Ko-fi</target>
+      </trans-unit>
+      <trans-unit id="2124172998294424662" datatype="html">
+        <source> Affiliate Links </source>
+        <target state="translated">推薦連結</target>
+      </trans-unit>
+      <trans-unit id="3076617424804562566" datatype="html">
+        <source>Pimax</source>
+        <target state="translated">Pimax</target>
+      </trans-unit>
+      <trans-unit id="2878875963830731582" datatype="html">
+        <source>$25 Off</source>
+        <target state="translated">$25 優惠</target>
+      </trans-unit>
+      <trans-unit id="6866446009305101185" datatype="html">
+        <source>Default Settings Tab</source>
+        <target state="translated">預設設定分頁</target>
+      </trans-unit>
+      <trans-unit id="2614717696232380606" datatype="html">
+        <source>Auto (based on headset)</source>
+        <target state="translated">自動（依據 HMD）</target>
+      </trans-unit>
+      <trans-unit id="2088381581994595582" datatype="html">
+        <source>MeganeX8K</source>
+        <target state="translated">MeganeX8K</target>
+      </trans-unit>
+      <trans-unit id="7582797498140593002" datatype="html">
+        <source>Dream Air</source>
+        <target state="translated">Dream Air</target>
+      </trans-unit>
+      <trans-unit id="1440423095101259239" datatype="html">
+        <source>Show Incompatible Profiles</source>
+        <target state="translated">顯示不相容設定檔</target>
+      </trans-unit>
+      <trans-unit id="1067866594366598865" datatype="html">
+        <source>Enable Dream Air Driver</source>
+        <target state="translated">啟用 Dream Air 驅動程式</target>
+      </trans-unit>
+      <trans-unit id="606988768018169130" datatype="html">
+        <source>When enabled, the Custom Headset driver will run the Pimax Dream Air.</source>
+        <target state="translated">啟用後，自訂 HMD 驅動程式將驅動 Pimax Dream Air。</target>
+      </trans-unit>
+      <trans-unit id="2886905340153306704" datatype="html">
+        <source>The inter pupillary distance of the virtual cameras in SteamVR applications. This IPD should be matched with what you set for the headset&apos;s physical IPD to get the correct world scale.</source>
+        <target state="translated">SteamVR 應用程式中虛擬攝影機的瞳孔間距 (IPD)。此 IPD 應與 HMD 的實體 IPD 設為一致，以獲得正確的場景比例。</target>
+      </trans-unit>
+      <trans-unit id="2251105634900060826" datatype="html">
+        <source>Replaces the distortion shader in SteamVR&apos;s compositor with a custom one that allows for more customization. This can work with any headset that directly uses SteamVR&apos;s compositor. Click for more information.</source>
+        <target state="translated">將 SteamVR 合成器中的失真著色器替換為自訂著色器，以實現更多自訂選項。可適用於所有直接使用 SteamVR 合成器的 HMD。點擊以取得更多資訊。</target>
+      </trans-unit>
+      <trans-unit id="5233274972558690878" datatype="html">
+        <source>This custom shader has the possibility to completely break SteamVR while enabled after a future SteamVR update. Disable it if you have issues or compatibility problems.</source>
+        <target state="translated">啟用此自訂著色器可能會在未來的 SteamVR 更新後導致 SteamVR 完全無法運作。如果遇到問題或相容性問題，請停用此功能。</target>
+      </trans-unit>
+      <trans-unit id="6717304138460300521" datatype="html">
+        <source>Enable for Other Native HMDs</source>
+        <target state="translated">為其他原生 HMD 啟用</target>
+      </trans-unit>
+      <trans-unit id="5052404124223641771" datatype="html">
+        <source>Enables the custom shader for all other native HMDs that don&apos;t have specific toggles at the bottom. This includes all native SteamVR headsets like the Index, Vive, BSB, etc. Non-native SteamVR headsets like the Quest, Pimax, etc will not work.</source>
+        <target state="translated">為底部沒有特定開關的所有其他原生 HMD 啟用自訂著色器。這包括所有原生 SteamVR HMD，如 Index、Vive、BSB 等。Quest、Pimax 等非原生 SteamVR HMD 將不適用。</target>
+      </trans-unit>
+      <trans-unit id="6907320896515802256" datatype="html">
+        <source>The custom shader is not enabled for the current headset.</source>
+        <target state="translated">自訂著色器未針對目前的 HMD 啟用。</target>
+      </trans-unit>
+      <trans-unit id="8829497237648100098" datatype="html">
+        <source>Filter</source>
+        <target state="translated">過濾器</target>
+      </trans-unit>
+      <trans-unit id="8740052564073898510" datatype="html">
+        <source>The sampling filter to use for the custom shader. These filters are one of the best ways to increase image quality in this driver. The default is the standard linear filter, but other options may increase sharpness or reduce aliasing. However these filters increase GPU memory bandwidth usage. Click for more information.</source>
+        <target state="translated">自訂著色器所使用的採樣過濾器。這些過濾器是此驅動程式中提升畫質最有效的方式之一。預設為標準的線性過濾器，但其他選項可能會增加銳利度或減少鋸齒。然而這些過濾器會增加 GPU 記憶體頻寬的使用量。按一下以取得更多資訊。</target>
+      </trans-unit>
+      <trans-unit id="9128435957530270398" datatype="html">
+        <source>Start SteamVR with the new driver to see new settings.</source>
+        <target state="translated">使用新驅動程式啟動 SteamVR 以查看新設定。</target>
+      </trans-unit>
+      <trans-unit id="2490288831053996036" datatype="html">
+        <source>FXAA2 Sharpen Strength</source>
+        <target state="translated">FXAA2 銳化強度</target>
+      </trans-unit>
+      <trans-unit id="6726288189272950602" datatype="html">
+        <source>Strength of the FXAA2 sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">FXAA2 銳化效果的強度。數值越高，銳化效果越明顯。</target>
+      </trans-unit>
+      <trans-unit id="4231987725628572123" datatype="html">
+        <source>FXAA2 Sharpen Clamp</source>
+        <target state="translated">FXAA2 銳化限制</target>
+      </trans-unit>
+      <trans-unit id="6419211388774975848" datatype="html">
+        <source>Limits maximum amount of sharpening a pixel receives. Lower values reduce artifacts at the cost of some sharpness.</source>
+        <target state="translated">限制畫素可獲得的最大銳化量。數值越低，偽影越少，但銳利度會有所降低。</target>
+      </trans-unit>
+      <trans-unit id="8099751105392814915" datatype="html">
+        <source>FXAA2 CAS Strength</source>
+        <target state="translated">FXAA2 CAS 強度</target>
+      </trans-unit>
+      <trans-unit id="32490824642298852" datatype="html">
+        <source>Strength of the FXAA 2CAS sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">FXAA 2CAS 銳化效果的強度。數值越高，銳化效果越明顯。</target>
+      </trans-unit>
+      <trans-unit id="5470658539933989942" datatype="html">
+        <source>FXAA2 CAS Contrast</source>
+        <target state="translated">FXAA2 CAS 對比度</target>
+      </trans-unit>
+      <trans-unit id="6743164523482590482" datatype="html">
+        <source>Contrast of the FXAA2 CAS sharpening effect. Higher values increase the sharpness of the image.</source>
+        <target state="translated">FXAA2 CAS 銳化效果的對比度。數值越高，畫面越清晰銳利。</target>
+      </trans-unit>
+      <trans-unit id="5057861628768897438" datatype="html">
+        <source>Luma Sharpen Strength</source>
+        <target state="translated">亮度銳化強度</target>
+      </trans-unit>
+      <trans-unit id="1702332711364907551" datatype="html">
+        <source>Strength of the sharpening effect. Higher values produce more sharpening.</source>
+        <target state="translated">銳化效果的強度。數值越高，銳化效果越明顯。</target>
+      </trans-unit>
+      <trans-unit id="5943953416252309713" datatype="html">
+        <source>Luma Sharpen Clamp</source>
+        <target state="translated">亮度銳化限制</target>
+      </trans-unit>
+      <trans-unit id="943448628013046188" datatype="html">
+        <source>Luma Sharpen Pattern</source>
+        <target state="translated">亮度銳化模式</target>
+      </trans-unit>
+      <trans-unit id="4944344393444797399" datatype="html">
+        <source>The sample pattern to use for the sharpening effect. Different patterns produce slightly different results.</source>
+        <target state="translated">銳化效果所使用的採樣模式。不同模式會產生略微不同的效果。</target>
+      </trans-unit>
+      <trans-unit id="4741383493660686438" datatype="html">
+        <source>Luma Sharpen Radius</source>
+        <target state="translated">亮度銳化半徑</target>
+      </trans-unit>
+      <trans-unit id="3490519526111686072" datatype="html">
+        <source>Radius of the sampling pattern. Higher values produce a wider effect. 1.0 is best in most cases, but higher values may help some blurry content.</source>
+        <target state="translated">採樣模式的半徑。數值越高，影響範圍越廣。1.0 在大多數情況下最佳，但較高的數值可能有助於改善模糊的畫面。</target>
+      </trans-unit>
+      <trans-unit id="3862931790033488343" datatype="html">
+        <source>CAS Strength</source>
+        <target state="translated">CAS 強度</target>
+      </trans-unit>
+      <trans-unit id="8789560629923838358" datatype="html">
+        <source>The strength of the CAS filter. Higher values produce a sharper image.</source>
+        <target state="translated">CAS 濾鏡的強度。數值越高，畫面越清晰銳利。</target>
+      </trans-unit>
+      <trans-unit id="395732623785174359" datatype="html">
+        <source>CAS Contrast</source>
+        <target state="translated">CAS 對比度</target>
+      </trans-unit>
+      <trans-unit id="1293383617858674656" datatype="html">
+        <source>The contrast of the CAS filter. Higher values increase the sharpness of the image.</source>
+        <target state="translated">CAS 濾鏡的對比度。數值越高，畫面越清晰銳利。</target>
+      </trans-unit>
+      <trans-unit id="1418682465067354526" datatype="html">
+        <source>Use Filter for Overlays</source>
+        <target state="translated">將過濾器應用於覆疊層</target>
+      </trans-unit>
+      <trans-unit id="5212335462525071748" datatype="html">
+        <source>Enables the filters for the SteamVR menu and overlays. Enabling this has a noticeable performance impact. Even when the menu is closed and there are no overlays, there is some decrease in performance. The SteamVR background is also an overlay so the filters will have no effects outside of games when this is off.</source>
+        <target state="translated">啟用 SteamVR 選單與覆疊層的過濾器。啟用此選項會對效能產生明顯影響。即使選單已關閉且沒有覆疊層，效能仍會有所下降。SteamVR 背景也是一種覆疊層，因此關閉此選項時，過濾器在遊戲外將不會產生效果。</target>
+      </trans-unit>
+      <trans-unit id="1410444841710470384" datatype="html">
+        <source>Use Filter for Dashboard</source>
+        <target state="translated">將過濾器應用於儀表板</target>
+      </trans-unit>
+      <trans-unit id="4899348330292837235" datatype="html">
+        <source>Enables the filters when the SteamVR dashboard is open. This only activates when the dashboard is actually visible, so there is no performance impact when the dashboard is closed. This does cause a lag spike when opening or closing the dashboard. The driver can not detect if the menu is open at startup, so the menu will have to be re-opened for this to take effect.</source>
+        <target state="translated">在 SteamVR 儀表板開啟時啟用過濾器。此功能僅在儀表板實際可見時才會啟動，因此儀表板關閉時不會影響效能。但這會在開啟或關閉儀表板時造成延遲尖峰。由於驅動程式在啟動時無法偵測選單是否開啟，因此必須重新開啟選單才能生效。</target>
+      </trans-unit>
+      <trans-unit id="8228400188029177776" datatype="html">
+        <source>Saturation</source>
+        <target state="translated">飽和度</target>
+      </trans-unit>
+      <trans-unit id="3951188764293952137" datatype="html">
+        <source>sRGB White Point Correction</source>
+        <target state="translated">sRGB 白點校正</target>
+      </trans-unit>
+      <trans-unit id="6694417376736419143" datatype="html">
+        <source>Corrects the sRGB white point in addition to the colors. This may result in a warmer image but more accurate colors to the sRGB standard.</source>
+        <target state="translated">在修正顏色的同時也會修正sRGB的白點。畫面可能會偏暖色，但色彩會更符合sRGB標準。</target>
+      </trans-unit>
+      <trans-unit id="3650433553188506936" datatype="html">
+        <source>This corrects color uniformity issues created by the lenses. On the MeganeX this fixes the warmer colors in the center of the lenses. On the Dream Air this fixes the red tint around the edges.</source>
+        <target state="translated">修正因鏡片造成的色彩均勻度問題。對於MeganeX可修正鏡片中央偏暖色的問題，對於Dream Air可修正邊緣偏紅色的色偏。</target>
+      </trans-unit>
+      <trans-unit id="3501090981182430993" datatype="html">
+        <source>Enables 10 bit dithering. This allows a 10 bit input to be shown on an 8 bit display. Pixels are dithered spatially and temporally to allow more colors to be represented. This works for the MeganeX and all other native headsets but will only have an effect for 10 bit VR applications. There may be some slight benefit to having this on when other color corrections are used.</source>
+        <target state="translated">啟用10位元抖動。此功能可讓10位元的輸入訊號在8位元顯示器上顯示。透過空間與時間抖動像素，能夠呈現更多的色彩。適用於MeganeX與所有其他原生 HMD，但僅對10位元的VR應用程式有效。搭配其他色彩校正功能使用時，可能會帶來些許改善。</target>
+      </trans-unit>
+      <trans-unit id="2185525877914813434" datatype="html">
+        <source>Adjusts the color of the image for any headset that can use the custom shader. This can also be used to decrease or increase the brightness of the scene.</source>
+        <target state="translated">調整所有可使用自訂著色器的 HMD 的畫面色彩。也可用於降低或提高場景的亮度。</target>
+      </trans-unit>
+      <trans-unit id="6874124726590243001" datatype="html">
+        <source>Enable for Dream Air</source>
+        <target state="translated">為 Dream Air 啟用</target>
+      </trans-unit>
+      <trans-unit id="6572848840051801784" datatype="html">
+        <source>Enables the custom shader for the Dream Air.</source>
+        <target state="translated">為 Dream Air 啟用自訂著色器。</target>
+      </trans-unit>
+      <trans-unit id="5076719159866344759" datatype="html">
+        <source>General Headset Settings</source>
+        <target state="translated">一般 HMD 設定</target>
+      </trans-unit>
+      <trans-unit id="7674403656412985763" datatype="html">
+        <source>These settings work with any SteamVR headset.</source>
+        <target state="translated">這些設定適用於任何 SteamVR HMD。</target>
+      </trans-unit>
+      <trans-unit id="7213133553923604199" datatype="html">
+        <source>Take Compositor Screenshots</source>
+        <target state="translated">截取合成器螢幕截圖</target>
+      </trans-unit>
+      <trans-unit id="6046379908052840609" datatype="html">
+        <source>Makes SteamVR take compositor debug screenshots whenever a normal screenshot is taken. These screenshots are higher resolution and also include the exact output sent to the headset. The folder containing them will open when a screenshot is taken. In some cases standard screenshots do not work with the MeganeX but these are still functional. They are more performance intensive than normal screenshots.</source>
+        <target state="translated">啟用後，每次截取一般螢幕截圖時 SteamVR 都會同時截取合成器偵錯截圖。這些截圖的解析度更高，且包含傳送至 HMD 的實際輸出畫面。截取截圖時會自動開啟存放截圖的資料夾。在某些情況下，標準截圖可能無法在 MeganeX 上正常運作，但此功能仍可正常執行。不過，這比一般截圖更消耗系統效能。</target>
+      </trans-unit>
+      <trans-unit id="492689708075506397" datatype="html">
+        <source>Use Vive Bluetooth</source>
+        <target state="translated">使用 Vive Bluetooth</target>
+      </trans-unit>
+      <trans-unit id="6555353275322017096" datatype="html">
+        <source>Enables the use of the original Vive&apos;s link box for any headset to control base stations directly with SteamVR.</source>
+        <target state="translated">啟用原始 Vive 的連結盒功能，讓任何 HMD 都能透過 SteamVR 直接控制基地台。</target>
+      </trans-unit>
+      <trans-unit id="187187500641108332" datatype="html">
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{config().enableText}}"/>
+        </source>
+        <target state="translated">
+          <x id="INTERPOLATION" equiv-text="{{config().enableText}}"/>
+        </target>
+      </trans-unit>
+      <trans-unit id="794173200648103951" datatype="html">
+        <source>Max Per Eye Fov Horizontal</source>
+        <target state="translated">各眼最大水平視野角</target>
+      </trans-unit>
+      <trans-unit id="894113024692774525" datatype="html">
+        <source>Max Per Eye Fov Vertical</source>
+        <target state="translated">各眼最大垂直視野角</target>
+      </trans-unit>
+      <trans-unit id="3336830571393985792" datatype="html">
+        <source>Enable FOV Clamping</source>
+        <target state="translated">啟用 FOV 限制</target>
+      </trans-unit>
+      <trans-unit id="650832422229562869" datatype="html">
+        <source>When FOV Clamping is enabled, the distortion profile FOV will clamp the image to fit entirely on the display. Disabling this allows lighting up more of the corners or providing more FOV in the desktop view for streaming, but will also cause a blue glow at the edge of the display. That is because the red channel is already touching the centers of each of the edges of the display and can not be expanded any more without cutting off.</source>
+        <target state="translated">啟用 FOV 限制後，失真設定檔的 FOV 會將影像裁剪以完全容納於顯示器上。停用此功能可讓更多角落像素發光，或在桌面視窗的串流中提供更廣的 FOV，但也會在顯示器邊緣產生藍光。這是因為紅色通道已經觸及顯示器各邊緣的中心，若再進一步擴展就會被裁切。</target>
+      </trans-unit>
+      <trans-unit id="3416203478018524861" datatype="html">
+        <source>FOV and Resolution Info</source>
+        <target state="translated">FOV 與解析度資訊</target>
+      </trans-unit>
+      <trans-unit id="currentCombinedHfov" datatype="html">
+        <source>Current Combined HFOV</source>
+        <target state="translated">目前合併 HFOV</target>
+      </trans-unit>
+      <trans-unit id="7873424066236224601" datatype="html">
+        <source>Current rendered per eye FOV</source>
+        <target state="translated">目前渲染的各眼 FOV</target>
+      </trans-unit>
+      <trans-unit id="5623760081334087234" datatype="html">
+        <source>Maximum possible per eye FOV</source>
+        <target state="translated">各眼 FOV 的最大可能值</target>
+      </trans-unit>
+      <trans-unit id="2517258168771093272" datatype="html">
+        <source>This headset is not currently being run by this driver.</source>
+        <target state="translated">此 HMD 目前未由本驅動程式執行。</target>
+      </trans-unit>
+      <trans-unit id="5680149591658904592" datatype="html">
+        <source>Adjusts how zoomed the FOV is. Decreasing this will allow the FOV sliders to go higher, but will introduce fish-eye distortion. These zoom settings can be combined for different effects.</source>
+        <target state="translated">調整 FOV 的縮放程度。降低此數值可讓 FOV 滑桿設定更高的值，但會引入魚眼扭曲效果。這些縮放設定可以互相組合以達成不同的效果。</target>
+      </trans-unit>
+      <trans-unit id="2217613917502349751" datatype="html">
+        <source>Flat FOV Zoom</source>
+        <target state="translated">平面 FOV 縮放</target>
+      </trans-unit>
+      <trans-unit id="405060426819658964" datatype="html">
+        <source>Similar to FOV Zoom but keeps straight lines straight at the expense of more distortion when rotating your head. Decreasing this will allow the FOV sliders to go higher, but will introduce distortion. These zoom settings can be combined for different effects.</source>
+        <target state="translated">類似於 FOV 縮放，但會保持直線不彎曲，代價是轉動頭部時會增加扭曲。降低此數值可讓 FOV 滑桿設定更高的值，但會引入扭曲效果。這些縮放設定可以互相組合以達成不同的效果。</target>
+      </trans-unit>
+      <trans-unit id="822068397074061211" datatype="html">
+        <source>Parallel Projection</source>
+        <target state="translated">平行投影</target>
+      </trans-unit>
+      <trans-unit id="6065348048961138520" datatype="html">
+        <source>Enabling parallel projection makes the virtual cameras always point in the same direction. It increases compatibility but slightly harms performance. This only applies when rendered binocular overlap is not 100%.</source>
+        <target state="translated">啟用平行投影後，虛擬相機將始終指向同一方向。可提升相容性，但會略微影響效能。此設定僅在渲染雙眼重疊範圍非 100% 時生效。</target>
+      </trans-unit>
+      <trans-unit id="6894334009784471350" datatype="html">
+        <source>Enable Eye Tracking</source>
+        <target state="translated">啟用眼球追蹤</target>
+      </trans-unit>
+      <trans-unit id="2292160599470132016" datatype="html">
+        <source>Enables eye tracking support for the headset. Pimax headsets require the pi_server runtime. Use mbucchia/Quad-Views-Foveated for foveated rendering. This may require restarting the game if turned on after a game is started.</source>
+        <target state="translated">啟用 HMD 的眼球追蹤支援。Pimax HMD 需要 pi_server 執行時環境。可使用 mbucchia/Quad-Views-Foveated 進行注視點渲染。若在遊戲啟動後開啟，可能需要重啟遊戲。</target>
+      </trans-unit>
+      <trans-unit id="7005186918826158340" datatype="html">
+        <source>Additional IPD</source>
+        <target state="translated">額外IPD</target>
+      </trans-unit>
+      <trans-unit id="7322772911204552921" datatype="html">
+        <source>Horizontal IPD Offset</source>
+        <target state="translated">水平IPD偏移</target>
+      </trans-unit>
+      <trans-unit id="9202590891036999940" datatype="html">
+        <source>Offsets both eyes to the right by the specified amount in millimeters. This can be used to accommodate hardware horizontal offsets.</source>
+        <target state="translated">將雙眼向右偏移指定的毫米數。可用於配合硬體的水平偏移。</target>
+      </trans-unit>
+      <trans-unit id="7105237620645987051" datatype="html">
+        <source>This may cause vision problems outside of the headset.</source>
+        <target state="translated">這可能會導致摘下 HMD 後（於現實世界中）出現視覺問題。</target>
+      </trans-unit>
+      <trans-unit id="452020748999779962" datatype="html">
+        <source>More settings are available on the </source>
+        <target state="translated">更多設定可在</target>
+      </trans-unit>
+      <trans-unit id="2102961643795704214" datatype="html">
+        <source> tab.</source>
+        <target state="translated"> 分頁中找到。</target>
+      </trans-unit>
+      <trans-unit id="7092489041770374525" datatype="html">
+        <source>Pimax Play must be open and logged in for this to work. Pimax has not provided me any integration with their DRM so this flaky method needs to be used. It has been <x id="INTERPOLATION" equiv-text="{{ daysSinceDreamAirBlocked }}"/> days since the Dream Air could start without Pimax Play if Pimax allowed it for everyone.</source>
+        <target state="translated">必須保持 Pimax Play 開啟並已登入。Pimax 未提供任何 DRM 整合方案，因此只能使用這種不穩定的方法。自 Dream Air 能夠在 Pimax 向所有用戶開放時無需 Pimax Play 即可啟動以來，已經過了 <x id="INTERPOLATION" equiv-text="{{ daysSinceDreamAirBlocked }}"/> 天。</target>
+      </trans-unit>
+      <trans-unit id="963585036176740737" datatype="html">
+        <source>Automatically launch the Dream Air headset when the GUI is opened. This will only launch if a Pimax headset is enabled.</source>
+        <target state="translated">開啟 GUI 時自動啟動 Dream Air HMD。僅在啟用 Pimax HMD 時才會啟動。</target>
+      </trans-unit>
+      <trans-unit id="7459620849547189151" datatype="html">
+        <source>Launch on GUI Startup</source>
+        <target state="translated">GUI 啟動時自動啟動</target>
+      </trans-unit>
+      <trans-unit id="1057377126114488911" datatype="html">
+        <source>Custom Distortion Profiles</source>
+        <target state="translated">自訂失真設定檔</target>
+      </trans-unit>
+      <trans-unit id="6145377464534677042" datatype="html">
+        <source>profiles</source>
+        <target state="translated">個設定檔</target>
+      </trans-unit>
+      <trans-unit id="8953033926734869941" datatype="html">
+        <source>Name</source>
+        <target state="translated">名稱</target>
+      </trans-unit>
+      <trans-unit id="8650499415827640724" datatype="html">
+        <source>Type</source>
+        <target state="translated">類型</target>
+      </trans-unit>
+      <trans-unit id="758358695235230670" datatype="html">
+        <source>Target Device</source>
+        <target state="translated">目標裝置</target>
+      </trans-unit>
+      <trans-unit id="945165561939660867" datatype="html">
+        <source>Distortion Algorithm</source>
+        <target state="translated">失真演算法</target>
+      </trans-unit>
+      <trans-unit id="1984095847256711870" datatype="html">
+        <source>Distortion Control Points</source>
+        <target state="translated">失真控制點</target>
+      </trans-unit>
+      <trans-unit id="5444145030429249111" datatype="html">
+        <source>Chromatic Aberration Correction</source>
+        <target state="translated">色差校正</target>
+      </trans-unit>
+      <trans-unit id="7071470734400948493" datatype="html">
+        <source>Author</source>
+        <target state="translated">作者</target>
+      </trans-unit>
+      <trans-unit id="4902817035128594900" datatype="html">
+        <source>Description</source>
+        <target state="translated">描述</target>
+      </trans-unit>
+      <trans-unit id="8646491615394973493" datatype="html">
+        <source> No imported distortion profiles found. </source>
+        <target state="translated">找不到匯入的失真設定檔。</target>
+      </trans-unit>
+      <trans-unit id="558638418339229928" datatype="html">
+        <source>Built-in Distortion Profiles</source>
+        <target state="translated">內建失真設定檔</target>
+      </trans-unit>
+      <trans-unit id="428362952849592897" datatype="html">
+        <source>A headset is currently running with a non-native driver. Many settings will not work.</source>
+        <target state="translated">HMD 目前正以非原生驅動程式執行，許多設定將無法使用。</target>
+      </trans-unit>
+      <trans-unit id="211892709611099413" datatype="html">
+        <source>You still need to install the driver into SteamVR on the About page.</source>
+        <target state="translated">您仍需在關於頁面中將驅動程式安裝至 SteamVR。</target>
+      </trans-unit>
+      <trans-unit id="7968144323126360768" datatype="html">
+        <source>Custom Headset&apos;s driver is disabled</source>
+        <target state="translated">Custom Headset 的驅動程式已停用</target>
+      </trans-unit>
+      <trans-unit id="5409696716939740879" datatype="html">
+        <source>Unblock All</source>
+        <target state="translated">全部解除封鎖</target>
+      </trans-unit>
+      <trans-unit id="9113006425690094381" datatype="html">
+        <source>MeganeX 8K</source>
+        <target state="translated">MeganeX 8K</target>
+      </trans-unit>
+      <trans-unit id="365798284983671240" datatype="html">
+        <source>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</source>
+        <target state="translated">此 HMD 目前未由此驅動程式執行。這些設定將不會產生任何效果。請啟用此驅動程式，並在連接 HMD 的情況下重新啟動 SteamVR 以進行變更。</target>
+      </trans-unit>
+      <trans-unit id="5022766051224400249" datatype="html">
+        <source>Force Tracking</source>
+        <target state="translated">強制追蹤</target>
+      </trans-unit>
+      <trans-unit id="8561844269846608277" datatype="html">
+        <source>Forces all tracked devices to always report as valid and tracking, even if no tracking data is received. This may reduce grey screens but also has the effect of making all tracked devices snap to the origin if they completely lose tracking.</source>
+        <target state="translated">強制所有追蹤裝置始終報告為有效且正在追蹤，即使未收到追蹤資料。這可能會減少灰色畫面問題，但也會使所有追蹤裝置在完全失去追蹤時直接跳回原點。</target>
       </trans-unit>
     </body>
   </file>
