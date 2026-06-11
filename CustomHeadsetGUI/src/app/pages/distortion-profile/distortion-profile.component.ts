@@ -14,9 +14,11 @@ import { PathsService } from '../../services/paths.service';
 import { BuiltInDistortionProfile, DriverInfo } from '../../services/JsonFileDefines';
 import { cleanJsonComments } from '../../helpers';
 import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
+import { DistortionProfileDisplayNames } from '../devices/DeviceConfigComponentBase';
 
 export interface ProfileInfo {
   name: string;
+  displayName: string;
   isBuiltIn: boolean;
   device?: string;
   description?: string;
@@ -68,6 +70,7 @@ export class DistortionProfileComponent {
         const hasChromaticAberration = (profile.distortionsRed?.length ?? 0) > 0 || (profile.distortionsBlue?.length ?? 0) > 0;
         return {
           name,
+          displayName: DistortionProfileDisplayNames.get(name) || name,
           isBuiltIn: true,
           device: profile.device,
           description: profile.description,
@@ -84,8 +87,10 @@ export class DistortionProfileComponent {
       // Build custom profile entries
       const customEntries: ProfileInfo[] = [];
       for (const file of customFiles) {
+        const name = file.name.split('.').slice(0, -1).join('.');
         const entry: ProfileInfo = {
-          name: file.name.split('.').slice(0, -1).join('.'),
+          name,
+          displayName: DistortionProfileDisplayNames.get(name) || name,
           isBuiltIn: false,
           device: file.device,
           file

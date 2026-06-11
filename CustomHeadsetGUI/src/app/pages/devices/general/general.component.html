@@ -659,6 +659,22 @@
     </div>
 </div>
 }
+@if(defaults.forceTracking != undefined){
+<div class="field">
+    <div class="title">
+        <span i18n>Force Tracking</span>
+        <app-field-tip i18n-info
+            info="Forces all tracked devices to always report as valid and tracking, even if no tracking data is received. This may reduce grey screens but also has the effect of making all tracked devices snap to the origin if they completely lose tracking." />
+        <app-reset-button
+            [canReset]="settings.forceTracking!=defaults.forceTracking"
+            (resetClick)="resetOption('forceTracking')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.forceTracking"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+}
 @if(defaults.generalHeadset != undefined){
 <div class="field">
     <div class="title">

@@ -9,6 +9,11 @@ import { stat } from "@tauri-apps/plugin-fs";
 import { DriverInfo, HeadsetType, Settings } from "../../services/JsonFileDefines";
 import { deepCopy } from "../../helpers";
 
+export const DistortionProfileDisplayNames: Map<string, string> = new Map([
+    ["MeganeX8K Default", "MeganeX8K Custom Default"],
+    ["Dream Air Default", "Dream Air Custom Default"],
+]);
+
 type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
 type ObjectKeys<T> = KeysMatching<T, Record<PropertyKey, any>>;
 @Component({
@@ -38,10 +43,7 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
     public Math = Math
     resolutionInfoDisplay = signal(false)
     profiles: DistortionProfileEntry[] = []
-    displayNames: Map<string,string> = new Map([
-        ["MeganeX8K Default", "MeganeX8K Custom Default"],
-        ["Dream Air Default", "Dream Air Custom Default"],
-    ])
+    displayNames = DistortionProfileDisplayNames;
     advanceMode = computed(() => this.ass.values()?.advanceMode ?? false)
     customShaderOtherWarning = computed(() => {
         const info = this.dis.values();
