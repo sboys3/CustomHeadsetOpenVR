@@ -1,8 +1,9 @@
 #pragma once
 #include "BaseHeadset.h"
+#include "../Helpers/PimaxCommon.h"
 #include "../Helpers/PimaxEyeTrackingBridge.h"
 
-class DreamAirShim : public BaseHeadsetShim{
+class DreamAirShim : public BaseHeadsetShim, public PimaxCommon{
 public:
 	// function that returns if this is a Dream Air headset
 	virtual bool IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container) override;

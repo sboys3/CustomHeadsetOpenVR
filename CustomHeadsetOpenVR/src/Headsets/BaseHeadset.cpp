@@ -19,7 +19,7 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	
 	std::string lighthouseName = vr::VRProperties()->GetStringProperty(container, vr::Prop_SerialNumber_String);
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
-	DriverLog("headset id: %s", lighthouseName);
+	DriverLog("headset id: %s", lighthouseName.c_str());
 	DriverLog("headset model: %s", modelNumber.c_str());
 	if(!IsDesiredHeadset(modelNumber, container) && !GetConfig().forceEnable){
 		// deactivate shim if this is not the correct headset
