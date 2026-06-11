@@ -114,6 +114,14 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     }
   }
 
+  // Computed keys to force slider re-render when max changes
+  sliderMaxFovX = computed(() => Math.ceil(this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX));
+  sliderMaxFovY = computed(() => Math.ceil(this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY));
+
+  trackBySliderMax(index: number, value: number): number {
+    return value;
+  }
+
   scaledMaxFOV(originalFOV: number) {
     return Math.ceil(originalFOV / (this.settings?.fovZoom || 1));
   }

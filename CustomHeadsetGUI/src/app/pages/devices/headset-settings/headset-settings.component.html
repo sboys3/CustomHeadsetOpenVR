@@ -93,7 +93,7 @@
     </div>
     <div class="control">
       <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider [max]="Math.ceil(dis.values()?.resolution?.fovMaxX || config().defaultMaxFovX)" min="1" step="1">
+      <mat-slider *ngFor="let max of [sliderMaxFovX()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
         <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
       </mat-slider>
     </div>
@@ -110,7 +110,7 @@
     </div>
     <div class="control">
       <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider [max]="Math.ceil(dis.values()?.resolution?.fovMaxY || config().defaultMaxFovY)" min="1" step="1">
+      <mat-slider *ngFor="let max of [sliderMaxFovY()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
         <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
       </mat-slider>
     </div>
