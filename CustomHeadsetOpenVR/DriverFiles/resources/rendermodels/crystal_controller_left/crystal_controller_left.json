@@ -1,0 +1,169 @@
+{
+    "thumbnail": "",
+    "components": {
+        "body": {
+            "filename": "body.obj",
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "trigger": {
+            "filename": "crystal_controller_left_button7.obj",
+            "motion": {
+                "type": "rotate",
+                "controller_axis": 1,
+                "controller_axis_component": 0,
+                "trigger_path": "/input/trigger",
+                "value_mapping": [ 0.0, -5.0 ],
+                "pivot": [ 0.003, 0.012, -0.008 ],
+                "axis": [ 0.977, 0.119, 0.179 ],
+                "pressed_value_override": -7.0
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "joystick": {
+            "filename": "crystal_controller_left_button3.obj",
+            "motion": {
+                "type": "joystick",
+                "controller_axis": 0,
+                "joystick_path": "/input/joystick",
+                "center": [ -0.018509, -0.004816, 0.038631 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ],
+                "joystick_rotation_x": [ 16, -16 ],
+                "joystick_rotation_y": [ 16, -16 ],
+                "component_path": "/input/joystick",
+                "press_translate": [ 0.0, -0.000927, 0.0 ]
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "sys_button": {
+            "filename": "crystal_controller_left_button1.obj",
+            "motion": {
+                "type": "translate",
+                "pressed_path": "/input/application_menu/click",
+                "controller_button": 0,
+                "value_mapping": [ 0.0, 0.0018 ],
+                "axis": [ 0.0, -1.0, 0 ]
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "b_button": {
+            "filename": "crystal_controller_left_button5.obj",
+            "motion": {
+                "type": "translate",
+                "pressed_path": "/input/y/click",
+                "controller_button": 1,
+                "value_mapping": [ 0.0, 0.0018 ],
+                "axis": [ 0.0, -1.0, 0.0 ]
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "a_button": {
+            "filename": "crystal_controller_left_button2.obj",
+            "motion": {
+                "type": "translate",
+                "pressed_path": "/input/x/click",
+                "controller_button": 2,
+                "value_mapping": [ 0.0, 0.0018 ],
+                "axis": [ 0.0, -1.0, 0.0 ]
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "menu_button": {
+            "filename": "crystal_controller_left_button4.obj",
+            "motion": {
+                "type": "translate",
+                "pressed_path": "/input/system/click",
+                "controller_button": 1,
+                "value_mapping": [ 0.0, 0.0018 ],
+                "axis": [ 0.0, -1.0, 0.0 ]
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "grip_button": {
+            "filename": "crystal_controller_left_button6.obj",
+            "motion": {
+                "type": "rotate",
+                "controller_axis": 2,
+                "controller_axis_component": 0,
+                "trigger_path": "/input/grip",
+                "value_mapping": [ 0.0, 12.0 ],
+                "pivot": [ 0.00169, -0.026397, 0.055564 ],
+                "axis": [ -0.009132, -0.045268, 0.04785 ],
+                "pressed_value_override": 14.0
+            },
+            "component_local": {
+                "origin": [ 0.0, 0.0, 0.0 ],
+                "rotate_xyz": [ 0.0, 0.0, 0.0 ]
+            }
+        },
+        "status": {
+            "filename": "status_left.obj",
+            "visibility": {
+                "default": false
+            }
+        },
+        "tip": {
+            "component_local": {
+                "origin": [ 0.0, -0.019, 0.014 ],
+                "rotate_xyz": [ -35.65, 0.0, 0.0 ]
+            }
+        },
+        "base": {
+            "component_local": {
+                "origin": [ -0.00554, -0.00735, 0.139 ],
+                "rotate_xyz": [ -0.4, -180.0, 0.0 ]
+            }
+        },
+        "openxr_aim": {
+            "component_local" : {
+                "origin": [0.007, -0.03894766, 0.00949694],
+                "rotate_xyz" : [-39.4, 0.0, 0.0]
+            }
+        },
+        "openxr_grip": {
+            "component_local" : {
+                "origin": [0.007, -0.00182941, 0.1019482],
+                "rotate_xyz" : [20.6, 0.0, 0.0]
+            }
+        },
+        "openxr_handmodel": {
+            "component_local" : {
+                "origin": [-0.01125, -0.00182941, 0.1019482],
+                "rotate_xyz" : [-39.4, 0.0, 0.0]
+            }
+        },
+        "handgrip": {
+            "component_local" : {
+                "origin": [0.0, 0.003, 0.097],
+                "rotate_xyz" : [5.037,0.0,0.0]
+             }
+        },
+        "grip": {
+            "component_local" : {
+                "origin": [0.0, 0.003, 0.097],
+                "rotate_xyz" : [5.037,0.0,0.0]
+             }
+        }
+
+    }
+}

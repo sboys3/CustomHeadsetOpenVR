@@ -1,0 +1,8 @@
+newmtl crystal_controller2_group1_pasted__pCylinder5SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.50 0.50 0.50
+Tf 1.00 1.00 1.00
+map_Kd crystal_controller_crystal_controller_mat_AlbedoTransparency.png
+bump crystal_controller_crystal_controller_mat_Normal.png -bm 0.1
+Ni 1.00
