@@ -352,13 +352,16 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 
 	vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
 
-	// TODO(mbucchia): Add shims for eye tracking
+	eyeTracking.eyeRotation = defaultDriverConfig.dreamAir.eyeRotation;
+	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
+	eyeTracking.Initialize();
 
 	returnValue = vr::VRInitError_None;
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
 
 void PimaxSlamDriver::SubDeactivate() {
+	eyeTracking.Shutdown();
 }
 
 void PimaxSlamDriver::SubRunFrame() {
@@ -430,6 +433,12 @@ void PimaxSlamDriver::SubRunFrame() {
 			s_controllerDriver[side]->UpdateInputState(inputState);
 		}
 	}
+
+	// Update eye tracking.
+	eyeTracking.ipd = GetConfig().ipd + GetConfig().ipdOffset;
+	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
+	// eyeTracking.eyeRotation = GetConfig().eyeRotation;
+	eyeTracking.RunFrame();
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {

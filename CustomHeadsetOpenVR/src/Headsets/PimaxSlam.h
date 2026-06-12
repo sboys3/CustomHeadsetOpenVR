@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseHeadset.h"
+// TODO(mbucchia): Migrate eye tracking to PimaxCommon
+#include "../Helpers/PimaxEyeTrackingBridge.h"
 #include "../Helpers/PimaxCommon.h"
 
 class PimaxSlamDriver : public BaseHeadsetShim, public PimaxCommon {
@@ -13,4 +15,7 @@ public:
 	virtual void SubDeactivate() override;
 	virtual void SubRunFrame() override;
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
+
+private:
+	PimaxEyeTrackingBridge eyeTracking;
 };
