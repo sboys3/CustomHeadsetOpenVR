@@ -51,6 +51,18 @@
     <ClInclude Include="..\ThirdParty\zlib\zutil.h">
       <Filter>Source Files\zlib</Filter>
     </ClInclude>
+    <ClInclude Include="src\Headsets\PimaxLighthouse.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headsets\PimaxSlam.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helpers\PimaxCommon.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Config\Config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Driver\DeviceProvider.cpp">
@@ -140,16 +152,22 @@
     <ClCompile Include="src\Headsets\BaseHeadset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Headsets\DreamAir.cpp">
+    <ClCompile Include="src\Headsets\PimaxLighthouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Headsets\FakeHeadset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Headsets\Helpers\PimaxEyeTrackingBridge.cpp">
+    <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Headsets\Helpers\EyeTrackingOutput.cpp">
+    <ClCompile Include="src\Helpers\PimaxEyeTrackingBridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Headsets\PimaxSlam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helpers\PimaxCommon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

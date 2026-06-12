@@ -1,36 +1,35 @@
-#include "DreamAir.h"
+#include "PimaxLighthouse.h"
 
-
-bool DreamAirShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
+bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
-	if(model == "Pimax Dream Air" && trackingSystem == "lighthouse"){
+	if(GetInfo().connected && model == "Pimax Dream Air" && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
 }
 
-Config::BaseHeadsetConfig& DreamAirShim::GetConfig(){
+Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfig(){
 	return driverConfig.dreamAir;
 }
 
-Config::BaseHeadsetConfig& DreamAirShim::GetConfigOld(){
+Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
 	return driverConfigOld.dreamAir;
 }
 
 
-void DreamAirShim::SubActivate(vr::PropertyContainerHandle_t container){
+void PimaxLighthouseShim::SubActivate(vr::PropertyContainerHandle_t container){
 	eyeTracking.eyeRotation = defaultDriverConfig.dreamAir.eyeRotation;
-	eyeTracking.enabled = GetConfig().enableEyeTracking;
+	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
 	eyeTracking.Initialize();
 }
 
-void DreamAirShim::SubDeactivate(){
+void PimaxLighthouseShim::SubDeactivate(){
 	eyeTracking.Shutdown();
 }
 
-void DreamAirShim::SubRunFrame(){
+void PimaxLighthouseShim::SubRunFrame(){
 	eyeTracking.ipd = GetConfig().ipd + GetConfig().ipdOffset;
-	eyeTracking.enabled = GetConfig().enableEyeTracking;
+	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
 	// eyeTracking.eyeRotation = GetConfig().eyeRotation;
 	eyeTracking.RunFrame();
 }
