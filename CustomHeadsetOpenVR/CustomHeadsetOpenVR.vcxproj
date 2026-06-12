@@ -28,6 +28,7 @@
     <ClInclude Include="src\Driver\Hooking\Hooking.h" />
     <ClInclude Include="src\Driver\Hooking\InterfaceHookInjector.h" />
     <ClInclude Include="src\Headsets\MeganeX8K.h" />
+    <ClInclude Include="src\Helpers\PimaxCommon.h" />
     <ClInclude Include="src\HiddenArea\HiddenArea.h" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +64,7 @@
     <ClCompile Include="src\Headsets\GenericHeadset.cpp" />
     <ClCompile Include="src\Helpers\DisplayHelper.cpp" />
     <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp" />
+    <ClCompile Include="src\Helpers\PimaxCommon.cpp" />
     <ClCompile Include="src\Helpers\PimaxEyeTrackingBridge.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>
@@ -130,7 +132,7 @@
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;$(SolutionDir)\ThirdParty\pvr\</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
@@ -142,7 +144,7 @@
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;$(SolutionDir)\ThirdParty\pvr\</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
