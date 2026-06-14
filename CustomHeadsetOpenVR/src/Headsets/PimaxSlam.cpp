@@ -370,6 +370,10 @@ void PimaxSlamDriver::SubDeactivate() {
 }
 
 void PimaxSlamDriver::SubRunFrame() {
+	if (CheckDeviceLost()) {
+		return;
+	}
+
 	const auto pvrNow = GetPvrTime();
 
 	pvrTrackingState trackingState = {};

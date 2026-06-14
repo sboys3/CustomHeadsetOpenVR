@@ -16,7 +16,16 @@ static bool EnsurePvrSession() {
 		}
 	}
 	if (!s_pvrSession) {
+		s_info.connected = false;
 		if (pvr_createSession(s_pvr, &s_pvrSession) != pvr_success) {
+			return false;
+		}
+	}
+
+	if (s_pvrSession && !s_info.connected) {
+		pvrHmdStatus hmdStatus = {};
+		pvr_getHmdStatus(s_pvrSession, &hmdStatus);
+		if (!(hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit)) {
 			return false;
 		}
 
@@ -71,14 +80,30 @@ PimaxCommon::PimaxCommon() {
 		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
 }
 
+bool PimaxCommon::CheckDeviceLost() {
+	pvrHmdStatus hmdStatus = {};
+	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
+	const bool deviceReady = hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit;
+	if (s_info.connected && !deviceReady) {
+		DriverLog("Detected loss of connection to the headset");
+		StopEyeTracking();
+		pvr_destroySession(GetPvrSession());
+		s_info.connected = false;
+		s_pvrSession = {};
+	}
+	return !deviceReady;
+}
+
 void PimaxCommon::StartEyeTracking() {
-	if (!eyeTrackingRunning.exchange(true)) {
+	if (s_pvrSession && !eyeTrackingRunning.exchange(true)) {
+		DriverLog("Starting eye tracking thread");
 		eyeTrackingThread = std::thread(&PimaxCommon::EyeTrackingThread, this);
 	}
 }
 
 void PimaxCommon::StopEyeTracking() {
 	if (eyeTrackingRunning.exchange(false) && eyeTrackingThread.joinable()) {
+		DriverLog("Stopping eye tracking thread");
 		eyeTrackingThread.join();
 		eyeTrackingThread = {};
 	}
@@ -110,4 +135,6 @@ void PimaxCommon::EyeTrackingThread() {
 	}
 
 	CloseHandle(timer);
+
+	DriverLog("Eye tracking thread stopped");
 }

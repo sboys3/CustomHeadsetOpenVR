@@ -29,6 +29,8 @@ protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
 	bool HasEyeTracking() const { return hasEyeTracking; }
 
+	bool CheckDeviceLost();
+
 	void StartEyeTracking();
 	void StopEyeTracking();
 

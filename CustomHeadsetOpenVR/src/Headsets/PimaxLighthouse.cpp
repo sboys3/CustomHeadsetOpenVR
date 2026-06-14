@@ -29,6 +29,10 @@ void PimaxLighthouseShim::SubDeactivate(){
 }
 
 void PimaxLighthouseShim::SubRunFrame(){
+	if(CheckDeviceLost()){
+		return;
+	}
+
 	if(HasEyeTracking() && GetConfig().enableEyeTracking){
 		StartEyeTracking();
 	} else {
