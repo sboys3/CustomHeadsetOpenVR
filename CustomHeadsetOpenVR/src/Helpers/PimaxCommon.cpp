@@ -3,6 +3,7 @@
 #include <PVR_Math.h>
 
 #include "../Driver/DriverLog.h"
+#include "EyeTrackingOutput.h"
 
 static pvrEnvHandle s_pvr = {};
 static pvrSessionHandle s_pvrSession = {};
@@ -68,4 +69,45 @@ PimaxCommon::PimaxCommon() {
 	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
 		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
 		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
+}
+
+void PimaxCommon::StartEyeTracking() {
+	if (!eyeTrackingRunning.exchange(true)) {
+		eyeTrackingThread = std::thread(&PimaxCommon::EyeTrackingThread, this);
+	}
+}
+
+void PimaxCommon::StopEyeTracking() {
+	if (eyeTrackingRunning.exchange(false) && eyeTrackingThread.joinable()) {
+		eyeTrackingThread.join();
+		eyeTrackingThread = {};
+	}
+}
+
+void PimaxCommon::EyeTrackingThread() {
+	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
+	const LARGE_INTEGER noDelay = {};
+	const LONG periodMs = 1000 / 120; // Approx 120Hz
+	SetWaitableTimer(timer, &noDelay, periodMs, nullptr, nullptr, true);
+
+	while (true) {
+		WaitForSingleObject(timer, 100);
+		if (!eyeTrackingRunning) {
+			break;
+		}
+
+		pvrEyeTrackingInfo eyeTrackingInfo = {};
+		pvr_getEyeTrackingInfo(GetPvrSession(), GetPvrTime(), &eyeTrackingInfo);
+		if (eyeTrackingInfo.TimeInSeconds) {
+			// Convert PVR eye tracking data to angles for EyeTrackingOutput.
+			// PVR provides gaze as tangent values, convert to angles in radians.
+			const float leftAngleX = atanf(eyeTrackingInfo.GazeTan[pvrEye_Left].x);
+			const float leftAngleY = atanf(eyeTrackingInfo.GazeTan[pvrEye_Left].y);
+			const float rightAngleX = atanf(eyeTrackingInfo.GazeTan[pvrEye_Right].x);
+			const float rightAngleY = atanf(eyeTrackingInfo.GazeTan[pvrEye_Right].y);
+			eyeTrackingOutput.SetEyeTrackingData(leftAngleX, leftAngleY, rightAngleX, rightAngleY);
+		}
+	}
+
+	CloseHandle(timer);
 }

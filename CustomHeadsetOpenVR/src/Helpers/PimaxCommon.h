@@ -1,7 +1,9 @@
 #pragma once
 #include <PVR.h>
 #include <PVR_API.h>
+#include <atomic>
 #include <string>
+#include <thread>
 
 enum PimaxHeadsetType {
 	DreamAir = 0,
@@ -27,9 +29,16 @@ protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
 	bool HasEyeTracking() const { return hasEyeTracking; }
 
+	void StartEyeTracking();
+	void StopEyeTracking();
+
 private:
+	void EyeTrackingThread();
+
 	pvrHmdInfo hmdInfo = {};
 	bool hasEyeTracking = false;
+	std::thread eyeTrackingThread;
+	std::atomic<bool> eyeTrackingRunning;
 };
 
 static inline std::string pvr_getTrackedDeviceStringPropertyHelper(pvrSessionHandle sessionHandle,

@@ -1,5 +1,7 @@
 #include "PimaxSlam.h"
 
+#include "../Helpers/EyeTrackingOutput.h"
+
 #include <DirectXMath.h>
 #include <filesystem>
 #include <memory>
@@ -352,16 +354,19 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 
 	vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
 
-	eyeTracking.eyeRotation = defaultDriverConfig.dreamAir.eyeRotation;
-	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
-	eyeTracking.Initialize();
+	// SteamVR requires an input profile for features like eye tracking. Reuse a basic one.
+	vr::VRProperties()->SetStringProperty(container, vr::Prop_InputProfilePath_String, "{oculus}/input/rift_profile.json");
+
+	if (HasEyeTracking()) {
+		eyeTrackingOutput.Initialize();
+	}
 
 	returnValue = vr::VRInitError_None;
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
 
 void PimaxSlamDriver::SubDeactivate() {
-	eyeTracking.Shutdown();
+	StopEyeTracking();
 }
 
 void PimaxSlamDriver::SubRunFrame() {
@@ -435,10 +440,13 @@ void PimaxSlamDriver::SubRunFrame() {
 	}
 
 	// Update eye tracking.
-	eyeTracking.ipd = GetConfig().ipd + GetConfig().ipdOffset;
-	eyeTracking.enabled = HasEyeTracking() && GetConfig().enableEyeTracking;
-	// eyeTracking.eyeRotation = GetConfig().eyeRotation;
-	eyeTracking.RunFrame();
+	if (HasEyeTracking() && GetConfig().enableEyeTracking) {
+		StartEyeTracking();
+	} else {
+		StopEyeTracking();
+	}
+	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
+	eyeTrackingOutput.RunFrame();
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {

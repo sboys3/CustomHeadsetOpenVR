@@ -1,7 +1,5 @@
 #pragma once
 #include "BaseHeadset.h"
-// TODO(mbucchia): Migrate eye tracking to PimaxCommon
-#include "../Helpers/PimaxEyeTrackingBridge.h"
 #include "../Helpers/PimaxCommon.h"
 
 class PimaxLighthouseShim : public BaseHeadsetShim, public PimaxCommon{
@@ -12,8 +10,6 @@ public:
 	virtual Config::BaseHeadsetConfig& GetConfig() override;
 	// function that returns the old config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfigOld() override;
-	// eye tracking
-	PimaxEyeTrackingBridge eyeTracking;
 	// start eye tracking
 	virtual void SubActivate(vr::PropertyContainerHandle_t container) override;
 	// stop eye tracking

@@ -161,9 +161,6 @@
     <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helpers\PimaxEyeTrackingBridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Headsets\PimaxSlam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
