@@ -35,6 +35,7 @@ export interface HeadsetSettingsConfig {
   resolutionInfo: string;
   resolutionOptions: ResolutionOption[];
   showResolutionSelector: boolean;
+  showDisplayRotation: boolean;
   showDriverWarning: boolean;
   ipdInfo: string;
   defaultMaxFovX: number;
@@ -73,7 +74,20 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     return connectedHeadset !== undefined && connectedHeadset === this.headsetType();
   });
   
-  resolutionModel?: number;
+  resolutionModel?: number; // index into resolutionOptions
+  defaultResolutionIndex = computed(() => {
+    if (!this.defaults) {
+      return 0;
+    }
+    const idx = this.config().resolutionOptions.findIndex(r => r.x === this.defaults!.resolutionX && r.y === this.defaults!.resolutionY);
+    return idx >= 0 ? idx : 0;
+  });
+  displayRotationOptions = [
+    { name: $localize`0°`, value: 0 },
+    { name: $localize`90°`, value: 1 },
+    { name: $localize`180°`, value: 2 },
+    { name: $localize`270°`, value: 3 },
+  ];
   subpixelShiftOptions = [-1, 0, 1];
   disableEyeOptions: DisableEyeOption[] = [
     { name: $localize`None`, value: 0 },
@@ -93,24 +107,41 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     effect(() => {
       this.dss.values();
       if (this.config().showResolutionSelector && this.settings) {
-        this.resolutionModel = this.settings.resolutionX;
+        const idx = this.config().resolutionOptions.findIndex(r => r.x === this.settings!.resolutionX && r.y === this.settings!.resolutionY);
+        this.resolutionModel = idx >= 0 ? idx : 0;
+      }
+    });
+    effect(() => {
+      this.dss.values();
+      if (this.config().showDisplayRotation && this.settings) {
+        this.displayRotationModel = this.settings.displayRotation;
       }
     });
   }
 
   resetResolution() {
-    this.resolutionModel = this.defaults?.resolutionX;
+    const idx = this.config().resolutionOptions.findIndex(r => r.x === this.defaults!.resolutionX && r.y === this.defaults!.resolutionY);
+    this.resolutionModel = idx >= 0 ? idx : 0;
     this.setResolution();
   }
 
   setResolution() {
-    if (this.settings && this.resolutionModel) {
-      const res = this.config().resolutionOptions.find(x => x.x === this.resolutionModel);
+    if (this.settings && this.resolutionModel != null) {
+      const res = this.config().resolutionOptions[this.resolutionModel];
       if (res) {
         this.settings.resolutionX = res.x;
         this.settings.resolutionY = res.y;
         this.saveConfigSettings();
       }
+    }
+  }
+
+  displayRotationModel?: number;
+
+  setDisplayRotation() {
+    if (this.settings && this.displayRotationModel != null) {
+      this.settings.displayRotation = this.displayRotationModel;
+      this.saveConfigSettings();
     }
   }
 

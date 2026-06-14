@@ -22,6 +22,7 @@ export class MeganexX8KComponent {
       { name: '2K', x: 2880, y: 2664 }
     ],
     showResolutionSelector: true,
+    showDisplayRotation: false,
     showDriverWarning: true,
     ipdInfo: $localize`The inter pupillary distance of the virtual cameras in SteamVR applications. You set the headset's physical IPD in the Shiftall Configurator. This IPD should be matched with what you set in the Shiftall Configurator to get the correct world scale.`,
     defaultMaxFovX: 115,

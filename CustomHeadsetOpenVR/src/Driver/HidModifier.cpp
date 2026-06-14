@@ -256,7 +256,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	delete[] configDecompressed;
 	bool doReplace = false;
 	
-	ordered_json data = ordered_json::parse(configStr, nullptr, true, true);
+	ordered_json data = ordered_json::parse(configStr, nullptr, false, true);
 	
 	if(data["model_number"].is_string()){
 		info.lighthouseDeviceName = data["model_number"].get<std::string>();
@@ -269,6 +269,13 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && (driverConfig.meganeX8K.forceEnable || (info.lighthouseDeviceName == "MeganeX superlight 8K" || info.lighthouseDeviceName == "MeganeX 8K Mark II")) && driverConfig.meganeX8K.enable){
 			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != driverConfig.meganeX8K.edidVendorIdOverride){
 				data["direct_mode_edid_vid"] = driverConfig.meganeX8K.edidVendorIdOverride;
+				doReplace = true;
+			}
+		}
+		if(driverConfig.dreamAir.enable && driverConfig.dreamAir.forceEnable){
+			int vendorId = driverConfig.dreamAir.edidVendorIdOverride ? driverConfig.dreamAir.edidVendorIdOverride : driverConfig.dreamAir.edidVendorId;
+			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != vendorId){
+				data["direct_mode_edid_vid"] = vendorId;
 				doReplace = true;
 			}
 		}

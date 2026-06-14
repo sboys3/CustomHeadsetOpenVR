@@ -89,6 +89,7 @@ export type CustomShaderConfig = {
  */
 export type BaseHeadsetConfig = {
   enable: boolean;
+  forceEnable: boolean;
   ipd: number;
   ipdOffset: number;
   horizontalIPDOffset: number;
@@ -102,6 +103,7 @@ export type BaseHeadsetConfig = {
   subpixelOffsets: number[];
   resolutionX: number;
   resolutionY: number;
+  displayRotation: number;
   maxFovX: number;
   maxFovY: number;
   distortionMeshResolution: number;

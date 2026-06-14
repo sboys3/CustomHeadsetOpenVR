@@ -35,13 +35,13 @@
         <app-field-note type="steamvrRestart" />
         <app-field-tip i18n-info
             info="The resolution to run the DisplayPort connection at." />
-        <app-reset-button [canReset]="resolutionModel !== defaults.resolutionX"
+        <app-reset-button [canReset]="resolutionModel !== defaultResolutionIndex()"
             (resetClick)="resetResolution()"></app-reset-button>
       </div>
       <div class="control">
         <mat-select [(ngModel)]="resolutionModel" (ngModelChange)="setResolution()">
-          @for(p of config().resolutionOptions; track p.x) {
-            <mat-option [value]="p.x">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
+          @for(p of config().resolutionOptions; track p.name; let i = $index) {
+            <mat-option [value]="i">{{p.name}}&nbsp;({{p.x}}x{{p.y}})</mat-option>
           }
         </mat-select>
       </div>
@@ -876,6 +876,27 @@
         <div class="control">
           <mat-slide-toggle [(ngModel)]="settings.disableEyeDecreaseFov"
               (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+        </div>
+      </div>
+    }
+
+    <!-- Display Rotation (optional, only for Dream Air force enable) -->
+    @if(config().showDisplayRotation) {
+      <div class="field">
+        <div class="title">
+          <span i18n>Display Rotation</span>
+          <app-field-note type="steamvrRestart" />
+          <app-field-tip i18n-info
+              info="Rotation of the image on the physical display." />
+          <app-reset-button [canReset]="displayRotationModel !== defaults.displayRotation"
+              (resetClick)="displayRotationModel = defaults.displayRotation; setDisplayRotation()"></app-reset-button>
+        </div>
+        <div class="control">
+          <mat-select [(ngModel)]="displayRotationModel" (ngModelChange)="setDisplayRotation()">
+            @for(p of displayRotationOptions; track p.value) {
+              <mat-option [value]="p.value">{{p.name}}</mat-option>
+            }
+          </mat-select>
         </div>
       </div>
     }
