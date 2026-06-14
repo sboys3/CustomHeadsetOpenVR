@@ -36,6 +36,9 @@ static bool EnsurePvrSession() {
 		case 0x0044:
 			s_info.headsetType = DreamAir;
 			break;
+		default:
+			DriverLog("Detected headset '%s' (%04x) - not supported", info.ProductName, info.ProductId);
+			break;
 		}
 
 		// This is what the OpenPort toggle sets in Pimax EVO.
