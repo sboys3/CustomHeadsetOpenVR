@@ -5,6 +5,14 @@
     <span i18n>A headset is currently running with a non-native driver. Many settings will not work.</span>
   </div>
   }
+  @if(webView2Outdated()){
+  <div style="color:red">
+    ⚠️
+    <span i18n>The WebView2 version is too old. Please download the Evergreen Bootstrapper and run it as administrator. </span>
+    <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download" target="_blank" rel="noopener noreferrer">https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download</a>
+    <div><span i18n>Current version: </span><span>{{ webView2Version() }}</span></div>
+  </div>
+  }
   @if(appUpdateService.updateInfo()?.installAvailable){
   <div>
     <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>

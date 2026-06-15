@@ -47,6 +47,26 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     driverEnablePrompt = signal(false)
     driverBlocked = signal(false)
     nonNativeWarning = signal(false)
+    webView2Outdated = signal(false)
+    webView2Version = signal<string | null>(null)
+
+    private checkWebView2Version() {
+        // versions I have seen that do not work: 100, 122
+        const ua = navigator.userAgent;
+        const edgeMatch = ua.match(/Edg\/([\d.]+)/);
+        if (!edgeMatch) {
+            this.webView2Outdated.set(false);
+            this.webView2Version.set(null);
+            return;
+        }
+        const versionString = edgeMatch[1];
+        this.webView2Version.set(versionString);
+        const versionParts = versionString.split('.').map(Number);
+        // const minimumVersion = 140;
+        const minimumVersion = 135;
+        let isOutdated = versionParts[0] < minimumVersion;
+        this.webView2Outdated.set(isOutdated);
+    }
 
     // Expose component classes and enums to template
     MeganexX8KComponent = MeganexX8KComponent;
@@ -124,6 +144,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.checkWebView2Version();
     }
 
     ngOnDestroy(): void {
