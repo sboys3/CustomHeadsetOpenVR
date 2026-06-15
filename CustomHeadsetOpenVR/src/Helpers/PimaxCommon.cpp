@@ -31,10 +31,12 @@ static bool EnsurePvrSession() {
 
 		pvrHmdInfo info = {};
 		pvr_getHmdInfo(s_pvrSession, &info);
-		// TODO: Add other Pimax headsets here.
 		switch (info.ProductId) {
-		case 0x0044:
+		case 0x0044: // Dream Air
 			s_info.headsetType = DreamAir;
+			break;
+		case 0x0101: // Pimax 5K and 8K series (share the same ProductId)
+			s_info.headsetType = P2;
 			break;
 		default:
 			DriverLog("Detected headset '%s' (%04x) - not supported", info.ProductName, info.ProductId);
@@ -56,6 +58,18 @@ static bool EnsurePvrSession() {
 			s_info.useSlamTracking = trackingStyle == pvrHmdTrackingStyle_InsideOutCameras;
 
 			DriverLog("Detected headset '%s' (%04x) with %s tracking", info.ProductName, info.ProductId, s_info.useSlamTracking ? "SLAM" : "Lighthouse");
+
+			pvrDisplayInfo displayInfo = {};
+			pvr_getEyeDisplayInfo(s_pvrSession, pvrEye_Left, &displayInfo);
+			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
+			s_info.resolutionX = displayInfo.width / 2;
+			s_info.resolutionY = displayInfo.height;
+			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
+			const auto cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) /
+				2.f;
+			DriverLog("Canting Angle: %.2f deg", cantingAngle * 180 / 3.1415926f);
 		}
 	}
 	return true;
@@ -81,6 +95,14 @@ PimaxCommon::PimaxCommon() {
 	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
 		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
 		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
+}
+
+Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
+	if (config.resolutionX == 0 || config.resolutionY == 0) {
+		config.resolutionX = GetInfo().resolutionX;
+		config.resolutionY = GetInfo().resolutionY;
+	}
+	return config;
 }
 
 bool PimaxCommon::CheckDeviceLost() {

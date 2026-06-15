@@ -4,32 +4,56 @@
 
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
-	if(GetInfo().connected && model == "Pimax Dream Air" && trackingSystem == "lighthouse"){
+	if(GetInfo().connected && (model == "Pimax Dream Air" || model == "REF-HMD") && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfig(){
-	return driverConfig.dreamAir;
+	// TODO: Add config categories for Crystal and P2.
+	switch (GetInfo().headsetType){
+	case DreamAir:
+	default:
+		return PatchConfig(driverConfig.dreamAir);
+	}
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
-	return driverConfigOld.dreamAir;
+	// TODO: Add config categories for Crystal and P2.
+	switch (GetInfo().headsetType){
+	case DreamAir:
+	default:
+		return PatchConfig(driverConfigOld.dreamAir);
+	}
 }
 
-void PimaxLighthouseShim::SubActivate(vr::PropertyContainerHandle_t container){
-	if(HasEyeTracking()){
+void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){
+	// We need to set this config value before UpdateSettings() runs.
+	// This is only necessary when using the PimaxDistortionProfile.
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
 	}
+
+	returnValue = vr::VRInitError_None;
+	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
 
 void PimaxLighthouseShim::SubDeactivate(){
 	StopEyeTracking();
 }
 
-void PimaxLighthouseShim::SubRunFrame(){
-	if(CheckDeviceLost()){
+void PimaxLighthouseShim::RunFrame(){
+	// We need to set this config value before UpdateSettings() runs.
+	// This is only necessary when using the PimaxDistortionProfile.
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	BaseHeadsetShim::RunFrame();
+
+	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
+	if (CheckDeviceLost()) {
 		return;
 	}
 

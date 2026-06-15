@@ -98,7 +98,7 @@ public:
 			vr::VRScalarType_Absolute,
 			vr::VRScalarUnits_NormalizedOneSided);
 		vr::VRProperties()->SetInt32Property(
-			container, vr::Prop_Axis1Type_Int32,vr::EVRControllerAxisType::k_eControllerAxis_Trigger);
+			container, vr::Prop_Axis1Type_Int32, vr::EVRControllerAxisType::k_eControllerAxis_Trigger);
 		vr::VRDriverInput()->CreateBooleanComponent(
 			container, "/input/trigger/click", &components[ComponentTriggerClick]);
 		vr::VRDriverInput()->CreateBooleanComponent(
@@ -337,11 +337,21 @@ bool PimaxSlamDriver::IsDesiredHeadset(std::string model, vr::PropertyContainerH
 }
 
 Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfig() {
-	return driverConfig.dreamAir;
+	// TODO: Add config categories for Crystal and P2.
+	switch (GetInfo().headsetType) {
+	case DreamAir:
+	default:
+		return PatchConfig(driverConfig.dreamAir);
+	}
 }
 
 Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld() {
-	return driverConfigOld.dreamAir;
+	// TODO: Add config categories for Crystal and P2.
+	switch (GetInfo().headsetType) {
+	case DreamAir:
+	default:
+		return PatchConfig(driverConfigOld.dreamAir);
+	}
 }
 
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
@@ -357,6 +367,10 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	// SteamVR requires an input profile for features like eye tracking. Reuse a basic one.
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_InputProfilePath_String, "{oculus}/input/rift_profile.json");
 
+	// We need to set this config value before UpdateSettings() runs.
+	// This is only necessary when using the PimaxDistortionProfile.
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
 	}
@@ -369,7 +383,14 @@ void PimaxSlamDriver::SubDeactivate() {
 	StopEyeTracking();
 }
 
-void PimaxSlamDriver::SubRunFrame() {
+void PimaxSlamDriver::RunFrame() {
+	// We need to set this config value before UpdateSettings() runs.
+	// This is only necessary when using the PimaxDistortionProfile.
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	BaseHeadsetShim::RunFrame();
+
+	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
 	if (CheckDeviceLost()) {
 		return;
 	}
@@ -446,7 +467,8 @@ void PimaxSlamDriver::SubRunFrame() {
 	// Update eye tracking.
 	if (HasEyeTracking() && GetConfig().enableEyeTracking) {
 		StartEyeTracking();
-	} else {
+	}
+	else {
 		StopEyeTracking();
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
