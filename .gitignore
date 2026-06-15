@@ -6,3 +6,6 @@ output
 *_test.hlsl
 build
 HidModifierPrivate.cpp
+crystal_controller
+crystal_controller_left
+crystal_controller_right
