@@ -1,6 +1,6 @@
 import { computed, effect, Injectable, OnDestroy, signal } from '@angular/core';
 import { copyFile, remove, exists, mkdir, readDir, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
-import { appLocalDataDir, join } from '@tauri-apps/api/path';
+import { appLocalDataDir, basename, join } from '@tauri-apps/api/path';
 import { DriverSettingService } from './driver-setting.service';
 import { DriverInfoService } from './driver-info.service';
 import { debounceTime, Subject } from 'rxjs';
@@ -9,8 +9,9 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
 import { cleanJsonComments } from '../helpers';
-import { launch_process } from '../tauri_wrapper';
+import { launch_process, run_process_sync } from '../tauri_wrapper';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { customHeadsetDriverName, driverCopyInstallationMethod } from '../../environment';
 
 @Injectable({providedIn: "root", })
 export class SystemDiagnosticService implements OnDestroy {
@@ -82,7 +83,12 @@ export class SystemDiagnosticService implements OnDestroy {
   public async checkDriverInstalled() {
     const steamVrPath = await this.checkSteamVrInstalled();
     if (steamVrPath) {
-      const driverPath = await join(steamVrPath, 'drivers', 'CustomHeadsetOpenVR', 'driver.vrdrivermanifest')
+      // Check for copied driver installation
+      let driverPath = await join(steamVrPath, 'drivers', customHeadsetDriverName, 'driver.vrdrivermanifest')
+      if (!await exists(driverPath)) {
+        const registeredPath = await this.checkDriverRegisteredPath(steamVrPath);
+        driverPath = await join(registeredPath, 'driver.vrdrivermanifest')
+      }
       if (await exists(driverPath)) {
         let version = '0.0.0'
         try {
@@ -161,6 +167,57 @@ export class SystemDiagnosticService implements OnDestroy {
     }
     return true;
   }
+  /**
+   * Check if the vendor-neutral driver (CustomHeadsetOpenVR) is enabled.
+   * Used by vendor-specific drivers to implement driver lockout.
+   * Returns false if the driver is not present in settings (treats as disabled).
+   */
+  public getNeutralDriverEnabled(settings: any): boolean {
+    if (!settings) {
+      return false;
+    }
+    const neutralDriverKey = this.getDriverFieldName('CustomHeadsetOpenVR');
+    const driverSetting = settings[neutralDriverKey];
+    if (!driverSetting) {
+      // Driver not present in settings at all - treat as disabled
+      return false;
+    }
+    const blocked = driverSetting['blocked_by_safe_mode'] ?? false;
+    if (blocked) {
+      return false;
+    }
+    const enabled = driverSetting['enable'] ?? true;
+    return enabled;
+  }
+  /**
+   * For vendor-specific drivers: disable the neutral driver and enable the vendor driver.
+   * This implements the driver lockout swap behavior.
+   */
+  public async enableVendorDriverAndDisableNeutral() {
+    await this.updateSteamVRSettings(settings => {
+      let changed = false;
+      // Disable the vendor-neutral driver
+      const neutralKey = this.getDriverFieldName('CustomHeadsetOpenVR');
+      if (!settings[neutralKey]) {
+        settings[neutralKey] = {};
+      }
+      if (settings[neutralKey]['enable'] !== false) {
+        settings[neutralKey]['enable'] = false;
+        changed = true;
+      }
+      // Enable the vendor-specific driver
+      const vendorKey = this.getDriverFieldName(customHeadsetDriverName);
+      if (!settings[vendorKey]) {
+        settings[vendorKey] = {};
+      }
+      if (settings[vendorKey]['enable'] !== true) {
+        settings[vendorKey]['enable'] = true;
+        changed = true;
+      }
+      delete settings[vendorKey]['blocked_by_safe_mode'];
+      return changed;
+    });
+  }
   public isDriverBlocked(settings: any, driverName: string) {
     if (settings) {
       const driverSetting = settings[this.getDriverFieldName(driverName)]
@@ -187,7 +244,7 @@ export class SystemDiagnosticService implements OnDestroy {
     this._installingDriver.set(true);
     this.installing = true
     try {
-      let driverDir = await join(await get_executable_path(), '../CustomHeadsetOpenVR');
+      let driverDir = await join(await get_executable_path(), `../${customHeadsetDriverName}`);
       if (!await exists(driverDir)) {
         if (await this.dialog.confirm($localize`Driver folder not found`, $localize`The driver folder is not in the default location. Unpack the entire zip and retry, or manually locate the new CustomHeadsetOpenVR folder to be installed.`, $localize`Locate`, 'primary')) {
           const path = await open({ directory: true, multiple: false })
@@ -201,16 +258,31 @@ export class SystemDiagnosticService implements OnDestroy {
         }
       }
       if (await exists(await join(driverDir, 'driver.vrdrivermanifest'))) {
-        const steamVrDriverDir = await join(steamVrPath, 'drivers');
-        if (!await exists(steamVrDriverDir)) {
-          await mkdir(steamVrDriverDir)
-        }
-        const driverPath = await join(steamVrDriverDir, 'CustomHeadsetOpenVR');
-        try {
-          await this.copyRec(driverPath, driverDir)
-        } catch (e) {
-          await this.dialog.message($localize`Install Failed, Make sure SteamVR is closed`, `${e}`)
-          return false
+        if (driverCopyInstallationMethod) {
+          // Copy driver into SteamVR drivers folder
+          const steamVrDriverDir = await join(steamVrPath, 'drivers');
+          if (!await exists(steamVrDriverDir)) {
+            await mkdir(steamVrDriverDir)
+          }
+          const driverPath = await join(steamVrDriverDir, customHeadsetDriverName);
+          try {
+            await this.copyRec(driverPath, driverDir)
+          } catch (e) {
+            await this.dialog.message($localize`Install Failed, Make sure SteamVR is closed`, `${e}`)
+            return false
+          }
+        } else {
+          // Register driver in place using vrpathreg
+          try {
+            const success = await this.registerDriver(steamVrPath, driverDir);
+            if (!success) {
+              await this.dialog.message($localize`Install Failed`, $localize`Failed to register driver using vrpathreg. Make sure SteamVR is installed and closed.`)
+              return false;
+            }
+          } catch (e) {
+            await this.dialog.message($localize`Install Failed, Make sure SteamVR is closed`, `${e}`)
+            return false
+          }
         }
         this.checkDriverInstalled()
         return true;
@@ -225,7 +297,7 @@ export class SystemDiagnosticService implements OnDestroy {
         await this.disableSteamVRDriver('MeganeXsuperlight8K_Native');
         await this.disableSteamVRDriver('MeganeX8KMark2_Native');
       }
-      await this.enableSteamVRDriver('CustomHeadsetOpenVR');
+      await this.enableSteamVRDriver(customHeadsetDriverName);
       this.installing = false
       this._installingDriver.set(false)
     }
@@ -233,16 +305,24 @@ export class SystemDiagnosticService implements OnDestroy {
   async uninstallDriver() {
     const steamVrPath = this.steamVRinstalled();
     if (!steamVrPath) return false;
-    const driverPath = await join(steamVrPath, 'drivers', 'CustomHeadsetOpenVR');
-    if (await exists(driverPath)) {
+    // Remove copied driver from SteamVR drivers folder (if exists)
+    const copiedDriverPath = await join(steamVrPath, 'drivers', customHeadsetDriverName);
+    if (await exists(copiedDriverPath)) {
       try{
-        await remove(driverPath, {recursive: true});
+        await remove(copiedDriverPath, {recursive: true});
       } catch(e){
         await this.dialog.message($localize`Uninstall Failed, Make sure SteamVR is closed`, `${e}`)
         return false;
       }
-      this.checkDriverInstalled()
     }
+    // Also unregister any in-place registered driver using vrpathreg
+    try {
+      await this.unregisterDriver(steamVrPath);
+    } catch(e) {
+      // Non-fatal for uninstall, the copied driver removal is the primary method
+      console.warn('Failed to unregister driver using vrpathreg:', e);
+    }
+    this.checkDriverInstalled()
     return true;
   }
   private async copyRec(targetDir: string, sourceDir: string) {
@@ -259,7 +339,71 @@ export class SystemDiagnosticService implements OnDestroy {
     }
   }
   /**
-   * 
+   * Check if the driver is registered in-place using vrpathreg.
+   */
+  private async checkDriverRegisteredPath(steamVrPath: string): Promise<string> {
+    try {
+      const openvrpaths = await this.getOpenvrpaths();
+      if (!openvrpaths || !openvrpaths.external_drivers) {
+        return "";
+      }
+      const drivers = openvrpaths.external_drivers;
+      if (Array.isArray(drivers)) {
+        for (const driverPath of drivers) {
+          const lastFolder = await basename(driverPath);
+          if (lastFolder === customHeadsetDriverName) {
+            let manifestPath = await join(driverPath, 'driver.vrdrivermanifest')
+            if(await exists(manifestPath)){
+              return driverPath;
+            }
+          }
+        }
+      }
+      return "";
+    } catch (e) {
+      console.warn('Failed to check driver registration from openvrpaths:', e);
+      return "";
+    }
+  }
+  /**
+   * Register driver in place using vrpathreg adddriver.
+   * Verifies the driver directory name matches the expected driver name before registering.
+   */
+  private async registerDriver(steamVrPath: string, driverDir: string): Promise<boolean> {
+    const vrpathregPath = await join(steamVrPath, 'bin', 'win64', 'vrpathreg.exe');
+    if (!await exists(vrpathregPath)) {
+      return false;
+    }
+    const lastFolder = await basename(driverDir);
+    if (lastFolder !== customHeadsetDriverName) {
+      console.warn(`Driver directory name "${lastFolder}" does not match expected "${customHeadsetDriverName}". Refusing to register.`);
+      return false;
+    }
+    try {
+      const exitCode = await run_process_sync(vrpathregPath, ['adddriver', driverDir]);
+      return exitCode === 0;
+    } catch (e) {
+      console.error('Failed to register driver with vrpathreg:', e);
+      throw e;
+    }
+  }
+  /**
+   * Unregister driver in place using vrpathreg removedriverswithname.
+   */
+  private async unregisterDriver(steamVrPath: string): Promise<void> {
+    const vrpathregPath = await join(steamVrPath, 'bin', 'win64', 'vrpathreg.exe');
+    if (!await exists(vrpathregPath)) {
+      return;
+    }
+    try {
+      await run_process_sync(vrpathregPath, ['removedriverswithname', customHeadsetDriverName]);
+    } catch (e) {
+      console.warn('Failed to unregister driver with vrpathreg:', e);
+      throw e;
+    }
+  }
+  /**
+   *
    * @param update return true to save
    */
   public async updateSteamVRSettings(update: (steamVrSettings: any) => boolean) {

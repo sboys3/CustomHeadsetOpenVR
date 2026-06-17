@@ -41,6 +41,7 @@
     },
     "dialog:default",
     "shell:default",
-    "opener:default"
+    "opener:default",
+    "core:window:allow-set-title"
   ]
 }

@@ -35,6 +35,7 @@
         <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This custom shader has the possibility to completely break SteamVR while enabled after a future SteamVR update. Disable it if you have issues or compatibility problems.</span>
     </div>
 </div>
+@if(!vendor){
 <div class="field">
     <div class="title">
         <span i18n>Enable for Other Native HMDs</span>
@@ -52,6 +53,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
 @if(defaults.customShader.samplingFilter){
 <div class="field">
     <div class="title">
@@ -586,6 +588,7 @@
     </div>
 </div>
 }
+@if(showMeganeX8K){
 <div class="field">
     <div class="title">
         <span i18n>Enable for MeganeX 8K</span>
@@ -600,6 +603,8 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
+@if(showDreamAir){
 <div class="field">
     <div class="title">
         <span i18n>Enable for Dream Air</span>
@@ -614,6 +619,8 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
+@if(!vendor){
 <div class="field">
     <div class="title">
         <span i18n>Enable for Other HMDs</span>
@@ -628,6 +635,7 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+}
 }
 }@else{
 <div class="field">

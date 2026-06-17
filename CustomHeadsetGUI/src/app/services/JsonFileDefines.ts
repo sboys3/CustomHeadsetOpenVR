@@ -138,7 +138,7 @@ export type GeneralHeadsetConfig = {
 }
 
 export type AppSetting = {
-  colorScheme: 'system' | 'dark' | 'light';
+  colorScheme: 'system' | 'dark' | 'light' | 'evo';
   updateMode: 'replace' | 'rewrite';
   advanceMode: boolean;
   defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';

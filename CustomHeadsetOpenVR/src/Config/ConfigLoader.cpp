@@ -18,12 +18,16 @@ using ordered_json = nlohmann::ordered_json;
 
 
 std::string ConfigLoader::GetConfigFolder(){
+	std::string configFolder = "CustomHeadset";
+	#ifdef VENDOR_PIMAX
+	configFolder = "Pimax/CustomHeadset";
+	#endif
 	#ifdef _WIN32
 	char* appdataPath = std::getenv("APPDATA");
-	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/CustomHeadset/");
+	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/" + configFolder + "/");
 	#elif __linux__
 	char* appdataPath = std::getenv("HOME");
-	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/.config/CustomHeadset/");
+	std::string configPath = appdataPath == nullptr ? "./" : (std::string(appdataPath) + "/.config/" + configFolder + "/");
 	#endif
 	return configPath;
 }
@@ -872,18 +876,11 @@ void ConfigLoader::WatcherThreadDistortions(){
 // only define settings that most users will change and are unlikely to have their default changed
 // settings not defined here will easily be able to have their defaults changed in the future for everyone
 std::string defaultConfig = R"({
-	"meganeX8K": {
-		"enable": true
-	}
+	
 })";
 
 
-void ConfigLoader::Start(){
-	if(started){
-		return;
-	}
-	started = true;
-	
+void ConfigLoader::CreateDirectories(){
 	try{
 		// create directory
 		std::filesystem::create_directories(GetConfigFolder());
@@ -898,6 +895,15 @@ void ConfigLoader::Start(){
 	}catch(const std::exception& e){
 		DriverLog("Failed to create settings.json %s", e.what());
 	}
+}
+
+void ConfigLoader::Start(){
+	if(started){
+		return;
+	}
+	started = true;
+	
+	CreateDirectories();
 	
 	// load config for the first time
 	ParseConfig();

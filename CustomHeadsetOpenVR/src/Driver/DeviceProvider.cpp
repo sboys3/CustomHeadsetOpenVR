@@ -3,6 +3,7 @@
 #include "DeviceShim.h"
 #include "CompositorPlugin.h"
 #include "HidModifier.h"
+#include "DriverLockout.h"
 
 #include "Hooking/InterfaceHookInjector.h"
 
@@ -11,9 +12,11 @@
 #include "../Headsets/GenericHeadset.h"
 #include "../Headsets/FakeHeadset.h"
 #include "../Helpers/EyeTrackingOutput.h"
+#include "../Helpers/AAPVRBlocker.h"
 
 #include "../Config/ConfigLoader.h"
 
+bool lockedOut = false;
 
 // general driver functions
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
@@ -24,10 +27,28 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	driverConfigLoader.info.steamvrResources = driverPath;
 	vr::VRResources()->GetResourceFullPath("{CustomHeadsetOpenVR}", "", driverPath, sizeof(driverPath));
 	driverConfigLoader.info.driverResources = driverPath;
+	
+	// Driver lockout: When this is a vendor-specific driver (not vendor-neutral),
+	// check if the vendor-neutral driver (CustomHeadsetOpenVR) is enabled.
+	// If the neutral driver is enabled, this vendor driver is locked out.
+	#ifndef VENDOR_NEUTRAL
+	DriverLog("Running in vendor-specific driver mode");
+	if(IsNeutralDriverEnabled()){
+		DriverLog("Vendor-specific driver locked out because the vendor-neutral driver (CustomHeadsetOpenVR) is enabled.");
+		lockedOut = true;
+		driverConfigLoader.CreateDirectories();
+		driverConfigLoader.WriteInfo();
+		return vr::VRInitError_None;
+	}
+	#endif
+	
 	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);
 	hidModifier.InjectHooks();
+	if(AAPVRShouldBlock()){
+		AAPVRLighthouseUnblockerInjectHooks();
+	}
 	
 	// the shim classes can be used to implement entirely new headsets, not just shim existing ones
 	if(driverConfig.fakeHeadset.enable){
@@ -66,6 +87,10 @@ void DebugEventLog(const vr::VREvent_t& vrevent){
 }
 
 void CustomHeadsetDeviceProvider::RunFrame(){
+	if(lockedOut){
+		return;
+	}
+	
 	// acquire driverConfig.configLock for the duration of this function
 	std::lock_guard<std::mutex> lock(driverConfigLock);
 	
@@ -192,6 +217,15 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 	}
 	#endif
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);
+	
+	#ifndef FULLY_BLOCK_AAPVR
+	if(AAPVRShouldBlock()){
+		APPVRDeviceBlocker* appvrDeviceBlocker = new APPVRDeviceBlocker();
+		shims.insert(appvrDeviceBlocker);
+		pDriver = new ShimTrackedDeviceDriver(appvrDeviceBlocker, pDriver);
+	}
+	#endif
+	
 	if(eDeviceClass == vr::TrackedDeviceClass_HMD){
 		
 		// add more shims here, they can stack and none of the functions are particularly hot

@@ -6,3 +6,11 @@ output
 *_test.hlsl
 build
 HidModifierPrivate.cpp
+crystal_controller
+crystal_controller_left
+crystal_controller_right
+environment-gen.ts
+
+# I have immense hatred for whatever dickwad at microslop caused visual studio to ask for a azure sign in and create this file
+copilot-instructions.md
+# This will be forever enshrined as a token of their incompetency

@@ -36,6 +36,9 @@
     <ClInclude Include="src\Driver\DriverLog.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Driver\DriverLockout.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Driver\Hooking\Hooking.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -51,6 +54,9 @@
     <ClInclude Include="..\ThirdParty\zlib\zutil.h">
       <Filter>Source Files\zlib</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helpers\AAPVRBlocker.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Driver\DeviceProvider.cpp">
@@ -60,6 +66,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Driver\DriverLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Driver\DriverLockout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Driver\Hooking\Hooking.cpp">
@@ -146,10 +155,13 @@
     <ClCompile Include="src\Headsets\FakeHeadset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Headsets\Helpers\PimaxEyeTrackingBridge.cpp">
+    <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Headsets\Helpers\EyeTrackingOutput.cpp">
+    <ClCompile Include="src\Helpers\PimaxEyeTrackingBridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helpers\AAPVRBlocker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

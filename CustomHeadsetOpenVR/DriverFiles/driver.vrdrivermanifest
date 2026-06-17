@@ -1,6 +1,7 @@
 {
 	"alwaysActivate": true,
 	"name": "CustomHeadsetOpenVR",
+	"isCustomHeadset": true,
 	"directory": "",
 	"resourceOnly": false,
 	"redirectsDisplay": true,

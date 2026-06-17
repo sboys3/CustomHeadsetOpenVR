@@ -74,6 +74,8 @@ public:
 	void WriteDiagnosticInfo();
 	// start the config parser
 	void Start();
+	// create basic directory structure
+	void CreateDirectories();
 	// thread to write info
 	// void WriteInfoThread();
 	// thread to write diagnostic info at 4 times per second
