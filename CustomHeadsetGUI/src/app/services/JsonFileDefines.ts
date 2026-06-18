@@ -144,6 +144,7 @@ export type AppSetting = {
   defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';
   showIncompatibleProfiles: boolean;
   launchPimaxOnStartup: boolean;
+  installMethod: 'auto' | 'register' | 'copy';
 }
 
 export const HeadsetType = {

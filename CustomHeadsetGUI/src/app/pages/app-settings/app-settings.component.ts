@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ResetButtonComponent } from '../../utilities/reset-button/reset-button.component';
-import { vendor } from '../../../environment';
 @Component({
   selector: 'app-app-settings',
   imports: [CommonModule, MatSelectModule, FormsModule, MatDividerModule, MatSlideToggleModule, ResetButtonComponent],
@@ -16,16 +15,8 @@ import { vendor } from '../../../environment';
 })
 export class AppSettingsComponent {
   settings?: AppSetting;
-  defaults: AppSetting = {
-    colorScheme: vendor === 'pimax' ? 'evo' : 'dark',
-    updateMode: 'rewrite',
-    advanceMode: false,
-    defaultSettingsTab: 'auto',
-    showIncompatibleProfiles: false,
-    launchPimaxOnStartup: false
-  };
 
-  constructor(private appSettingService: AppSettingService) {
+  constructor(public appSettingService: AppSettingService) {
     effect(() => {
       this.settings = appSettingService.values();
     })
@@ -37,7 +28,7 @@ export class AppSettingsComponent {
   }
   resetOption(key: keyof AppSetting) {
     if (this.settings) {
-      (this.settings as any)[key] = this.defaults[key];
+      (this.settings as any)[key] = this.appSettingService.defaults?.[key];
       this.saveConfigSettings();
     }
   }

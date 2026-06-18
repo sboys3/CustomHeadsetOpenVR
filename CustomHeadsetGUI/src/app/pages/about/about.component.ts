@@ -63,14 +63,6 @@ export class AboutComponent {
       this.checking.set(false)
     }
   }
-  async reinstallDriver() {
-    try{
-      await this.sds.uninstallDriver()
-    }catch(e){
-      console.error(e)
-    }
-    this.installDriver()
-  }
   async installDriver() {
     if (await this.sds.installDriver()) {
       this.dialog.message($localize`Install success`, $localize`please launch SteamVR to finish the installation`)

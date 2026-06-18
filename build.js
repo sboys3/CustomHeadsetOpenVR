@@ -5,6 +5,7 @@ let child_process = require("child_process")
 // --- Argument parsing ---
 let args = process.argv.slice(2)
 let vendor = "neutral"
+let vendorUi = "neutral"
 let buildDriver = true
 let buildGui = true
 
@@ -12,6 +13,9 @@ for (let i = 0; i < args.length; i++) {
 	switch (args[i]) {
 		case "--vendor":
 			vendor = args[++i].toLowerCase()
+			break
+		case "--vendor-ui":
+			vendorUi = args[++i].toLowerCase()
 			break
 		case "--no-driver":
 			buildDriver = false
@@ -29,8 +33,20 @@ if (!["neutral", "pimax", "shiftall"].includes(vendor)) {
 	process.exit(1)
 }
 
+if (!["neutral", "pimax", "shiftall"].includes(vendorUi)) {
+	console.error(`Invalid vendor-ui "${vendorUi}". Must be one of: neutral, pimax, shiftall`)
+	process.exit(1)
+}
+
 if(vendor == "neutral"){
 	vendor = ""
+}
+if(vendorUi == "neutral"){
+	vendorUi = ""
+}
+// Auto-set vendorUi to vendor if full vendorization is enabled
+if (vendor) {
+	vendorUi = vendor
 }
 
 // --- Extract version from Config.cpp ---
@@ -45,9 +61,12 @@ if (!versionMatch) {
 let version = versionMatch[1]
 console.log(`Detected version: ${version}`)
 console.log(`Vendor: ${vendor}`)
+console.log(`Vendor UI: ${vendorUi}`)
 
 // --- Define output directories ---
-let vendorTag = vendor ? `-${vendor.charAt(0).toUpperCase()}${vendor.slice(1)}` : ""
+let vendorTag = vendor || vendorUi
+vendorTag = vendorTag ? `-${vendorTag.charAt(0).toUpperCase()}${vendorTag.slice(1)}` : ""
+vendorTag += vendorUi && vendorUi !== vendor ? "-UI" : ""
 let stagingFolder = `CustomHeadset-STAGING-${version}${vendorTag}-Windows`
 let outputDir = path.join(__dirname, "output", stagingFolder)
 let defaultDriverOutput = path.join(__dirname, "output", "CustomHeadsetOpenVR")
@@ -237,7 +256,7 @@ function buildGuiTask() {
 		console.log("=== Building GUI ===")
 
 		let guiDir = path.join(__dirname, "CustomHeadsetGUI")
-		let env = { ...process.env, VENDOR: vendor }
+		let env = { ...process.env, VENDOR: vendor, VENDOR_UI: vendorUi }
 
 		let stdout = []
 		let stderr = []

@@ -11,7 +11,8 @@ import { PullingService } from './PullingService';
 import { cleanJsonComments } from '../helpers';
 import { launch_process, run_process_sync } from '../tauri_wrapper';
 import { openUrl } from '@tauri-apps/plugin-opener';
-import { customHeadsetDriverName, driverCopyInstallationMethod } from '../../environment';
+import { customHeadsetDriverName, driverCopyInstallationMethod, vendor } from '../../environment';
+import { AppSettingService } from './app-setting.service';
 
 @Injectable({providedIn: "root", })
 export class SystemDiagnosticService implements OnDestroy {
@@ -37,7 +38,7 @@ export class SystemDiagnosticService implements OnDestroy {
   }
   public readonly pullingSteamVRinstall = new PullingService(() => this.checkSteamVrInstalled(), 'pullingSteamVRinstallk');
   public readonly PullingDriverinstall = new PullingService(() => this.checkDriverInstalled(), 'PullingDriverinstall');
-  constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService) {
+  constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService, private appSettingService: AppSettingService) {
     let readySetup = false
     effect(() => {
       this.watchSteamVRSettings();
@@ -258,7 +259,10 @@ export class SystemDiagnosticService implements OnDestroy {
         }
       }
       if (await exists(await join(driverDir, 'driver.vrdrivermanifest'))) {
-        if (driverCopyInstallationMethod) {
+        await this.uninstallDriver()
+        const installMethod = this.appSettingService.values()?.installMethod ?? 'auto';
+        const useCopyMethod = installMethod === 'copy' || (installMethod === 'auto' && driverCopyInstallationMethod);
+        if (useCopyMethod) {
           // Copy driver into SteamVR drivers folder
           const steamVrDriverDir = await join(steamVrPath, 'drivers');
           if (!await exists(steamVrDriverDir)) {
@@ -291,11 +295,13 @@ export class SystemDiagnosticService implements OnDestroy {
         return false;
       }
     } finally {
-      if(!this.dss.values() || this.dss.values()?.meganeX8K?.enable){
-        await this.disableSteamVRDriver('MeganeXSuperlight');
-        await this.disableSteamVRDriver('MeganeX8KMark2');
-        await this.disableSteamVRDriver('MeganeXsuperlight8K_Native');
-        await this.disableSteamVRDriver('MeganeX8KMark2_Native');
+      if(!vendor || vendor == "shiftall"){
+        if(!this.dss.values() || this.dss.values()?.meganeX8K?.enable){
+          await this.disableSteamVRDriver('MeganeXSuperlight');
+          await this.disableSteamVRDriver('MeganeX8KMark2');
+          await this.disableSteamVRDriver('MeganeXsuperlight8K_Native');
+          await this.disableSteamVRDriver('MeganeX8KMark2_Native');
+        }
       }
       await this.enableSteamVRDriver(customHeadsetDriverName);
       this.installing = false

@@ -8,7 +8,7 @@ import { AppSettingService } from './services/app-setting.service';
 import { AppUpdateService } from './services/app-update.service';
 import { PimaxLauncherService } from './services/pimax-launcher.service';
 import { SystemDiagnosticService } from './services/system-diagnostic.service';
-import { vendor } from '../environment'
+import { vendorUi } from '../environment'
 
 @Component({
   selector: 'app-root',
@@ -34,7 +34,7 @@ export class AppComponent {
   constructor(appSettingService: AppSettingService, public appUpdateService: AppUpdateService, public sds: SystemDiagnosticService, @Inject(DOCUMENT) document: Document, @Inject(PimaxLauncherService) _launcher: PimaxLauncherService) {
     // Set the native window title with localization support
     let windowTitle = $localize`Custom Headset`
-    switch(vendor){
+    switch(vendorUi){
       case "pimax":
         windowTitle = $localize`Pimax Native Headset`
         break;

@@ -3,7 +3,7 @@ import { AppSetting } from './JsonFileDefines';
 import { PathsService } from './paths.service';
 import { JsonSettingServiceBase } from './JsonSettingServiceBase';
 import { AppSettingHolder } from './AppSettingAccessor';
-import { vendor } from '../../environment'
+import { vendorUi } from '../../environment'
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,13 @@ import { vendor } from '../../environment'
 export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
   constructor(paths: PathsService) {
     super(paths.guiSettingPath, paths.appDataDirPath, signal({
-      colorScheme: vendor === 'pimax' ? 'evo' : 'dark',
+      colorScheme: vendorUi === 'pimax' ? 'evo' : 'dark',
       updateMode: 'rewrite',
       advanceMode: false,
       defaultSettingsTab: 'auto',
       showIncompatibleProfiles: false,
-      launchPimaxOnStartup: false
+      launchPimaxOnStartup: false,
+      installMethod: 'auto'
     }), true, true)
     const appSettingHolder = inject(AppSettingHolder)
     effect(() => {
