@@ -68,7 +68,7 @@
         }
         @if(aus.updateInfo();as updateInfo){
         <span>&nbsp;&nbsp;</span>
-        <button mat-stroked-button (click)="installDriver()" [disabled]="sds.installingDriver()">
+        <button mat-stroked-button (click)="reinstallDriver()" [disabled]="sds.installingDriver()">
             <span i18n>Re-Install Driver</span>
         </button>
         }

@@ -27,6 +27,7 @@ public:
 		uint32_t outputResolutionX = 0;
 		uint32_t outputResolutionY = 0;
 		std::string debugLog = "";
+		std::string driverName = "";
 		std::string driverResources = "";
 		std::string steamvrResources = "";
 		Config::HeadsetType connectedHeadset = Config::HeadsetType::None;

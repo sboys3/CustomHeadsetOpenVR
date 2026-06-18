@@ -156,6 +156,7 @@ function buildDriverTask() {
 			"/p:Configuration=Release",
 			"/p:Platform=x64",
 			`/p:IntermediateOutputPath=CustomHeadsetOpenVR\\x64\\Release\\staging\\`,
+			"/p:SkipPostBuild=true",
 			"/m",
 			"/v:minimal",
 		]

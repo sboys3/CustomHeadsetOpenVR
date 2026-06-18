@@ -5,6 +5,8 @@
 #include "HidModifier.h"
 #include "DriverLockout.h"
 
+#include <chrono>
+
 #include "Hooking/InterfaceHookInjector.h"
 
 #include "../Headsets/MeganeX8K.h"
@@ -22,11 +24,27 @@ bool lockedOut = false;
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
 	// initialise this driver
 	VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
+	
+	vr::DriverHandle_t driverHandle = vr::VRDriverHandle();
+
+	std::string driverName;
+	uint32_t count = vr::VRDriverManager()->GetDriverCount();
+	for (uint32_t i = 0; i < count; i++) {
+		char name[128];
+		vr::VRDriverManager()->GetDriverName(i, name, sizeof(name));
+		if (vr::VRDriverManager()->GetDriverHandle(name) == driverHandle) {
+			driverName = name;
+			break;
+		}
+	}
+	driverConfigLoader.info.driverName = driverName;
 	char driverPath[2048];
 	vr::VRResources()->GetResourceFullPath("", "", driverPath, sizeof(driverPath));
 	driverConfigLoader.info.steamvrResources = driverPath;
-	vr::VRResources()->GetResourceFullPath("{CustomHeadsetOpenVR}", "", driverPath, sizeof(driverPath));
+	vr::VRResources()->GetResourceFullPath(("{" + driverName + "}").c_str(), "", driverPath, sizeof(driverPath));
 	driverConfigLoader.info.driverResources = driverPath;
+	
+	DriverLog("Initializing %s", driverName.c_str());
 	
 	// Driver lockout: When this is a vendor-specific driver (not vendor-neutral),
 	// check if the vendor-neutral driver (CustomHeadsetOpenVR) is enabled.
@@ -87,9 +105,21 @@ void DebugEventLog(const vr::VREvent_t& vrevent){
 }
 
 void CustomHeadsetDeviceProvider::RunFrame(){
+	
+	// Static variables for benchmark tracking
+	static auto startupTime = std::chrono::high_resolution_clock::now();
+	static double maxDurationMs = 0.0;
+	static double totalDurationMs = 0.0;
+	static int frameCount = 0;
+	static bool resetAt60 = false;
+	static bool resetAt600 = false;
+	
 	if(lockedOut){
 		return;
 	}
+	
+	// Benchmark timing - record start
+	auto frameStart = std::chrono::high_resolution_clock::now();
 	
 	// acquire driverConfig.configLock for the duration of this function
 	std::lock_guard<std::mutex> lock(driverConfigLock);
@@ -115,7 +145,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 				uint32_t id = static_cast<uint32_t>(data.reserved1);
 				vr::IVRDriverContext* ctx = (vr::IVRDriverContext*)data.reserved2;
 				// logging here seems to deadlock on occasion
-				// DriverLog("Received context collection event for device with ID: %d, Context: %p", id, ctx);	
+				// DriverLog("Received context collection event for device with ID: %d, Context: %p", id, ctx);
 				driverContextsByDeviceId[id] = ctx;
 				// send any queued events
 				if(queuedEvents.find(id) != queuedEvents.end()){
@@ -170,6 +200,39 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	eyeTrackingOutput.RunFrame();
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
+	
+	// Benchmark timing - calculate elapsed time
+	auto frameEnd = std::chrono::high_resolution_clock::now();
+	double elapsedMs = std::chrono::duration<double, std::micro>(frameEnd - frameStart).count() / 1000.0;
+	
+	// Accumulate for average
+	totalDurationMs += elapsedMs;
+	frameCount++;
+	double avgDurationMs = totalDurationMs / frameCount;
+	
+	// Check for new maximum and log
+	if(elapsedMs > maxDurationMs){
+		maxDurationMs = elapsedMs;
+		double secondsSinceStartup = std::chrono::duration<double>(frameStart - startupTime).count();
+		DriverLog("RunFrame new max: %.3f ms (avg: %.3f ms, %d frames, %.1f s since startup)", elapsedMs, avgDurationMs, frameCount, secondsSinceStartup);
+	}
+	
+	// Check for reset points at 60s and 600s since startup
+	double secondsSinceStartupEarly = std::chrono::duration<double>(frameStart - startupTime).count();
+	if(!resetAt60 && secondsSinceStartupEarly >= 60.0){
+		maxDurationMs = 0.0;
+		totalDurationMs = 0.0;
+		frameCount = 0;
+		resetAt60 = true;
+		DriverLog("RunFrame max and average reset at 60s since startup");
+	}
+	if(!resetAt600 && secondsSinceStartupEarly >= 600.0){
+		maxDurationMs = 0.0;
+		totalDurationMs = 0.0;
+		frameCount = 0;
+		resetAt600 = true;
+		DriverLog("RunFrame max and average reset at 600s since startup");
+	}
 }
 
 void CustomHeadsetDeviceProvider::SendContextCollectionEvents(uint32_t id){

@@ -154,7 +154,6 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
                 // For vendor-specific drivers, also check if the neutral driver is enabled
                 // If so, show the enable prompt and track the lockout state
                 if (vendor) {
-                    console.log(vendor)
                     const neutralEnabled = this.sds.getNeutralDriverEnabled(steamVrConfig);
                     this.neutralDriverEnabled.set(neutralEnabled);
                     // Show prompt if vendor driver is disabled OR if neutral driver is enabled (lockout)

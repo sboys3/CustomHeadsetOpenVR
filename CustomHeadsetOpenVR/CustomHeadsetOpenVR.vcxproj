@@ -168,7 +168,8 @@
       <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
+      <Command>if "$(SkipPostBuild)"=="true" exit 0
+XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -193,7 +194,8 @@
       <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
+      <Command>if "$(SkipPostBuild)"=="true" exit 0
+XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -213,7 +215,8 @@
       <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
+      <Command>if "$(SkipPostBuild)"=="true" exit 0
+XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -238,7 +241,8 @@
       <Command>XCOPY "$(ProjectDir)DriverFiles" "$(SolutionDir)output\$(ProjectName)" /S /Y /I /exclude:..\CustomHeadsetOpenVR\CopyExcludes.txt</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
+      <Command>if "$(SkipPostBuild)"=="true" exit 0
+XCOPY "$(SolutionDir)output\$(ProjectName)" "C:\Program Files (x86)\Steam\steamapps\common\SteamVR\drivers\$(ProjectName)" /S /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

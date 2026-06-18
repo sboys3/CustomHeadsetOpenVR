@@ -555,6 +555,7 @@ void ConfigLoader::WriteInfo(){
 		{"nonNativeHeadsetFound", info.nonNativeHeadsetFound},
 		{"isDashboardOpen", info.isDashboardOpen},
 		{"debugLog", info.debugLog},
+		{"driverName", info.driverName},
 		{"driverResources", info.driverResources},
 		{"steamvrResources", info.steamvrResources},
 		{"driverVersion", driverVersion}
@@ -596,6 +597,9 @@ void ConfigLoader::ReadInfo(){
 	try{
 		std::lock_guard<std::mutex> lock(driverConfigLock);
 		json data = json::parse(infoFile, nullptr, true, true);
+		if(data["driverName"].is_string()){
+			info.driverName = data["driverName"].get<std::string>();
+		}
 		if(data["driverResources"].is_string()){
 			info.driverResources = data["driverResources"].get<std::string>();
 		}
