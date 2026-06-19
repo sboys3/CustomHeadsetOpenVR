@@ -77,19 +77,19 @@ public:
 
 		// Setup the icons.
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceOff_String, "{aapvr}/icons/controller_status_off.png");
+			container, vr::Prop_NamedIconPathDeviceOff_String, "{aapvr}/icons/crystal_controller_status_off.png");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceSearching_String, "{aapvr}/icons/controller_status_searching.gif");
+			container, vr::Prop_NamedIconPathDeviceSearching_String, "{aapvr}/icons/crystal_controller_status_searching.gif");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceSearchingAlert_String, "{aapvr}/icons/controller_status_searching_alert.gif");
+			container, vr::Prop_NamedIconPathDeviceSearchingAlert_String, "{aapvr}/icons/crystal_controller_status_searching_alert.gif");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceReady_String, "{aapvr}/icons/controller_status_ready.png");
+			container, vr::Prop_NamedIconPathDeviceReady_String, "{aapvr}/icons/crystal_controller_status_ready.png");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceReadyAlert_String, "{aapvr}/icons/controller_status_ready_alert.png");
+			container, vr::Prop_NamedIconPathDeviceReadyAlert_String, "{aapvr}/icons/crystal_controller_status_ready_alert.png");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceNotReady_String, "{aapvr}/icons/controller_status_error.png");
+			container, vr::Prop_NamedIconPathDeviceNotReady_String, "{aapvr}/icons/crystal_controller_status_error.png");
 		vr::VRProperties()->SetStringProperty(
-			container, vr::Prop_NamedIconPathDeviceAlertLow_String, "{aapvr}/icons/controller_status_ready_low.png");
+			container, vr::Prop_NamedIconPathDeviceAlertLow_String, "{aapvr}/icons/crystal_controller_status_ready_low.png");
 
 		// Create the input components.
 		vr::VRDriverInput()->CreateScalarComponent(container,
