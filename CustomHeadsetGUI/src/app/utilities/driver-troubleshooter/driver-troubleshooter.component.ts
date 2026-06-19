@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { MatIconModule } from '@angular/material/icon';
+import { customHeadsetDriverName } from '../../../environment';
 @Component({
   selector: 'app-driver-troubleshooter',
   imports: [CommonModule, MatDividerModule, MatIconModule, MatButtonModule],
@@ -39,13 +40,13 @@ export class DriverTroubleshooterComponent {
     effect(() => {
       const steamVrConfig = sds.steamVrConfig();
       if(steamVrConfig){
-          let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR');
+          let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, customHeadsetDriverName);
           this.driverEnablePrompt.set(!customEnabled);
       }
     })
   }
   async enableDriver(){
-    await this.sds.enableSteamVRDriver('CustomHeadsetOpenVR');
+    await this.sds.enableSteamVRDriver(customHeadsetDriverName);
   }
   async installSteamVR() {
     await openUrl('steam://install/250820')

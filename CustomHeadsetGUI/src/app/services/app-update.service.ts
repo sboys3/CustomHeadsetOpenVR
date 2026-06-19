@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { getVersion } from '@tauri-apps/api/app';
 import { isNewVersion } from '../helpers';
 import { SystemDiagnosticService } from './system-diagnostic.service';
+import {vendor} from '../../environment'
 export type GitHubRelease = {
   tag_name: string,
   html_url: string
@@ -49,6 +50,12 @@ export class AppUpdateService {
       updateAvailable: false,
       installAvailable: false,
       url: ""
+    }
+    if(vendor){
+      // don't show updates on the vendor specific builds as they are distributed separately
+      this.currentCheckTask = undefined;
+      this._updateInfo.set(result);
+      return result;
     }
     try {
       const request = firstValueFrom(this.http.get<GitHubRelease>('https://api.github.com/repos/sboys3/CustomHeadsetOpenVR/releases/latest'));

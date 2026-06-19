@@ -4,6 +4,11 @@
 #include <mutex>
 #include <tuple>
 
+#if !defined(VENDOR_PIMAX) && !defined(VENDOR_SHIFTALL)
+#define VENDOR_NEUTRAL
+// #error "this should not be neutral"
+#endif
+
 struct ConfigColor{
 	double r = 1.0;
 	double g = 1.0;
@@ -118,6 +123,12 @@ public:
 		Vive = 3,
 		DreamAir = 4,
 	};
+	static inline bool IsPimaxHeadset(HeadsetType type){
+		return type == HeadsetType::DreamAir;
+	}
+	static inline bool IsShiftallHeadset(HeadsetType type){
+		return type == HeadsetType::MeganeX8K;
+	}
 	
 	class BaseHeadsetConfig{
 	public:
@@ -216,6 +227,9 @@ public:
 	class MeganeX8KConfig : public BaseHeadsetConfig{
 	public:
 		MeganeX8KConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_SHIFTALL)
+			enable = false;
+			#endif
 			headsetType = HeadsetType::MeganeX8K;
 			distortionProfile = "MeganeX8K Default";
 			distortionProfileDeviceType = "MeganeX8K";
@@ -230,6 +244,9 @@ public:
 	class DreamAirConfig : public BaseHeadsetConfig{
 		public:
 		DreamAirConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
 			headsetType = HeadsetType::DreamAir;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "DreamAir";

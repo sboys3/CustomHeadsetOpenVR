@@ -8,7 +8,19 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 	
 	std::string modelNumber = vr::VRProperties()->GetStringProperty(container, vr::Prop_ModelNumber_String);
-	if(modelNumber == "Vive. MV"){
+	#ifdef VENDOR_SHIFTALL
+	if(!Config::IsShiftallHeadset(driverConfigLoader.info.connectedHeadset)){
+		shimActive = false;
+		return;
+	}
+	#endif
+	#ifdef VENDOR_PIMAX
+	if(!Config::IsPimaxHeadset(driverConfigLoader.info.connectedHeadset)){
+		shimActive = false;
+		return;
+	}
+	#endif
+	if(returnValue == vr::VRInitError_None && modelNumber == "Vive. MV"){
 		driverConfigLoader.info.connectedHeadset = Config::HeadsetType::Vive;
 	}
 	if(returnValue == vr::VRInitError_None && driverConfigLoader.info.connectedHeadset == Config::HeadsetType::None){

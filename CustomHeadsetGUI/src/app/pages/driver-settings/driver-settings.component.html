@@ -22,7 +22,11 @@
   @if(driverEnablePrompt()){
   <div class="dirver-warning-main">
     <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
+    @if(neutralDriverEnabled()){
+    <span i18n>This driver is locked out by the main Custom Headset driver. Enable to disable the main driver and enable this vendor driver.</span>
+    }@else{
     <span i18n>Custom Headset's driver is disabled</span>
+    }
     <button mat-stroked-button i18n (click)="enableDriver()">Enable</button>
     @if(driverBlocked()){
     <button mat-stroked-button i18n (click)="unblockAllDrivers()">Unblock All</button>

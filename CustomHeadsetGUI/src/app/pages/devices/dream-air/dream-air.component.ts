@@ -28,6 +28,7 @@ export class DreamAirComponent {
       { name: '2880x2880', x: 2880 , y: 2880 },
       { name: '2560x2560', x: 2560 , y: 2560 },
       { name: '2560x2496', x: 2560 , y: 2496 },
+      { name: '2544x2544', x: 2544 , y: 2544 },
       { name: '1920x1920', x: 1920 , y: 1920 },
     ],
     showResolutionSelector: false,

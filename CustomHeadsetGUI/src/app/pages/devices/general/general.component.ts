@@ -15,6 +15,7 @@ import { FieldNoteComponent } from '../../../utilities/field-note/field-note.com
 import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.component';
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
 import { ColorPickerComponent } from '../../../utilities/color-picker/color-picker.component';
+import { vendor, vendorUi } from '../../../../environment';
 
 @Component({
   selector: 'app-general',
@@ -36,5 +37,8 @@ import { ColorPickerComponent } from '../../../utilities/color-picker/color-pick
   styleUrl: './general.component.scss'
 })
 export class GeneralComponent extends DeviceConfigComponentBase<Settings & { enable: false }> {
-
+  vendor = vendor;
+  vendorUi = vendorUi;
+  showMeganeX8K = !vendorUi || vendorUi == "shiftall";
+  showDreamAir = !vendorUi || vendorUi == "pimax";
 }

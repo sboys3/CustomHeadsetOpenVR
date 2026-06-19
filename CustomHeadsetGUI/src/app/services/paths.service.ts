@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { appDataDir, join } from '@tauri-apps/api/path';
 import { exists, mkdir } from '@tauri-apps/plugin-fs';
+import { vendor } from '../../environment';
+
+console.log("vendor", vendor || "neutral");
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +49,13 @@ export class PathsService {
     }
   }
   private async getDriverAppDirPath(rel?: string) {
-    const seg = [await appDataDir(), '../CustomHeadset']
+    let dataDir = 'CustomHeadset'
+    switch(vendor){
+      case 'pimax':
+        dataDir = 'Pimax/CustomHeadset'
+        break;
+    }
+    const seg = [await appDataDir(), '../' + dataDir]
     if (rel) {
       seg.push(rel)
     }

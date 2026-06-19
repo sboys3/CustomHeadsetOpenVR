@@ -138,12 +138,13 @@ export type GeneralHeadsetConfig = {
 }
 
 export type AppSetting = {
-  colorScheme: 'system' | 'dark' | 'light';
+  colorScheme: 'system' | 'dark' | 'light' | 'evo';
   updateMode: 'replace' | 'rewrite';
   advanceMode: boolean;
   defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';
   showIncompatibleProfiles: boolean;
   launchPimaxOnStartup: boolean;
+  installMethod: 'auto' | 'register' | 'copy';
 }
 
 export const HeadsetType = {

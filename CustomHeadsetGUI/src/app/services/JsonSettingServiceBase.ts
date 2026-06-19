@@ -22,7 +22,7 @@ export abstract class JsonSettingServiceBase<T> {
     }
     protected _readFileError = signal<FileReadError | undefined>(undefined);
     public readFileError = this._readFileError.asReadonly();
-    protected defaults?: T;
+    public defaults?: T;
     public get filePath() {
         return this._filePath;
     }

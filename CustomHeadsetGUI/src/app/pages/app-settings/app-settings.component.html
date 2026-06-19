@@ -1,33 +1,26 @@
 @if(settings){
 <div class="field">
-    <div class="title" i18n>Color Scheme</div>
+    <div class="title">
+        <span i18n>Color Scheme</span>
+        <app-reset-button [canReset]="settings.colorScheme!=appSettingService.defaults?.colorScheme"
+            (resetClick)="resetOption('colorScheme')"></app-reset-button>
+    </div>
     <div class="control">
         <mat-select [(ngModel)]="settings.colorScheme" (ngModelChange)="saveConfigSettings()"
             (closed)="saveConfigSettings()">
             <mat-option value="system" i18n>System</mat-option>
             <mat-option value="dark" i18n>Dark</mat-option>
             <mat-option value="light" i18n>Light</mat-option>
+            <mat-option value="evo" i18n>EVO</mat-option>
         </mat-select>
     </div>
 </div>
 <div class="field">
-    <div class="title" i18n>Update Mode</div>
-    <div class="control">
-        <mat-select [(ngModel)]="settings.updateMode" (ngModelChange)="saveConfigSettings()"
-            (closed)="saveConfigSettings()">
-            <mat-option value="replace" i18n>Replace</mat-option>
-            <mat-option value="rewrite" i18n>Rewrite</mat-option>
-        </mat-select>
+    <div class="title">
+        <span i18n>Default Settings Tab</span>
+        <app-reset-button [canReset]="settings.defaultSettingsTab!=appSettingService.defaults?.defaultSettingsTab"
+            (resetClick)="resetOption('defaultSettingsTab')"></app-reset-button>
     </div>
-</div>
-<div class="field">
-    <div class="title" i18n>Advanced Mode</div>
-    <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.advanceMode" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
-    </div>
-</div>
-<div class="field">
-    <div class="title" i18n>Default Settings Tab</div>
     <div class="control">
         <mat-select [(ngModel)]="settings.defaultSettingsTab" (ngModelChange)="saveConfigSettings()"
             (closed)="saveConfigSettings()">
@@ -38,9 +31,52 @@
         </mat-select>
     </div>
 </div>
+<div class="field">
+    <div class="title">
+        <span i18n>Advanced Mode</span>
+        <app-reset-button [canReset]="settings.advanceMode!=appSettingService.defaults?.advanceMode"
+            (resetClick)="resetOption('advanceMode')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.advanceMode" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
 @if(settings.advanceMode){
 <div class="field">
-    <div class="title" i18n>Show Incompatible Profiles</div>
+    <div class="title">
+        <span i18n>Update Mode</span>
+        <app-reset-button [canReset]="settings.updateMode!=appSettingService.defaults?.updateMode"
+            (resetClick)="resetOption('updateMode')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.updateMode" (ngModelChange)="saveConfigSettings()"
+            (closed)="saveConfigSettings()">
+            <mat-option value="replace" i18n>Replace</mat-option>
+            <mat-option value="rewrite" i18n>Rewrite</mat-option>
+        </mat-select>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Installation Method</span>
+        <app-reset-button [canReset]="settings.installMethod!=appSettingService.defaults?.installMethod"
+            (resetClick)="resetOption('installMethod')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-select [(ngModel)]="settings.installMethod" (ngModelChange)="saveConfigSettings()"
+            (closed)="saveConfigSettings()">
+            <mat-option value="auto" i18n>Auto</mat-option>
+            <mat-option value="register" i18n>Register</mat-option>
+            <mat-option value="copy" i18n>Copy</mat-option>
+        </mat-select>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Show Incompatible Profiles</span>
+        <app-reset-button [canReset]="settings.showIncompatibleProfiles!=appSettingService.defaults?.showIncompatibleProfiles"
+            (resetClick)="resetOption('showIncompatibleProfiles')"></app-reset-button>
+    </div>
     <div class="control">
         <mat-slide-toggle [(ngModel)]="settings.showIncompatibleProfiles" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>

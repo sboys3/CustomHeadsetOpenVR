@@ -27,6 +27,7 @@ public:
 		uint32_t outputResolutionX = 0;
 		uint32_t outputResolutionY = 0;
 		std::string debugLog = "";
+		std::string driverName = "";
 		std::string driverResources = "";
 		std::string steamvrResources = "";
 		Config::HeadsetType connectedHeadset = Config::HeadsetType::None;
@@ -74,6 +75,8 @@ public:
 	void WriteDiagnosticInfo();
 	// start the config parser
 	void Start();
+	// create basic directory structure
+	void CreateDirectories();
 	// thread to write info
 	// void WriteInfoThread();
 	// thread to write diagnostic info at 4 times per second

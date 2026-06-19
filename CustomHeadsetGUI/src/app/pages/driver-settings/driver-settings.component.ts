@@ -4,8 +4,9 @@ import { MeganexX8KComponent } from '../devices/meganex-x8-k/meganex-x8-k.compon
 import { DreamAirComponent } from '../devices/dream-air/dream-air.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
-import { HeadsetType, HeadsetType as HeadsetTypeEnum } from '../../services/JsonFileDefines';
+import { HeadsetType, HeadsetType as HeadsetTypeEnum, Settings } from '../../services/JsonFileDefines';
 import { DriverInfoService } from '../../services/driver-info.service';
+import { DriverSettingService } from '../../services/driver-setting.service';
 import { CommonModule } from '@angular/common';
 import { Subscription, Subject } from 'rxjs';
 import { effect, signal, computed } from '@angular/core';
@@ -14,6 +15,7 @@ import {SystemDiagnosticService} from '../../services/system-diagnostic.service'
 import {MatButtonModule} from '@angular/material/button'
 import { AppSettingService } from '../../services/app-setting.service';
 import { AppUpdateService } from '../../services/app-update.service'
+import { vendor, vendorUi, customHeadsetDriverName } from '../../../environment'
 
 export interface TabConfig {
   type: string;
@@ -46,6 +48,8 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     public sds = inject(SystemDiagnosticService)
     driverEnablePrompt = signal(false)
     driverBlocked = signal(false)
+    // For vendor-specific drivers: tracks if the neutral driver is enabled (causing lockout)
+    neutralDriverEnabled = signal(false)
     nonNativeWarning = signal(false)
     webView2Outdated = signal(false)
     webView2Version = signal<string | null>(null)
@@ -74,14 +78,51 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     DreamAirComponent = DreamAirComponent;
     HeadsetType = HeadsetTypeEnum;
 
-    constructor(private dis: DriverInfoService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
+    constructor(private dis: DriverInfoService, private dss: DriverSettingService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
         // Register tab configurations
-        this._tabs.set([
-            { type: 'General', headsetType: HeadsetType.Other }, // Other
-            { type: 'MeganeX8K', headsetType: HeadsetType.MeganeX8K }, // MeganeX8K
-            { type: 'DreamAir', headsetType: HeadsetType.DreamAir }, // DreamAir
-        ]);
-
+        let availableTabs = [];
+        availableTabs.push({ type: 'General', headsetType: HeadsetType.Other }) // other headsets
+        
+        
+        let onSettingsAvailable = (callback: (settings: Settings) => void) =>{
+            let effectRef = effect(() => {
+                let settings = this.dss.values()
+                if(settings){
+                    // no clue why the setTimeout is necessary, but everything breaks without it
+                    setTimeout(() => {
+                        settings = this.dss.values()
+                        if(settings){
+                            callback(settings)
+                            effectRef.destroy()
+                        }
+                    }, 1000)
+                }
+            })
+        }
+        
+        if(!vendorUi || vendorUi == "shiftall"){
+            availableTabs.push({ type: 'MeganeX8K', headsetType: HeadsetType.MeganeX8K })
+        }else{
+            // disable when not shown
+            onSettingsAvailable((settings) => {
+                settings.meganeX8K.enable = false
+                this.dss.save(settings)
+            })
+        }
+        
+        if(!vendorUi || vendorUi == "pimax"){
+            availableTabs.push({ type: 'DreamAir', headsetType: HeadsetType.DreamAir })
+        }else{
+            // disable when not shown
+            onSettingsAvailable((settings) => {
+                settings.dreamAir.enable = false
+                this.dss.save(settings)
+            })
+        }
+        
+        this._tabs.set(availableTabs)
+        
+        
         // Effect to update current headset type when driver info changes
         effect(() => {
             const info = this.dis.values();
@@ -136,9 +177,18 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         effect(() => {
             const steamVrConfig = this.sds.steamVrConfig();
             if (steamVrConfig) {
-                let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, 'CustomHeadsetOpenVR')
+                let customEnabled = this.sds.getSteamVRDriverEnableState(steamVrConfig, customHeadsetDriverName)
                 this.driverEnablePrompt.set(!customEnabled);
-                this.driverBlocked.set(this.sds.isDriverBlocked(steamVrConfig, 'CustomHeadsetOpenVR'));
+                this.driverBlocked.set(this.sds.isDriverBlocked(steamVrConfig, customHeadsetDriverName));
+                
+                // For vendor-specific drivers, also check if the neutral driver is enabled
+                // If so, show the enable prompt and track the lockout state
+                if (vendor) {
+                    const neutralEnabled = this.sds.getNeutralDriverEnabled(steamVrConfig);
+                    this.neutralDriverEnabled.set(neutralEnabled);
+                    // Show prompt if vendor driver is disabled OR if neutral driver is enabled (lockout)
+                    this.driverEnablePrompt.set(!customEnabled || neutralEnabled);
+                }
             }
         })
     }
@@ -221,7 +271,12 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     }
     
     async enableDriver() {
-        await this.sds.enableSteamVRDriver("CustomHeadsetOpenVR")
+        // For vendor-specific drivers, disable the neutral driver and enable the vendor driver
+        if (vendor) {
+            await this.sds.enableVendorDriverAndDisableNeutral();
+        } else {
+            await this.sds.enableSteamVRDriver(customHeadsetDriverName);
+        }
     }
 
     async unblockAllDrivers() {

@@ -61,14 +61,15 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 		}
 		if(folderName != ""){
 			// update icons
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceOff_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_off.png").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearching_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_searching.gif").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearchingAlert_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_searching_alert.gif").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReady_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_ready.png").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReadyAlert_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_ready_alert.png").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceNotReady_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_error.png").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceStandby_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_standby.png").c_str());
-			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceStandbyAlert_String, ("{CustomHeadsetOpenVR}/icons/" + folderName + "/headset_status_standby_alert.png").c_str());
+			std::string iconPath = "{" + driverConfigLoader.info.driverName + "}/icons/" + folderName;
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceOff_String, (iconPath + "/headset_status_off.png").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearching_String, (iconPath + "/headset_status_searching.gif").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceSearchingAlert_String, (iconPath + "/headset_status_searching_alert.gif").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReady_String, (iconPath + "/headset_status_ready.png").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceReadyAlert_String, (iconPath + "/headset_status_ready_alert.png").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceNotReady_String, (iconPath + "/headset_status_error.png").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceStandby_String, (iconPath + "/headset_status_standby.png").c_str());
+			vr::VRProperties()->SetStringProperty(container, vr::Prop_NamedIconPathDeviceStandbyAlert_String, (iconPath + "/headset_status_standby_alert.png").c_str());
 		}
 	}	
 

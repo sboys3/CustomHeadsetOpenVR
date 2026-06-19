@@ -75,3 +75,56 @@ body {
   background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
 }
+
+/* EVO Theme - Dark theme with blue primary (#4152ea) and dark background (#1d1d1d) */
+.evo-theme {
+  --color-scheme: dark;
+
+  /* Primary colors */
+  --mat-sys-primary: #4152ea;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #5a6af0;
+  --mat-sys-on-primary-container: #ffffff;
+
+  /* Surface colors */
+  --mat-sys-surface: #1d1d1d;
+  --mat-sys-on-surface: #e0e0e0;
+  --mat-sys-surface-variant: #2a2a2a;
+  --mat-sys-on-surface-variant: #b0b0b0;
+  --mat-sys-surface-container: #252525;
+  --mat-sys-surface-container-high: #2d2d2d;
+  --mat-sys-surface-container-highest: #353535;
+  --mat-sys-surface-container-low: #202020;
+  --mat-sys-surface-container-lowest: #1a1a1a;
+
+  /* Secondary colors */
+  --mat-sys-secondary: #a0a5db;
+  --mat-sys-on-secondary: #1d1d1d;
+  --mat-sys-secondary-container: #3a3f5c;
+  --mat-sys-on-secondary-container: #d0d4f0;
+
+  /* Tertiary colors */
+  --mat-sys-tertiary: #c4a0e0;
+  --mat-sys-on-tertiary: #1d1d1d;
+  --mat-sys-tertiary-container: #4a3a5c;
+  --mat-sys-on-tertiary-container: #e0d0f0;
+
+  /* Error colors */
+  --mat-sys-error: #ffb4ab;
+  --mat-sys-on-error: #690005;
+  --mat-sys-error-container: #93000a;
+  --mat-sys-on-error-container: #ffb4ab;
+
+  /* Inverse colors */
+  --mat-sys-inverse-surface: #e0e0e0;
+  --mat-sys-inverse-on-surface: #1d1d1d;
+  --mat-sys-inverse-primary: #4152ea;
+
+  /* Outline colors */
+  --mat-sys-outline: #707070;
+  --mat-sys-outline-variant: #404040;
+
+  /* Shadow and surface tint */
+  --mat-sys-shadow: rgba(0, 0, 0, 0.5);
+  --mat-sys-surface-tint: #4152ea;
+}
