@@ -167,5 +167,8 @@
     <ClCompile Include="src\Helpers\PimaxCommon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Distortion\PimaxDistortionProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,10 +10,10 @@ public:
 	virtual Config::BaseHeadsetConfig& GetConfig() override;
 	// function that returns the old config for this headset
 	virtual Config::BaseHeadsetConfig& GetConfigOld() override;
-	// start eye tracking
-	virtual void SubActivate(vr::PropertyContainerHandle_t container) override;
+	// set pvr config, start eye tracking
+	virtual void PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) override;
 	// stop eye tracking
 	virtual void SubDeactivate() override;
 	// run eye tracking
-	virtual void SubRunFrame() override;
+	virtual void RunFrame() override;
 };

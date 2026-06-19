@@ -22,6 +22,7 @@
     <ClInclude Include="src\Config\Config.h" />
     <ClInclude Include="src\Distortion\DistortionProfile.h" />
     <ClInclude Include="src\Distortion\NoneDistortionProfile.h" />
+    <ClInclude Include="src\Distortion\PimaxDistortionProfile.h" />
     <ClInclude Include="src\Distortion\RadialBezierDistortionProfile.h" />
     <ClInclude Include="src\Driver\DeviceProvider.h" />
     <ClInclude Include="src\Driver\DeviceShim.h" />
@@ -50,6 +51,7 @@
     <ClCompile Include="src\Config\Config.cpp" />
     <ClCompile Include="src\Config\ConfigLoader.cpp" />
     <ClCompile Include="src\Distortion\DistortionProfileConstructor.cpp" />
+    <ClCompile Include="src\Distortion\PimaxDistortionProfile.cpp" />
     <ClCompile Include="src\Distortion\RadialBezierDistortionProfile.cpp" />
     <ClCompile Include="src\Driver\CompositorPlugin.cpp" />
     <ClCompile Include="src\Driver\DeviceProvider.cpp" />
