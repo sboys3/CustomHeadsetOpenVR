@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Config\Config.h" />
     <ClInclude Include="src\Distortion\DistortionProfile.h" />
     <ClInclude Include="src\Distortion\NoneDistortionProfile.h" />
+    <ClInclude Include="src\Distortion\PimaxDistortionProfile.h" />
     <ClInclude Include="src\Distortion\RadialBezierDistortionProfile.h" />
     <ClInclude Include="src\Driver\DeviceProvider.h" />
     <ClInclude Include="src\Driver\DeviceShim.h" />
@@ -29,6 +31,9 @@
     <ClInclude Include="src\Driver\Hooking\Hooking.h" />
     <ClInclude Include="src\Driver\Hooking\InterfaceHookInjector.h" />
     <ClInclude Include="src\Headsets\MeganeX8K.h" />
+    <ClInclude Include="src\Headsets\PimaxLighthouse.h" />
+    <ClInclude Include="src\Headsets\PimaxSlam.h" />
+    <ClInclude Include="src\Helpers\PimaxCommon.h" />
     <ClInclude Include="src\HiddenArea\HiddenArea.h" />
     <ClInclude Include="src\Helpers\AAPVRBlocker.h" />
   </ItemGroup>
@@ -48,6 +53,7 @@
     <ClCompile Include="src\Config\Config.cpp" />
     <ClCompile Include="src\Config\ConfigLoader.cpp" />
     <ClCompile Include="src\Distortion\DistortionProfileConstructor.cpp" />
+    <ClCompile Include="src\Distortion\PimaxDistortionProfile.cpp" />
     <ClCompile Include="src\Distortion\RadialBezierDistortionProfile.cpp" />
     <ClCompile Include="src\Driver\CompositorPlugin.cpp" />
     <ClCompile Include="src\Driver\DeviceProvider.cpp" />
@@ -60,14 +66,15 @@
     <ClCompile Include="src\Driver\Hooking\InterfaceHookInjector.cpp" />
     <ClCompile Include="src\Driver\ShaderReplacement.cpp" />
     <ClCompile Include="src\Headsets\BaseHeadset.cpp" />
-    <ClCompile Include="src\Headsets\DreamAir.cpp" />
+    <ClCompile Include="src\Headsets\PimaxLighthouse.cpp" />
     <ClCompile Include="src\Headsets\FakeHeadset.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
     <ClCompile Include="src\Headsets\GenericHeadset.cpp" />
+    <ClCompile Include="src\Headsets\PimaxSlam.cpp" />
     <ClCompile Include="src\Helpers\DisplayHelper.cpp" />
     <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp" />
-    <ClCompile Include="src\Helpers\PimaxEyeTrackingBridge.cpp" />
     <ClCompile Include="src\Helpers\AAPVRBlocker.cpp" />
+    <ClCompile Include="src\Helpers\PimaxCommon.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -134,7 +141,7 @@
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;$(SolutionDir)\ThirdParty\pvr\</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
@@ -146,7 +153,7 @@
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\ThirdParty\openvr\headers\;$(SolutionDir)\ThirdParty\json\include\;$(SolutionDir)\ThirdParty\pvr\</IncludePath>
     <LibraryPath>$(SolutionDir)\ThirdParty\openvr\lib\win$(PlatformArchitecture);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <TargetName>driver_$(ProjectName)</TargetName>
     <OutDir>$(SolutionDir)output\$(ProjectName)\bin\win$(PlatformArchitecture)\</OutDir>

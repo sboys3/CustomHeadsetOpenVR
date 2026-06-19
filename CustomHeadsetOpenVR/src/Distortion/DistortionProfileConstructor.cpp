@@ -1,5 +1,6 @@
 #include "DistortionProfileConstructor.h"
 #include "RadialBezierDistortionProfile.h"
+#include "PimaxDistortionProfile.h"
 #include <cmath>
 #include <map>
 
@@ -146,6 +147,16 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[dreamAir.name] = dreamAir;
 	
+	DistortionProfileConfig pimaxBuiltin = {};
+	pimaxBuiltin.name = "Pimax Builtin";
+	pimaxBuiltin.device = "Pimax";
+	pimaxBuiltin.modifiedTime = 0;
+	pimaxBuiltin.description = "Distortion Profile retrieved from Pimax API.";
+	pimaxBuiltin.author = "Pimax";
+	pimaxBuiltin.creationDate = 0.0;
+	pimaxBuiltin.type = "Pimax";
+	builtInDistortionProfiles[pimaxBuiltin.name] = pimaxBuiltin;
+
 	return true;
 };
 // this is pretty much just an initializer so immediately call
@@ -207,7 +218,12 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 		radialBezierProfile->offsetY = config.offsetY;
 		newProfile = radialBezierProfile;
 	}
-	
+	else if (config.type == "Pimax"){
+		DriverLog("Using Pimax PVR distortion function");
+		PimaxDistortionProfile* pimaxProfile = new PimaxDistortionProfile();
+		newProfile = pimaxProfile;
+	}
+
 	bool changed = false;
 	
 	if(newProfile != nullptr){
