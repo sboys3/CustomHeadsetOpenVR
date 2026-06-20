@@ -4,28 +4,29 @@
 
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
-	if(GetInfo().connected && (model == "Pimax Dream Air" || model == "REF-HMD") && trackingSystem == "lighthouse"){
+	std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::Prop_ManufacturerName_String);
+	if(GetInfo().connected && (model == "Pimax Dream Air" || model == "REF-HMD") && manufacturer == "Pimax" && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfig(){
-	// TODO: Add config categories for Crystal and P2.
-	switch (GetInfo().headsetType){
-	case DreamAir:
-	default:
-		return PatchConfig(driverConfig.dreamAir);
+	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfig.dreamAir;
 	}
+	return PatchConfig(*config);
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
-	// TODO: Add config categories for Crystal and P2.
-	switch (GetInfo().headsetType){
-	case DreamAir:
-	default:
-		return PatchConfig(driverConfigOld.dreamAir);
+	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfigOld.dreamAir;
 	}
+	return PatchConfig(*config);
 }
 
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){

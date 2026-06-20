@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@
 import { SystemReadyComponent } from '../../utilities/system-ready/system-ready.component';
 import { MeganexX8KComponent } from '../devices/meganex-x8-k/meganex-x8-k.component';
 import { DreamAirComponent } from '../devices/dream-air/dream-air.component';
+import { DreamAirSeComponent } from '../devices/dream-air-se/dream-air-se.component';
+import { CrystalSuperMicroOledComponent } from '../devices/crystal-super-micro-oled/crystal-super-micro-oled.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
 import { HeadsetType, HeadsetType as HeadsetTypeEnum, Settings } from '../../services/JsonFileDefines';
@@ -28,13 +30,15 @@ export interface TabConfig {
         SystemReadyComponent,
         MeganexX8KComponent,
         DreamAirComponent,
+        DreamAirSeComponent,
+        CrystalSuperMicroOledComponent,
         GeneralComponent,
         MatTabsModule,
         MatIconModule,
         MatButtonModule,
         CommonModule
     ],
-    providers: [MeganexX8KComponent, DreamAirComponent],
+    providers: [MeganexX8KComponent, DreamAirComponent, DreamAirSeComponent, CrystalSuperMicroOledComponent],
     templateUrl: './driver-settings.component.html',
     styleUrl: './driver-settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -76,6 +80,8 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     MeganexX8KComponent = MeganexX8KComponent;
     GeneralComponent = GeneralComponent;
     DreamAirComponent = DreamAirComponent;
+    DreamAirSeComponent = DreamAirSeComponent;
+    CrystalSuperMicroOledComponent = CrystalSuperMicroOledComponent;
     HeadsetType = HeadsetTypeEnum;
 
     constructor(private dis: DriverInfoService, private dss: DriverSettingService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
@@ -112,10 +118,14 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         
         if(!vendorUi || vendorUi == "pimax"){
             availableTabs.push({ type: 'DreamAir', headsetType: HeadsetType.DreamAir })
+            availableTabs.push({ type: 'DreamAirSE', headsetType: HeadsetType.DreamAirSE })
+            availableTabs.push({ type: 'CrystalSuperMicroOLED', headsetType: HeadsetType.CrystalSuperMicroOLED })
         }else{
             // disable when not shown
             onSettingsAvailable((settings) => {
                 settings.dreamAir.enable = false
+                settings.dreamAirSE.enable = false
+                settings.crystalSuperMicroOLED.enable = false
                 this.dss.save(settings)
             })
         }

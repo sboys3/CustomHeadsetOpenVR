@@ -7,7 +7,9 @@
 #include <memory>
 #include "nlohmann/json.hpp"
 
+// TODO: Find the universe id that the AAPVR driver uses to prevent the need for setting up boundaries again
 static constexpr uint64_t k_UniverseId = 0x50494D4158; // "PIMAX"
+static constexpr const char* tackingSystemName = "aapvr";
 
 // A driver for Pimax Crystal controllers.
 class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver, public PimaxCommon {
@@ -26,15 +28,16 @@ public:
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_ControllerRoleHint_Int32, role);
 
 		// Purely emulate an Oculus Touch controller for compatibility.
-		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "oculus");
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
 		vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Oculus");
 		vr::VRProperties()->SetStringProperty(
 			container, vr::Prop_ModelNumber_String, isLeft ? "Oculus Quest2 (Left Controller)" : "Oculus Quest2 (Right Controller)");
 		vr::VRProperties()->SetStringProperty(
 			container, vr::Prop_InputProfilePath_String, "{oculus}/input/touch_profile.json");
 		vr::VRProperties()->SetStringProperty(container, vr::Prop_ControllerType_String, "oculus_touch");
-
-		vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
+		if(k_UniverseId){
+			vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
+		}
 
 		{
 			using json = nlohmann::json;
@@ -336,33 +339,34 @@ bool PimaxSlamDriver::IsDesiredHeadset(std::string model, vr::PropertyContainerH
 	return true;
 }
 
-Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfig() {
-	// TODO: Add config categories for Crystal and P2.
-	switch (GetInfo().headsetType) {
-	case DreamAir:
-	default:
-		return PatchConfig(driverConfig.dreamAir);
+Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfig(){
+	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfig.dreamAir;
 	}
+	return PatchConfig(*config);
 }
 
-Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld() {
-	// TODO: Add config categories for Crystal and P2.
-	switch (GetInfo().headsetType) {
-	case DreamAir:
-	default:
-		return PatchConfig(driverConfigOld.dreamAir);
+Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld(){
+	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfigOld.dreamAir;
 	}
+	return PatchConfig(*config);
 }
 
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
-	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "Pimax");
+	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Pimax");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ModelNumber_String, GetHmdInfo().ProductName);
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_RenderModelName_String, "generic_hmd");
-
-	vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
+	if(k_UniverseId){
+		vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
+	}
 
 	// SteamVR requires an input profile for features like eye tracking. Reuse a basic one.
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_InputProfilePath_String, "{oculus}/input/rift_profile.json");

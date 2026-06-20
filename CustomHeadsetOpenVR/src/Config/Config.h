@@ -122,9 +122,33 @@ public:
 		MeganeX8K = 2,
 		Vive = 3,
 		DreamAir = 4,
+		DreamAirSE = 5,
+		CrystalSuper50PPD = 6,
+		CrystalSuper57PPD = 7,
+		CrystalSuperUltrawide = 8,
+		CrystalSuperMicroOLED = 9,
+		CrystalLight = 14,
+		CrystalOG = 15,
+		Pimax5KSuper = 16,
+		Pimax5KPlus = 17,
+		Pimax8KX = 18,
+		Pimax8KPlus = 19,
+		PimaxArtisan = 20,
 	};
 	static inline bool IsPimaxHeadset(HeadsetType type){
-		return type == HeadsetType::DreamAir;
+		return type == HeadsetType::DreamAir ||
+		       type == HeadsetType::DreamAirSE ||
+		       type == HeadsetType::CrystalSuper50PPD ||
+		       type == HeadsetType::CrystalSuper57PPD ||
+		       type == HeadsetType::CrystalSuperUltrawide ||
+		       type == HeadsetType::CrystalSuperMicroOLED ||
+		       type == HeadsetType::CrystalLight ||
+		       type == HeadsetType::CrystalOG ||
+		       type == HeadsetType::Pimax5KSuper ||
+		       type == HeadsetType::Pimax5KPlus ||
+		       type == HeadsetType::Pimax8KX ||
+		       type == HeadsetType::Pimax8KPlus ||
+		       type == HeadsetType::PimaxArtisan;
 	}
 	static inline bool IsShiftallHeadset(HeadsetType type){
 		return type == HeadsetType::MeganeX8K;
@@ -222,6 +246,11 @@ public:
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
 		StationaryDimmingConfig stationaryDimming = {};
+		// define virtual destructor to allow virtual function classes
+		virtual ~BaseHeadsetConfig() = default;
+	};
+	class PimaxHeadsetConfig : public BaseHeadsetConfig{
+		
 	};
 	
 	class MeganeX8KConfig : public BaseHeadsetConfig{
@@ -241,7 +270,7 @@ public:
 	// config for the MeganeX superlight 8K
 	MeganeX8KConfig meganeX8K = {};
 	
-	class DreamAirConfig : public BaseHeadsetConfig{
+	class DreamAirConfig : public PimaxHeadsetConfig{
 		public:
 		DreamAirConfig(){
 			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
@@ -262,6 +291,256 @@ public:
 	// config for the Dream Air
 	DreamAirConfig dreamAir = {};
 	
+	// config for the Dream Air SE
+	class DreamAirSEConfig : public PimaxHeadsetConfig{
+		public:
+		DreamAirSEConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::DreamAirSE;
+			distortionProfile = "Dream Air Default";
+			distortionProfileDeviceType = "DreamAir"; // this should have it's own distortion profiles as they are slightly different
+			maxFovX = 86;
+			maxFovY = 86;
+			edidVendorId = 53826; // PVR
+			displayRotation = 1;
+			// WTF did they do with my 16 pixels?
+			resolutionX = 2544;
+			resolutionY = 2544;
+			eyeRotation = 2.5;
+			enableEyeTracking = true;
+		}
+	};
+	DreamAirSEConfig dreamAirSE = {};
+
+	// config for the Crystal Super 50PPD
+	class CrystalSuper50PPDConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalSuper50PPDConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalSuper50PPD;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "CrystalSuper50PPD";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 0;
+			resolutionX = 3840;
+			resolutionY = 3744;
+			eyeRotation = 5;
+			enableEyeTracking = true;
+		}
+	};
+	CrystalSuper50PPDConfig crystalSuper50PPD = {};
+
+	// config for the Crystal Super 57PPD
+	class CrystalSuper57PPDConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalSuper57PPDConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalSuper57PPD;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "CrystalSuper57PPD";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 21594;
+			displayRotation = 0;
+			resolutionX = 3840;
+			resolutionY = 3744;
+			eyeRotation = 7;
+			enableEyeTracking = true;
+		}
+	};
+	CrystalSuper57PPDConfig crystalSuper57PPD = {};
+
+	// config for the Crystal Super Ultrawide
+	class CrystalSuperUltrawideConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalSuperUltrawideConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalSuperUltrawide;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "CrystalSuperUltrawide";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 21594;
+			displayRotation = 0;
+			resolutionX = 3840;
+			resolutionY = 3744;
+			eyeRotation = 7;
+			enableEyeTracking = true;
+		}
+	};
+	CrystalSuperUltrawideConfig crystalSuperUltrawide = {};
+
+	// config for the Crystal Super MicroOLED
+	class CrystalSuperMicroOLEDConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalSuperMicroOLEDConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalSuperMicroOLED;
+			distortionProfile = "Dream Air Default";
+			distortionProfileDeviceType = "DreamAir";
+			maxFovX = 96;
+			maxFovY = 86;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			subpixelOffsets = {0.33 / 3552.0, 0, 0, 0, -0.33 / 3552.0, 0};
+			eyeRotation = 3;
+			enableEyeTracking = true;
+		}
+	};
+	CrystalSuperMicroOLEDConfig crystalSuperMicroOLED = {};
+
+	// config for the Crystal Light
+	class CrystalLightConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalLightConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalLight;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "CrystalLight";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 1;
+			resolutionX = 2880;
+			resolutionY = 2880;
+			eyeRotation = 4;
+		}
+	};
+	CrystalLightConfig crystalLight = {};
+
+	// config for the Crystal OG
+	class CrystalOGConfig : public PimaxHeadsetConfig{
+		public:
+		CrystalOGConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::CrystalOG;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "CrystalOG";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			enableEyeTracking = true;
+		}
+	};
+	CrystalOGConfig crystalOG = {};
+
+	// config for the Pimax 5K Super
+	class Pimax5KSuperConfig : public PimaxHeadsetConfig{
+		public:
+		Pimax5KSuperConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::Pimax5KSuper;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "Pimax5KSuper";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			resolutionX = 0;
+			resolutionY = 0;
+		}
+	};
+	Pimax5KSuperConfig pimax5KSuper = {};
+
+	// config for the Pimax 5K Plus
+	class Pimax5KPlusConfig : public PimaxHeadsetConfig{
+		public:
+		Pimax5KPlusConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::Pimax5KPlus;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "Pimax5KPlus";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			resolutionX = 0;
+			resolutionY = 0;
+		}
+	};
+	Pimax5KPlusConfig pimax5KPlus = {};
+
+	// config for the Pimax 8KX
+	class Pimax8KXConfig : public PimaxHeadsetConfig{
+		public:
+		Pimax8KXConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::Pimax8KX;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "Pimax8KX";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			resolutionX = 0;
+			resolutionY = 0;
+		}
+	};
+	Pimax8KXConfig pimax8KX = {};
+
+	// config for the Pimax 8K Plus
+	class Pimax8KPlusConfig : public PimaxHeadsetConfig{
+		public:
+		Pimax8KPlusConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::Pimax8KPlus;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "Pimax8KPlus";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 3;
+			resolutionX = 0;
+			resolutionY = 0;
+		}
+	};
+	Pimax8KPlusConfig pimax8KPlus = {};
+
+	// config for the Pimax Artisan
+	class PimaxArtisanConfig : public PimaxHeadsetConfig{
+		public:
+		PimaxArtisanConfig(){
+			#if !defined(VENDOR_NEUTRAL) && !defined(VENDOR_PIMAX)
+			enable = false;
+			#endif
+			headsetType = HeadsetType::PimaxArtisan;
+			distortionProfile = "Pimax Builtin";
+			distortionProfileDeviceType = "PimaxArtisan";
+			maxFovX = 100;
+			maxFovY = 90;
+			edidVendorId = 53826; // PVR
+			displayRotation = 0;
+			resolutionX = 0;
+			resolutionY = 0;
+		}
+	};
+	PimaxArtisanConfig pimaxArtisan = {};
+
 	class FakeHeadsetConfig : public BaseHeadsetConfig{
 		public:
 		FakeHeadsetConfig(){
@@ -277,6 +556,40 @@ public:
 	};
 	// config for the fake headset
 	FakeHeadsetConfig fakeHeadset = {};
+	
+	
+	inline BaseHeadsetConfig* ConfigFromHeadsetType(HeadsetType headSetType){
+		switch(headSetType){
+			case HeadsetType::MeganeX8K:
+				return &meganeX8K;
+			case HeadsetType::DreamAir:
+				return &dreamAir;
+			case HeadsetType::DreamAirSE:
+				return &dreamAirSE;
+			case HeadsetType::CrystalSuper50PPD:
+				return &crystalSuper50PPD;
+			case HeadsetType::CrystalSuper57PPD:
+				return &crystalSuper57PPD;
+			case HeadsetType::CrystalSuperUltrawide:
+				return &crystalSuperUltrawide;
+			case HeadsetType::CrystalSuperMicroOLED:
+				return &crystalSuperMicroOLED;
+			case HeadsetType::CrystalLight:
+				return &crystalLight;
+			case HeadsetType::CrystalOG:
+				return &crystalOG;
+			case HeadsetType::Pimax5KSuper:
+				return &pimax5KSuper;
+			case HeadsetType::Pimax5KPlus:
+				return &pimax5KPlus;
+			case HeadsetType::Pimax8KX:
+				return &pimax8KX;
+			case HeadsetType::Pimax8KPlus:
+				return &pimax8KPlus;
+			case HeadsetType::PimaxArtisan:
+				return &pimaxArtisan;
+		}
+	}
 	
 	class GeneralHeadsetConfig{
 	public:

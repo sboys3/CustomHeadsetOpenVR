@@ -5,7 +5,7 @@ let child_process = require("child_process")
 // --- Argument parsing ---
 let args = process.argv.slice(2)
 let vendor = "neutral"
-let vendorUi = "neutral"
+let vendorUi = "pimax"
 let buildDriver = true
 let buildGui = true
 
@@ -24,6 +24,16 @@ for (let i = 0; i < args.length; i++) {
 			buildGui = false
 			break
 		default:
+			console.log(`Unknown argument: ${args[i]}`)
+			console.log('')
+			console.log('Usage: node build.js [options]')
+			console.log('')
+			console.log('Options:')
+			console.log('  --vendor <name>       Set vendor (neutral, pimax, shiftall). Default: neutral')
+			console.log('  --vendor-ui <name>    Set vendor UI (neutral, pimax, shiftall). Default: neutral')
+			console.log('  --no-driver           Skip building the driver')
+			console.log('  --no-gui              Skip building the GUI')
+			console.log('')
 			break
 	}
 }

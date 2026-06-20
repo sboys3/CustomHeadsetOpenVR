@@ -455,11 +455,20 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_VIVE", "1"};
 		}
 	}
-	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir || driverConfigLoader.info.connectedHeadset == Config::HeadsetType::CrystalSuperMicroOLED){
 		defines[definesCount++] = {"DREAMAIR", "1"};
 		if(driverConfig.customShader.subpixelShift && driverConfig.dreamAir.subpixelShift != 0 ){
 			defines[definesCount++] = {"SUBPIXEL_SHIFT_DREAMAIR", "1"};
 		}
+	}
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAirSE){
+		defines[definesCount++] = {"DREAMAIRSE", "1"};
+		if(driverConfig.customShader.subpixelShift && driverConfig.dreamAirSE.subpixelShift != 0 ){
+			defines[definesCount++] = {"SUBPIXEL_SHIFT_DREAMAIRSE", "1"};
+		}
+	}
+	if(Config::IsPimaxHeadset(driverConfigLoader.info.connectedHeadset)){
+		defines[definesCount++] = {"PIMAX", "1"};
 	}
 	std::string resolutionX = std::to_string(driverConfigLoader.info.outputResolutionX);
 	std::string resolutionY = std::to_string(driverConfigLoader.info.outputResolutionY);

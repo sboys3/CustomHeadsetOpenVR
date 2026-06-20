@@ -14,6 +14,18 @@ export type DistortionProfileConfig = {
 export type Settings = {
   meganeX8K: MeganeX8KConfig,
   dreamAir: DreamAirConfig,
+  dreamAirSE: DreamAirSEConfig,
+  crystalSuper50PPD: CrystalSuper50PPDConfig,
+  crystalSuper57PPD: CrystalSuper57PPDConfig,
+  crystalSuperUltrawide: CrystalSuperUltrawideConfig,
+  crystalSuperMicroOLED: CrystalSuperMicroOLEDConfig,
+  crystalLight: CrystalLightConfig,
+  crystalOG: CrystalOGConfig,
+  pimax5KSuper: Pimax5KSuperConfig,
+  pimax5KPlus: Pimax5KPlusConfig,
+  pimax8KX: Pimax8KXConfig,
+  pimax8KPlus: Pimax8KPlusConfig,
+  pimaxArtisan: PimaxArtisanConfig,
   generalHeadset: GeneralHeadsetConfig,
   customShader: CustomShaderConfig,
   forceTracking: boolean,
@@ -133,6 +145,54 @@ export type DreamAirConfig = BaseHeadsetConfig & {
   // DreamAir-specific fields can be added here if needed
 };
 
+export type DreamAirSEConfig = BaseHeadsetConfig & {
+  // DreamAirSE-specific fields can be added here if needed
+};
+
+export type CrystalSuper50PPDConfig = BaseHeadsetConfig & {
+  // CrystalSuper50PPD-specific fields can be added here if needed
+};
+
+export type CrystalSuper57PPDConfig = BaseHeadsetConfig & {
+  // CrystalSuper57PPD-specific fields can be added here if needed
+};
+
+export type CrystalSuperUltrawideConfig = BaseHeadsetConfig & {
+  // CrystalSuperUltrawide-specific fields can be added here if needed
+};
+
+export type CrystalSuperMicroOLEDConfig = BaseHeadsetConfig & {
+  // CrystalSuperMicroOLED-specific fields can be added here if needed
+};
+
+export type CrystalLightConfig = BaseHeadsetConfig & {
+  // CrystalLight-specific fields can be added here if needed
+};
+
+export type CrystalOGConfig = BaseHeadsetConfig & {
+  // CrystalOG-specific fields can be added here if needed
+};
+
+export type Pimax5KSuperConfig = BaseHeadsetConfig & {
+  // Pimax5KSuper-specific fields can be added here if needed
+};
+
+export type Pimax5KPlusConfig = BaseHeadsetConfig & {
+  // Pimax5KPlus-specific fields can be added here if needed
+};
+
+export type Pimax8KXConfig = BaseHeadsetConfig & {
+  // Pimax8KX-specific fields can be added here if needed
+};
+
+export type Pimax8KPlusConfig = BaseHeadsetConfig & {
+  // Pimax8KPlus-specific fields can be added here if needed
+};
+
+export type PimaxArtisanConfig = BaseHeadsetConfig & {
+  // PimaxArtisan-specific fields can be added here if needed
+};
+
 export type GeneralHeadsetConfig = {
   useViveBluetooth: boolean;
 }
@@ -141,7 +201,7 @@ export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light' | 'evo';
   updateMode: 'replace' | 'rewrite';
   advanceMode: boolean;
-  defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir';
+  defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir' | 'DreamAirSE' | 'CrystalSuperMicroOLED';
   showIncompatibleProfiles: boolean;
   launchPimaxOnStartup: boolean;
   installMethod: 'auto' | 'register' | 'copy';
@@ -153,6 +213,18 @@ export const HeadsetType = {
   MeganeX8K: 2,
   Vive: 3,
   DreamAir: 4,
+  DreamAirSE: 5,
+  CrystalSuper50PPD: 6,
+  CrystalSuper57PPD: 7,
+  CrystalSuperUltrawide: 8,
+  CrystalSuperMicroOLED: 9,
+  CrystalLight: 14,
+  CrystalOG: 15,
+  Pimax5KSuper: 16,
+  Pimax5KPlus: 17,
+  Pimax8KX: 18,
+  Pimax8KPlus: 19,
+  PimaxArtisan: 20,
 } as const;
 
 export type HeadsetType = typeof HeadsetType[keyof typeof HeadsetType];

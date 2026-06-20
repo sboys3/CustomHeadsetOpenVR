@@ -204,6 +204,54 @@ void ConfigLoader::ParseConfig(){
 			json headsetData = data["dreamAir"];
 			parseBaseHeadsetConfig(headsetData, newConfig.dreamAir);
 		}
+		if(data["dreamAirSE"].is_object()){
+			json headsetData = data["dreamAirSE"];
+			parseBaseHeadsetConfig(headsetData, newConfig.dreamAirSE);
+		}
+		if(data["crystalSuper50PPD"].is_object()){
+			json headsetData = data["crystalSuper50PPD"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalSuper50PPD);
+		}
+		if(data["crystalSuper57PPD"].is_object()){
+			json headsetData = data["crystalSuper57PPD"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalSuper57PPD);
+		}
+		if(data["crystalSuperUltrawide"].is_object()){
+			json headsetData = data["crystalSuperUltrawide"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalSuperUltrawide);
+		}
+		if(data["crystalSuperMicroOLED"].is_object()){
+			json headsetData = data["crystalSuperMicroOLED"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalSuperMicroOLED);
+		}
+		if(data["crystalLight"].is_object()){
+			json headsetData = data["crystalLight"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalLight);
+		}
+		if(data["crystalOG"].is_object()){
+			json headsetData = data["crystalOG"];
+			parseBaseHeadsetConfig(headsetData, newConfig.crystalOG);
+		}
+		if(data["pimax5KSuper"].is_object()){
+			json headsetData = data["pimax5KSuper"];
+			parseBaseHeadsetConfig(headsetData, newConfig.pimax5KSuper);
+		}
+		if(data["pimax5KPlus"].is_object()){
+			json headsetData = data["pimax5KPlus"];
+			parseBaseHeadsetConfig(headsetData, newConfig.pimax5KPlus);
+		}
+		if(data["pimax8KX"].is_object()){
+			json headsetData = data["pimax8KX"];
+			parseBaseHeadsetConfig(headsetData, newConfig.pimax8KX);
+		}
+		if(data["pimax8KPlus"].is_object()){
+			json headsetData = data["pimax8KPlus"];
+			parseBaseHeadsetConfig(headsetData, newConfig.pimax8KPlus);
+		}
+		if(data["pimaxArtisan"].is_object()){
+			json headsetData = data["pimaxArtisan"];
+			parseBaseHeadsetConfig(headsetData, newConfig.pimaxArtisan);
+		}
 		if(data["generalHeadset"].is_object()){
 			json generalHeadsetData = data["generalHeadset"];
 			if(generalHeadsetData["useViveBluetooth"].is_boolean()){
@@ -484,6 +532,18 @@ void ConfigLoader::WriteInfo(){
 		{"defaultSettings", {
 			{"meganeX8K", baseHeadsetInfo(defaultSettings.meganeX8K)},
 			{"dreamAir", baseHeadsetInfo(defaultSettings.dreamAir)},
+			{"dreamAirSE", baseHeadsetInfo(defaultSettings.dreamAirSE)},
+			{"crystalSuper50PPD", baseHeadsetInfo(defaultSettings.crystalSuper50PPD)},
+			{"crystalSuper57PPD", baseHeadsetInfo(defaultSettings.crystalSuper57PPD)},
+			{"crystalSuperUltrawide", baseHeadsetInfo(defaultSettings.crystalSuperUltrawide)},
+			{"crystalSuperMicroOLED", baseHeadsetInfo(defaultSettings.crystalSuperMicroOLED)},
+			{"crystalLight", baseHeadsetInfo(defaultSettings.crystalLight)},
+			{"crystalOG", baseHeadsetInfo(defaultSettings.crystalOG)},
+			{"pimax5KSuper", baseHeadsetInfo(defaultSettings.pimax5KSuper)},
+			{"pimax5KPlus", baseHeadsetInfo(defaultSettings.pimax5KPlus)},
+			{"pimax8KX", baseHeadsetInfo(defaultSettings.pimax8KX)},
+			{"pimax8KPlus", baseHeadsetInfo(defaultSettings.pimax8KPlus)},
+			{"pimaxArtisan", baseHeadsetInfo(defaultSettings.pimaxArtisan)},
 			{"generalHeadset", {
 				{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
 			}},

@@ -31,23 +31,43 @@ static bool EnsurePvrSession() {
 
 		pvrHmdInfo info = {};
 		pvr_getHmdInfo(s_pvrSession, &info);
-		switch (info.ProductId) {
+		switch (info.ProductId) { // ProductId comes from the USB device
 		case 0x0044: // Dream Air
-			s_info.headsetType = DreamAir;
+			s_info.headsetType = Config::HeadsetType::DreamAir;
+			break;
+		case 0x0042: // Dream Air SE
+			// TODO: double check this
+			s_info.headsetType = Config::HeadsetType::DreamAirSE;
+			break;
+		case 0x0040: // Crystal Super (50PPD, 57PPD, Ultrawide, MicroOLED share this ProductId)
+			// TODO: will need to differentiate these
+			// TODO: double check this
+			s_info.headsetType = Config::HeadsetType::CrystalSuper50PPD;
+			break;
+		case 0x0018: // Crystal Light
+			// TODO: double check this
+			s_info.headsetType = Config::HeadsetType::CrystalLight;
+			break;
+		case 0x0012: // Crystal OG
+			// TODO: double check this
+			s_info.headsetType = Config::HeadsetType::CrystalOG;
 			break;
 		case 0x0101: // Pimax 5K and 8K series (share the same ProductId)
-			s_info.headsetType = P2;
+			// TODO: will need to differentiate these
+			s_info.headsetType = Config::HeadsetType::Pimax8KX;
 			break;
 		default:
-			DriverLog("Detected headset '%s' (%04x) - not supported", info.ProductName, info.ProductId);
 			break;
+		}
+		if(info.ProductId){
+			DriverLog("Detected PVR headset '%s' (%04x)%s", info.ProductName, info.ProductId, s_info.headsetType == Config::HeadsetType::None ? " - not supported" : "");
 		}
 
 		// This is what the OpenPort toggle sets in Pimax EVO.
 		const bool isOpenPortEnabled = pvr_getIntConfig(s_pvrSession, "no_render", 0);
 
 		// Filter by: 1) is OpenPort enabled, 2) do we support the attached headset?
-		s_info.connected = isOpenPortEnabled && s_info.headsetType != Invalid;
+		s_info.connected = isOpenPortEnabled && s_info.headsetType != Config::HeadsetType::None;
 		if (s_info.connected) {
 			pvrHmdTrackingStyle trackingStyle = pvrHmdTrackingStyle_Unknown;
 			trackingStyle = (pvrHmdTrackingStyle)pvr_getTrackedDeviceIntProperty(
@@ -64,6 +84,10 @@ static bool EnsurePvrSession() {
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
 			s_info.resolutionX = displayInfo.width / 2;
 			s_info.resolutionY = displayInfo.height;
+			if(s_info.headsetType == Config::HeadsetType::CrystalSuper50PPD && displayInfo.width == 7104){
+				// TODO: remove this when a better detection method is found
+				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
+			}
 			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);

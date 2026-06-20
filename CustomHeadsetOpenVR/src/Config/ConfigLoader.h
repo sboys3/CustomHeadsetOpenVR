@@ -104,7 +104,9 @@ inline bool IsCustomShaderEnabled(){
 	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
 		return driverConfig.customShader.enableForMeganeX8K;
 	}
-	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir){
+	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAir ||
+	   driverConfigLoader.info.connectedHeadset == Config::HeadsetType::DreamAirSE ||
+	   driverConfigLoader.info.connectedHeadset == Config::HeadsetType::CrystalSuperMicroOLED){
 		return driverConfig.customShader.enableForDreamAir;
 	}
 	// all other headsets that do not have explicit toggles

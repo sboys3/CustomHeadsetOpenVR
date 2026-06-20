@@ -13,6 +13,8 @@ import { customHeadsetDriverName } from '../../../environment';
 export const DistortionProfileDisplayNames: Map<string, string> = new Map([
     ["MeganeX8K Default", "MeganeX8K Custom Default"],
     ["Dream Air Default", "Dream Air Custom Default"],
+    ["Dream Air SE Default", "Dream Air SE Custom Default"],
+    ["Crystal Super Micro-OLED Default", "Crystal Super Micro-OLED Custom Default"],
 ]);
 
 type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];

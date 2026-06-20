@@ -7,16 +7,10 @@
 #include <string>
 #include <thread>
 
-enum PimaxHeadsetType {
-	DreamAir = 0,
-	P2,
-
-	Invalid
-};
 
 struct PimaxInfo {
 	bool connected = false;
-	PimaxHeadsetType headsetType = Invalid;
+	Config::HeadsetType headsetType = Config::HeadsetType::None;
 	bool useSlamTracking = false;
 	uint32_t resolutionX = 0;
 	uint32_t resolutionY = 0;

@@ -100,7 +100,7 @@ static void AfterLibraryLoad(const std::string& dllName, void* result) {
 }
 
 static void* HookedLoadLibraryA(const char* lpLibFileName) {
-	DriverLog("AAPVRBlocker: LoadLibraryA(%s)", lpLibFileName);
+	// DriverLog("AAPVRBlocker: LoadLibraryA(%s)", lpLibFileName);
 	void* intercepted = BeforeLibraryLoad(GetDllName(lpLibFileName));
 	if (intercepted == BLOCK_SENTINEL) return nullptr;
 	if (intercepted) return intercepted;
@@ -110,7 +110,7 @@ static void* HookedLoadLibraryA(const char* lpLibFileName) {
 }
 
 static void* HookedLoadLibraryW(const wchar_t* lpLibFileName) {
-	DriverLog("AAPVRBlocker: LoadLibraryW(%s)", WcharToAscii(lpLibFileName).c_str());
+	// DriverLog("AAPVRBlocker: LoadLibraryW(%s)", WcharToAscii(lpLibFileName).c_str());
 	std::string name = GetDllName(lpLibFileName);
 	void* intercepted = BeforeLibraryLoad(name);
 	if (intercepted == BLOCK_SENTINEL) return nullptr;
@@ -121,7 +121,7 @@ static void* HookedLoadLibraryW(const wchar_t* lpLibFileName) {
 }
 
 static void* HookedLoadLibraryExA(const char* lpLibFileName, void* hFile, unsigned long dwFlags) {
-	DriverLog("AAPVRBlocker: LoadLibraryExA(%s)", lpLibFileName);
+	// DriverLog("AAPVRBlocker: LoadLibraryExA(%s)", lpLibFileName);
 	void* intercepted = BeforeLibraryLoad(GetDllName(lpLibFileName));
 	if (intercepted == BLOCK_SENTINEL) return nullptr;
 	if (intercepted) return intercepted;
@@ -131,7 +131,7 @@ static void* HookedLoadLibraryExA(const char* lpLibFileName, void* hFile, unsign
 }
 
 static void* HookedLoadLibraryExW(const wchar_t* lpLibFileName, void* hFile, unsigned long dwFlags) {
-	DriverLog("AAPVRBlocker: LoadLibraryExW(%s)", WcharToAscii(lpLibFileName).c_str());
+	// DriverLog("AAPVRBlocker: LoadLibraryExW(%s)", WcharToAscii(lpLibFileName).c_str());
 	std::string name = GetDllName(lpLibFileName);
 	void* intercepted = BeforeLibraryLoad(name);
 	if (intercepted == BLOCK_SENTINEL) return nullptr;

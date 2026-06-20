@@ -51,6 +51,22 @@
         <app-dream-air (navigateToGeneralTab)="switchToGeneralTab()" />
       </ng-template>
     </mat-tab>
+    <mat-tab label="Dream Air SE" i18n-label *ngIf="tab.type === 'DreamAirSE'">
+      <ng-template matTabContent>
+        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.DreamAirSE){
+          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        }
+        <app-dream-air-se (navigateToGeneralTab)="switchToGeneralTab()" />
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Crystal Super Micro-OLED" i18n-label *ngIf="tab.type === 'CrystalSuperMicroOLED'">
+      <ng-template matTabContent>
+        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.CrystalSuperMicroOLED){
+          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        }
+        <app-crystal-super-micro-oled (navigateToGeneralTab)="switchToGeneralTab()" />
+      </ng-template>
+    </mat-tab>
     <mat-tab label="General" i18n-label *ngIf="tab.type === 'General'">
       <ng-template matTabContent>
         <app-general
