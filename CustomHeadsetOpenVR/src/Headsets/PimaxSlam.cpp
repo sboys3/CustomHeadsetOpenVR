@@ -7,9 +7,8 @@
 #include <memory>
 #include "nlohmann/json.hpp"
 
-// TODO: Find the universe id that the AAPVR driver uses to prevent the need for setting up boundaries again
-static constexpr uint64_t k_UniverseId = 0x50494D4158; // "PIMAX"
-static constexpr const char* tackingSystemName = "aapvr";
+// Matches driver_aapvr.
+static constexpr uint64_t k_UniverseId = 30;
 
 // A driver for Pimax Crystal controllers.
 class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver, public PimaxCommon {
@@ -28,7 +27,7 @@ public:
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_ControllerRoleHint_Int32, role);
 
 		// Purely emulate an Oculus Touch controller for compatibility.
-		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "oculus");
 		vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Oculus");
 		vr::VRProperties()->SetStringProperty(
 			container, vr::Prop_ModelNumber_String, isLeft ? "Oculus Quest2 (Left Controller)" : "Oculus Quest2 (Right Controller)");
@@ -360,7 +359,7 @@ Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld(){
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
-	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "aapvr");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Pimax");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ModelNumber_String, GetHmdInfo().ProductName);
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_RenderModelName_String, "generic_hmd");
