@@ -31,30 +31,41 @@ static bool EnsurePvrSession() {
 
 		pvrHmdInfo info = {};
 		pvr_getHmdInfo(s_pvrSession, &info);
+		const std::string_view productName = info.ProductName;
+		pvrDisplayInfo displayInfo = {};
+		pvr_getEyeDisplayInfo(s_pvrSession, pvrEye_Left, &displayInfo);
 		switch (info.ProductId) { // ProductId comes from the USB device
 		case 0x0044: // Dream Air
 			s_info.headsetType = Config::HeadsetType::DreamAir;
 			break;
 		case 0x0042: // Dream Air SE
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::DreamAirSE;
 			break;
 		case 0x0040: // Crystal Super (50PPD, 57PPD, Ultrawide, MicroOLED share this ProductId)
-			// TODO: will need to differentiate these
-			// TODO: double check this
-			s_info.headsetType = Config::HeadsetType::CrystalSuper50PPD;
+			// TODO: Find a better way to differenciate these.
+			if (displayInfo.width == 7104) {
+				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
+			}
+			else {
+				s_info.headsetType = Config::HeadsetType::CrystalSuper50PPD;
+			}
 			break;
 		case 0x0018: // Crystal Light
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::CrystalLight;
 			break;
 		case 0x0012: // Crystal OG
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::CrystalOG;
 			break;
 		case 0x0101: // Pimax 5K and 8K series (share the same ProductId)
-			// TODO: will need to differentiate these
-			s_info.headsetType = Config::HeadsetType::Pimax8KX;
+			if (productName.find("5K") != std::string::npos) {
+				s_info.headsetType = Config::HeadsetType::Pimax5KPlus;
+			}
+			else if (productName.find("Artisan") != std::string::npos) {
+				s_info.headsetType = Config::HeadsetType::PimaxArtisan;
+			}
+			else {
+				s_info.headsetType = Config::HeadsetType::Pimax8KX;
+			}
 			break;
 		default:
 			break;
@@ -78,16 +89,9 @@ static bool EnsurePvrSession() {
 			s_info.useSlamTracking = trackingStyle == pvrHmdTrackingStyle_InsideOutCameras;
 
 			DriverLog("Detected headset '%s' (%04x) with %s tracking", info.ProductName, info.ProductId, s_info.useSlamTracking ? "SLAM" : "Lighthouse");
-
-			pvrDisplayInfo displayInfo = {};
-			pvr_getEyeDisplayInfo(s_pvrSession, pvrEye_Left, &displayInfo);
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
 			s_info.resolutionX = displayInfo.width / 2;
 			s_info.resolutionY = displayInfo.height;
-			if(s_info.headsetType == Config::HeadsetType::CrystalSuper50PPD && displayInfo.width == 7104){
-				// TODO: remove this when a better detection method is found
-				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
-			}
 			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
