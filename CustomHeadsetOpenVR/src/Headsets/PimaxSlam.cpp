@@ -11,7 +11,7 @@
 static constexpr uint64_t k_UniverseId = 30;
 
 // A driver for Pimax Crystal controllers.
-class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver, public PimaxCommon {
+class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver {
 public:
 	PimaxCrystalControllerDriver(vr::ETrackedControllerRole role) : role(role) {
 	}
@@ -182,7 +182,7 @@ public:
 
 			// Only pick the events applicable to us.
 			if (container == data.containerHandle) {
-				pvr_triggerHapticPulse(GetPvrSession(),
+				pvr_triggerHapticPulse(PimaxCommon::GetPvrSession(),
 					role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 					data.fAmplitude,
 					data.fDurationSeconds > 0.02f ? data.fDurationSeconds : 0.02f,
@@ -192,7 +192,7 @@ public:
 	}
 
 	void UpdateInputState(const pvrInputState& inputState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 		const auto side = role == vr::TrackedControllerRole_LeftHand ? 0 : 1;
 
 		if (deviceIndex != vr::k_unTrackedDeviceIndexInvalid) {
@@ -239,7 +239,7 @@ public:
 
 			// Update the battery level.
 			const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
-				GetPvrSession(),
+				PimaxCommon::GetPvrSession(),
 				role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 				pvrTrackedDeviceProp_BatteryPercent_int,
 				-1);
@@ -253,7 +253,7 @@ public:
 	}
 
 	void UpdateTrackingState(const pvrPoseStatef& poseState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 
 		vr::DriverPose_t pose = {};
 		pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;

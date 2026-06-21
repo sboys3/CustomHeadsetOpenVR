@@ -70,7 +70,7 @@ static bool EnsurePvrSession() {
 		default:
 			break;
 		}
-		if(info.ProductId){
+		if (info.ProductId) {
 			DriverLog("Detected PVR headset '%s' (%04x)%s", info.ProductName, info.ProductId, s_info.headsetType == Config::HeadsetType::None ? " - not supported" : "");
 		}
 
@@ -92,12 +92,6 @@ static bool EnsurePvrSession() {
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
 			s_info.resolutionX = displayInfo.width / 2;
 			s_info.resolutionY = displayInfo.height;
-			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
-			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
-			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
-			const auto cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) /
-				2.f;
-			DriverLog("Canting Angle: %.2f deg", cantingAngle * 180 / 3.1415926f);
 		}
 	}
 	return true;
@@ -123,12 +117,35 @@ PimaxCommon::PimaxCommon() {
 	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
 		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
 		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
+
+	// Always query without parallel projection enabled.
+	// The underlying driver will then (re)apply parallel projection if needed during Activate() and/or RunFrame().
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", 0);
+	pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
+	pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
+	pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
+	ipd = PVR::Vector3f(eyeInfo[pvrEye_Left].HmdToEyePose.Position).Distance(eyeInfo[pvrEye_Right].HmdToEyePose.Position) * 1000;
+	DriverLog("IPD: %.1f mm", ipd);
+	cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
+	cantingAngle *= 180 / 3.1415926f;
+	DriverLog("Canting Angle: %.2f deg", cantingAngle);
 }
 
 Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
 	if (config.resolutionX == 0 || config.resolutionY == 0) {
 		config.resolutionX = GetInfo().resolutionX;
 		config.resolutionY = GetInfo().resolutionY;
+	}
+	if (config.autoIpd) {
+		config.ipd = ipd;
+	}
+	if (config.autoEyeRotation) {
+		if (config.distortionProfile == "Pimax Builtin" && config.parallelProjection) {
+			config.eyeRotation = 0;
+		}
+		else {
+			config.eyeRotation = cantingAngle;
+		}
 	}
 	return config;
 }

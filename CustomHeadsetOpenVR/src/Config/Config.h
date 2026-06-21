@@ -164,6 +164,8 @@ public:
 		double ipd = 63.0;
 		// ipd offset from the ipd value in mm
 		double ipdOffset = 0.0;
+		// whether to use ipd data from the platform (eg: PVR)
+		bool autoIpd = false;
 		// horizontal offset in mm to shift both eyes to the right
 		double horizontalIPDOffset = 0.0;
 		// minimum black levels from 0 to 1
@@ -182,9 +184,9 @@ public:
 		double subpixelShift = 1.0;
 		// subpixel offsets in pixel units for each color channel [offsetXRed, offsetYRed, offsetXGreen, offsetYGreen, offsetXBlue, offsetYBlue]
 		std::vector<double> subpixelOffsets = {0, 0, 0, 0, 0, 0};
-		// width of one eye in pixels
+		// width of one eye in pixels. 0: get data from the platform (eg: PVR)
 		int resolutionX = 3840;
-		// height of one eye in pixels
+		// height of one eye in pixels 0: get data from the platform (eg: PVR)
 		int resolutionY = 3552;
 		// clockwise rotation of the image on the right display, 0:0, 1:90, 2:180, 3:270
 		int displayRotation = 0;
@@ -212,6 +214,8 @@ public:
 		double secondsFromPhotonsToVblank = 0.0025;
 		// angle in degrees for each eye to be rotated outwards
 		double eyeRotation = 0.0;
+		// whether to use eye rotation from the platform (eg: PVR)
+		bool autoEyeRotation = false;
 		// disable eyes as much as possible. 0:both enabled 1:left disabled 2:right disabled 3:both disabled
 		int disableEye = 0;
 		// if the fov should be decreased for the disabled eye, this causes problems in some apps
@@ -454,9 +458,10 @@ public:
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 3;
+			displayRotation = 0;
 			resolutionX = 0;
 			resolutionY = 0;
+			autoEyeRotation = true;
 		}
 	};
 	Pimax5KSuperConfig pimax5KSuper = {};
@@ -474,9 +479,10 @@ public:
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 3;
+			displayRotation = 0;
 			resolutionX = 0;
 			resolutionY = 0;
+			autoEyeRotation = true;
 		}
 	};
 	Pimax5KPlusConfig pimax5KPlus = {};
@@ -494,9 +500,10 @@ public:
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 3;
+			displayRotation = 0;
 			resolutionX = 0;
 			resolutionY = 0;
+			autoEyeRotation = true;
 		}
 	};
 	Pimax8KXConfig pimax8KX = {};
@@ -514,9 +521,10 @@ public:
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 3;
+			displayRotation = 0;
 			resolutionX = 0;
 			resolutionY = 0;
+			autoEyeRotation = true;
 		}
 	};
 	Pimax8KPlusConfig pimax8KPlus = {};
@@ -537,6 +545,7 @@ public:
 			displayRotation = 0;
 			resolutionX = 0;
 			resolutionY = 0;
+			autoEyeRotation = true;
 		}
 	};
 	PimaxArtisanConfig pimaxArtisan = {};

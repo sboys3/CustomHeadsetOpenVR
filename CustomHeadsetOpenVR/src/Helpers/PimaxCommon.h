@@ -40,6 +40,8 @@ private:
 
 	pvrHmdInfo hmdInfo = {};
 	bool hasEyeTracking = false;
+	float cantingAngle = 0;
+	float ipd = 0;
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
 };
