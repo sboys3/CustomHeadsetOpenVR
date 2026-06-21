@@ -340,21 +340,11 @@ bool PimaxSlamDriver::IsDesiredHeadset(std::string model, vr::PropertyContainerH
 }
 
 Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfig(){
-	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
-	if(!config){
-		// fallback to the Dream Air to avoid null pointer
-		config = &driverConfig.dreamAir;
-	}
-	return PatchConfig(*config);
+	return GetHeadsetConfig();
 }
 
 Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld(){
-	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
-	if(!config){
-		// fallback to the Dream Air to avoid null pointer
-		config = &driverConfigOld.dreamAir;
-	}
-	return PatchConfig(*config);
+	return GetHeadsetConfigOld();
 }
 
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {

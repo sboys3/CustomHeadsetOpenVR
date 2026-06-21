@@ -88,6 +88,10 @@ static bool EnsurePvrSession() {
 				// TODO: remove this when a better detection method is found
 				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
 			}
+			if(s_info.headsetType == Config::HeadsetType::CrystalSuper50PPD && displayInfo.edid_vid == 21594){
+				// TODO: remove this when a better detection method is found
+				s_info.headsetType = Config::HeadsetType::CrystalSuperUltrawide;
+			}
 			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
@@ -113,20 +117,38 @@ double PimaxCommon::GetPvrTime() {
 	return pvr_getTimeSeconds(s_pvr);
 }
 
-PimaxCommon::PimaxCommon() {
-	// Cache useful immutable state.
-	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
-	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
-		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
-		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
-}
-
 Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
 	if (config.resolutionX == 0 || config.resolutionY == 0) {
 		config.resolutionX = GetInfo().resolutionX;
 		config.resolutionY = GetInfo().resolutionY;
 	}
 	return config;
+}
+
+Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfig(){
+	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfig.dreamAir;
+	}
+	return PatchConfig(*config);
+}
+
+Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfigOld(){
+	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfigOld.dreamAir;
+	}
+	return PatchConfig(*config);
+}
+
+PimaxCommon::PimaxCommon() {
+	// Cache useful immutable state.
+	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
+	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
+		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
+		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
 }
 
 bool PimaxCommon::CheckDeviceLost() {

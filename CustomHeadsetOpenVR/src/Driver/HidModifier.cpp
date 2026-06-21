@@ -266,10 +266,62 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 		info.lighthouseDeviceManufacturer = data["manufacturer"].get<std::string>();
 	}
 	
+	
+	std::map<std::string, ordered_json> jsonOverrides = {};
+	if(driverConfig.dreamAir.enable){
+		int vendorId = driverConfig.dreamAir.edidVendorIdOverride ? driverConfig.dreamAir.edidVendorIdOverride : driverConfig.dreamAir.edidVendorId;
+		jsonOverrides["Pimax Dream Air"] = {
+			{"device", {
+				// {"eye_target_width_in_pixels", 3552},
+				// {"eye_target_height_in_pixels", 3840},
+				{"eye_target_width_in_pixels", driverConfig.dreamAir.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.dreamAir.resolutionX},
+			}},
+			{"direct_mode_edid_vid", vendorId}, // PVR
+			// {"device_class", "controller"}, 
+		};
+	}
+	if(driverConfig.meganeX8K.enable){
+		int vendorId = driverConfig.meganeX8K.edidVendorIdOverride ? driverConfig.meganeX8K.edidVendorIdOverride : driverConfig.meganeX8K.edidVendorId;
+		jsonOverrides["MeganeX superlight 8K"] = {
+			{"device", {
+				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
+			}},
+			{"direct_mode_edid_vid", vendorId},
+		};
+		jsonOverrides["MeganeX 8K Mark II"] = {
+			{"device", {
+				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
+				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
+			}},
+			{"direct_mode_edid_vid", vendorId},
+		};
+	}
+	auto pimaxInfo = PimaxCommon::GetInfo();
+	if(pimaxInfo.connected){
+		Config::BaseHeadsetConfig& pimaxConfig = PimaxCommon::GetHeadsetConfig();
+		int vendorId = pimaxConfig.edidVendorIdOverride ? pimaxConfig.edidVendorIdOverride : pimaxConfig.edidVendorId;
+		jsonOverrides["REF-HMD"] = {
+			{"device", {
+				{"eye_target_width_in_pixels", pimaxConfig.resolutionX},
+				{"eye_target_height_in_pixels", pimaxConfig.resolutionY},
+			}},
+			{"direct_mode_edid_vid", vendorId}, // Probably PVR
+		};
+	}
+	
+	if(jsonOverrides.find(info.lighthouseDeviceName) != jsonOverrides.end()){
+		mergeJson(data, jsonOverrides[info.lighthouseDeviceName]);
+		doReplace = true;
+	}
+	
+	
 	if(data["device_class"].is_string() && data["device_class"].get<std::string>() == "hmd"){
-		if(driverConfig.meganeX8K.edidVendorIdOverride != 0 && (driverConfig.meganeX8K.forceEnable || (info.lighthouseDeviceName == "MeganeX superlight 8K" || info.lighthouseDeviceName == "MeganeX 8K Mark II")) && driverConfig.meganeX8K.enable){
-			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != driverConfig.meganeX8K.edidVendorIdOverride){
-				data["direct_mode_edid_vid"] = driverConfig.meganeX8K.edidVendorIdOverride;
+		if(driverConfig.meganeX8K.enable && driverConfig.meganeX8K.forceEnable){
+			int vendorId = driverConfig.meganeX8K.edidVendorIdOverride ? driverConfig.meganeX8K.edidVendorIdOverride : driverConfig.meganeX8K.edidVendorId;
+			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != vendorId){
+				data["direct_mode_edid_vid"] = vendorId;
 				doReplace = true;
 			}
 		}
@@ -281,49 +333,6 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 			}
 		}
 	}
-	
-	std::map<std::string, ordered_json> jsonOverrides = {};
-	if(driverConfig.dreamAir.enable){
-		jsonOverrides["Pimax Dream Air"] = {
-			{"device", {
-				// {"eye_target_width_in_pixels", 3552},
-				// {"eye_target_height_in_pixels", 3840},
-				{"eye_target_width_in_pixels", driverConfig.dreamAir.resolutionY},
-				{"eye_target_height_in_pixels", driverConfig.dreamAir.resolutionX},
-			}},
-			{"direct_mode_edid_vid", 53826}, // PVR
-			// {"device_class", "controller"}, 
-		};
-		jsonOverrides["REF-HMD"] = {
-			{"device", {
-				{"eye_target_width_in_pixels",
-					driverConfig.dreamAir.resolutionX ? driverConfig.dreamAir.resolutionX : PimaxCommon::GetInfo().resolutionX},
-				{"eye_target_height_in_pixels",
-					driverConfig.dreamAir.resolutionY ? driverConfig.dreamAir.resolutionY : PimaxCommon::GetInfo().resolutionY},
-			}},
-			{"direct_mode_edid_vid", 53826}, // PVR
-		};
-	}
-	if(driverConfig.meganeX8K.enable){
-		jsonOverrides["MeganeX superlight 8K"] = {
-			{"device", {
-				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
-				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
-			}},
-		};
-		jsonOverrides["MeganeX 8K Mark II"] = {
-			{"device", {
-				{"eye_target_width_in_pixels", driverConfig.meganeX8K.resolutionY},
-				{"eye_target_height_in_pixels", driverConfig.meganeX8K.resolutionX},
-			}},
-		};
-	}
-	
-	if(jsonOverrides.find(info.lighthouseDeviceName) != jsonOverrides.end()){
-		mergeJson(data, jsonOverrides[info.lighthouseDeviceName]);
-		doReplace = true;
-	}
-			
 	
 	if(doReplace){
 		data["modified_by_custom_driver"] = true;

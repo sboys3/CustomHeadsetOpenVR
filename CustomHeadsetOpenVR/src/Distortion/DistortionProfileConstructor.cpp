@@ -14,7 +14,7 @@ std::unordered_map<std::string, std::string> builtInDistortionProfileAliases = {
 bool PopulateBuiltInDistortionProfiles(){
 	DistortionProfileConfig defaultProfile = {};
 	defaultProfile.name = "MeganeX8K Default";
-	defaultProfile.device = "MeganeX8K";
+	defaultProfile.device = {"MeganeX8K"};
 	defaultProfile.modifiedTime = 0;
 	defaultProfile.description = "Default distortion profile for MeganeX8K. This is the profile made by Essentia that was called the Essentia Zoom Out profile. Previous profiles are too zoomed in when the diopters are set to zero, so this one provides more FOV. It works best if you can get close enough to the lenses.";
 	defaultProfile.author = "Essentia, SBoys3, Shiftall";
@@ -39,7 +39,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig meganeX8Kv1_0_0 = {};
 	meganeX8Kv1_0_0.name = "MeganeX8K v1.0.0";
-	meganeX8Kv1_0_0.device = "MeganeX8K";
+	meganeX8Kv1_0_0.device = {"MeganeX8K"};
 	meganeX8Kv1_0_0.modifiedTime = 0;
 	meganeX8Kv1_0_0.description = "This is the profile made by Essentia that was called the Western B CA profile. It works pretty well if you can get close enough to be able to nearly see the 110 degree field of view.";
 	meganeX8Kv1_0_0.author = "Essentia, SBoys3, Shiftall";
@@ -63,7 +63,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig meganeX8Kv0_4_0 = {};
 	meganeX8Kv0_4_0.name = "MeganeX8K v0.4.0";
-	meganeX8Kv0_4_0.device = "MeganeX8K";
+	meganeX8Kv0_4_0.device = {"MeganeX8K"};
 	meganeX8Kv0_4_0.modifiedTime = 0;
 	meganeX8Kv0_4_0.description = "MeganeX8K distortion profile from CustomHeadset v0.4.0";
 	meganeX8Kv0_4_0.author = "SBoys3, Shiftall";
@@ -83,7 +83,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig meganeX8Kv0_3_0 = {};
 	meganeX8Kv0_3_0.name = "MeganeX8K v0.3.0";
-	meganeX8Kv0_3_0.device = "MeganeX8K";
+	meganeX8Kv0_3_0.device = {"MeganeX8K"};
 	meganeX8Kv0_3_0.modifiedTime = 0;
 	meganeX8Kv0_3_0.description = "MeganeX8K original distortion profile which is the same as simplehmd.";
 	meganeX8Kv0_3_0.author = "Shiftall";
@@ -111,7 +111,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig dreamAir = {};
 	dreamAir.name = "Dream Air Default";
-	dreamAir.device = "DreamAir";
+	dreamAir.device = {"DreamAir"};
 	dreamAir.modifiedTime = 0;
 	dreamAir.description = "Default distortion profile for the Dream Air in this driver. It is a custom distortion profile created for for the Dream Air by using a calibrated camera.";
 	dreamAir.author = "SBoys3";
@@ -149,7 +149,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig pimaxBuiltin = {};
 	pimaxBuiltin.name = "Pimax Builtin";
-	pimaxBuiltin.device = "Pimax";
+	pimaxBuiltin.device = {"DreamAir", "DreamAirSE", "CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide", "CrystalSuperMicroOLED", "CrystalLight", "CrystalOG", "Pimax5KSuper", "Pimax5KPlus", "Pimax8KX", "Pimax8KPlus", "PimaxArtisan"};
 	pimaxBuiltin.modifiedTime = 0;
 	pimaxBuiltin.description = "Distortion Profile retrieved from Pimax API.";
 	pimaxBuiltin.author = "Pimax";

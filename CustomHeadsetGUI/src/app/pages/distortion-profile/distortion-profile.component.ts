@@ -20,7 +20,7 @@ export interface ProfileInfo {
   name: string;
   displayName: string;
   isBuiltIn: boolean;
-  device?: string;
+  device?: string | string[];
   description?: string;
   author?: string;
   creationDate?: number;
