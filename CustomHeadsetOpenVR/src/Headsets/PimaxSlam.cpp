@@ -489,6 +489,15 @@ void PimaxSlamDriver::RunFrame() {
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update the battery level (Crystal OG).
+	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+	if (batteryPercentage > 0) {
+		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	}
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {

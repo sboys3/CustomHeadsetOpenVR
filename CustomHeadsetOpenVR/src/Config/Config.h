@@ -440,7 +440,10 @@ public:
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 3;
+			displayRotation = 1;
+			resolutionX = 2880;
+			resolutionY = 2880;
+			eyeRotation = 5;
 			enableEyeTracking = true;
 		}
 	};
