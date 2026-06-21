@@ -491,21 +491,30 @@ void BaseHeadsetShim::UpdateSettings(){
 	vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_EnableParallelRenderCameras_Bool, GetConfig().parallelProjection);
 
 	if (GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye) { // This generally requires that you restart your game for it to update
-		for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
-			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left,  meshType, nullptr, 0);
-			vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
+		const auto& haConf = GetConfig().hiddenArea;
+		if (!haConf.enable) {
+			for (auto meshType : { vr::k_eHiddenAreaMesh_Standard, vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
+				vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, meshType, nullptr, 0);
+				vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
+			}
 		}
-		// The compositor uses the LineLoop/Inverse mesh (depending on which is available),
-		// but I haven't been able to set those without causing issues for the compositor at boot.
-		// So for now we just set the Standard mesh that games seem to use (it's the one that matters for performance).
-		if (const auto& haConf = GetConfig().hiddenArea; haConf.enable) {
-			for (auto meshType : { vr::k_eHiddenAreaMesh_Standard }) {
-				for (auto eye : { vr::Eye_Left, vr::Eye_Right}) {
-					auto mesh = HiddenArea::CreateHiddenAreaMesh(eye, meshType, haConf);
-					auto err = vr::VRHiddenArea()->SetHiddenArea(eye, meshType, mesh.data(), (uint32_t)mesh.size());
-					if (err != vr::TrackedProp_Success) {
-						DriverLog("Failed to setHiddenArea type %d with error %d", static_cast<int>(meshType), err);
+		else {
+			// The compositor uses the LineLoop/Inverse mesh (depending on which is available),
+			// but I haven't been able to set those without causing issues for the compositor at boot.
+			// So for now we just set the Standard mesh that games seem to use (it's the one that matters for performance).
+			if (haConf.enable && !haConf.autoHiddenArea) {
+				for (auto meshType : { vr::k_eHiddenAreaMesh_Standard }) {
+					for (auto eye : { vr::Eye_Left, vr::Eye_Right }) {
+						auto mesh = HiddenArea::CreateHiddenAreaMesh(eye, meshType, haConf);
+						auto err = vr::VRHiddenArea()->SetHiddenArea(eye, meshType, mesh.data(), (uint32_t)mesh.size());
+						if (err != vr::TrackedProp_Success) {
+							DriverLog("Failed to setHiddenArea type %d with error %d", static_cast<int>(meshType), err);
+						}
 					}
+				}
+				for (auto meshType : { vr::k_eHiddenAreaMesh_Inverse, vr::k_eHiddenAreaMesh_LineLoop }) {
+					vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Left, meshType, nullptr, 0);
+					vr::VRHiddenArea()->SetHiddenArea(vr::Eye_Right, meshType, nullptr, 0);
 				}
 			}
 		}

@@ -179,6 +179,26 @@ void PimaxCommon::StopEyeTracking() {
 	}
 }
 
+void PimaxCommon::SetVisibilityMeshes() {
+	vr::CVRHiddenAreaHelpers helpers = { vr::VRPropertiesRaw() };
+	for (int eye = 0; eye < pvrEye_Count; eye++) {
+		std::vector<vr::HmdVector2_t> vertices;
+		size_t count;
+
+		count = pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_HiddenArea, nullptr, 0);
+		vertices.resize(count);
+		pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_HiddenArea,
+			(pvrVector2f*)vertices.data(), (unsigned int)vertices.size());
+		helpers.SetHiddenArea((vr::EVREye)eye, vr::k_eHiddenAreaMesh_Standard, vertices.data(), (uint32_t)vertices.size());
+
+		count = pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_VisibleArea, nullptr, 0);
+		vertices.resize(count);
+		pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_VisibleArea,
+			(pvrVector2f*)vertices.data(), (unsigned int)vertices.size());
+		helpers.SetHiddenArea((vr::EVREye)eye, vr::k_eHiddenAreaMesh_Inverse, vertices.data(), (uint32_t)vertices.size());
+	}
+}
+
 void PimaxCommon::EyeTrackingThread() {
 	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
 	const LARGE_INTEGER noDelay = {};

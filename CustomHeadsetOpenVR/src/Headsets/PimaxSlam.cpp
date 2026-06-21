@@ -374,6 +374,11 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
 
+	// We need to set the mesh values before UpdateSettings() runs.
+	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+		SetVisibilityMeshes();
+	}
+
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
 	}
@@ -390,6 +395,14 @@ void PimaxSlamDriver::RunFrame() {
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	if (driverConfig.hasBeenUpdated &&
+		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
+		// We need to set the mesh values before UpdateSettings() runs.
+		if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+			SetVisibilityMeshes();
+		}
+	}
 
 	BaseHeadsetShim::RunFrame();
 

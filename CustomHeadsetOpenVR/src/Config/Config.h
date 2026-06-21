@@ -23,10 +23,11 @@ struct HiddenAreaMeshConfig {
 	double radiusTopInner = 0.25;
 	double radiusBottomInner = 0.25;
 	double radiusBottomOuter = 0.25;
+	bool autoHiddenArea = false;
 
 	constexpr bool operator==(const HiddenAreaMeshConfig& other) const {
-		return std::tie(this->enable, this->testMode, this->detailLevel, this->radiusTopOuter, this->radiusTopInner, this->radiusBottomInner, this->radiusBottomOuter) ==
-		       std::tie(other.enable, other.testMode, other.detailLevel, other.radiusTopOuter, other.radiusTopInner, other.radiusBottomInner, other.radiusBottomOuter);
+		return std::tie(this->enable, this->testMode, this->detailLevel, this->radiusTopOuter, this->radiusTopInner, this->radiusBottomInner, this->radiusBottomOuter, this->autoHiddenArea) ==
+		       std::tie(other.enable, other.testMode, other.detailLevel, other.radiusTopOuter, other.radiusTopInner, other.radiusBottomInner, other.radiusBottomOuter, other.autoHiddenArea);
 	}
 	constexpr bool operator!=(const HiddenAreaMeshConfig& other) const {
 		return !(this->operator==(other));
