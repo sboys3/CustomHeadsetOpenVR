@@ -451,6 +451,7 @@ public:
 			headsetType = HeadsetType::Pimax5KSuper;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax5KSuper";
+			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -472,6 +473,7 @@ public:
 			headsetType = HeadsetType::Pimax5KPlus;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax5KPlus";
+			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -493,6 +495,7 @@ public:
 			headsetType = HeadsetType::Pimax8KX;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax8KX";
+			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -514,6 +517,7 @@ public:
 			headsetType = HeadsetType::Pimax8KPlus;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax8KPlus";
+			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -535,6 +539,7 @@ public:
 			headsetType = HeadsetType::PimaxArtisan;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "PimaxArtisan";
+			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR

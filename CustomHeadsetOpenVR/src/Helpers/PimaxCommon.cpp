@@ -122,6 +122,9 @@ Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& c
 		config.resolutionX = GetInfo().resolutionX;
 		config.resolutionY = GetInfo().resolutionY;
 	}
+	if (config.distortionProfile == "Pimax Builtin" && config.parallelProjection) {
+		config.eyeRotation = 0;
+	}
 	return config;
 }
 

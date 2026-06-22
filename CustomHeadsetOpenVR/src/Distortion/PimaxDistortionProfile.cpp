@@ -4,18 +4,15 @@
 #define NOMINMAX
 #include "../Helpers/PimaxCommon.h"
 
-void PimaxDistortionProfile::Initialize() {
-    pvr_getEyeRenderInfo(PimaxCommon::GetPvrSession(), pvrEye_Left, &eyeInfo[pvrEye_Left]);
-    pvr_getEyeRenderInfo(PimaxCommon::GetPvrSession(), pvrEye_Right, &eyeInfo[pvrEye_Right]);
-    pvr_getFovTextureSize(PimaxCommon::GetPvrSession(), pvrEye_Left, eyeInfo[pvrEye_Left].Fov, 1.f, &viewportSize);
-}
-
 void PimaxDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) {
-    *pfLeft = -eyeInfo[eEye].Fov.LeftTan;
-    *pfRight = eyeInfo[eEye].Fov.RightTan;
+    pvrEyeRenderInfo eyeInfo = {};
+    pvr_getEyeRenderInfo(PimaxCommon::GetPvrSession(), eEye == vr::Eye_Left ? pvrEye_Left : pvrEye_Right, &eyeInfo);
+
+    *pfLeft = -eyeInfo.Fov.LeftTan;
+    *pfRight = eyeInfo.Fov.RightTan;
     // Top and bottom are backwards per SteamVR documentation.
-    *pfTop = eyeInfo[eEye].Fov.DownTan;
-    *pfBottom = -eyeInfo[eEye].Fov.UpTan;
+    *pfTop = eyeInfo.Fov.DownTan;
+    *pfBottom = -eyeInfo.Fov.UpTan;
 }
 
 Point2D PimaxDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) {
@@ -34,6 +31,11 @@ Point2D PimaxDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel 
 }
 
 void PimaxDistortionProfile::GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) {
+    pvrEyeRenderInfo eyeInfo = {};
+    pvr_getEyeRenderInfo(PimaxCommon::GetPvrSession(), pvrEye_Left, &eyeInfo);
+    pvrSizei viewportSize = {};
+    pvr_getFovTextureSize(PimaxCommon::GetPvrSession(), pvrEye_Left, eyeInfo.Fov, 1.f, &viewportSize);
+
     *pnWidth = (uint32_t)viewportSize.w;
     *pnWidth = (*pnWidth + 3) / 4 * 4;
     *pnHeight = (uint32_t)viewportSize.h;
