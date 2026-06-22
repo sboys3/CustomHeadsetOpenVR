@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseHeadset.h"
 #include "../Helpers/PimaxCommon.h"
+#include <atomic>
+#include <thread>
 
 class PimaxSlamDriver : public BaseHeadsetShim, public PimaxCommon {
 public:
@@ -13,4 +15,13 @@ public:
 	virtual void SubDeactivate() override;
 	virtual void RunFrame() override;
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
+
+	void StartPvrTracking();
+	void StopPvrTracking();
+
+private:
+	void PvrTrackingThread();
+
+	std::thread pvrTrackingThread;
+	std::atomic<bool> pvrTrackingRunning;
 };
