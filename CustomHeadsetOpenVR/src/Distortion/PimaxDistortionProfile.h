@@ -6,15 +6,9 @@
 
 class PimaxDistortionProfile : public DistortionProfile {
 public:
-	virtual void Initialize() override;
-
 	virtual void GetProjectionRaw(vr::EVREye eEye, float* pfLeft, float* pfRight, float* pfBottom, float* pfTop) override;
 
 	virtual Point2D ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) override;
 
 	virtual void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) override;
-
-private:
-	pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
-	pvrSizei viewportSize = {};
 };
