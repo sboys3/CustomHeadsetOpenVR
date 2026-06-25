@@ -8,12 +8,11 @@
 #include "nlohmann/json.hpp"
 #include <shared_mutex>
 
-// TODO: Find the universe id that the AAPVR driver uses to prevent the need for setting up boundaries again
-static constexpr uint64_t k_UniverseId = 0x50494D4158; // "PIMAX"
-static constexpr const char* tackingSystemName = "aapvr";
+// Matches driver_aapvr.
+static constexpr uint64_t k_UniverseId = 30;
 
 // A driver for Pimax Crystal controllers.
-class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver, public PimaxCommon {
+class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver {
 public:
 	PimaxCrystalControllerDriver(vr::ETrackedControllerRole role) : role(role) {
 	}
@@ -29,7 +28,7 @@ public:
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_ControllerRoleHint_Int32, role);
 
 		// Purely emulate an Oculus Touch controller for compatibility.
-		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "oculus");
 		vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Oculus");
 		vr::VRProperties()->SetStringProperty(
 			container, vr::Prop_ModelNumber_String, isLeft ? "Oculus Quest2 (Left Controller)" : "Oculus Quest2 (Right Controller)");
@@ -184,7 +183,7 @@ public:
 
 			// Only pick the events applicable to us.
 			if (container == data.containerHandle) {
-				pvr_triggerHapticPulse(GetPvrSession(),
+				pvr_triggerHapticPulse(PimaxCommon::GetPvrSession(),
 					role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 					data.fAmplitude,
 					data.fDurationSeconds > 0.02f ? data.fDurationSeconds : 0.02f,
@@ -194,7 +193,7 @@ public:
 	}
 
 	void UpdateInputState(const pvrInputState& inputState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 		const auto side = role == vr::TrackedControllerRole_LeftHand ? 0 : 1;
 
 		if (deviceIndex != vr::k_unTrackedDeviceIndexInvalid) {
@@ -241,7 +240,7 @@ public:
 
 			// Update the battery level.
 			const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
-				GetPvrSession(),
+				PimaxCommon::GetPvrSession(),
 				role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 				pvrTrackedDeviceProp_BatteryPercent_int,
 				-1);
@@ -255,7 +254,7 @@ public:
 	}
 
 	void UpdateTrackingState(const pvrPoseStatef& poseState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 
 		vr::DriverPose_t pose = {};
 		pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
@@ -355,7 +354,7 @@ Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld(){
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
-	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "aapvr");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Pimax");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ModelNumber_String, GetHmdInfo().ProductName);
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_RenderModelName_String, "generic_hmd");
@@ -369,6 +368,11 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	// We need to set the mesh values before UpdateSettings() runs.
+	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+		SetVisibilityMeshes();
+	}
 
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
@@ -387,6 +391,14 @@ void PimaxSlamDriver::RunFrame() {
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	if (driverConfig.hasBeenUpdated &&
+		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
+		// We need to set the mesh values before UpdateSettings() runs.
+		if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+			SetVisibilityMeshes();
+		}
+	}
 
 	BaseHeadsetShim::RunFrame();
 
@@ -444,6 +456,15 @@ void PimaxSlamDriver::RunFrame() {
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update the battery level (Crystal OG).
+	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+	if (batteryPercentage > 0) {
+		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	}
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {

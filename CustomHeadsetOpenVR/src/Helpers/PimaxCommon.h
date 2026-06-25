@@ -37,11 +37,15 @@ protected:
 	void StartEyeTracking();
 	void StopEyeTracking();
 
+	void SetVisibilityMeshes();
+
 private:
 	void EyeTrackingThread();
 
 	pvrHmdInfo hmdInfo = {};
 	bool hasEyeTracking = false;
+	float cantingAngle = 0;
+	float ipd = 0;
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
 };

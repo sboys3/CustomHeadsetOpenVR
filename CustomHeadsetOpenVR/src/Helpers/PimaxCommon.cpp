@@ -31,35 +31,46 @@ static bool EnsurePvrSession() {
 
 		pvrHmdInfo info = {};
 		pvr_getHmdInfo(s_pvrSession, &info);
+		const std::string_view productName = info.ProductName;
+		pvrDisplayInfo displayInfo = {};
+		pvr_getEyeDisplayInfo(s_pvrSession, pvrEye_Left, &displayInfo);
 		switch (info.ProductId) { // ProductId comes from the USB device
 		case 0x0044: // Dream Air
 			s_info.headsetType = Config::HeadsetType::DreamAir;
 			break;
 		case 0x0042: // Dream Air SE
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::DreamAirSE;
 			break;
 		case 0x0040: // Crystal Super (50PPD, 57PPD, Ultrawide, MicroOLED share this ProductId)
-			// TODO: will need to differentiate these
-			// TODO: double check this
-			s_info.headsetType = Config::HeadsetType::CrystalSuper50PPD;
+			// TODO: Find a better way to differenciate these.
+			if (displayInfo.width == 7104) {
+				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
+			}
+			else {
+				s_info.headsetType = Config::HeadsetType::CrystalSuper50PPD;
+			}
 			break;
 		case 0x0018: // Crystal Light
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::CrystalLight;
 			break;
 		case 0x0012: // Crystal OG
-			// TODO: double check this
 			s_info.headsetType = Config::HeadsetType::CrystalOG;
 			break;
 		case 0x0101: // Pimax 5K and 8K series (share the same ProductId)
-			// TODO: will need to differentiate these
-			s_info.headsetType = Config::HeadsetType::Pimax8KX;
+			if (productName.find("5K") != std::string::npos) {
+				s_info.headsetType = Config::HeadsetType::Pimax5KPlus;
+			}
+			else if (productName.find("Artisan") != std::string::npos) {
+				s_info.headsetType = Config::HeadsetType::PimaxArtisan;
+			}
+			else {
+				s_info.headsetType = Config::HeadsetType::Pimax8KX;
+			}
 			break;
 		default:
 			break;
 		}
-		if(info.ProductId){
+		if (info.ProductId) {
 			DriverLog("Detected PVR headset '%s' (%04x)%s", info.ProductName, info.ProductId, s_info.headsetType == Config::HeadsetType::None ? " - not supported" : "");
 		}
 
@@ -78,26 +89,9 @@ static bool EnsurePvrSession() {
 			s_info.useSlamTracking = trackingStyle == pvrHmdTrackingStyle_InsideOutCameras;
 
 			DriverLog("Detected headset '%s' (%04x) with %s tracking", info.ProductName, info.ProductId, s_info.useSlamTracking ? "SLAM" : "Lighthouse");
-
-			pvrDisplayInfo displayInfo = {};
-			pvr_getEyeDisplayInfo(s_pvrSession, pvrEye_Left, &displayInfo);
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
 			s_info.resolutionX = displayInfo.width / 2;
 			s_info.resolutionY = displayInfo.height;
-			if(s_info.headsetType == Config::HeadsetType::CrystalSuper50PPD && displayInfo.width == 7104){
-				// TODO: remove this when a better detection method is found
-				s_info.headsetType = Config::HeadsetType::CrystalSuperMicroOLED;
-			}
-			if(s_info.headsetType == Config::HeadsetType::CrystalSuper50PPD && displayInfo.edid_vid == 21594){
-				// TODO: remove this when a better detection method is found
-				s_info.headsetType = Config::HeadsetType::CrystalSuperUltrawide;
-			}
-			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
-			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
-			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
-			const auto cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) /
-				2.f;
-			DriverLog("Canting Angle: %.2f deg", cantingAngle * 180 / 3.1415926f);
 		}
 	}
 	return true;
@@ -117,10 +111,40 @@ double PimaxCommon::GetPvrTime() {
 	return pvr_getTimeSeconds(s_pvr);
 }
 
+PimaxCommon::PimaxCommon() {
+	// Cache useful immutable state.
+	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
+	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
+		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
+		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
+
+	// Always query without parallel projection enabled.
+	// The underlying driver will then (re)apply parallel projection if needed during Activate() and/or RunFrame().
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", 0);
+	pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
+	pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
+	pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
+	ipd = PVR::Vector3f(eyeInfo[pvrEye_Left].HmdToEyePose.Position).Distance(eyeInfo[pvrEye_Right].HmdToEyePose.Position) * 1000;
+	DriverLog("IPD: %.1f mm", ipd);
+	cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
+	cantingAngle *= 180 / 3.1415926f;
+	DriverLog("Canting Angle: %.2f deg", cantingAngle);
+}
 Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
 	if (config.resolutionX == 0 || config.resolutionY == 0) {
 		config.resolutionX = GetInfo().resolutionX;
 		config.resolutionY = GetInfo().resolutionY;
+	}
+	if (config.autoIpd) {
+		config.ipd = ipd;
+	}
+	if (config.autoEyeRotation) {
+		if (config.distortionProfile == "Pimax Builtin" && config.parallelProjection) {
+			config.eyeRotation = 0;
+		}
+		else {
+			config.eyeRotation = cantingAngle;
+		}
 	}
 	return config;
 }
@@ -177,6 +201,26 @@ void PimaxCommon::StopEyeTracking() {
 		DriverLog("Stopping eye tracking thread");
 		eyeTrackingThread.join();
 		eyeTrackingThread = {};
+	}
+}
+
+void PimaxCommon::SetVisibilityMeshes() {
+	vr::CVRHiddenAreaHelpers helpers = { vr::VRPropertiesRaw() };
+	for (int eye = 0; eye < pvrEye_Count; eye++) {
+		std::vector<vr::HmdVector2_t> vertices;
+		size_t count;
+
+		count = pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_HiddenArea, nullptr, 0);
+		vertices.resize(count);
+		pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_HiddenArea,
+			(pvrVector2f*)vertices.data(), (unsigned int)vertices.size());
+		helpers.SetHiddenArea((vr::EVREye)eye, vr::k_eHiddenAreaMesh_Standard, vertices.data(), (uint32_t)vertices.size());
+
+		count = pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_VisibleArea, nullptr, 0);
+		vertices.resize(count);
+		pvr_getEyeHiddenAreaMesh(GetPvrSession(), (pvrEyeType)eye, pvrHiddenAreaMesh_VisibleArea,
+			(pvrVector2f*)vertices.data(), (unsigned int)vertices.size());
+		helpers.SetHiddenArea((vr::EVREye)eye, vr::k_eHiddenAreaMesh_Inverse, vertices.data(), (uint32_t)vertices.size());
 	}
 }
 
