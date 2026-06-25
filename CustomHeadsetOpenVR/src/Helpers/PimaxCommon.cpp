@@ -130,7 +130,6 @@ PimaxCommon::PimaxCommon() {
 	cantingAngle *= 180 / 3.1415926f;
 	DriverLog("Canting Angle: %.2f deg", cantingAngle);
 }
-
 Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
 	if (config.resolutionX == 0 || config.resolutionY == 0) {
 		config.resolutionX = GetInfo().resolutionX;
@@ -148,6 +147,32 @@ Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& c
 		}
 	}
 	return config;
+}
+
+Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfig(){
+	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfig.dreamAir;
+	}
+	return PatchConfig(*config);
+}
+
+Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfigOld(){
+	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &driverConfigOld.dreamAir;
+	}
+	return PatchConfig(*config);
+}
+
+PimaxCommon::PimaxCommon() {
+	// Cache useful immutable state.
+	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
+	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
+		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
+		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
 }
 
 bool PimaxCommon::CheckDeviceLost() {

@@ -633,20 +633,29 @@ void ConfigLoader::WriteInfo(){
 	ordered_json& distortionProfilesJson = data["builtInDistortionProfiles"];
 	for(auto profilePair : builtInDistortionProfiles){
 		auto profile = profilePair.second;
+		// Serialize as single string when there's only one device for backward compatibility
+		ordered_json deviceJson;
+		if(profile.device.size() == 1){
+			deviceJson = profile.device[0];
+		}else{
+			deviceJson = profile.device;
+		}
 		ordered_json profileJson = {
-			{"device", profile.device},
+			{"device", deviceJson},
 			{"description", profile.description},
 			{"author", profile.author},
 			{"creationDate", profile.creationDate},
 			{"type", profile.type},
-			{"distortions", profile.distortions},
-			{"distortionsRed", profile.distortionsRed},
-			{"distortionsBlue", profile.distortionsBlue},
-			{"legacySmoothing", profile.legacySmoothing},
-			{"smoothAmount", profile.smoothAmount},
-			{"offsetX", profile.offsetX},
-			{"offsetY", profile.offsetY},
 		};
+		if(profile.type == "RadialBezier"){
+			profileJson["distortions"] = profile.distortions;
+			profileJson["distortionsRed"] = profile.distortionsRed;
+			profileJson["distortionsBlue"] = profile.distortionsBlue;
+			profileJson["legacySmoothing"] = profile.legacySmoothing;
+			profileJson["smoothAmount"] = profile.smoothAmount;
+			profileJson["offsetX"] = profile.offsetX;
+			profileJson["offsetY"] = profile.offsetY;
+		} 
 		distortionProfilesJson[profile.name] = profileJson;
 	}
 	infoFile << data.dump(1, '\t');

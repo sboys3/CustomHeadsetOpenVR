@@ -3,10 +3,11 @@ import { CrystalSuperMicroOLEDConfig, HeadsetType } from '../../../services/Json
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
 import { DriverSettingService } from '../../../services/driver-setting.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-crystal-super-micro-oled',
-  imports: [HeadsetSettingsComponent, PimaxLauncherComponent],
+  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, MatIconModule],
   templateUrl: './crystal-super-micro-oled.component.html',
   styleUrl: './crystal-super-micro-oled.component.scss'
 })

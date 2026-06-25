@@ -551,6 +551,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierY != GetConfig().renderResolutionMultiplierY;
 	shouldReInitializeDistortion |= GetConfigOld().fovBurnInPrevention != GetConfig().fovBurnInPrevention;
 	shouldReInitializeDistortion |= GetConfigOld().fovClamping != GetConfig().fovClamping;
+	shouldReInitializeDistortion = shouldReInitializeDistortion && driverConfig.hasBeenUpdated;
 	
 	std::lock_guard<std::mutex> lock(distortionProfileLock);
 	bool loadedNewDistortionProfile = distortionProfileConstructor.LoadDistortionProfile(GetConfig().distortionProfile);
@@ -565,7 +566,10 @@ void BaseHeadsetShim::UpdateSettings(){
 	shouldUpdateDistortion |= GetConfigOld().parallelProjection != GetConfig().parallelProjection;
 	shouldUpdateDistortion |= GetConfig().parallelProjection && (GetConfigOld().eyeRotation != GetConfig().eyeRotation);
 	shouldUpdateDistortion |= (now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization;
-
+	
+	bool delayedDistortionUpdate = false;
+	delayedDistortionUpdate |= GetConfigOld().parallelProjection != GetConfig().parallelProjection;
+	delayedDistortionUpdate = delayedDistortionUpdate && driverConfig.hasBeenUpdated;
 	
 	vr::VRProperties()->SetInt32Property(container, vr::Prop_DistortionMeshResolution_Int32, std::min(1024, GetConfig().distortionMeshResolution));
 	if(GetConfigOld().superSamplingFilterPercent != GetConfig().superSamplingFilterPercent){
@@ -576,13 +580,15 @@ void BaseHeadsetShim::UpdateSettings(){
 	if(shouldReInitializeDistortion && !loadedNewDistortionProfile){
 		distortionProfileConstructor.ReInitializeProfile();
 	}
-	
 	if(shouldUpdateDistortion){
 		// mark to finalize if regenerating within 0.5 seconds of the last
-		needsDistortionFinalization = now - lastDistortionChangeTime < 0.5;
+		needsDistortionFinalization = (now - lastDistortionChangeTime < 0.5) || (delayedDistortionUpdate && driverConfig.hasBeenUpdated);
 		lastDistortionChangeTime = now;
-		// it has changed so signal the compositor to regenerate the distortion mesh
-		deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
+		if(needsDistortionFinalization){
+			// it has changed so signal the compositor to regenerate the distortion mesh
+			deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
+			DriverLog("Sending distortion update");
+		}
 		// also update fov
 		float leftEyeLeft, leftEyeRight, leftEyeTop, leftEyeBottom;
 		distortionProfileConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
@@ -599,6 +605,9 @@ void BaseHeadsetShim::UpdateSettings(){
 		vr::VRServerDriverHost()->SetDisplayProjectionRaw(0, vr::HmdRect2_t{{leftEyeLeft, leftEyeBottom}, {leftEyeRight, leftEyeTop}}, vr::HmdRect2_t{{rightEyeLeft, rightEyeBottom}, {rightEyeRight, rightEyeTop}});
 		// this requires reallocations so only do it when a finalization is not queued
 		if(!needsDistortionFinalization){
+			// make sure the latest changes get applied
+			deviceProvider->SendVendorEvent(0, vr::VREvent_LensDistortionChanged, {}, 0);
+			DriverLog("Sending finalized distortion update");
 			// get max fov from the new profile
 			DistortionProfileConstructor maxFovConstructor = DistortionProfileConstructor();
 			maxFovConstructor.distortionSettings = distortionProfileConstructor.distortionSettings;

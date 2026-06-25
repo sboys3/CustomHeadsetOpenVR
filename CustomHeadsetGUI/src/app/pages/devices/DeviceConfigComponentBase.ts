@@ -15,6 +15,7 @@ export const DistortionProfileDisplayNames: Map<string, string> = new Map([
     ["Dream Air Default", "Dream Air Custom Default"],
     ["Dream Air SE Default", "Dream Air SE Custom Default"],
     ["Crystal Super Micro-OLED Default", "Crystal Super Micro-OLED Custom Default"],
+    ["Pimax 8KX Default", "Pimax 8KX Custom Default"],
 ]);
 
 type KeysMatching<T, V> = { [K in keyof T]-?: T[K] extends V ? K : never }[keyof T];
@@ -117,23 +118,30 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 name,
                 displayName: "",
                 isDefault: true,
-                device: (defaultProfiles as any)[name]?.device as string | undefined
+                device: (defaultProfiles as any)[name]?.device as string | string[] | undefined
             }));
             const fileProfileEntries = this.dss.distortionProfileList().map(f => ({
                 name: f.name.split('.').slice(0, -1).join('.'),
                 displayName: "",
                 isDefault: false,
                 file: f.entry,
-                device: f.device
+                device: f.device as string | string[] | undefined
             }));
             
             let allProfiles = [...defaultProfileEntries, ...fileProfileEntries];
             
+            // Helper to check if a profile matches a device type (handles both string and string[])
+            const deviceMatches = (device: string | string[] | undefined, headsetType: string): boolean => {
+                if (!device) return false;
+                if (Array.isArray(device)) return device.includes(headsetType);
+                return device === headsetType;
+            };
+            
             // Filter/sort profiles based on device compatibility
             if (headsetDeviceType) {
-                const matching = allProfiles.filter(p => p.device === headsetDeviceType);
+                const matching = allProfiles.filter(p => deviceMatches(p.device, headsetDeviceType));
                 const noDevice = allProfiles.filter(p => !p.device);
-                const incompatible = allProfiles.filter(p => p.device && p.device !== headsetDeviceType);
+                const incompatible = allProfiles.filter(p => p.device && !deviceMatches(p.device, headsetDeviceType));
                 allProfiles = showIncompatible ? [...matching, ...noDevice, ...incompatible] : [...matching, ...noDevice];
             }
             

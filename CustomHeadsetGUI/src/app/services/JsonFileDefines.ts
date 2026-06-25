@@ -201,7 +201,7 @@ export type AppSetting = {
   colorScheme: 'system' | 'dark' | 'light' | 'evo';
   updateMode: 'replace' | 'rewrite';
   advanceMode: boolean;
-  defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir' | 'DreamAirSE' | 'CrystalSuperMicroOLED';
+  defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir' | 'DreamAirSE' | 'CrystalSuperMicroOLED' | 'Pimax8KX';
   showIncompatibleProfiles: boolean;
   launchPimaxOnStartup: boolean;
   installMethod: 'auto' | 'register' | 'copy';
@@ -253,7 +253,7 @@ export type ResolutionInfo = {
 }
 
 export type BuiltInDistortionProfile = {
-  device?: string;
+  device?: string | string[];
   distortionProfileId?: string;
   description?: string;
   author?: string;

@@ -12,21 +12,11 @@ bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContai
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfig(){
-	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
-	if(!config){
-		// fallback to the Dream Air to avoid null pointer
-		config = &driverConfig.dreamAir;
-	}
-	return PatchConfig(*config);
+	return GetHeadsetConfig();
 }
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
-	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
-	if(!config){
-		// fallback to the Dream Air to avoid null pointer
-		config = &driverConfigOld.dreamAir;
-	}
-	return PatchConfig(*config);
+	return GetHeadsetConfigOld();
 }
 
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){

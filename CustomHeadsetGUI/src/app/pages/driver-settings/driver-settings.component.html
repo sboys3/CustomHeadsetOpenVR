@@ -67,6 +67,14 @@
         <app-crystal-super-micro-oled (navigateToGeneralTab)="switchToGeneralTab()" />
       </ng-template>
     </mat-tab>
+    <mat-tab label="Pimax 8KX" i18n-label *ngIf="tab.type === 'Pimax8KX'">
+      <ng-template matTabContent>
+        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.Pimax8KX){
+          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        }
+        <app-pimax-8kx (navigateToGeneralTab)="switchToGeneralTab()" />
+      </ng-template>
+    </mat-tab>
     <mat-tab label="General" i18n-label *ngIf="tab.type === 'General'">
       <ng-template matTabContent>
         <app-general

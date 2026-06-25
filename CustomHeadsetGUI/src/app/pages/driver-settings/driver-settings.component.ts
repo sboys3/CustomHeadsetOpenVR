@@ -4,6 +4,7 @@ import { MeganexX8KComponent } from '../devices/meganex-x8-k/meganex-x8-k.compon
 import { DreamAirComponent } from '../devices/dream-air/dream-air.component';
 import { DreamAirSeComponent } from '../devices/dream-air-se/dream-air-se.component';
 import { CrystalSuperMicroOledComponent } from '../devices/crystal-super-micro-oled/crystal-super-micro-oled.component';
+import { Pimax8KxComponent } from '../devices/pimax-8kx/pimax-8kx.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
 import { HeadsetType, HeadsetType as HeadsetTypeEnum, Settings } from '../../services/JsonFileDefines';
@@ -32,13 +33,14 @@ export interface TabConfig {
         DreamAirComponent,
         DreamAirSeComponent,
         CrystalSuperMicroOledComponent,
+        Pimax8KxComponent,
         GeneralComponent,
         MatTabsModule,
         MatIconModule,
         MatButtonModule,
         CommonModule
     ],
-    providers: [MeganexX8KComponent, DreamAirComponent, DreamAirSeComponent, CrystalSuperMicroOledComponent],
+    providers: [MeganexX8KComponent, DreamAirComponent, DreamAirSeComponent, CrystalSuperMicroOledComponent, Pimax8KxComponent],
     templateUrl: './driver-settings.component.html',
     styleUrl: './driver-settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -82,6 +84,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     DreamAirComponent = DreamAirComponent;
     DreamAirSeComponent = DreamAirSeComponent;
     CrystalSuperMicroOledComponent = CrystalSuperMicroOledComponent;
+    Pimax8KxComponent = Pimax8KxComponent;
     HeadsetType = HeadsetTypeEnum;
 
     constructor(private dis: DriverInfoService, private dss: DriverSettingService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
@@ -120,12 +123,14 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
             availableTabs.push({ type: 'DreamAir', headsetType: HeadsetType.DreamAir })
             availableTabs.push({ type: 'DreamAirSE', headsetType: HeadsetType.DreamAirSE })
             availableTabs.push({ type: 'CrystalSuperMicroOLED', headsetType: HeadsetType.CrystalSuperMicroOLED })
+            availableTabs.push({ type: 'Pimax8KX', headsetType: HeadsetType.Pimax8KX })
         }else{
             // disable when not shown
             onSettingsAvailable((settings) => {
                 settings.dreamAir.enable = false
                 settings.dreamAirSE.enable = false
                 settings.crystalSuperMicroOLED.enable = false
+                settings.pimax8KX.enable = false
                 this.dss.save(settings)
             })
         }

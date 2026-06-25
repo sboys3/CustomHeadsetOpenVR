@@ -327,12 +327,12 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper50PPD;
-			distortionProfile = "Pimax Builtin";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalSuper50PPD";
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
-			displayRotation = 0;
+			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
 			eyeRotation = 5;
@@ -349,12 +349,12 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper57PPD;
-			distortionProfile = "Pimax Builtin";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
 			maxFovX = 100;
 			maxFovY = 90;
-			edidVendorId = 21594;
-			displayRotation = 0;
+			edidVendorId = 21594; // VRT
+			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
 			eyeRotation = 7;
@@ -371,12 +371,12 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperUltrawide;
-			distortionProfile = "Pimax Builtin";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
 			maxFovX = 100;
 			maxFovY = 90;
-			edidVendorId = 21594;
-			displayRotation = 0;
+			edidVendorId = 21594; // VRT
+			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
 			eyeRotation = 7;
@@ -414,7 +414,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalLight;
-			distortionProfile = "Pimax Builtin";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalLight";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -435,7 +435,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalOG;
-			distortionProfile = "Pimax Builtin";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalOG";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -443,7 +443,7 @@ public:
 			displayRotation = 1;
 			resolutionX = 2880;
 			resolutionY = 2880;
-			eyeRotation = 5;
+			eyeRotation = 4;
 			enableEyeTracking = true;
 		}
 	};
@@ -639,8 +639,9 @@ class DistortionProfileConfig{
 public:
 	// name of distortion profile, this will be it's filename
 	std::string name = "None";
-	// the headset device this profile is for, empty for all devices, or "MeganeX8K" for the MeganeX superlight 8K
-	std::string device = "";
+	// the headset device(s) this profile is for, empty for all devices, or "MeganeX8K" for the MeganeX superlight 8K
+	// serialized as a single string when there's only one device for backward compatibility
+	std::vector<std::string> device = {};
 	// description to display
 	std::string description = "";
 	// author of the distortion profile

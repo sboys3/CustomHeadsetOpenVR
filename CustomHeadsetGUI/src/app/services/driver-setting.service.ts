@@ -16,7 +16,7 @@ export type DistortionProfileEntry = {
 };
 export type DistortionProfileFile = {
   name: string;
-  device?: string;
+  device?: string | string[];
   entry: DirEntry;
 };
 @Injectable({

@@ -23,12 +23,14 @@ public:
 	static PimaxInfo GetInfo();
 	static pvrSessionHandle GetPvrSession();
 	static double GetPvrTime();
+	static Config::BaseHeadsetConfig& PatchConfig(Config::BaseHeadsetConfig& config);
+	static Config::BaseHeadsetConfig& GetHeadsetConfig();
+	static Config::BaseHeadsetConfig& GetHeadsetConfigOld();
 
 protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
 	bool HasEyeTracking() const { return hasEyeTracking; }
 
-	Config::BaseHeadsetConfig& PatchConfig(Config::BaseHeadsetConfig& config);
 
 	bool CheckDeviceLost();
 
