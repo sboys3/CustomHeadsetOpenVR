@@ -476,6 +476,10 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 			}
 		}
 		break;
+	case vr::VREvent_SceneApplicationChanged:
+		// Signal Pimax Play to perform a MagicAttach (DFR injector) when a new scene app started.
+		pvr_setIntConfig(GetPvrSession(), "openvr_client_changed", event.data.process.pid);
+		break;
 	}
 }
 
