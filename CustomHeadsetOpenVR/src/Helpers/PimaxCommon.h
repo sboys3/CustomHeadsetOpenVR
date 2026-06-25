@@ -14,6 +14,8 @@ struct PimaxInfo {
 	bool useSlamTracking = false;
 	uint32_t resolutionX = 0;
 	uint32_t resolutionY = 0;
+	float cantingAngle = 0;
+	float ipd = 0;
 };
 
 class PimaxCommon {
@@ -36,6 +38,8 @@ protected:
 
 	void StartEyeTracking();
 	void StopEyeTracking();
+
+	void SetVisibilityMeshes();
 
 private:
 	void EyeTrackingThread();

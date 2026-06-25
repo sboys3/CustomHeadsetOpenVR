@@ -42,6 +42,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["ipdOffset"].is_number()){
 		headsetConfig.ipdOffset = headsetData["ipdOffset"].get<double>();
 	}
+	if(headsetData["autoIpd"].is_boolean()){
+		headsetConfig.autoIpd = headsetData["autoIpd"].get<bool>();
+	}
 	if(headsetData["horizontalIPDOffset"].is_number()){
 		headsetConfig.horizontalIPDOffset = headsetData["horizontalIPDOffset"].get<double>();
 	}
@@ -117,6 +120,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["eyeRotation"].is_number()){
 		headsetConfig.eyeRotation = headsetData["eyeRotation"].get<double>();
 	}
+	if(headsetData["autoEyeRotation"].is_boolean()){
+		headsetConfig.autoEyeRotation = headsetData["autoEyeRotation"].get<bool>();
+	}
 	if(headsetData["disableEye"].is_number()){
 		headsetConfig.disableEye = headsetData["disableEye"].get<int>();
 	}
@@ -166,6 +172,7 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 		if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
 		if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
 		if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
+		if(hiddenAreaJson["autoHiddenArea"].is_boolean()){ newHiddenArea.autoHiddenArea = hiddenAreaJson["autoHiddenArea"].get<boolean>(); }
 	}
 	if(json& stationaryDimmingJson = headsetData["stationaryDimming"]; stationaryDimmingJson.is_object()){
 		auto& newStationaryDimming = headsetConfig.stationaryDimming;
@@ -452,6 +459,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"enable", headsetConfig.enable},
 		{"ipd", headsetConfig.ipd},
 		{"ipdOffset", headsetConfig.ipdOffset},
+		{"autoIpd", headsetConfig.autoIpd},
 		{"horizontalIPDOffset", headsetConfig.horizontalIPDOffset},
 		{"blackLevel", headsetConfig.blackLevel},
 		{"colorMultiplier", {
@@ -480,6 +488,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"secondsFromVsyncToPhotons", headsetConfig.secondsFromVsyncToPhotons},
 		{"secondsFromPhotonsToVblank", headsetConfig.secondsFromPhotonsToVblank},
 		{"eyeRotation", headsetConfig.eyeRotation},
+		{"autoEyeRotation", headsetConfig.autoEyeRotation},
 		{"disableEye", headsetConfig.disableEye},
 		{"disableEyeDecreaseFov", headsetConfig.disableEyeDecreaseFov},
 		{"useViveBluetooth", headsetConfig.useViveBluetooth},
@@ -501,6 +510,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 			{"radiusTopInner", headsetConfig.hiddenArea.radiusTopInner},
 			{"radiusBottomInner", headsetConfig.hiddenArea.radiusBottomInner},
 			{"radiusBottomOuter", headsetConfig.hiddenArea.radiusBottomOuter},
+			{"autoHiddenArea", headsetConfig.hiddenArea.autoHiddenArea},
 		}},
 		{"stationaryDimming", {
 			{"enable", headsetConfig.stationaryDimming.enable},

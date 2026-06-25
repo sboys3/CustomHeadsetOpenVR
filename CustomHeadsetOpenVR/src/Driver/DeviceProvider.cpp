@@ -307,7 +307,7 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		
 		// TODO: validate the interface versions of drivers and make the shims conform to versions to prevent potential crashes
 		
-		if(driverConfig.dreamAir.enable && PimaxCommon::GetInfo().connected && !PimaxCommon::GetInfo().useSlamTracking){
+		if(driverConfig.ConfigFromHeadsetType(PimaxCommon::GetInfo().headsetType)->enable && PimaxCommon::GetInfo().connected && !PimaxCommon::GetInfo().useSlamTracking){
 			PimaxLighthouseShim* pimaxLighthouseShim = new PimaxLighthouseShim();
 			pimaxLighthouseShim->deviceProvider = this;
 			shims.insert(pimaxLighthouseShim);

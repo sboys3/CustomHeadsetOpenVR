@@ -5,7 +5,7 @@
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
 	std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::Prop_ManufacturerName_String);
-	if(GetInfo().connected && (model == "Pimax Dream Air" || model == "REF-HMD") && manufacturer == "Pimax" && trackingSystem == "lighthouse"){
+	if(GetInfo().connected && (model.find("Pimax") != std::string::npos || (model == "REF-HMD" && manufacturer.find("Pimax") != std::string::npos)) && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
@@ -28,6 +28,11 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 		eyeTrackingOutput.Initialize();
 	}
 
+	// We need to set the mesh values before UpdateSettings() runs.
+	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+		SetVisibilityMeshes();
+	}
+
 	returnValue = vr::VRInitError_None;
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
@@ -40,6 +45,14 @@ void PimaxLighthouseShim::RunFrame(){
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	if (driverConfig.hasBeenUpdated &&
+		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
+		// We need to set the mesh values before UpdateSettings() runs.
+		if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+			SetVisibilityMeshes();
+		}
+	}
 
 	BaseHeadsetShim::RunFrame();
 
@@ -55,6 +68,15 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update the battery level (Crystal OG).
+	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+	if (batteryPercentage > 0) {
+		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	}
 }
 
 

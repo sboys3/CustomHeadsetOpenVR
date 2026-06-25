@@ -193,7 +193,7 @@ function buildDriverTask() {
 		let env = { ...process.env }
 		if (vendorDefine) {
 			// msbuildArgs.push(`/p:DefineConstants="$(DefineConstants);"${vendorDefine}`)
-			env.ExternalCompilerOptions=`/D${vendorDefine}`
+			env.ExternalCompilerOptions=`/D${vendorDefine} /DIts1984`
 		}
 		
 		console.log("Running MSBuild for driver...", msbuildPath, msbuildArgs)

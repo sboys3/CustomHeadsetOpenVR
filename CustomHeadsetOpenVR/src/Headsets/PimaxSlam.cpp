@@ -6,13 +6,13 @@
 #include <filesystem>
 #include <memory>
 #include "nlohmann/json.hpp"
+#include <shared_mutex>
 
-// TODO: Find the universe id that the AAPVR driver uses to prevent the need for setting up boundaries again
-static constexpr uint64_t k_UniverseId = 0x50494D4158; // "PIMAX"
-static constexpr const char* tackingSystemName = "aapvr";
+// Matches driver_aapvr.
+static constexpr uint64_t k_UniverseId = 30;
 
 // A driver for Pimax Crystal controllers.
-class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver, public PimaxCommon {
+class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver {
 public:
 	PimaxCrystalControllerDriver(vr::ETrackedControllerRole role) : role(role) {
 	}
@@ -28,7 +28,7 @@ public:
 		vr::VRProperties()->SetInt32Property(container, vr::Prop_ControllerRoleHint_Int32, role);
 
 		// Purely emulate an Oculus Touch controller for compatibility.
-		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "oculus");
 		vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Oculus");
 		vr::VRProperties()->SetStringProperty(
 			container, vr::Prop_ModelNumber_String, isLeft ? "Oculus Quest2 (Left Controller)" : "Oculus Quest2 (Right Controller)");
@@ -183,7 +183,7 @@ public:
 
 			// Only pick the events applicable to us.
 			if (container == data.containerHandle) {
-				pvr_triggerHapticPulse(GetPvrSession(),
+				pvr_triggerHapticPulse(PimaxCommon::GetPvrSession(),
 					role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 					data.fAmplitude,
 					data.fDurationSeconds > 0.02f ? data.fDurationSeconds : 0.02f,
@@ -193,7 +193,7 @@ public:
 	}
 
 	void UpdateInputState(const pvrInputState& inputState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 		const auto side = role == vr::TrackedControllerRole_LeftHand ? 0 : 1;
 
 		if (deviceIndex != vr::k_unTrackedDeviceIndexInvalid) {
@@ -240,7 +240,7 @@ public:
 
 			// Update the battery level.
 			const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
-				GetPvrSession(),
+				PimaxCommon::GetPvrSession(),
 				role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 				pvrTrackedDeviceProp_BatteryPercent_int,
 				-1);
@@ -254,15 +254,16 @@ public:
 	}
 
 	void UpdateTrackingState(const pvrPoseStatef& poseState) {
-		const auto pvrNow = GetPvrTime();
+		const auto pvrNow = PimaxCommon::GetPvrTime();
 
 		vr::DriverPose_t pose = {};
 		pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
 		if (deviceIndex != vr::k_unTrackedDeviceIndexInvalid) {
-			pose.deviceIsConnected = true;
+			isConnected = isConnected || (poseState.StatusFlags & pvrStatus_OrientationTracked);
+			pose.deviceIsConnected = isConnected;
 			pose.result = vr::TrackingResult_Running_OutOfRange;
 
-			if (poseState.StatusFlags & pvrStatus_OrientationTracked) {
+			if (isConnected) {
 				pose.vecPosition[0] = poseState.ThePose.Position.x;
 				pose.vecPosition[1] = poseState.ThePose.Position.y;
 				pose.vecPosition[2] = poseState.ThePose.Position.z;
@@ -301,6 +302,7 @@ public:
 	void Disconnect() {
 		vr::DriverPose_t pose = {};
 		pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
+		isConnected = false;
 		pose.result = vr::TrackingResult_Running_OutOfRange;
 		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(deviceIndex, pose, sizeof(pose));
 	}
@@ -329,11 +331,13 @@ private:
 	const vr::ETrackedControllerRole role;
 	vr::TrackedDeviceIndex_t deviceIndex = vr::k_unTrackedDeviceIndexInvalid;
 	vr::VRInputComponentHandle_t components[ComponentCount] = {};
+	bool isConnected = false;
 
 	DirectX::XMMATRIX poseOffset = DirectX::XMMatrixIdentity();
 };
 
 static std::unique_ptr<PimaxCrystalControllerDriver> s_controllerDriver[2];
+static std::shared_mutex s_controllerDriverMutex;
 
 bool PimaxSlamDriver::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container) {
 	return true;
@@ -350,7 +354,7 @@ Config::BaseHeadsetConfig& PimaxSlamDriver::GetConfigOld(){
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
-	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, tackingSystemName);
+	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "aapvr");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ManufacturerName_String, "Pimax");
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_ModelNumber_String, GetHmdInfo().ProductName);
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_RenderModelName_String, "generic_hmd");
@@ -365,6 +369,11 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
 
+	// We need to set the mesh values before UpdateSettings() runs.
+	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+		SetVisibilityMeshes();
+	}
+
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
 	}
@@ -374,6 +383,7 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 }
 
 void PimaxSlamDriver::SubDeactivate() {
+	StopPvrTracking();
 	StopEyeTracking();
 }
 
@@ -382,49 +392,25 @@ void PimaxSlamDriver::RunFrame() {
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
 
+	if (driverConfig.hasBeenUpdated &&
+		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
+		// We need to set the mesh values before UpdateSettings() runs.
+		if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
+			SetVisibilityMeshes();
+		}
+	}
+
 	BaseHeadsetShim::RunFrame();
 
 	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
 	if (CheckDeviceLost()) {
+		StopPvrTracking();
 		return;
 	}
 
-	const auto pvrNow = GetPvrTime();
+	StartPvrTracking();
 
-	pvrTrackingState trackingState = {};
-	pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
-
-	// Update the headset pose.
-	{
-		vr::DriverPose_t pose = {};
-		pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
-		pose.deviceIsConnected = true;
-		pose.result = vr::TrackingResult_Running_OutOfRange;
-		if (trackingState.HeadPose.StatusFlags & pvrStatus_OrientationTracked) {
-			pose.vecPosition[0] = trackingState.HeadPose.ThePose.Position.x;
-			pose.vecPosition[1] = trackingState.HeadPose.ThePose.Position.y;
-			pose.vecPosition[2] = trackingState.HeadPose.ThePose.Position.z;
-			pose.qRotation.x = trackingState.HeadPose.ThePose.Orientation.x;
-			pose.qRotation.y = trackingState.HeadPose.ThePose.Orientation.y;
-			pose.qRotation.z = trackingState.HeadPose.ThePose.Orientation.z;
-			pose.qRotation.w = trackingState.HeadPose.ThePose.Orientation.w;
-
-			pose.vecVelocity[0] = trackingState.HeadPose.LinearVelocity.x;
-			pose.vecVelocity[1] = trackingState.HeadPose.LinearVelocity.y;
-			pose.vecVelocity[2] = trackingState.HeadPose.LinearVelocity.z;
-
-			pose.vecAngularVelocity[0] = trackingState.HeadPose.AngularVelocity.x;
-			pose.vecAngularVelocity[1] = trackingState.HeadPose.AngularVelocity.y;
-			pose.vecAngularVelocity[2] = trackingState.HeadPose.AngularVelocity.z;
-
-			pose.poseTimeOffset = trackingState.HeadPose.TimeInSeconds - pvrNow;
-
-			pose.poseIsValid = true;
-			pose.result = vr::TrackingResult_Running_OK;
-		}
-		vr::VRServerDriverHost()->TrackedDevicePoseUpdated(deviceIndex, pose, sizeof(pose));
-	}
-
+	// Update controller state and buttons.
 	pvrInputState inputState = {};
 	pvr_getInputState(GetPvrSession(), &inputState);
 
@@ -435,25 +421,28 @@ void PimaxSlamDriver::RunFrame() {
 			side == 0 ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 			pvrTrackedDeviceProp_ControllerType_String);
 		const bool isActive = !controllerType.empty();
-		if (isActive) {
-			if (!s_controllerDriver[side]) {
-				const bool isPimaxController = controllerType == "pimax_crystal";
-				if (isPimaxController) {
-					s_controllerDriver[side] = std::make_unique<PimaxCrystalControllerDriver>(
-						side == 0 ? vr::TrackedControllerRole_LeftHand : vr::TrackedControllerRole_RightHand);
+		{
+			// Protects creation of s_controllerDriver[] and setting the isConnected flag inside PimaxCrystalControllerDriver.
+			std::unique_lock lock(s_controllerDriverMutex);
 
-					vr::VRServerDriverHost()->TrackedDeviceAdded(
-						side == 0 ? "PIMAXLEFT" : "PIMAXRIGHT", vr::TrackedDeviceClass_Controller, s_controllerDriver[side].get());
+			if (isActive) {
+				if (!s_controllerDriver[side]) {
+					const bool isPimaxController = controllerType == "pimax_crystal";
+					if (isPimaxController) {
+						s_controllerDriver[side] = std::make_unique<PimaxCrystalControllerDriver>(
+							side == 0 ? vr::TrackedControllerRole_LeftHand : vr::TrackedControllerRole_RightHand);
+
+						vr::VRServerDriverHost()->TrackedDeviceAdded(
+							side == 0 ? "PIMAXLEFT" : "PIMAXRIGHT", vr::TrackedDeviceClass_Controller, s_controllerDriver[side].get());
+					}
 				}
 			}
-		}
-		else if (s_controllerDriver[side]) {
-			s_controllerDriver[side]->Disconnect();
+			else if (s_controllerDriver[side]) {
+				s_controllerDriver[side]->Disconnect();
+			}
 		}
 
-		// Update controller poses and button states.
 		if (s_controllerDriver[side]) {
-			s_controllerDriver[side]->UpdateTrackingState(trackingState.HandPoses[side]);
 			s_controllerDriver[side]->UpdateInputState(inputState);
 		}
 	}
@@ -467,11 +456,21 @@ void PimaxSlamDriver::RunFrame() {
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update the battery level (Crystal OG).
+	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+	if (batteryPercentage > 0) {
+		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	}
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 	switch (event.eventType) {
 	case vr::VREvent_Input_HapticVibration:
+		// CustomHeadsetDeviceProvider invokes this call back from the same context as RunFrame(). No need to acquire s_controllerDriverMutex.
 		for (uint32_t side = 0; side < 2; side++) {
 			if (s_controllerDriver[side]) {
 				s_controllerDriver[side]->BroadcastHapticEvent(event.data.hapticVibration);
@@ -479,4 +478,84 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 		}
 		break;
 	}
+}
+
+void PimaxSlamDriver::StartPvrTracking() {
+	if (GetPvrSession() && !pvrTrackingRunning.exchange(true)) {
+		DriverLog("Starting PVR tracking thread");
+		pvrTrackingThread = std::thread(&PimaxSlamDriver::PvrTrackingThread, this);
+	}
+}
+
+void PimaxSlamDriver::StopPvrTracking() {
+	if (pvrTrackingRunning.exchange(false) && pvrTrackingThread.joinable()) {
+		DriverLog("Stopping PVR tracking thread");
+		pvrTrackingThread.join();
+		pvrTrackingThread = {};
+	}
+}
+
+void PimaxSlamDriver::PvrTrackingThread() {
+	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
+	const LARGE_INTEGER noDelay = {};
+	// TODO: Make sure this is a reasonable value. 500Hz is quite high, but it doesn't seem to largely increase CPU/GPU utilization.
+	const LONG periodMs = 2;
+	SetWaitableTimer(timer, &noDelay, periodMs, nullptr, nullptr, true);
+
+	while (true) {
+		WaitForSingleObject(timer, 100);
+		if (!pvrTrackingRunning) {
+			break;
+		}
+
+		const auto pvrNow = GetPvrTime();
+
+		pvrTrackingState trackingState = {};
+		pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
+
+		// Update the headset pose.
+		{
+			vr::DriverPose_t pose = {};
+			pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
+			pose.deviceIsConnected = true;
+			pose.result = vr::TrackingResult_Running_OutOfRange;
+			if (trackingState.HeadPose.StatusFlags & pvrStatus_OrientationTracked) {
+				pose.vecPosition[0] = trackingState.HeadPose.ThePose.Position.x;
+				pose.vecPosition[1] = trackingState.HeadPose.ThePose.Position.y;
+				pose.vecPosition[2] = trackingState.HeadPose.ThePose.Position.z;
+				pose.qRotation.x = trackingState.HeadPose.ThePose.Orientation.x;
+				pose.qRotation.y = trackingState.HeadPose.ThePose.Orientation.y;
+				pose.qRotation.z = trackingState.HeadPose.ThePose.Orientation.z;
+				pose.qRotation.w = trackingState.HeadPose.ThePose.Orientation.w;
+
+				pose.vecVelocity[0] = trackingState.HeadPose.LinearVelocity.x;
+				pose.vecVelocity[1] = trackingState.HeadPose.LinearVelocity.y;
+				pose.vecVelocity[2] = trackingState.HeadPose.LinearVelocity.z;
+
+				pose.vecAngularVelocity[0] = trackingState.HeadPose.AngularVelocity.x;
+				pose.vecAngularVelocity[1] = trackingState.HeadPose.AngularVelocity.y;
+				pose.vecAngularVelocity[2] = trackingState.HeadPose.AngularVelocity.z;
+
+				pose.poseTimeOffset = trackingState.HeadPose.TimeInSeconds - pvrNow;
+
+				pose.poseIsValid = true;
+				pose.result = vr::TrackingResult_Running_OK;
+			}
+			vr::VRServerDriverHost()->TrackedDevicePoseUpdated(deviceIndex, pose, sizeof(pose));
+		}
+
+		{
+			std::shared_lock lock(s_controllerDriverMutex);
+
+			for (uint32_t side = 0; side < 2; side++) {
+				if (s_controllerDriver[side]) {
+					s_controllerDriver[side]->UpdateTrackingState(trackingState.HandPoses[side]);
+				}
+			}
+		}
+	}
+
+	CloseHandle(timer);
+
+	DriverLog("PVR tracking thread stopped");
 }
