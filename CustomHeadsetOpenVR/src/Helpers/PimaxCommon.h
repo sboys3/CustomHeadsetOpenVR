@@ -14,6 +14,8 @@ struct PimaxInfo {
 	bool useSlamTracking = false;
 	uint32_t resolutionX = 0;
 	uint32_t resolutionY = 0;
+	float cantingAngle = 0;
+	float ipd = 0;
 };
 
 class PimaxCommon {
@@ -44,8 +46,6 @@ private:
 
 	pvrHmdInfo hmdInfo = {};
 	bool hasEyeTracking = false;
-	float cantingAngle = 0;
-	float ipd = 0;
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
 };

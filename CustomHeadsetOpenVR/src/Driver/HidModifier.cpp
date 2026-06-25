@@ -268,19 +268,6 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	
 	
 	std::map<std::string, ordered_json> jsonOverrides = {};
-	if(driverConfig.dreamAir.enable){
-		int vendorId = driverConfig.dreamAir.edidVendorIdOverride ? driverConfig.dreamAir.edidVendorIdOverride : driverConfig.dreamAir.edidVendorId;
-		jsonOverrides["Pimax Dream Air"] = {
-			{"device", {
-				// {"eye_target_width_in_pixels", 3552},
-				// {"eye_target_height_in_pixels", 3840},
-				{"eye_target_width_in_pixels", driverConfig.dreamAir.resolutionY},
-				{"eye_target_height_in_pixels", driverConfig.dreamAir.resolutionX},
-			}},
-			{"direct_mode_edid_vid", vendorId}, // PVR
-			// {"device_class", "controller"}, 
-		};
-	}
 	if(driverConfig.meganeX8K.enable){
 		int vendorId = driverConfig.meganeX8K.edidVendorIdOverride ? driverConfig.meganeX8K.edidVendorIdOverride : driverConfig.meganeX8K.edidVendorId;
 		jsonOverrides["MeganeX superlight 8K"] = {
@@ -302,13 +289,29 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	if(pimaxInfo.connected){
 		Config::BaseHeadsetConfig& pimaxConfig = PimaxCommon::GetHeadsetConfig();
 		int vendorId = pimaxConfig.edidVendorIdOverride ? pimaxConfig.edidVendorIdOverride : pimaxConfig.edidVendorId;
-		jsonOverrides["REF-HMD"] = {
+		ordered_json pimaxOverride = {
 			{"device", {
 				{"eye_target_width_in_pixels", pimaxConfig.resolutionX},
 				{"eye_target_height_in_pixels", pimaxConfig.resolutionY},
 			}},
 			{"direct_mode_edid_vid", vendorId}, // Probably PVR
 		};
+		switch(pimaxInfo.headsetType){
+			case Config::HeadsetType::DreamAir:
+				jsonOverrides["Pimax Dream Air"] = pimaxOverride;
+				break;
+			case Config::HeadsetType::DreamAirSE:
+				jsonOverrides["Pimax Dream Air SE"] = pimaxOverride;
+				break;
+			case Config::HeadsetType::CrystalSuper50PPD:
+			case Config::HeadsetType::CrystalSuper57PPD:
+			case Config::HeadsetType::CrystalSuperUltrawide:
+			case Config::HeadsetType::CrystalSuperMicroOLED:
+				jsonOverrides["Pimax Crystal Super"] = pimaxOverride;
+				// also allow janky crystal faceplates on the super so don't break
+			default:
+				jsonOverrides["REF-HMD"] = pimaxOverride;
+		}
 	}
 	
 	if(jsonOverrides.find(info.lighthouseDeviceName) != jsonOverrides.end()){

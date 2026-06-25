@@ -53,6 +53,7 @@ If my driver is a major factor in your decision of purchasing the Dream Air, use
 To pull the latest changes, run `git pull --recurse-submodules`
 
 ### Building on Linux
+You may have to go back to older commits if the current one uses windows specific APIs, or submit a pull request with cross platform support. I do intend to maintain Linux compatibility, but currently none of the headsets work on Linux for reasons out of my control.
 1. Follow the cloning steps above
 2. `cd CustomHeadsetOpenVR/CustomHeadsetOpenVR`
 3. `mkdir build && cd build`
@@ -66,7 +67,7 @@ Edit the `settings.json` file based on the [Config header file](./CustomHeadsetO
 Distortion profiles go in a folder named `Distortion` and they are referenced by their name.  
 
 ### Closed Source Components
-The DRM related functionality on the Dream Air is not open source, but the released driver can be used with a compiled from source driver.
+The DRM related functionality on the Dream Air is not open source, but the released driver can be used with a compiled from source driver. When using Pimax EVO OpenPort, this is not necessary.
 
 The `onlyHandlePrivateFunctionality` property allows you to run a compiled source driver alongside the closed-source driver. When set to `true` in the root of the config, it disables all functionality in the driver that contains private code except for the private code itself. This allows a compiled source driver to handle all the important parts of the driver. A driver without the closed source components is unaffected by the option.
 

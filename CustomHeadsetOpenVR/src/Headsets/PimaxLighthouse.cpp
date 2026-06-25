@@ -5,7 +5,7 @@
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
 	std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::Prop_ManufacturerName_String);
-	if(GetInfo().connected && (model == "Pimax Dream Air" || model == "REF-HMD") && manufacturer == "Pimax" && trackingSystem == "lighthouse"){
+	if(GetInfo().connected && (model.find("Pimax") != std::string::npos || (model == "REF-HMD" && manufacturer.find("Pimax") != std::string::npos)) && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
