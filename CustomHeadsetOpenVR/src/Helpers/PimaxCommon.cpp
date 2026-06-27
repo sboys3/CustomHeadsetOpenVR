@@ -221,6 +221,24 @@ void PimaxCommon::SetVisibilityMeshes() {
 	}
 }
 
+void PimaxCommon::PollMagicAttach() {
+	// Detect if Pimax LibMagic (DFR injector) was enabled after a scene application started and re-assert the
+	// PID of the current scene application.
+	const bool wasLibMagicEnabled = isLibMagicEnabled;
+	isLibMagicEnabled = pvr_getIntConfig(GetPvrSession(), "enable_foveated_rendering", 0);
+	if (isLibMagicEnabled != wasLibMagicEnabled) {
+		SetSceneApplicationProcess(lastSceneApplicationPid);
+	}
+}
+
+void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
+	if (pid) {
+		// Signal Pimax Play to perform a MagicAttach (DFR injector) when a new scene app started.
+		pvr_setIntConfig(GetPvrSession(), "openvr_client_changed", pid);
+	}
+	lastSceneApplicationPid = pid;
+}
+
 void PimaxCommon::EyeTrackingThread() {
 	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
 	const LARGE_INTEGER noDelay = {};
