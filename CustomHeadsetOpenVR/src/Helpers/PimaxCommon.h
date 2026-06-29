@@ -41,6 +41,9 @@ protected:
 
 	void SetVisibilityMeshes();
 
+	void PollMagicAttach();
+	void SetSceneApplicationProcess(uint32_t pid);
+
 private:
 	void EyeTrackingThread();
 
@@ -48,6 +51,8 @@ private:
 	bool hasEyeTracking = false;
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
+	uint32_t lastSceneApplicationPid = 0;
+	bool isLibMagicEnabled = false;
 };
 
 static inline std::string pvr_getTrackedDeviceStringPropertyHelper(pvrSessionHandle sessionHandle,

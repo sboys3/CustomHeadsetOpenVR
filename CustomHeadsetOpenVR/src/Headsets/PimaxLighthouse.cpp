@@ -77,13 +77,14 @@ void PimaxLighthouseShim::RunFrame(){
 		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
 		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
 	}
+
+	PollMagicAttach();
 }
 
 void PimaxLighthouseShim::HandleEvent(const vr::VREvent_t& event){
 	switch (event.eventType) {
 	case vr::VREvent_SceneApplicationChanged:
-		// Signal Pimax Play to perform a MagicAttach (DFR injector) when a new scene app started.
-		pvr_setIntConfig(GetPvrSession(), "openvr_client_changed", event.data.process.pid);
+		SetSceneApplicationProcess(event.data.process.pid);
 		break;
 	}
 }
