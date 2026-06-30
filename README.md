@@ -1,6 +1,5 @@
 # CustomHeadsetOpenVR
-This is a custom headset driver for SteamVR that allows the MeganeX 8K and Dream Air to operate as native SteamVR headsets. It provides significant image customization to all native SteamVR headsets through the custom shader.  
-
+This is a custom headset driver for SteamVR that allows several to operate as native SteamVR headsets. It provides significant image customization to all native SteamVR headsets through the custom shader.  
 
 <picture><img src="./CustomHeadsetGUI/public/CustomHeadsetCropped.png" height="96"><img/></picture>
 
@@ -24,13 +23,28 @@ You do not need to do this if you installed the driver with the GUI.
 3. Run `custom-headset-gui.exe` in `CustomHeadsetGUI`
 4. Go to the about page and install the new driver.
 
+
+## Supported Headsets
+* MeganeX 8K
+* Dream Air
+* Dream Air SE (1.3.0-beta)
+* Pimax 8K/5K (1.3.0-beta)
+* Crystal Super Micro-OLED (1.3.0-beta, distortion is still not perfect)
+* The Custom Shader works with all SteamVR native headsets
+	* Vive, Index, Bigscreen Beyond
+* Future/Incomplete support
+	* Crystal Super 50PPD
+	* Crystal Super 57PPD
+	* Crystal Super Ultrawide
+	* Crystal Light
+
+
 ## Configuring
 Run `custom-headset-gui.exe` to configure settings.
-Almost all settings will be immediately applied when the file is saved without restarting SteamVR.  
+Almost all settings will be immediately applied without restarting SteamVR.  
 
 
 ## Donations and Affiliates
-
 If you find this project helpful, consider supporting it through donations or using the affiliate links below:
 
 ### Donation Links

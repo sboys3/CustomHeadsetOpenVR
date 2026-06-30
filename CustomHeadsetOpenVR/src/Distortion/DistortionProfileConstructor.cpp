@@ -147,9 +147,46 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[dreamAir.name] = dreamAir;
 	
+	DistortionProfileConfig dreamAirSE = {};
+	dreamAirSE.name = "Dream Air SE Default";
+	dreamAirSE.device = {"DreamAirSE"};
+	dreamAirSE.modifiedTime = 0;
+	dreamAirSE.description = "Default distortion profile for the Dream Air SE in this driver. It is a custom distortion profile created for for the Dream Air SE by using a calibrated camera.";
+	dreamAirSE.author = "SBoys3";
+	dreamAirSE.creationDate = 1782452702.100;
+	dreamAirSE.type = "RadialBezier";
+	dreamAirSE.distortions = {
+		0.00, 0.000,
+		5.00, 12.33,
+		10.0, 24.61,
+		15.0, 36.75,
+		20.0, 48.63,
+		25.0, 60.04,
+		30.0, 70.90,
+		35.0, 81.20,
+		40.0, 90.80,
+		45.0, 99.60,
+		50.0, 107.7,
+		55.0, 115.5
+	};
+	dreamAirSE.distortionsRed = {
+		0.00, 0.30,
+		25.0, 0.45,
+		40.0, 0.50,
+		50.0, 0.55,
+	};
+	dreamAirSE.distortionsBlue = {
+		0.00, -0.2,
+		25.0, -0.4,
+		30.0, -0.4,
+		40.0, -0.5,
+		50.0, -0.6
+	};
+	builtInDistortionProfiles[dreamAirSE.name] = dreamAirSE;
+	
 	DistortionProfileConfig pimaxBuiltin = {};
 	pimaxBuiltin.name = "Pimax Builtin";
-	pimaxBuiltin.device = {"DreamAir", "DreamAirSE", "CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide", "CrystalSuperMicroOLED", "CrystalLight", "CrystalOG", "Pimax5KSuper", "Pimax5KPlus", "Pimax8KX", "Pimax8KPlus", "PimaxArtisan"};
+	pimaxBuiltin.device = {/*"DreamAir", "DreamAirSE", "CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide", "CrystalSuperMicroOLED", "CrystalLight", "CrystalOG",*/ "Pimax5KSuper", "Pimax5KPlus", "Pimax8KX", "Pimax8KPlus", "PimaxArtisan"};
 	pimaxBuiltin.modifiedTime = 0;
 	pimaxBuiltin.description = "Distortion Profile retrieved from Pimax API.";
 	pimaxBuiltin.author = "Pimax";

@@ -29,8 +29,8 @@ export class CrystalSuperMicroOledComponent {
     showDisplayRotation: false,
     showDriverWarning: false,
     ipdInfo: $localize`The inter pupillary distance of the virtual cameras in SteamVR applications. This IPD should be matched with what you set for the headset's physical IPD to get the correct world scale.`,
-    defaultMaxFovX: 96,
-    defaultMaxFovY: 86
+    defaultMaxFovX: 98,
+    defaultMaxFovY: 88
   };
 
   constructor() {

@@ -149,6 +149,14 @@ bool BaseHeadsetShim::PreDisplayComponentGetProjectionRaw(vr::EVREye &eEye, floa
 // run for each vertex of the distortion mesh and outputs the uv coordinates to sample for each color
 bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, float &fU, float &fV, vr::DistortionCoordinates_t &coordinates){
 	
+	int resolutionX = GetConfig().resolutionX;
+	int resolutionY = GetConfig().resolutionY;
+	if(resolutionX == 2544 && resolutionY == 2544){
+		// The Seeya panels in the Dream Air SE and Beyond have 16 pixels removed in each dimension on one side in full res mode which causes the center of the image to be offset. This fixes it
+		float offset = -8 / 2544.0f;
+		fU += offset;
+		fV += offset;
+	}
 	float redU = fU;
 	float redV = fV;
 	float greenU = fU;
@@ -169,14 +177,14 @@ bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, flo
 		}
 	}
 	
-	float minResolution = (float)std::min(GetConfig().resolutionX, GetConfig().resolutionY);
+	float minResolution = (float)std::min(resolutionX, resolutionY);
 	float distortionZoom = (float)GetConfig().distortionZoom;
 	float displayRotation = (float)GetConfig().displayRotation;
 	// change range to -1 to 1 for coverage of the minResolution square, apply rotation, and apply zoom
 	auto transformUV = [&](float &u, float &v){
 		// change range to -1 to 1 for coverage of the minResolution square
-		u = (u - 0.5f) * 2.0f * GetConfig().resolutionY / minResolution;
-		v = (v - 0.5f) * 2.0f * GetConfig().resolutionX / minResolution;
+		u = (u - 0.5f) * 2.0f * resolutionY / minResolution;
+		v = (v - 0.5f) * 2.0f * resolutionX / minResolution;
 		if(displayRotation == 1 || displayRotation == 3){
 			// swap u and v for 90 and 270 rotation
 			if(eEye == vr::Eye_Left){

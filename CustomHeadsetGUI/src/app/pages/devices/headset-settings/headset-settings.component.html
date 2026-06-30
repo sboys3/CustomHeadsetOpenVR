@@ -1,3 +1,13 @@
+@if(headsetMismatch()) {
+  <div class="headset-mismatch-warning">
+    <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon>
+    <span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span>
+  </div>
+}
+
+<!-- Content projection slot for existing warnings/content that should appear above settings but below the not-enabled warning -->
+<ng-content select="[headset-settings-content]"></ng-content>
+
 @if(settings && defaults) {
   <!-- Enable Driver Toggle -->
   <div class="field ignore-disable">
@@ -67,12 +77,25 @@
   </div>
 
   <!-- IPD -->
+  @if(settings.hardwareIpd) {
+  <div class="field">
+    <div class="title">
+      <span i18n>Use Hardware IPD</span>
+      <app-field-tip [info]="config().ipdInfo" />
+      <app-reset-button [canReset]="settings.hardwareIpd !== defaults.hardwareIpd"
+          (resetClick)="resetIpd()"></app-reset-button>
+    </div>
+    <div class="control">
+      <mat-slide-toggle [(ngModel)]="settings.hardwareIpd" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+  </div>
+  } @else {
   <div class="field">
     <div class="title">
       <span i18n>IPD</span>
       <app-field-tip [info]="config().ipdInfo" />
-      <app-reset-button [canReset]="settings.ipd !== defaults.ipd"
-          (resetClick)="resetOption('ipd')"></app-reset-button>
+      <app-reset-button [canReset]="settings.hardwareIpd !== defaults.hardwareIpd || settings.ipd !== defaults.ipd"
+          (resetClick)="defaults.hardwareIpd ? resetIpd() : resetOption('ipd')"></app-reset-button>
     </div>
     <div class="control">
       <input matInput [(ngModel)]="settings.ipd" step="0.5" (ngModelChange)="saveConfigSettings()" type="number">
@@ -81,6 +104,7 @@
       </mat-slider>
     </div>
   </div>
+  }
 
   <!-- Max FOV Horizontal -->
   <div class="field">
@@ -823,6 +847,20 @@
     </div>
 
     <!-- Eye Rotation -->
+    @if(settings.autoEyeRotation) {
+    <div class="field">
+      <div class="title">
+        <span i18n>Use Auto Eye Rotation</span>
+        <app-field-tip i18n-info
+            info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense of binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
+        <app-reset-button [canReset]="settings.autoEyeRotation !== defaults.autoEyeRotation"
+            (resetClick)="resetEyeRotation()"></app-reset-button>
+      </div>
+      <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.autoEyeRotation" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+      </div>
+    </div>
+    } @else {
     <div class="field">
       <div class="title">
         <span i18n>Eye Rotation</span>
@@ -832,8 +870,8 @@
           &nbsp;&nbsp;
           <mat-icon class="warn-color-flash" matTooltip="This may cause vision problems outside of the headset." i18n-matTooltip>warning</mat-icon>
         }
-        <app-reset-button [canReset]="settings.eyeRotation !== defaults.eyeRotation"
-            (resetClick)="resetOption('eyeRotation')"></app-reset-button>
+        <app-reset-button [canReset]="settings.autoEyeRotation !== defaults.autoEyeRotation || settings.eyeRotation !== defaults.eyeRotation"
+            (resetClick)="defaults.autoEyeRotation ? resetEyeRotation() : resetOption('eyeRotation')"></app-reset-button>
       </div>
       <div class="control">
         <input matInput [(ngModel)]="settings.eyeRotation" step="0.1" (ngModelChange)="saveConfigSettings()"
@@ -843,6 +881,7 @@
         </mat-slider>
       </div>
     </div>
+    }
 
     <!-- Disable Eye -->
     <div class="field">

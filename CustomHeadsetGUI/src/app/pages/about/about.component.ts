@@ -2,6 +2,8 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { open } from '@tauri-apps/plugin-shell';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
 import { AppUpdateInfoSuccess, AppUpdateService } from '../../services/app-update.service';
 import { delay, isNewVersion } from '../../helpers';
 import { DriverInfoService } from '../../services/driver-info.service';
@@ -9,9 +11,10 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
 import { DialogService } from '../../services/dialog.service';
 import { DriverSettingService } from '../../services/driver-setting.service'
 import {FieldTipComponent} from '../../utilities/field-tip/field-tip.component'
+import { customHeadsetDriverName } from '../../../environment';
 @Component({
   selector: 'app-about',
-  imports: [MatButtonModule, MatIconModule, FieldTipComponent,],
+  imports: [MatButtonModule, MatIconModule, MatSlideToggleModule, FormsModule, FieldTipComponent,],
   providers: [],
   templateUrl: './about.component.html',
   styleUrl: './about.component.scss'
@@ -25,11 +28,19 @@ export class AboutComponent {
   private oldMeganeXEdidVendor: number | undefined = undefined
   private oldDreamAirEidVendor: number | undefined = undefined
   public driverVersionMismatch = signal<boolean>(false);
+  private _driverEnabledState = signal<boolean>(true);
+  public driverEnabledToggle = true;
   constructor(public aus: AppUpdateService, public dis: DriverInfoService, public sds: SystemDiagnosticService, private dialog: DialogService) {
     effect(() => {
       const installedVersion = this.sds.driverInstalled();
       const lastRunVersion = this.dis.values()?.driverVersion;
       this.driverVersionMismatch.set(!!installedVersion && !!lastRunVersion && installedVersion !== lastRunVersion);
+    });
+    effect(() => {
+      const config = this.sds.steamVrConfig();
+      const enabled = this.sds.getSteamVRDriverEnableState(config, customHeadsetDriverName);
+      this._driverEnabledState.set(enabled);
+      this.driverEnabledToggle = enabled;
     });
     effect(() => {
         let newSettings = this.dss.values()
@@ -71,6 +82,13 @@ export class AboutComponent {
   async uninstallDriver(){
     if (await this.sds.uninstallDriver()) {
       this.dialog.message($localize`Uninstall success`, $localize`Successfully uninstalled the driver`)
+    }
+  }
+  async toggleDriverEnabled() {
+    if (this._driverEnabledState()) {
+      await this.sds.disableSteamVRDriver(customHeadsetDriverName);
+    } else {
+      await this.sds.enableSteamVRDriver(customHeadsetDriverName);
     }
   }
 }

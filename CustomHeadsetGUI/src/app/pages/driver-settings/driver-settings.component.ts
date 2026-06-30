@@ -4,7 +4,14 @@ import { MeganexX8KComponent } from '../devices/meganex-x8-k/meganex-x8-k.compon
 import { DreamAirComponent } from '../devices/dream-air/dream-air.component';
 import { DreamAirSeComponent } from '../devices/dream-air-se/dream-air-se.component';
 import { CrystalSuperMicroOledComponent } from '../devices/crystal-super-micro-oled/crystal-super-micro-oled.component';
-import { Pimax8KxComponent } from '../devices/pimax-8kx/pimax-8kx.component';
+import { CrystalSuper50PpdComponent } from '../devices/crystal-super-50ppd/crystal-super-50ppd.component';
+import { CrystalSuper57PpdComponent } from '../devices/crystal-super-57ppd/crystal-super-57ppd.component';
+import { CrystalSuperUltrawideComponent } from '../devices/crystal-super-ultrawide/crystal-super-ultrawide.component';
+import { CrystalLightComponent } from '../devices/crystal-light/crystal-light.component';
+import { CrystalOgComponent } from '../devices/crystal-og/crystal-og.component';
+import { Pimax8KComponent } from '../devices/pimax-8k/pimax-8k.component';
+import { Pimax5KComponent } from '../devices/pimax-5k/pimax-5k.component';
+import { PimaxArtisanComponent } from '../devices/pimax-artisan/pimax-artisan.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
 import { HeadsetType, HeadsetType as HeadsetTypeEnum, Settings } from '../../services/JsonFileDefines';
@@ -23,6 +30,13 @@ import { vendor, vendorUi, customHeadsetDriverName } from '../../../environment'
 export interface TabConfig {
   type: string;
   headsetType: HeadsetType;
+  label: string;
+  group?: string; // Optional group name for grouping tabs together
+}
+
+export interface TabGroup {
+  name: string;
+  tabs: TabConfig[];
 }
 
 @Component({
@@ -33,14 +47,21 @@ export interface TabConfig {
         DreamAirComponent,
         DreamAirSeComponent,
         CrystalSuperMicroOledComponent,
-        Pimax8KxComponent,
+        CrystalSuper50PpdComponent,
+        CrystalSuper57PpdComponent,
+        CrystalSuperUltrawideComponent,
+        CrystalLightComponent,
+        CrystalOgComponent,
+        Pimax8KComponent,
+        Pimax5KComponent,
+        PimaxArtisanComponent,
         GeneralComponent,
         MatTabsModule,
         MatIconModule,
         MatButtonModule,
         CommonModule
     ],
-    providers: [MeganexX8KComponent, DreamAirComponent, DreamAirSeComponent, CrystalSuperMicroOledComponent, Pimax8KxComponent],
+    providers: [MeganexX8KComponent, DreamAirComponent, DreamAirSeComponent, CrystalSuperMicroOledComponent, CrystalSuper50PpdComponent, CrystalSuper57PpdComponent, CrystalSuperUltrawideComponent, CrystalLightComponent, CrystalOgComponent, Pimax8KComponent, Pimax5KComponent, PimaxArtisanComponent],
     templateUrl: './driver-settings.component.html',
     styleUrl: './driver-settings.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -48,9 +69,8 @@ export interface TabConfig {
 export class DriverSettingsComponent implements OnInit, OnDestroy {
     // Tab configurations
     private _tabs = signal<TabConfig[]>([]);
-    public currentHeadsetType = signal<HeadsetType | undefined>(undefined);
     private _selectedTab = signal<TabConfig | undefined>(undefined);
-    private _previousOrderedTabs: TabConfig[] = [];
+    private _previousOrderedGroups: TabGroup[] = [];
     public sds = inject(SystemDiagnosticService)
     driverEnablePrompt = signal(false)
     driverBlocked = signal(false)
@@ -84,13 +104,13 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     DreamAirComponent = DreamAirComponent;
     DreamAirSeComponent = DreamAirSeComponent;
     CrystalSuperMicroOledComponent = CrystalSuperMicroOledComponent;
-    Pimax8KxComponent = Pimax8KxComponent;
+    Pimax8KComponent = Pimax8KComponent;
     HeadsetType = HeadsetTypeEnum;
 
     constructor(private dis: DriverInfoService, private dss: DriverSettingService, private appSettingService: AppSettingService, public appUpdateService: AppUpdateService) {
         // Register tab configurations
-        let availableTabs = [];
-        availableTabs.push({ type: 'General', headsetType: HeadsetType.Other }) // other headsets
+        let availableTabs: TabConfig[] = [];
+        availableTabs.push({ type: 'General', headsetType: HeadsetType.Other, label: $localize`General` })
         
         
         let onSettingsAvailable = (callback: (settings: Settings) => void) =>{
@@ -110,7 +130,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         }
         
         if(!vendorUi || vendorUi == "shiftall"){
-            availableTabs.push({ type: 'MeganeX8K', headsetType: HeadsetType.MeganeX8K })
+            availableTabs.push({ type: 'MeganeX8K', headsetType: HeadsetType.MeganeX8K, label: $localize`MeganeX 8K` })
         }else{
             // disable when not shown
             onSettingsAvailable((settings) => {
@@ -120,73 +140,80 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
         }
         
         if(!vendorUi || vendorUi == "pimax"){
-            availableTabs.push({ type: 'DreamAir', headsetType: HeadsetType.DreamAir })
-            availableTabs.push({ type: 'DreamAirSE', headsetType: HeadsetType.DreamAirSE })
-            availableTabs.push({ type: 'CrystalSuperMicroOLED', headsetType: HeadsetType.CrystalSuperMicroOLED })
-            availableTabs.push({ type: 'Pimax8KX', headsetType: HeadsetType.Pimax8KX })
+            availableTabs.push({ type: 'DreamAir', headsetType: HeadsetType.DreamAir, label: $localize`Dream Air`, group: $localize`Dream Air` })
+            availableTabs.push({ type: 'DreamAirSE', headsetType: HeadsetType.DreamAirSE, label: $localize`Dream Air SE`, group: $localize`Dream Air` })
+            availableTabs.push({ type: 'CrystalSuperMicroOLED', headsetType: HeadsetType.CrystalSuperMicroOLED, label: $localize`Super Micro-OLED`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'CrystalSuper50PPD', headsetType: HeadsetType.CrystalSuper50PPD, label: $localize`Super 50PPD`, group: $localize`Crystal Series` })
+            // availableTabs.push({ type: 'CrystalSuper57PPD', headsetType: HeadsetType.CrystalSuper57PPD, label: $localize`Super 57PPD`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'CrystalSuperUltrawide', headsetType: HeadsetType.CrystalSuperUltrawide, label: $localize`Super Ultrawide`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'CrystalLight', headsetType: HeadsetType.CrystalLight, label: $localize`Crystal Light`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'CrystalOG', headsetType: HeadsetType.CrystalOG, label: $localize`Crystal OG`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'Pimax8K', headsetType: HeadsetType.Pimax8KX, label: $localize`Pimax 8K Series`, group: $localize`P2 Series` })
+            availableTabs.push({ type: 'Pimax5K', headsetType: HeadsetType.Pimax5KPlus, label: $localize`Pimax 5K Series`, group: $localize`P2 Series` })
+            availableTabs.push({ type: 'PimaxArtisan', headsetType: HeadsetType.PimaxArtisan, label: $localize`Pimax Artisan`, group: $localize`P2 Series` })
         }else{
             // disable when not shown
             onSettingsAvailable((settings) => {
                 settings.dreamAir.enable = false
                 settings.dreamAirSE.enable = false
                 settings.crystalSuperMicroOLED.enable = false
+                settings.crystalSuper50PPD.enable = false
+                settings.crystalSuper57PPD.enable = false
+                settings.crystalSuperUltrawide.enable = false
+                settings.crystalLight.enable = false
+                settings.crystalOG.enable = false
+                settings.pimax5KPlus.enable = false
                 settings.pimax8KX.enable = false
+                settings.pimaxArtisan.enable = false
                 this.dss.save(settings)
             })
         }
         
         this._tabs.set(availableTabs)
         
-        
         // Effect to update current headset type when driver info changes
         effect(() => {
             const info = this.dis.values();
-            if (info && info.connectedHeadset !== undefined && info.connectedHeadset !== HeadsetType.None) {
-                // Convert number to HeadsetType enum
-                const headsetType = info.connectedHeadset as HeadsetType;
-                this.currentHeadsetType.set(headsetType);
-            }
             if (info && info.nonNativeHeadsetFound) {
                 this.nonNativeWarning.set(true)
             } else {
                 this.nonNativeWarning.set(false)
             }
         });
-
+        
         // Effect to handle tab reordering and selection when headset changes
         effect(() => {
-            const ordered = this.orderedTabs;
-            const currentType = this.currentHeadsetType();
+            const groups = this.tabGroups;
+            const currentType = this.dis.currentHeadsetType();
             const selected = this._selectedTab();
-            
 
             // Check if order changed
-            const orderChanged = !this.arraysEqual(ordered, this._previousOrderedTabs);
-            
+            const orderChanged = !this.groupsEqual(groups, this._previousOrderedGroups);
+
             setTimeout(() => {
                 if (orderChanged) {
-                    // If order changed, select the first tab
-                    if (ordered.length > 0) {
-                        this._selectedTab.set(ordered[0]);
+                    // If order changed, select the first tab of the first group
+                    if (groups.length > 0 && groups[0].tabs.length > 0) {
+                        this._selectedTab.set(groups[0].tabs[0]);
                     }
-                } else if (!selected && ordered.length > 0) {
+                } else if (!selected && groups.length > 0 && groups[0].tabs.length > 0) {
                     // If no selected tab yet, select the first one
-                    this._selectedTab.set(ordered[0]);
+                    this._selectedTab.set(groups[0].tabs[0]);
                 }
             }, 0);
-            
-            
+
+
             console.log('Tab reordering triggered:', {
-                ordered,
+                groups,
                 currentType,
                 selected,
                 newSelected: this._selectedTab(),
-                previous: this._previousOrderedTabs
+                previous: this._previousOrderedGroups
             });
-            
 
-            // Update previous ordered tabs
-            this._previousOrderedTabs = [...ordered];
+
+            // Update previous ordered groups
+            this._previousOrderedGroups = groups.map(g => ({ ...g, tabs: [...g.tabs] }));
         });
         
         effect(() => {
@@ -215,65 +242,142 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
     }
 
-    // Expose ordered tabs to template (getter that returns array)
-    get orderedTabs(): TabConfig[] {
-        const currentType = this.currentHeadsetType();
+    // Build tab groups from the flat tabs list, preserving definition order
+    get tabGroups(): TabGroup[] {
         const tabs = this._tabs();
-        const previousOrder = this._previousOrderedTabs.length > 0 ? this._previousOrderedTabs : tabs;
+        const currentType = this.dis.currentHeadsetType();
         const appSettings = this.appSettingService.values();
         const defaultTab = appSettings?.defaultSettingsTab ?? 'auto';
 
-        // If default tab is set to a specific tab (not 'auto'), use that tab
+        // Build groups preserving definition order from availableTabs
+        let groups: TabGroup[] = [];
+        const groupIndexMap = new Map<string, number>(); // group name -> index in groups array
+
+        for (const tab of tabs) {
+            if (tab.group) {
+                // Grouped tab - add to existing group or create new one
+                let groupIdx = groupIndexMap.get(tab.group);
+                if (groupIdx === undefined) {
+                    groups.push({ name: tab.group, tabs: [tab] });
+                    groupIndexMap.set(tab.group, groups.length - 1);
+                } else {
+                    groups[groupIdx].tabs.push(tab);
+                }
+            } else {
+                // Standalone tab - create its own group
+                groups.push({ name: tab.label, tabs: [tab] });
+            }
+        }
+
+        // Handle default tab selection (not 'auto')
         if (defaultTab !== 'auto') {
             const selectedTab = tabs.find(tab => tab.type === defaultTab);
             if (selectedTab) {
-                const otherTabs = tabs.filter(tab => tab !== selectedTab);
-                return [selectedTab, ...otherTabs];
+                // Find which group contains this tab
+                const targetGroupIndex = groups.findIndex(g => g.tabs.includes(selectedTab));
+                if (targetGroupIndex > -1 && targetGroupIndex !== 0) {
+                    // Move group to front
+                    const [targetGroup] = groups.splice(targetGroupIndex, 1);
+                    groups.unshift(targetGroup);
+                    // Move tab to front within group
+                    const tabIndex = targetGroup.tabs.indexOf(selectedTab);
+                    if (tabIndex > -1 && tabIndex !== 0) {
+                        const [targetTab] = targetGroup.tabs.splice(tabIndex, 1);
+                        targetGroup.tabs.unshift(targetTab);
+                    }
+                }
+                return groups;
             }
         }
 
         // Auto mode: use headset-based selection
         if (!currentType) {
-            // When headset is unknown, keep tab order
-            return previousOrder;
+            // When headset is unknown, don't reorder
+            return groups;
         }
 
         // Find the tab that matches the current headset type
         const specificTab = tabs.find(tab => tab.headsetType === currentType);
-
         if (!specificTab) {
-            // If we can't find the tab for the headset type, use the default order
-            return tabs;
+            // If no matching tab for current headset, use default order
+            return groups;
         }
 
-        // Reorder: specific headset tab first, then general tab
-        const otherTabs = tabs.filter(tab => tab !== specificTab);
-        return [specificTab, ...otherTabs];
+        // Find which group contains the specific tab
+        const targetGroupIndex = groups.findIndex(g => g.tabs.includes(specificTab));
+        if (targetGroupIndex === -1) {
+            return groups;
+        }
+
+        // Move the target group to the front
+        const [targetGroup] = groups.splice(targetGroupIndex, 1);
+        groups.unshift(targetGroup);
+
+        // Move the specific tab to the front within its group
+        const tabIndex = targetGroup.tabs.indexOf(specificTab);
+        if (tabIndex > -1) {
+            const [targetTab] = targetGroup.tabs.splice(tabIndex, 1);
+            targetGroup.tabs.unshift(targetTab);
+        }
+
+        return groups;
     }
 
-    // Get the selected tab index
-    get selectedIndex(): number {
+    // Get the selected group index
+    get selectedGroupIndex(): number {
         const selected = this._selectedTab();
-        const ordered = this.orderedTabs;
+        const groups = this.tabGroups;
         if (selected) {
-            return ordered.indexOf(selected);
+            return groups.findIndex(g => g.tabs.includes(selected));
         }
         return 0;
     }
 
-    // Handle tab change
-    onTabChange(index: number): void {
-        const ordered = this.orderedTabs;
-        if (ordered[index]) {
-            this._selectedTab.set(ordered[index]);
+    // Get the selected tab index within the current group
+    get selectedTabInGroupIndex(): number {
+        const selected = this._selectedTab();
+        const groups = this.tabGroups;
+        const groupIndex = this.selectedGroupIndex;
+        if (selected && groupIndex >= 0 && groupIndex < groups.length) {
+            return groups[groupIndex].tabs.indexOf(selected);
+        }
+        return 0;
+    }
+
+    // Handle outer group tab change
+    onGroupChange(index: number): void {
+        const groups = this.tabGroups;
+        if (groups[index]) {
+            // Select the first tab in the new group
+            if (groups[index].tabs.length > 0) {
+                this._selectedTab.set(groups[index].tabs[0]);
+            }
         }
     }
-    
-    // Compare two arrays for equality based on object references
-    private arraysEqual(a: TabConfig[], b: TabConfig[]): boolean {
+
+    // Handle inner tab change within a group
+    onTabInGroupChange(index: number): void {
+        const groups = this.tabGroups;
+        const groupIndex = this.selectedGroupIndex;
+        if (groupIndex >= 0 && groups[groupIndex] && groups[groupIndex].tabs[index]) {
+            this._selectedTab.set(groups[groupIndex].tabs[index]);
+        }
+    }
+
+    // Check if a group is a standalone (single tab with no group property)
+    isStandaloneGroup(group: TabGroup): boolean {
+        return !group.tabs[0].group;
+    }
+
+    // Compare two arrays of groups for equality
+    private groupsEqual(a: TabGroup[], b: TabGroup[]): boolean {
         if (a.length !== b.length) return false;
         for (let i = 0; i < a.length; i++) {
-            if (a[i] !== b[i]) return false;
+            if (a[i].name !== b[i].name) return false;
+            if (a[i].tabs.length !== b[i].tabs.length) return false;
+            for (let j = 0; j < a[i].tabs.length; j++) {
+                if (a[i].tabs[j] !== b[i].tabs[j]) return false;
+            }
         }
         return true;
     }

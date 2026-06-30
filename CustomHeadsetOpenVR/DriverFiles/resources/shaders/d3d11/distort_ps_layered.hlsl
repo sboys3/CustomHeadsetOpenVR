@@ -763,6 +763,11 @@ OutputStruct main(in InputStruct IN)
 	col.r *= 1 - sideAmount * 2.0;
 	col.g *= 1 - sideAmount * 0.3;
 	#endif
+	#ifdef DREAMAIRSE
+	float scaledDistanceFromCenter = max(0, distanceFromCenter * 0.5 - 0.15);
+	float sideAmount = min(scaledDistanceFromCenter * scaledDistanceFromCenter, 0.1);
+	col.g *= 1 - sideAmount * 2.0;
+	#endif
 	#endif
 	
 	// gamma is not done if this is not a layer shader

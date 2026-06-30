@@ -23,6 +23,8 @@ public:
 	PimaxCommon();
 	virtual ~PimaxCommon() = default;
 	static PimaxInfo GetInfo();
+	static bool IsLighthouseHeadsetConnected();
+	static bool IsSlamHeadsetConnected();
 	static pvrSessionHandle GetPvrSession();
 	static double GetPvrTime();
 	static Config::BaseHeadsetConfig& PatchConfig(Config::BaseHeadsetConfig& config);

@@ -23,15 +23,15 @@ export class DreamAirSeComponent {
     enableInfo: $localize`When enabled, the Custom Headset driver will run the Pimax Dream Air SE.`,
     resolutionInfo: $localize`The resolution to run the DisplayPort connection at.`,
     resolutionOptions: [
-      { name: '2544x2544', x: 2544, y: 2544 },
-      { name: '1920x1920', x: 1920, y: 1920 },
+      { name: '3K', x: 2544, y: 2544 },
+      { name: '2K', x: 1920, y: 1920 },
     ],
     showResolutionSelector: true,
     showDisplayRotation: false,
     showDriverWarning: false,
     ipdInfo: $localize`The inter pupillary distance of the virtual cameras in SteamVR applications. This IPD should be matched with what you set for the headset's physical IPD to get the correct world scale.`,
-    defaultMaxFovX: 86,
-    defaultMaxFovY: 86
+    defaultMaxFovX: 90,
+    defaultMaxFovY: 90
   };
 
   constructor() {

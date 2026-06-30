@@ -73,6 +73,10 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     const connectedHeadset = this.dis.values()?.connectedHeadset;
     return connectedHeadset !== undefined && connectedHeadset === this.headsetType();
   });
+  headsetMismatch = computed(() => {
+    const current = this.dis.currentHeadsetType();
+    return current !== undefined && current !== this.headsetType();
+  });
   
   resolutionModel?: number; // index into resolutionOptions
   defaultResolutionIndex = computed(() => {
@@ -125,6 +129,22 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     this.setResolution();
   }
 
+  resetIpd() {
+    if (this.settings && this.defaults) {
+      this.settings.hardwareIpd = this.defaults.hardwareIpd;
+      this.settings.ipd = this.defaults.ipd;
+      this.saveConfigSettings();
+    }
+  }
+
+  resetEyeRotation() {
+    if (this.settings && this.defaults) {
+      this.settings.autoEyeRotation = this.defaults.autoEyeRotation;
+      this.settings.eyeRotation = this.defaults.eyeRotation;
+      this.saveConfigSettings();
+    }
+  }
+
   setResolution() {
     if (this.settings && this.resolutionModel != null) {
       const res = this.config().resolutionOptions[this.resolutionModel];
@@ -146,8 +166,8 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   }
 
   // Computed keys to force slider re-render when max changes
-  sliderMaxFovX = computed(() => Math.ceil(this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX));
-  sliderMaxFovY = computed(() => Math.ceil(this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY));
+  sliderMaxFovX = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX : this.config().defaultMaxFovX));
+  sliderMaxFovY = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY : this.config().defaultMaxFovY));
 
   trackBySliderMax(index: number, value: number): number {
     return value;

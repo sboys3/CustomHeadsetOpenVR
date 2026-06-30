@@ -166,7 +166,7 @@ public:
 		// ipd offset from the ipd value in mm
 		double ipdOffset = 0.0;
 		// whether to use ipd data from the platform (eg: PVR)
-		bool autoIpd = false;
+		bool hardwareIpd = false;
 		// horizontal offset in mm to shift both eyes to the right
 		double horizontalIPDOffset = 0.0;
 		// minimum black levels from 0 to 1
@@ -284,8 +284,9 @@ public:
 			headsetType = HeadsetType::DreamAir;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "DreamAir";
-			maxFovX = 96;
-			maxFovY = 86;
+			maxFovX = 98;
+			maxFovY = 88;
+			fovClamping = false;
 			edidVendorId = 53826; // PVR
 			displayRotation = 3;
 			subpixelOffsets = {0.33 / 3552.0, 0, 0, 0, -0.33 / 3552.0, 0};
@@ -304,16 +305,17 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::DreamAirSE;
-			distortionProfile = "Dream Air Default";
-			distortionProfileDeviceType = "DreamAir"; // this should have it's own distortion profiles as they are slightly different
-			maxFovX = 86;
-			maxFovY = 86;
+			distortionProfile = "Dream Air SE Default";
+			distortionProfileDeviceType = "DreamAirSE";
+			maxFovX = 90;
+			maxFovY = 90;
 			edidVendorId = 53826; // PVR
 			displayRotation = 1;
-			// WTF did they do with my 16 pixels?
+			subpixelOffsets = {-0.25 / 2544.0, -0.25 / 2544.0, -0.25 / 2544.0, 0.25 / 2544.0, 0.25 / 2544.0, 0};
+			// WTF did they do with my 16 pixels? (81664 in total missing pixels)
 			resolutionX = 2544;
 			resolutionY = 2544;
-			eyeRotation = 2.5;
+			eyeRotation = 3;
 			enableEyeTracking = true;
 		}
 	};
@@ -395,8 +397,9 @@ public:
 			headsetType = HeadsetType::CrystalSuperMicroOLED;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "DreamAir";
-			maxFovX = 96;
-			maxFovY = 86;
+			maxFovX = 98;
+			maxFovY = 88;
+			fovClamping = false;
 			edidVendorId = 53826; // PVR
 			displayRotation = 3;
 			subpixelOffsets = {0.33 / 3552.0, 0, 0, 0, -0.33 / 3552.0, 0};
@@ -620,6 +623,9 @@ public:
 	
 	// if devices should always be reported as tracking
 	bool forceTracking = false;
+	
+	// if only the headset should always be reported as tracking (ignores controllers and trackers)
+	bool forceTrackingHeadsetOnly = false;
 	
 	// if the screenshot requests should cause full compositor debug screenshots to be taken
 	bool takeCompositorScreenshots = false;

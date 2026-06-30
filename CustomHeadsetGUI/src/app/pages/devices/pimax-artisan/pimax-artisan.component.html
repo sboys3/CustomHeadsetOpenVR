@@ -1,0 +1,5 @@
+<app-headset-settings [config]="headsetConfig" [driverName]="headsetConfig.driverName" [settingField]="headsetConfig.settingField" [headsetType]="HeadsetType.PimaxArtisan" (navigateToGeneralTab)="navigateToGeneralTab.emit()">
+  <div headset-settings-content>
+    <app-pimax-launcher></app-pimax-launcher>
+  </div>
+</app-headset-settings>

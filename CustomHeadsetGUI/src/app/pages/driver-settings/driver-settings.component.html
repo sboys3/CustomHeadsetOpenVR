@@ -33,53 +33,72 @@
     }
   </div>
   }
-  <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
-    @for (tab of orderedTabs; track tab.headsetType) {
-    <mat-tab label="MeganeX 8K" i18n-label *ngIf="tab.type === 'MeganeX8K'">
+
+  <!-- Outer group tabs -->
+  <mat-tab-group [selectedIndex]="selectedGroupIndex" (selectedIndexChange)="onGroupChange($event)">
+    @for (group of tabGroups; track group.name) {
+    <mat-tab [label]="group.name">
       <ng-template matTabContent>
-        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.MeganeX8K){
-          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
+        @if(isStandaloneGroup(group)) {
+          <!-- Standalone: render content directly, no inner tabs -->
+          <div class="body-padding">
+            @for (tab of group.tabs; track tab.headsetType) {
+              @if(tab.type === 'MeganeX8K') {
+                <app-meganex-x8-k (navigateToGeneralTab)="switchToGeneralTab()" />
+              }
+              @if(tab.type === 'General') {
+                <app-general
+                  driverName=""
+                  settingField="" />
+              }
+            }
+          </div>
+        } @else {
+          <!-- Grouped: always show inner tabs (even with single tab, more may be added) -->
+          <mat-tab-group [selectedIndex]="selectedTabInGroupIndex" (selectedIndexChange)="onTabInGroupChange($event)">
+            @for (tab of group.tabs; track tab.headsetType) {
+            <mat-tab [label]="tab.label">
+              <ng-template matTabContent>
+                <div class="body-padding">
+                  @if(tab.type === 'DreamAir') {
+                    <app-dream-air (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'DreamAirSE') {
+                    <app-dream-air-se (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalSuperMicroOLED') {
+                    <app-crystal-super-micro-oled (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalSuper50PPD') {
+                    <app-crystal-super-50ppd (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalSuper57PPD') {
+                    <app-crystal-super-57ppd (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalSuperUltrawide') {
+                    <app-crystal-super-ultrawide (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalLight') {
+                    <app-crystal-light (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'CrystalOG') {
+                    <app-crystal-og (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'Pimax5K') {
+                    <app-pimax-5k (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'Pimax8K') {
+                    <app-pimax-8k (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                  @if(tab.type === 'PimaxArtisan') {
+                    <app-pimax-artisan (navigateToGeneralTab)="switchToGeneralTab()" />
+                  }
+                </div>
+              </ng-template>
+            </mat-tab>
+            }
+          </mat-tab-group>
         }
-        <app-meganex-x8-k (navigateToGeneralTab)="switchToGeneralTab()" />
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Dream Air" i18n-label *ngIf="tab.type === 'DreamAir'">
-      <ng-template matTabContent>
-        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.DreamAir){
-          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
-        }
-        <app-dream-air (navigateToGeneralTab)="switchToGeneralTab()" />
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Dream Air SE" i18n-label *ngIf="tab.type === 'DreamAirSE'">
-      <ng-template matTabContent>
-        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.DreamAirSE){
-          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
-        }
-        <app-dream-air-se (navigateToGeneralTab)="switchToGeneralTab()" />
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Crystal Super Micro-OLED" i18n-label *ngIf="tab.type === 'CrystalSuperMicroOLED'">
-      <ng-template matTabContent>
-        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.CrystalSuperMicroOLED){
-          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
-        }
-        <app-crystal-super-micro-oled (navigateToGeneralTab)="switchToGeneralTab()" />
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="Pimax 8KX" i18n-label *ngIf="tab.type === 'Pimax8KX'">
-      <ng-template matTabContent>
-        @if(currentHeadsetType() && currentHeadsetType() !== HeadsetType.Pimax8KX){
-          <div class="field"><mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>This headset is not currently being run by this driver. None of these settings will have an effect. Enable this driver and restart SteamVR with the headset connected to change this.</span></div>
-        }
-        <app-pimax-8kx (navigateToGeneralTab)="switchToGeneralTab()" />
-      </ng-template>
-    </mat-tab>
-    <mat-tab label="General" i18n-label *ngIf="tab.type === 'General'">
-      <ng-template matTabContent>
-        <app-general
-          driverName=""
-          settingField="" />
       </ng-template>
     </mat-tab>
     }

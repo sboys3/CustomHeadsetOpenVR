@@ -89,6 +89,12 @@
     </div>
 </div>
 <div class="field">
+    <div class="title" i18n>Enable Driver</div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="driverEnabledToggle" (ngModelChange)="toggleDriverEnabled()"></mat-slide-toggle>
+    </div>
+</div>
+<div class="field">
     <div class="section-title" i18n>Links</div>
 </div>
 <div class="field">

@@ -42,8 +42,8 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["ipdOffset"].is_number()){
 		headsetConfig.ipdOffset = headsetData["ipdOffset"].get<double>();
 	}
-	if(headsetData["autoIpd"].is_boolean()){
-		headsetConfig.autoIpd = headsetData["autoIpd"].get<bool>();
+	if(headsetData["hardwareIpd"].is_boolean()){
+		headsetConfig.hardwareIpd = headsetData["hardwareIpd"].get<bool>();
 	}
 	if(headsetData["horizontalIPDOffset"].is_number()){
 		headsetConfig.horizontalIPDOffset = headsetData["horizontalIPDOffset"].get<double>();
@@ -385,6 +385,9 @@ void ConfigLoader::ParseConfig(){
 		if(data["forceTracking"].is_boolean()){
 			newConfig.forceTracking = data["forceTracking"].get<bool>();
 		}
+		if(data["forceTrackingHeadsetOnly"].is_boolean()){
+			newConfig.forceTrackingHeadsetOnly = data["forceTrackingHeadsetOnly"].get<bool>();
+		}
 		if(data["takeCompositorScreenshots"].is_boolean()){
 			newConfig.takeCompositorScreenshots = data["takeCompositorScreenshots"].get<bool>();
 		}
@@ -459,7 +462,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"enable", headsetConfig.enable},
 		{"ipd", headsetConfig.ipd},
 		{"ipdOffset", headsetConfig.ipdOffset},
-		{"autoIpd", headsetConfig.autoIpd},
+		{"hardwareIpd", headsetConfig.hardwareIpd},
 		{"horizontalIPDOffset", headsetConfig.horizontalIPDOffset},
 		{"blackLevel", headsetConfig.blackLevel},
 		{"colorMultiplier", {
@@ -601,6 +604,7 @@ void ConfigLoader::WriteInfo(){
 				}},
 			}},
 			{"forceTracking", defaultSettings.forceTracking},
+			{"forceTrackingHeadsetOnly", defaultSettings.forceTrackingHeadsetOnly},
 			{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},
 			{"onlyHandlePrivateFunctionality", defaultSettings.onlyHandlePrivateFunctionality},
 			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}

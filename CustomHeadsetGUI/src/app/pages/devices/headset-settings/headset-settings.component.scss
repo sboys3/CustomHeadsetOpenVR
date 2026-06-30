@@ -3,3 +3,10 @@
 :host {
     @include sf.formStyle();
 }
+
+.headset-mismatch-warning {
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+}

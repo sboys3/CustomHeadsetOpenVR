@@ -70,7 +70,7 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	}
 	
 	// For Pimax SLAM headsets, load our own driver instead of shimming another driver.
-	if(driverConfig.dreamAir.enable && PimaxCommon::GetInfo().connected && PimaxCommon::GetInfo().useSlamTracking) {
+	if(PimaxCommon::IsSlamHeadsetConnected()) {
 		PimaxSlamDriver* pimaxSlamImplementation = new PimaxSlamDriver();
 		pimaxSlamImplementation->deviceProvider = this;
 		shims.insert(pimaxSlamImplementation);
@@ -274,7 +274,7 @@ bool CustomHeadsetDeviceProvider::SendVendorEvent(uint32_t unWhichDevice, vr::EV
 }
 
 bool CustomHeadsetDeviceProvider::HandleDevicePoseUpdated(uint32_t openVRID, vr::DriverPose_t &pose){
-	if(driverConfig.forceTracking){
+	if(driverConfig.forceTracking || (driverConfig.forceTrackingHeadsetOnly && openVRID == 0)){
 		pose.poseIsValid = true;
 		if(pose.result != vr::TrackingResult_Fallback_RotationOnly){
 			pose.result = vr::TrackingResult_Running_OK;
@@ -307,7 +307,7 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		
 		// TODO: validate the interface versions of drivers and make the shims conform to versions to prevent potential crashes
 		
-		if(driverConfig.ConfigFromHeadsetType(PimaxCommon::GetInfo().headsetType)->enable && PimaxCommon::GetInfo().connected && !PimaxCommon::GetInfo().useSlamTracking){
+		if(PimaxCommon::IsLighthouseHeadsetConnected()){
 			PimaxLighthouseShim* pimaxLighthouseShim = new PimaxLighthouseShim();
 			pimaxLighthouseShim->deviceProvider = this;
 			shims.insert(pimaxLighthouseShim);

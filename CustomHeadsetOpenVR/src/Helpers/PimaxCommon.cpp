@@ -96,19 +96,19 @@ static bool EnsurePvrSession() {
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
 			s_info.resolutionX = displayInfo.width / 2;
 			s_info.resolutionY = displayInfo.height;
+				
+			// Always query without parallel projection enabled.
+			// The underlying driver will then (re)apply parallel projection if needed during Activate() and/or RunFrame().
+			pvr_setIntConfig(s_pvrSession, "view_rotation_fix", 0);
+			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
+			s_info.ipd = PVR::Vector3f(eyeInfo[pvrEye_Left].HmdToEyePose.Position).Distance(eyeInfo[pvrEye_Right].HmdToEyePose.Position) * 1000;
+			DriverLog("IPD: %.1f mm", s_info.ipd);
+			s_info.cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
+			s_info.cantingAngle *= 180 / 3.1415926f;
+			DriverLog("Canting Angle: %.2f deg", s_info.cantingAngle);
 		}
-		
-		// Always query without parallel projection enabled.
-		// The underlying driver will then (re)apply parallel projection if needed during Activate() and/or RunFrame().
-		pvr_setIntConfig(s_pvrSession, "view_rotation_fix", 0);
-		pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
-		pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
-		pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
-		s_info.ipd = PVR::Vector3f(eyeInfo[pvrEye_Left].HmdToEyePose.Position).Distance(eyeInfo[pvrEye_Right].HmdToEyePose.Position) * 1000;
-		DriverLog("IPD: %.1f mm", s_info.ipd);
-		s_info.cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
-		s_info.cantingAngle *= 180 / 3.1415926f;
-		DriverLog("Canting Angle: %.2f deg", s_info.cantingAngle);
 	}
 	return true;
 }
@@ -116,6 +116,14 @@ static bool EnsurePvrSession() {
 PimaxInfo PimaxCommon::GetInfo() {
 	EnsurePvrSession();
 	return s_info;
+}
+
+bool PimaxCommon::IsLighthouseHeadsetConnected(){
+	return PimaxCommon::GetInfo().headsetType && driverConfig.ConfigFromHeadsetType(PimaxCommon::GetInfo().headsetType)->enable && PimaxCommon::GetInfo().connected && !PimaxCommon::GetInfo().useSlamTracking;
+}
+
+bool PimaxCommon::IsSlamHeadsetConnected(){
+	return PimaxCommon::GetInfo().headsetType && driverConfig.ConfigFromHeadsetType(PimaxCommon::GetInfo().headsetType)->enable && PimaxCommon::GetInfo().connected && PimaxCommon::GetInfo().useSlamTracking;
 }
 
 pvrSessionHandle PimaxCommon::GetPvrSession() {
@@ -132,7 +140,7 @@ Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& c
 		config.resolutionX = GetInfo().resolutionX;
 		config.resolutionY = GetInfo().resolutionY;
 	}
-	if (config.autoIpd) {
+	if (config.hardwareIpd) {
 		config.ipd = GetInfo().ipd;
 	}
 	if (config.autoEyeRotation) {

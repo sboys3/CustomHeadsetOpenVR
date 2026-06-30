@@ -29,6 +29,7 @@ export type Settings = {
   generalHeadset: GeneralHeadsetConfig,
   customShader: CustomShaderConfig,
   forceTracking: boolean,
+  forceTrackingHeadsetOnly: boolean,
   takeCompositorScreenshots: boolean,
   watchDistortionProfiles: boolean,
 }
@@ -128,6 +129,8 @@ export type BaseHeadsetConfig = {
   secondsFromVsyncToPhotons: number;
   secondsFromPhotonsToVblank: number;
   eyeRotation: number;
+  autoEyeRotation: boolean;
+  hardwareIpd: boolean;
   disableEye: number;
   disableEyeDecreaseFov: number;
   edidVendorIdOverride: number;

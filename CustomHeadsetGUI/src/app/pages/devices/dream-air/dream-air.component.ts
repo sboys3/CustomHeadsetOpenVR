@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, output } from '@angular/core';
+import { Component, effect, inject, output } from '@angular/core';
 import { DreamAirConfig, HeadsetType } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
@@ -35,8 +35,8 @@ export class DreamAirComponent {
     showDisplayRotation: false,
     showDriverWarning: false,
     ipdInfo: $localize`The inter pupillary distance of the virtual cameras in SteamVR applications. This IPD should be matched with what you set for the headset's physical IPD to get the correct world scale.`,
-    defaultMaxFovX: 96,
-    defaultMaxFovY: 86
+    defaultMaxFovX: 98,
+    defaultMaxFovY: 88
   };
 
   constructor() {

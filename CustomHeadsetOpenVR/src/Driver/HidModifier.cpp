@@ -266,6 +266,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 		info.lighthouseDeviceManufacturer = data["manufacturer"].get<std::string>();
 	}
 	
+	DriverLog("HidModifier - Lighthouse device name: %s, manufacturer: %s", info.lighthouseDeviceName.c_str(), info.lighthouseDeviceManufacturer.c_str());
 	
 	std::map<std::string, ordered_json> jsonOverrides = {};
 	if(driverConfig.meganeX8K.enable){
@@ -285,8 +286,8 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 			{"direct_mode_edid_vid", vendorId},
 		};
 	}
-	auto pimaxInfo = PimaxCommon::GetInfo();
-	if(pimaxInfo.connected){
+	if(PimaxCommon::IsLighthouseHeadsetConnected()){
+		auto pimaxInfo = PimaxCommon::GetInfo();
 		Config::BaseHeadsetConfig& pimaxConfig = PimaxCommon::GetHeadsetConfig();
 		int vendorId = pimaxConfig.edidVendorIdOverride ? pimaxConfig.edidVendorIdOverride : pimaxConfig.edidVendorId;
 		ordered_json pimaxOverride = {

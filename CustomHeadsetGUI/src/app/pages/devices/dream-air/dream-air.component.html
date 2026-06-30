@@ -3,6 +3,8 @@
   <span i18n>This page is currently non-functional. Waiting on Pimax to make Dream Air support possible.</span>
 </div> -->
 
-<app-pimax-launcher></app-pimax-launcher>
-
-<app-headset-settings [config]="headsetConfig" [driverName]="headsetConfig.driverName" [settingField]="headsetConfig.settingField" [headsetType]="HeadsetType.DreamAir" (navigateToGeneralTab)="navigateToGeneralTab.emit()"></app-headset-settings>
+<app-headset-settings [config]="headsetConfig" [driverName]="headsetConfig.driverName" [settingField]="headsetConfig.settingField" [headsetType]="HeadsetType.DreamAir" (navigateToGeneralTab)="navigateToGeneralTab.emit()">
+  <div headset-settings-content>
+    <app-pimax-launcher></app-pimax-launcher>
+  </div>
+</app-headset-settings>

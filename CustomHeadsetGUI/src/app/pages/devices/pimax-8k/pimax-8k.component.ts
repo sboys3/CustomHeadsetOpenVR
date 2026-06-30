@@ -5,12 +5,12 @@ import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.compone
 import { DriverSettingService } from '../../../services/driver-setting.service';
 
 @Component({
-  selector: 'app-pimax-8kx',
+  selector: 'app-pimax-8k',
   imports: [HeadsetSettingsComponent, PimaxLauncherComponent],
-  templateUrl: './pimax-8kx.component.html',
-  styleUrl: './pimax-8kx.component.scss'
+  templateUrl: './pimax-8k.component.html',
+  styleUrl: './pimax-8k.component.scss'
 })
-export class Pimax8KxComponent {
+export class Pimax8KComponent {
   navigateToGeneralTab = output<void>();
   HeadsetType = HeadsetType;
   private dss = inject(DriverSettingService);
@@ -18,8 +18,8 @@ export class Pimax8KxComponent {
   headsetConfig: HeadsetSettingsConfig = {
     driverName: [],
     settingField: 'pimax8KX',
-    enableText: $localize`Enable Pimax 8KX Driver`,
-    enableInfo: $localize`When enabled, the Custom Headset driver will run the Pimax 8KX.`,
+    enableText: $localize`Enable Pimax 8K Driver`,
+    enableInfo: $localize`When enabled, the Custom Headset driver will run the Pimax 8K.`,
     resolutionInfo: $localize`The resolution to run the DisplayPort connection at.`,
     resolutionOptions: [
       { name: 'Auto', x: 0, y: 0 },

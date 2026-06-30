@@ -1,0 +1,10 @@
+<app-headset-settings [config]="headsetConfig" [driverName]="headsetConfig.driverName" [settingField]="headsetConfig.settingField" [headsetType]="HeadsetType.CrystalLight" (navigateToGeneralTab)="navigateToGeneralTab.emit()">
+  <div headset-settings-content>
+    <div class="distortion-warning">
+      <mat-icon>warning</mat-icon>
+      <span i18n>The distortion profiles are somewhat wrong for the Crystal Light.</span>
+    </div>
+
+    <app-pimax-launcher></app-pimax-launcher>
+  </div>
+</app-headset-settings>

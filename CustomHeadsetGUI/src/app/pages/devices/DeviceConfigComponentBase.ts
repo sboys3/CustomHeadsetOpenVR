@@ -137,12 +137,20 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
                 return device === headsetType;
             };
             
+            // Get the default and currently selected profile names (always show these)
+            const defaultProfileName = (this.defaults as any)?.distortionProfile as string | undefined;
+            const selectedProfileName = (this.settings as any)?.distortionProfile as string | undefined;
+            const alwaysShowNames = new Set<string>();
+            if (defaultProfileName) alwaysShowNames.add(defaultProfileName);
+            if (selectedProfileName) alwaysShowNames.add(selectedProfileName);
+            
             // Filter/sort profiles based on device compatibility
             if (headsetDeviceType) {
                 const matching = allProfiles.filter(p => deviceMatches(p.device, headsetDeviceType));
                 const noDevice = allProfiles.filter(p => !p.device);
-                const incompatible = allProfiles.filter(p => p.device && !deviceMatches(p.device, headsetDeviceType));
-                allProfiles = showIncompatible ? [...matching, ...noDevice, ...incompatible] : [...matching, ...noDevice];
+                const alwaysShownIncompatible = allProfiles.filter(p => p.device && !deviceMatches(p.device, headsetDeviceType) && alwaysShowNames.has(p.name));
+                const incompatible = allProfiles.filter(p => p.device && !deviceMatches(p.device, headsetDeviceType) && !alwaysShowNames.has(p.name));
+                allProfiles = showIncompatible ? [...matching, ...noDevice, ...alwaysShownIncompatible, ...incompatible] : [...matching, ...noDevice, ...alwaysShownIncompatible];
             }
             
             this.profiles = allProfiles;
