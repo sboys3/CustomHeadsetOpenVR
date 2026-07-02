@@ -1,0 +1,34 @@
+{
+  "jsonid" : "input_profile",
+  "controller_type": "pimax_hmd",
+  "input_bindingui_mode" : "hmd",
+  "input_bindingui_right" :
+  {
+    "image": "{CustomHeadsetOpenVR}/icons/hmd.svg"
+  },
+  "input_source": {
+    "/input/system": {
+      "type": "button",
+      "binding_image_point": [ 132, 75 ]
+    },
+    "/input/tap": {
+      "type": "button",
+      "binding_image_point": [ 132, 75 ]
+    },
+    "/proximity": {
+      "type": "button",
+      "binding_image_point": [ 132, 74 ]
+    },
+    "/pose/raw": {
+      "type": "pose",
+      "binding_image_point": [ 132, 75 ]
+    }
+  },
+  "default_bindings":
+  [
+    {
+      "app_key": "openvr.component.vrcompositor",
+      "binding_url": "vrcompositor_bindings_pimaxhmd.json"
+    }
+  ]
+}

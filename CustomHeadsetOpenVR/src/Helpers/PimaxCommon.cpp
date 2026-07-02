@@ -5,6 +5,15 @@
 #include "../Driver/DriverLog.h"
 #include "EyeTrackingOutput.h"
 
+// For "hmd_buttons" config. Not in PVR SDK.
+enum class HmdButton : int {
+	Button_Power = 0x0001,
+	Button_VolumeUp = 0x0002,
+	Button_VolumeDown = 0x0004,
+	Button_DoubleTap = 0x0008,
+};
+DEFINE_ENUM_FLAG_OPERATORS(HmdButton);
+
 static pvrEnvHandle s_pvr = {};
 static pvrSessionHandle s_pvrSession = {};
 static PimaxInfo s_info = {};
@@ -245,6 +254,15 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 		pvr_setIntConfig(GetPvrSession(), "openvr_client_changed", pid);
 	}
 	lastSceneApplicationPid = pid;
+}
+
+void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap) {
+	const HmdButton hmdButtonsState = (HmdButton)pvr_getIntConfig(GetPvrSession(), "hmd_buttons", 0);
+	const auto isButtonPressed = [&hmdButtonsState](const HmdButton button) {
+		return (hmdButtonsState & button) == button;
+		};
+	systemButton = isButtonPressed(HmdButton::Button_VolumeUp) && isButtonPressed(HmdButton::Button_VolumeDown);
+	doubleTap = isButtonPressed(HmdButton::Button_DoubleTap);
 }
 
 void PimaxCommon::EyeTrackingThread() {

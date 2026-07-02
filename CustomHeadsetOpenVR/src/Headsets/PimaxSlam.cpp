@@ -361,8 +361,12 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 		vr::VRProperties()->SetUint64Property(container, vr::Prop_CurrentUniverseId_Uint64, k_UniverseId);
 	}
 
-	// SteamVR requires an input profile for features like eye tracking. Reuse a basic one.
-	vr::VRProperties()->SetStringProperty(container, vr::Prop_InputProfilePath_String, "{oculus}/input/rift_profile.json");
+	vr::VRProperties()->SetStringProperty(
+		container, vr::Prop_InputProfilePath_String, ("{" + driverConfigLoader.info.driverName + "}/input/pimaxhmd_profile.json").c_str());
+	vr::VRDriverInput()->CreateBooleanComponent(
+		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentPresence]);
 
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
@@ -455,6 +459,17 @@ void PimaxSlamDriver::RunFrame() {
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update proximity sensor.
+	pvrHmdStatus hmdStatus = {};
+	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+
+	// Update the buttons state.
+	bool systemClick = false, doubleTap = false;
+	GetHmdButtonsState(systemClick, doubleTap);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
 
 	// Update the battery level (Crystal OG).
 	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
