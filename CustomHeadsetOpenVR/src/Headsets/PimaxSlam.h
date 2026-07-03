@@ -6,11 +6,13 @@
 
 class PimaxSlamDriver : public BaseHeadsetShim, public PimaxCommon {
 public:
+	PimaxSlamDriver();
 	virtual bool IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container) override;
 
 	virtual Config::BaseHeadsetConfig& GetConfig() override;
 	virtual Config::BaseHeadsetConfig& GetConfigOld() override;
 
+	virtual void PosTrackedDeviceGetComponent(const char*& pchComponentNameAndVersion, void*& returnComponent) override;
 	virtual void PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) override;
 	virtual void SubDeactivate() override;
 	virtual void RunFrame() override;
