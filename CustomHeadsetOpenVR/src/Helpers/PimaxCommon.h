@@ -46,6 +46,8 @@ protected:
 	void PollMagicAttach();
 	void SetSceneApplicationProcess(uint32_t pid);
 
+	void GetHmdButtonsState(bool& systemButton, bool& doubleTap);
+
 private:
 	void EyeTrackingThread();
 

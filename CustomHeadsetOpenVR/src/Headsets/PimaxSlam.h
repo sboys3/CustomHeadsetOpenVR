@@ -20,8 +20,17 @@ public:
 	void StopPvrTracking();
 
 private:
+	enum InputComponents {
+		ComponentSystemClick,
+		ComponentTap,
+		ComponentPresence,
+
+		ComponentCount,
+	};
+
 	void PvrTrackingThread();
 
 	std::thread pvrTrackingThread;
 	std::atomic<bool> pvrTrackingRunning;
+	vr::VRInputComponentHandle_t inputComponents[ComponentCount] = {};
 };
