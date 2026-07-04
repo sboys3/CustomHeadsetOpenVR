@@ -170,8 +170,8 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			// set nonNativeHeadsetFound if a device with a direct mode component is found
 			vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(vrevent.trackedDeviceIndex);
 			if(container){
-				// DriverLog("Device %d has driver direct mode component: %s", vrevent.trackedDeviceIndex, vr::VRProperties()->GetBoolProperty(container, vr::Prop_HasDriverDirectModeComponent_Bool) ? "true" : "false");
 				if(vr::VRProperties()->GetBoolProperty(container, vr::Prop_HasDriverDirectModeComponent_Bool)){
+					DriverLog("Device %d has driver direct mode component: %s", vrevent.trackedDeviceIndex, vr::VRProperties()->GetBoolProperty(container, vr::Prop_HasDriverDirectModeComponent_Bool) ? "true" : "false");
 					driverConfigLoader.info.nonNativeHeadsetFound = true;
 					driverConfigLoader.WriteInfo();
 				}

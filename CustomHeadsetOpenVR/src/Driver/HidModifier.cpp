@@ -10,7 +10,7 @@
 #undef min
 
 #if HAS_PRIVATE
-#include "HidModifierPrivate.cpp"
+#include "HidModifierPrivate.h"
 #endif
 
 
@@ -303,6 +303,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 				break;
 			case Config::HeadsetType::DreamAirSE:
 				jsonOverrides["Pimax Dream Air SE"] = pimaxOverride;
+				jsonOverrides["Pimax Dream Air"] = pimaxOverride;
 				break;
 			case Config::HeadsetType::CrystalSuper50PPD:
 			case Config::HeadsetType::CrystalSuper57PPD:

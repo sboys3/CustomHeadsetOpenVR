@@ -184,6 +184,39 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[dreamAirSE.name] = dreamAirSE;
 	
+	DistortionProfileConfig crystalSuperBad = {};
+	crystalSuperBad.name = "Crystal Super Bad";
+	crystalSuperBad.device = {"CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide"};
+	crystalSuperBad.modifiedTime = 0;
+	crystalSuperBad.description = "This a crude distortion profile for the Crystal Super 50PPD and Ultrawide. The distortion is not good, however the chromatic aberration is fairly well calibrated.";
+	crystalSuperBad.author = "SBoys3";
+	crystalSuperBad.creationDate = 1783126561.551;
+	crystalSuperBad.type = "RadialBezier";
+	crystalSuperBad.distortions = {
+		0.00, 0.000,
+		5.00, 11.80,
+		10.0, 23.50,
+		15.0, 34.90,
+		20.0, 46.00,
+		25.0, 56.70,
+		30.0, 67.10,
+		35.0, 77.30,
+		40.0, 87.00,
+		45.0, 95.50,
+		50.0, 102.70,
+		52.5, 105.40,
+		55.0, 109.00
+	};
+	crystalSuperBad.distortionsRed = {
+		0.00, 0.50,
+		50.0, 0.80
+	};
+	crystalSuperBad.distortionsBlue = {
+		0.00, -0.7,
+		50.0, -1.1
+	};
+	builtInDistortionProfiles[crystalSuperBad.name] = crystalSuperBad;
+	
 	DistortionProfileConfig pimaxBuiltin = {};
 	pimaxBuiltin.name = "Pimax Builtin";
 	pimaxBuiltin.device = {/*"DreamAir", "DreamAirSE", "CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide", "CrystalSuperMicroOLED", "CrystalLight", "CrystalOG",*/ "Pimax5KSuper", "Pimax5KPlus", "Pimax8KX", "Pimax8KPlus", "PimaxArtisan"};

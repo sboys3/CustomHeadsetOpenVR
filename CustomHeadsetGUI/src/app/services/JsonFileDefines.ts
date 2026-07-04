@@ -58,7 +58,7 @@ export type LinearColor = {
 export type CustomShaderConfig = {
   enable: boolean;
   enableForMeganeX8K: boolean,
-  enableForDreamAir: boolean,
+  enableForPimax: boolean,
   enableForOther: boolean,
   contrast: number;
   contrastMidpoint: number;

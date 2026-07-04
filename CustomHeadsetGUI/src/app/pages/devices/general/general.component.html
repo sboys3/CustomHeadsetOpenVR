@@ -604,18 +604,18 @@
     </div>
 </div>
 }
-@if(showDreamAir){
+@if(showPimax){
 <div class="field">
     <div class="title">
-        <span i18n>Enable for Dream Air</span>
+        <span i18n>Enable for Pimax Headsets</span>
         <app-field-tip i18n-info
-            info="Enables the custom shader for the Dream Air." />
+            info="Enables the custom shader for all Pimax headsets." />
         <app-reset-button
-            [canReset]="settings.customShader.enableForDreamAir!=defaults.customShader.enableForDreamAir"
-            (resetClick)="nested('customShader').resetOption('enableForDreamAir')"></app-reset-button>
+            [canReset]="settings.customShader.enableForPimax!=defaults.customShader.enableForPimax"
+            (resetClick)="nested('customShader').resetOption('enableForPimax')"></app-reset-button>
     </div>
     <div class="control">
-        <mat-slide-toggle [(ngModel)]="settings.customShader.enableForDreamAir"
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enableForPimax"
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>

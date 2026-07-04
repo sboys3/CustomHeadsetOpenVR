@@ -40,5 +40,5 @@ export class GeneralComponent extends DeviceConfigComponentBase<Settings & { ena
   vendor = vendor;
   vendorUi = vendorUi;
   showMeganeX8K = !vendorUi || vendorUi == "shiftall";
-  showDreamAir = !vendorUi || vendorUi == "pimax";
+  showPimax = !vendorUi || vendorUi == "pimax";
 }

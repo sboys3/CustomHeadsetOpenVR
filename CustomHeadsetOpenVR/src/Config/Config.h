@@ -54,7 +54,7 @@ struct CustomShaderConfig{
 	// if shaders should be replaced in the compositor
 	bool enable = false;
 	bool enableForMeganeX8K = true;
-	bool enableForDreamAir = true;
+	bool enableForPimax = true;
 	bool enableForOther = false;
 	// contrast with 50 being normal
 	double contrast = 50;
@@ -329,7 +329,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper50PPD;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal Super Bad";
 			distortionProfileDeviceType = "CrystalSuper50PPD";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -351,7 +351,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper57PPD;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal Super Bad";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -373,7 +373,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperUltrawide;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal Super Bad";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -695,6 +695,6 @@ extern std::mutex driverConfigLock;
 extern std::string driverVersion;
 
 
-#if __has_include("../Driver/HidModifierPrivate.cpp")
+#if __has_include("../Driver/HidModifierPrivate.h")
 #define HAS_PRIVATE 1
 #endif

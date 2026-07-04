@@ -273,8 +273,8 @@ void ConfigLoader::ParseConfig(){
 			if(customShaderData["enableForMeganeX8K"].is_boolean()){
 				newConfig.customShader.enableForMeganeX8K = customShaderData["enableForMeganeX8K"].get<bool>();
 			}
-			if(customShaderData["enableForDreamAir"].is_boolean()){
-				newConfig.customShader.enableForDreamAir = customShaderData["enableForDreamAir"].get<bool>();
+			if(customShaderData["enableForPimax"].is_boolean()){
+				newConfig.customShader.enableForPimax = customShaderData["enableForPimax"].get<bool>();
 			}
 			if(customShaderData["enableForOther"].is_boolean()){
 				newConfig.customShader.enableForOther = customShaderData["enableForOther"].get<bool>();
@@ -563,7 +563,7 @@ void ConfigLoader::WriteInfo(){
 			{"customShader", {
 				{"enable", defaultSettings.customShader.enable},
 				{"enableForMeganeX8K", defaultSettings.customShader.enableForMeganeX8K},
-				{"enableForDreamAir", defaultSettings.customShader.enableForDreamAir},
+				{"enableForPimax", defaultSettings.customShader.enableForPimax},
 				{"enableForOther", defaultSettings.customShader.enableForOther},
 				{"contrast", defaultSettings.customShader.contrast},
 				{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
