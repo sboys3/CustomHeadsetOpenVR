@@ -260,7 +260,7 @@ void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap) {
 	const HmdButton hmdButtonsState = (HmdButton)pvr_getIntConfig(GetPvrSession(), "hmd_buttons", 0);
 	const auto isButtonPressed = [&hmdButtonsState](const HmdButton button) {
 		return (hmdButtonsState & button) == button;
-		};
+	};
 	systemButton = isButtonPressed(HmdButton::Button_VolumeUp) && isButtonPressed(HmdButton::Button_VolumeDown);
 	doubleTap = isButtonPressed(HmdButton::Button_DoubleTap);
 }

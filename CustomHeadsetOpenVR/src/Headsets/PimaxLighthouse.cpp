@@ -20,9 +20,18 @@ Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
 }
 
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){
+	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
+
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+
+	vr::VRProperties()->SetStringProperty(
+		container, vr::Prop_InputProfilePath_String, ("{" + driverConfigLoader.info.driverName + "}/input/pimaxhmd_profile.json").c_str());
+	vr::VRDriverInput()->CreateBooleanComponent(
+		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentPresence]);
 
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
@@ -68,6 +77,17 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+
+	// Update proximity sensor.
+	pvrHmdStatus hmdStatus = {};
+	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+
+	// Update the buttons state.
+	bool systemClick = false, doubleTap = false;
+	GetHmdButtonsState(systemClick, doubleTap);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
 
 	// Update the battery level (Crystal OG).
 	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);

@@ -18,4 +18,15 @@ public:
 	virtual void RunFrame() override;
 	// forward events
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
+
+private:
+	enum InputComponents {
+		ComponentSystemClick,
+		ComponentTap,
+		ComponentPresence,
+
+		ComponentCount,
+	};
+
+	vr::VRInputComponentHandle_t inputComponents[ComponentCount] = {};
 };
