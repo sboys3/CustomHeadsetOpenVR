@@ -3,7 +3,6 @@
 #include "../Helpers/EyeTrackingOutput.h"
 
 #include <DirectXMath.h>
-#include <cmath>
 #include <filesystem>
 #include <memory>
 #include "nlohmann/json.hpp"
@@ -11,25 +10,6 @@
 
 // Matches driver_aapvr.
 static constexpr uint64_t k_UniverseId = 30;
-
-static bool HasUsablePvrPose(const pvrPoseStatef& poseState) {
-	const auto& pose = poseState.ThePose;
-	const float quatNorm =
-		pose.Orientation.x * pose.Orientation.x +
-		pose.Orientation.y * pose.Orientation.y +
-		pose.Orientation.z * pose.Orientation.z +
-		pose.Orientation.w * pose.Orientation.w;
-	return poseState.TimeInSeconds > 0 &&
-		std::isfinite(pose.Position.x) &&
-		std::isfinite(pose.Position.y) &&
-		std::isfinite(pose.Position.z) &&
-		std::isfinite(pose.Orientation.x) &&
-		std::isfinite(pose.Orientation.y) &&
-		std::isfinite(pose.Orientation.z) &&
-		std::isfinite(pose.Orientation.w) &&
-		quatNorm > 0.5f &&
-		quatNorm < 1.5f;
-}
 
 // A driver for Pimax Crystal controllers.
 class PimaxCrystalControllerDriver : public vr::ITrackedDeviceServerDriver {
@@ -282,10 +262,7 @@ public:
 			pose.deviceIsConnected = isConnected;
 			pose.result = vr::TrackingResult_Running_OutOfRange;
 
-			const bool hasUsablePose = HasUsablePvrPose(poseState);
-			isConnected = isConnected || hasUsablePose;
-			pose.deviceIsConnected = isConnected;
-			if ((poseState.StatusFlags & pvrStatus_OrientationTracked) || hasUsablePose) {
+			if (isConnected) {
 				pose.vecPosition[0] = poseState.ThePose.Position.x;
 				pose.vecPosition[1] = poseState.ThePose.Position.y;
 				pose.vecPosition[2] = poseState.ThePose.Position.z;
@@ -492,7 +469,7 @@ void PimaxSlamDriver::RunFrame() {
 	pvrHmdStatus hmdStatus = {};
 	const pvrResult hmdStatusResult = pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
 	const bool hmdPresent = hmdStatusResult == pvr_success && hmdStatus.HmdPresent && hmdStatus.ServiceReady && !hmdStatus.ShouldQuit;
-	const bool proximityActive = hmdPresent && (hmdStatus.HmdMounted || pvrHeadPoseUsable.load());
+	const bool proximityActive = hmdPresent && hmdStatus.HmdMounted;
 	if(inputComponents[ComponentPresence]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], proximityActive, 0);
 	}
@@ -548,7 +525,6 @@ void PimaxSlamDriver::StopPvrTracking() {
 		pvrTrackingThread.join();
 		pvrTrackingThread = {};
 	}
-	pvrHeadPoseUsable = false;
 }
 
 void PimaxSlamDriver::PvrTrackingThread() {
@@ -567,9 +543,7 @@ void PimaxSlamDriver::PvrTrackingThread() {
 		const auto pvrNow = GetPvrTime();
 
 		pvrTrackingState trackingState = {};
-		const pvrResult trackingResult = pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
-		const bool hasUsableHeadPose = trackingResult == pvr_success && HasUsablePvrPose(trackingState.HeadPose);
-		pvrHeadPoseUsable = hasUsableHeadPose;
+		pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
 
 		// Update the headset pose.
 		{
@@ -577,7 +551,7 @@ void PimaxSlamDriver::PvrTrackingThread() {
 			pose.qWorldFromDriverRotation.w = pose.qDriverFromHeadRotation.w = pose.qRotation.w = 1.0;
 			pose.deviceIsConnected = true;
 			pose.result = vr::TrackingResult_Running_OutOfRange;
-			if ((trackingState.HeadPose.StatusFlags & pvrStatus_OrientationTracked) || hasUsableHeadPose) {
+			if (trackingState.HeadPose.StatusFlags & pvrStatus_OrientationTracked) {
 				pose.vecPosition[0] = trackingState.HeadPose.ThePose.Position.x;
 				pose.vecPosition[1] = trackingState.HeadPose.ThePose.Position.y;
 				pose.vecPosition[2] = trackingState.HeadPose.ThePose.Position.z;
