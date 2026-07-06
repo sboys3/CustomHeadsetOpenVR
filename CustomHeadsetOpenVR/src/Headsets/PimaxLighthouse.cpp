@@ -5,7 +5,8 @@
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
 	std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::Prop_ManufacturerName_String);
-	if(GetInfo().connected && (model.find("Pimax") != std::string::npos || (model == "REF-HMD" && manufacturer.find("Pimax") != std::string::npos)) && trackingSystem == "lighthouse"){
+	DriverLog("Model: %s, Manufacturer: %s, Tracking System: %s, IsLighthouseHeadsetConnected: %i, IsPimaxLighthouseDevice: %i\n", model.c_str(), manufacturer.c_str(), trackingSystem.c_str(), IsLighthouseHeadsetConnected(), IsPimaxLighthouseDevice(model, manufacturer));
+	if(IsLighthouseHeadsetConnected() && IsPimaxLighthouseDevice(model, manufacturer) && trackingSystem == "lighthouse"){
 		return true;
 	}
 	return false;
@@ -41,8 +42,7 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
 		SetVisibilityMeshes();
 	}
-
-	returnValue = vr::VRInitError_None;
+	
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
 
@@ -51,6 +51,10 @@ void PimaxLighthouseShim::SubDeactivate(){
 }
 
 void PimaxLighthouseShim::RunFrame(){
+	if(!isActive){
+		// don't do anything if not the active device
+		return;
+	}
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
@@ -77,17 +81,28 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+	
+	if(GetInfo().directConnected){
+		// reconnect the USB
+		TryDirectConnection();
+	}
 
 	// Update proximity sensor.
 	pvrHmdStatus hmdStatus = {};
 	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+	if(inputComponents[ComponentPresence]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+	}
 
 	// Update the buttons state.
 	bool systemClick = false, doubleTap = false;
 	GetHmdButtonsState(systemClick, doubleTap);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	if(inputComponents[ComponentSystemClick]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	}
+	if(inputComponents[ComponentTap]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	}
 
 	// Update the battery level (Crystal OG).
 	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);

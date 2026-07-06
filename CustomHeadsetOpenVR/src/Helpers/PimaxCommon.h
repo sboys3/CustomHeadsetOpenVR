@@ -16,6 +16,10 @@ struct PimaxInfo {
 	uint32_t resolutionY = 0;
 	float cantingAngle = 0;
 	float ipd = 0;
+	// if the headset is directly connected instead of using the PVR API
+	bool directConnected = false;
+	int directButtonState = 0;
+	std::string headsetName;
 };
 
 class PimaxCommon {
@@ -23,6 +27,8 @@ public:
 	PimaxCommon();
 	virtual ~PimaxCommon() = default;
 	static PimaxInfo GetInfo();
+	static bool TryDirectConnection();
+	static bool IsPimaxLighthouseDevice(std::string_view model, std::string_view manufacturer);
 	static bool IsLighthouseHeadsetConnected();
 	static bool IsSlamHeadsetConnected();
 	static pvrSessionHandle GetPvrSession();

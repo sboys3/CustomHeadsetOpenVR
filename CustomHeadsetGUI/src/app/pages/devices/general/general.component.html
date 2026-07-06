@@ -715,5 +715,21 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+<!-- @if(advanceMode()){
+<div class="field">
+    <div class="title">
+        <span i18n>Lighthouse Calibration Device Override</span>
+        <app-field-tip i18n-info
+            info="When defined, force this device to be the main lighthouse device used for tracking calibration. This is done by telling the lighthouse driver that this device is an HMD while everything else is controllers. That means if this device does not exist, you will get a random device selected as your main device. This can be a serial or device name." />
+        <app-reset-button
+            [canReset]="settings.generalHeadset.lighthouseCalibrationDeviceOverride!=defaults.generalHeadset.lighthouseCalibrationDeviceOverride"
+            (resetClick)="nested('generalHeadset').resetOption('lighthouseCalibrationDeviceOverride')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.generalHeadset.lighthouseCalibrationDeviceOverride"
+            (ngModelChange)="saveConfigSettings()" placeholder="Serial or device name" type="text" />
+    </div>
+</div>
+} -->
 }
 }

@@ -13,7 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\zlib">
+    <Filter Include="Source Files\ThirdParty">
+      <UniqueIdentifier>{bed5532f-62a5-4aaa-9d08-dd41946e28e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ThirdParty\zlib">
       <UniqueIdentifier>{154f3cb7-29a9-45bb-ad44-b296f0bdb6f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -52,7 +55,7 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ThirdParty\zlib\zutil.h">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClInclude>
     <ClInclude Include="src\Helpers\AAPVRBlocker.h">
       <Filter>Source Files</Filter>
@@ -119,9 +122,6 @@
     <ClCompile Include="src\Driver\CompositorPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ThirdParty\easywsclient\easywsclient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Headsets\GenericHeadset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -132,34 +132,34 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\compress.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\uncompr.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\trees.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\inftrees.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\inflate.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\inffast.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\infback.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\crc32.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\adler32.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\zlib\deflate.c">
-      <Filter>Source Files\zlib</Filter>
+      <Filter>Source Files\ThirdParty\zlib</Filter>
     </ClCompile>
     <ClCompile Include="src\Headsets\BaseHeadset.cpp">
       <Filter>Source Files</Filter>
@@ -184,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="src\Distortion\PimaxDistortionProfile.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\easywsclient\easywsclient.cpp">
+      <Filter>Source Files\ThirdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\hidapi\windows\hid.c">
+      <Filter>Source Files\ThirdParty</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -351,7 +351,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper57PPD;
-			distortionProfile = "Crystal Super Bad";
+			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
 			maxFovX = 100;
 			maxFovY = 90;
@@ -616,6 +616,8 @@ public:
 	public:
 		// if a vive link box should be used for bluetooth
 		bool useViveBluetooth = false;
+		// when defined, force this device to be the main lighthouse device used for lighthouse calibration. This is done by telling the lighthouse driver that this device is an HMD while everything else is controllers. That means if this device does not exist, you will get a random device selected as your main device. This can be a serial or device name.
+		std::string lighthouseCalibrationDeviceOverride = "";
 	};
 	GeneralHeadsetConfig generalHeadset = {};
 	

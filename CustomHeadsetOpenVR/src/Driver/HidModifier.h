@@ -67,6 +67,8 @@ public:
 		hid_device* device;
 		std::string lighthouseDeviceName;
 		std::string lighthouseDeviceManufacturer;
+		std::string lighthouseDeviceClass;
+		std::string lighthouseDeviceSerial;
 		// std::string lighthouseConfig;
 		unsigned char* newLighthouseConfig;
 		int newLighthouseConfigLength;
@@ -79,6 +81,9 @@ public:
 	};
 	// map of devices that have been opened
 	std::map<hid_device*, HidDeviceInfo> deviceMap;
+	
+	// map of original device classes for when it is overridden and the classes are changed before passing to the driver.
+	std::map<std::string, int> originalDeviceClasses;
 	
 	// add a device to the map
 	void AddDevice(hid_device* device);

@@ -264,6 +264,9 @@ void ConfigLoader::ParseConfig(){
 			if(generalHeadsetData["useViveBluetooth"].is_boolean()){
 				newConfig.generalHeadset.useViveBluetooth = generalHeadsetData["useViveBluetooth"].get<bool>();
 			}
+			if(generalHeadsetData["lighthouseCalibrationDeviceOverride"].is_string()){
+				newConfig.generalHeadset.lighthouseCalibrationDeviceOverride = generalHeadsetData["lighthouseCalibrationDeviceOverride"].get<std::string>();
+			}
 		}
 		if(data["customShader"].is_object()){
 			json customShaderData = data["customShader"];
@@ -559,6 +562,7 @@ void ConfigLoader::WriteInfo(){
 			{"pimaxArtisan", baseHeadsetInfo(defaultSettings.pimaxArtisan)},
 			{"generalHeadset", {
 				{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
+				{"lighthouseCalibrationDeviceOverride", defaultSettings.generalHeadset.lighthouseCalibrationDeviceOverride},
 			}},
 			{"customShader", {
 				{"enable", defaultSettings.customShader.enable},

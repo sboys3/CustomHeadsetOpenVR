@@ -198,6 +198,7 @@ export type PimaxArtisanConfig = BaseHeadsetConfig & {
 
 export type GeneralHeadsetConfig = {
   useViveBluetooth: boolean;
+  lighthouseCalibrationDeviceOverride: string;
 }
 
 export type AppSetting = {

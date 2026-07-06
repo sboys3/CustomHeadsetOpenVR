@@ -18,6 +18,12 @@
 [submodule "ThirdParty/zlib"]
 	path = ThirdParty/zlib
 	url = https://github.com/madler/zlib
+	shallow = true
 [submodule "ThirdParty/pvr"]
 	path = ThirdParty/pvr
 	url = https://github.com/mbucchia/PVR.git
+	shallow = true
+[submodule "ThirdParty/hidapi"]
+	path = ThirdParty/hidapi
+	url = https://github.com/libusb/hidapi
+	shallow = true

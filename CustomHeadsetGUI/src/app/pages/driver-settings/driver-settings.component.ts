@@ -144,7 +144,7 @@ export class DriverSettingsComponent implements OnInit, OnDestroy {
             availableTabs.push({ type: 'DreamAirSE', headsetType: HeadsetType.DreamAirSE, label: $localize`Dream Air SE`, group: $localize`Dream Air` })
             availableTabs.push({ type: 'CrystalSuperMicroOLED', headsetType: HeadsetType.CrystalSuperMicroOLED, label: $localize`Super Micro-OLED`, group: $localize`Crystal Series` })
             availableTabs.push({ type: 'CrystalSuper50PPD', headsetType: HeadsetType.CrystalSuper50PPD, label: $localize`Super 50PPD`, group: $localize`Crystal Series` })
-            // availableTabs.push({ type: 'CrystalSuper57PPD', headsetType: HeadsetType.CrystalSuper57PPD, label: $localize`Super 57PPD`, group: $localize`Crystal Series` })
+            availableTabs.push({ type: 'CrystalSuper57PPD', headsetType: HeadsetType.CrystalSuper57PPD, label: $localize`Super 57PPD`, group: $localize`Crystal Series` })
             availableTabs.push({ type: 'CrystalSuperUltrawide', headsetType: HeadsetType.CrystalSuperUltrawide, label: $localize`Super Ultrawide`, group: $localize`Crystal Series` })
             availableTabs.push({ type: 'CrystalLight', headsetType: HeadsetType.CrystalLight, label: $localize`Crystal Light`, group: $localize`Crystal Series` })
             availableTabs.push({ type: 'CrystalOG', headsetType: HeadsetType.CrystalOG, label: $localize`Crystal OG`, group: $localize`Crystal Series` })

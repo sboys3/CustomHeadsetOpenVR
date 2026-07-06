@@ -291,6 +291,11 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 	#endif
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);
 	
+	if(hidModifier.originalDeviceClasses.find(std::string(pchDeviceSerialNumber)) != hidModifier.originalDeviceClasses.end()){
+		DriverLog("Device %s restoring original class %d", pchDeviceSerialNumber, hidModifier.originalDeviceClasses[std::string(pchDeviceSerialNumber)]);
+		eDeviceClass = (vr::ETrackedDeviceClass)hidModifier.originalDeviceClasses[std::string(pchDeviceSerialNumber)];
+	}
+	
 	#ifndef FULLY_BLOCK_AAPVR
 	if(AAPVRShouldBlock()){
 		APPVRDeviceBlocker* appvrDeviceBlocker = new APPVRDeviceBlocker();
@@ -318,7 +323,7 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 			MeganeX8KShim* meganeX8KShim = new MeganeX8KShim();
 			meganeX8KShim->deviceProvider = this;
 			shims.insert(meganeX8KShim);
-			pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver);
+			pDriver = new ShimTrackedDeviceDriver(meganeX8KShim, pDriver); 
 		}
 		
 		GenericHeadsetShim* genericHeadsetShim = new GenericHeadsetShim();

@@ -391,6 +391,10 @@ void PimaxSlamDriver::SubDeactivate() {
 }
 
 void PimaxSlamDriver::RunFrame() {
+	if(!isActive){
+		// don't do anything if not the active device
+		return;
+	}
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
@@ -463,13 +467,19 @@ void PimaxSlamDriver::RunFrame() {
 	// Update proximity sensor.
 	pvrHmdStatus hmdStatus = {};
 	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+	if(inputComponents[ComponentPresence]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+	}
 
 	// Update the buttons state.
 	bool systemClick = false, doubleTap = false;
 	GetHmdButtonsState(systemClick, doubleTap);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
-	vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	if(inputComponents[ComponentSystemClick]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	}
+	if(inputComponents[ComponentTap]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	}
 
 	// Update the battery level (Crystal OG).
 	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);

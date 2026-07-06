@@ -265,6 +265,12 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	if(data["manufacturer"].is_string()){
 		info.lighthouseDeviceManufacturer = data["manufacturer"].get<std::string>();
 	}
+	if(data["device_class"].is_string()){
+		info.lighthouseDeviceClass = data["device_class"].get<std::string>();
+	}
+	if(data["device_serial_number"].is_string()){
+		info.lighthouseDeviceSerial = data["device_serial_number"].get<std::string>();
+	}
 	
 	DriverLog("HidModifier - Lighthouse device name: %s, manufacturer: %s", info.lighthouseDeviceName.c_str(), info.lighthouseDeviceManufacturer.c_str());
 	
@@ -285,6 +291,10 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 			}},
 			{"direct_mode_edid_vid", vendorId},
 		};
+	}
+	if(PimaxCommon::IsPimaxLighthouseDevice(info.lighthouseDeviceName, info.lighthouseDeviceManufacturer)){
+		// attempt to directly connect to the Pimax headset that this lighthouse device belongs to
+		PimaxCommon::TryDirectConnection();
 	}
 	if(PimaxCommon::IsLighthouseHeadsetConnected()){
 		auto pimaxInfo = PimaxCommon::GetInfo();
@@ -322,7 +332,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	}
 	
 	
-	if(data["device_class"].is_string() && data["device_class"].get<std::string>() == "hmd"){
+	if(info.lighthouseDeviceClass == "hmd"){
 		if(driverConfig.meganeX8K.enable && driverConfig.meganeX8K.forceEnable){
 			int vendorId = driverConfig.meganeX8K.edidVendorIdOverride ? driverConfig.meganeX8K.edidVendorIdOverride : driverConfig.meganeX8K.edidVendorId;
 			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != vendorId){
@@ -334,6 +344,31 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 			int vendorId = driverConfig.dreamAir.edidVendorIdOverride ? driverConfig.dreamAir.edidVendorIdOverride : driverConfig.dreamAir.edidVendorId;
 			if(!data["direct_mode_edid_vid"].is_number() || data["direct_mode_edid_vid"].get<int>() != vendorId){
 				data["direct_mode_edid_vid"] = vendorId;
+				doReplace = true;
+			}
+		}
+	}
+	
+	if(driverConfig.generalHeadset.lighthouseCalibrationDeviceOverride != "" && (info.lighthouseDeviceClass == "hmd" || info.lighthouseDeviceClass == "controller")){
+		if(info.lighthouseDeviceName == driverConfig.generalHeadset.lighthouseCalibrationDeviceOverride || info.lighthouseDeviceSerial == driverConfig.generalHeadset.lighthouseCalibrationDeviceOverride){
+			// if(info.lighthouseDeviceClass != "hmd"){
+			// 	originalDeviceClasses[info.lighthouseDeviceSerial] = vr::TrackedDeviceClass_Controller;
+			// 	DriverLog("Overriding device class for %s to hmd", info.lighthouseDeviceSerial.c_str());
+			// 	data["device_class"] = "hmd";
+			// 	doReplace = true;
+			// }
+			if(info.lighthouseDeviceClass == "hmd"){
+				// originalDeviceClasses[info.lighthouseDeviceSerial] = vr::TrackedDeviceClass_HMD;
+				originalDeviceClasses[info.lighthouseDeviceSerial] = vr::TrackedDeviceClass_GenericTracker;
+				DriverLog("Overriding device class for %s to controller", info.lighthouseDeviceSerial.c_str());
+				data["device_class"] = "controller";
+				doReplace = true;
+			}
+		}else{
+			if(info.lighthouseDeviceClass == "hmd"){
+				originalDeviceClasses[info.lighthouseDeviceSerial] = vr::TrackedDeviceClass_HMD;
+				DriverLog("Overriding device class for %s to controller", info.lighthouseDeviceSerial.c_str());
+				data["device_class"] = "controller";
 				doReplace = true;
 			}
 		}

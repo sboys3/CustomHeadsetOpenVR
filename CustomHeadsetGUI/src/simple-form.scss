@@ -97,6 +97,14 @@
                 text-align: right;
             }
 
+            input[type=text] {
+                @include simpleInput();
+                flex: 1 1 auto;
+                font-size: 130%;
+                margin: 0 0.5rem;
+                padding: 0 0.5rem;
+            }
+
             mat-slider,
             mat-select {
                 flex: 1 1 auto;
