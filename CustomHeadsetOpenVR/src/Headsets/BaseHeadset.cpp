@@ -39,7 +39,10 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	// it blackscreens and immediately crashes windows when changed at runtime for the MeganeX on nvidia
 	vr::VRProperties()->SetBoolProperty(container, vr::Prop_DisplaySupportsRuntimeFramerateChange_Bool, false);
 	
-	// vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayFrequency_Float, 90.0f);
+	if(GetConfig().headsetType == Config::HeadsetType::DreamAir ||
+		GetConfig().headsetType == Config::HeadsetType::DreamAirSE){
+		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayFrequency_Float, 90.0f);
+	}
 	
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidVendorID_Int32, 0xd222); // HVR htc vr
 	// vr::VRProperties()->SetInt32Property(container, vr::Prop_EdidProductID_Int32, 43521); // vive

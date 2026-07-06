@@ -3,8 +3,9 @@
 #include "../Config/ConfigLoader.h"
 
 
-#ifdef PVR_EXISTS
-	#include "C:/Program Files/Pimax/Sdk/Include/PVR_API.h"
+#if __has_include(<PVR_API.h>)
+	#define PVR_EXISTS
+	#include <PVR_API.h>
 #endif
 
 #include <windows.h>
@@ -245,11 +246,6 @@ void AAPVRLighthouseUnblockerRemoveHooks() {
 }
 
 
-#if __has_include("C:/Program Files/Pimax/Sdk/Include/PVR_API.h")
-	#define PVR_EXISTS
-	#include "C:/Program Files/Pimax/Sdk/Include/PVR_API.h"
-#endif
-
 bool AAPVRShouldBlock() {
 	if (sShouldBlockValid) {
 		return sShouldBlockCached;
@@ -275,6 +271,14 @@ bool AAPVRShouldBlock() {
 		return sShouldBlockCached;
 	}
 
+	pvrHmdInfo hmdInfo{};
+	pvr_getHmdInfo(sessionHandle, &hmdInfo);
+
+	const std::string productName = hmdInfo.ProductName;
+	const bool isDreamAir =
+		hmdInfo.ProductId == 0x0044 ||
+		ContainsInsensitive(productName, "Dream Air");
+
 	int noRender = pvr_getIntConfig(sessionHandle, "no_render", 0);
 	sShouldBlockCached = (noRender == 1);
 	
@@ -285,7 +289,12 @@ bool AAPVRShouldBlock() {
 	}
 	#endif
 
-	DriverLog("AAPVRBlocker: PVR no_render=%d, caching block=%d", noRender, sShouldBlockCached);
+	DriverLog("AAPVRBlocker: PVR headset='%s' product=0x%04x no_render=%d dream_air=%d, caching block=%d",
+		productName.c_str(),
+		hmdInfo.ProductId,
+		noRender,
+		isDreamAir,
+		sShouldBlockCached);
 #else
 	sShouldBlockCached = false;
 	sShouldBlockValid = true;

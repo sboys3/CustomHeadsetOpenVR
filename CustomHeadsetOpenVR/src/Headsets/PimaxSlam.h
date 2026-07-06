@@ -31,6 +31,7 @@ private:
 	void PvrTrackingThread();
 
 	std::thread pvrTrackingThread;
-	std::atomic<bool> pvrTrackingRunning;
+	std::atomic<bool> pvrTrackingRunning = false;
+	std::atomic<bool> pvrHeadPoseUsable = false;
 	vr::VRInputComponentHandle_t inputComponents[ComponentCount] = {};
 };
