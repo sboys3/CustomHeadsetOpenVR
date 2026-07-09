@@ -257,7 +257,12 @@ public:
 				}
 			}
 			if(serial[0] == 'P'){
-				DriverLog("Found Pimax device %i, %s, %s, %s", devicesIter->interface_number, name, serial, devicesIter->path);
+				std::string maskedSerial = serial;
+				// Mask last four digits with X's
+				if(maskedSerial.length() > 4){
+					maskedSerial = maskedSerial.substr(0, maskedSerial.length() - 4) + "XXXX";
+				}
+				DriverLog("Found Pimax device %i, %s, %s, %s", devicesIter->interface_number, name, maskedSerial.c_str(), devicesIter->path);
 				if(devicesIter->interface_number == 0){
 					path = devicesIter->path;
 					deviceName = name;
@@ -311,6 +316,12 @@ public:
 				Close();
 				return false;
 			}
+			// Also log the module serial number, but with the last four digits replaced with X's.
+			std::string serial = GetSerial(0x05);
+			if(serial.length() > 4){
+				std::string maskedSerial = serial.substr(0, serial.size() - 4) + "XXXX";
+				DriverLog("Super module serial: %s", maskedSerial.c_str());
+			}
 		}
 		s_info.headsetType = headsetType;
 		running = true;
@@ -355,13 +366,13 @@ static bool EnsurePvrSession() {
 		}
 	}
 	if (!s_pvrSession) {
-		s_info.connected = false;
+		s_info.pvrConnected = false;
 		if (pvr_createSession(s_pvr, &s_pvrSession) != pvr_success) {
 			return false;
 		}
 	}
 
-	if (s_pvrSession && !s_info.connected) {
+	if (s_pvrSession && !s_info.pvrConnected) {
 		pvrHmdStatus hmdStatus = {};
 		pvr_getHmdStatus(s_pvrSession, &hmdStatus);
 		if (!(hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit)) {
@@ -390,6 +401,19 @@ static bool EnsurePvrSession() {
 			}else{
 				s_info.headsetType = Config::HeadsetType::None;
 			}
+			// I've seen some evidence that the EDIDs might have been changed at some point.
+			if(s_info.headsetType){
+				Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(s_info.headsetType);
+				if(config && displayInfo.edid_pid && config->edidProductId != displayInfo.edid_pid){
+					DriverLog("EDID product ID mismatch: expected %04x, got %04x\n", config->edidProductId, displayInfo.edid_pid);
+					config->edidProductId = displayInfo.edid_pid;
+					std::string maskedSerial = std::string(info.SerialNumber);
+					if(maskedSerial.length() > 4){
+						maskedSerial = maskedSerial.substr(0, maskedSerial.size() - 4) + "XXXX";
+						DriverLog("Super headset serial: %s", maskedSerial.c_str());
+					}
+				}
+			}
 		}
 		if (info.ProductId) {
 			DriverLog("Detected PVR headset '%s' (%04x)%s", info.ProductName, info.ProductId, s_info.headsetType == Config::HeadsetType::None ? " - not supported" : "");
@@ -399,8 +423,8 @@ static bool EnsurePvrSession() {
 		const bool isOpenPortEnabled = pvr_getIntConfig(s_pvrSession, "no_render", 0);
 
 		// Filter by: 1) is OpenPort enabled, 2) do we support the attached headset?
-		s_info.connected = isOpenPortEnabled && s_info.headsetType != Config::HeadsetType::None;
-		if (s_info.connected) {
+		s_info.pvrConnected = isOpenPortEnabled && s_info.headsetType != Config::HeadsetType::None;
+		if (s_info.pvrConnected) {
 			pvrHmdTrackingStyle trackingStyle = pvrHmdTrackingStyle_Unknown;
 			trackingStyle = (pvrHmdTrackingStyle)pvr_getTrackedDeviceIntProperty(
 				s_pvrSession,
@@ -425,6 +449,7 @@ static bool EnsurePvrSession() {
 			s_info.cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
 			s_info.cantingAngle *= 180 / 3.1415926f;
 			DriverLog("Canting Angle: %.2f deg", s_info.cantingAngle);
+			s_info.connected = true;
 		}
 	}
 	return true;
@@ -516,11 +541,11 @@ bool PimaxCommon::CheckDeviceLost() {
 	pvrHmdStatus hmdStatus = {};
 	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
 	const bool deviceReady = hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit;
-	if (s_info.connected && !deviceReady) {
+	if (s_info.pvrConnected && !deviceReady) {
 		DriverLog("Detected loss of connection to the headset");
 		StopEyeTracking();
 		pvr_destroySession(GetPvrSession());
-		s_info.connected = false;
+		s_info.pvrConnected = false;
 		s_pvrSession = {};
 	}
 	return !deviceReady;

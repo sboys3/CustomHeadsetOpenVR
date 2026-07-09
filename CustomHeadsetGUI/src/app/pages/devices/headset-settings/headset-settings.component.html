@@ -749,6 +749,26 @@
       </div>
     </div>
 
+    <!-- Proximity Sensor Type -->
+    @if(defaults.proximitySensorType !== undefined) {
+      <div class="field">
+        <div class="title">
+          <span i18n>Proximity Sensor Type</span>
+          <app-field-tip i18n-info
+              info="Controls where the data for proximity is retrieved from. Hardware is only available on some devices and has the same effect as none on devices that don't have proximity available. Pimax hardware devices may be unreliable, resulting in the screen shutting off or staying on regardless of proximity. None results in the standard SteamVR movement based proximity. In the stationary dimming mode, proximity is reported as false whenever the display has dimmed to its lowest level." />
+          <app-reset-button [canReset]="settings.proximitySensorType !== defaults.proximitySensorType"
+              (resetClick)="resetOption('proximitySensorType')"></app-reset-button>
+        </div>
+        <div class="control">
+          <mat-select [(ngModel)]="settings.proximitySensorType" (ngModelChange)="saveConfigSettings()">
+            @for(option of proximitySensorTypeOptions; track option.value) {
+              <mat-option [value]="option.value">{{option.name}}</mat-option>
+            }
+          </mat-select>
+        </div>
+      </div>
+    }
+
     <!-- Render Resolution Width Multiplier -->
     <div class="field">
       <div class="title">

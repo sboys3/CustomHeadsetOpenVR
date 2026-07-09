@@ -162,6 +162,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["enableEyeTracking"].is_boolean()){
 		headsetConfig.enableEyeTracking = headsetData["enableEyeTracking"].get<bool>();
 	}
+	if(headsetData["proximitySensorType"].is_number()){
+		headsetConfig.proximitySensorType = static_cast<Config::ProximitySensorType>(headsetData["proximitySensorType"].get<int>());
+	}
 	
 	if(json& hiddenAreaJson = headsetData["hiddenArea"]; hiddenAreaJson.is_object()){
 		auto& newHiddenArea = headsetConfig.hiddenArea;
@@ -508,6 +511,7 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 		{"forceEnable", headsetConfig.forceEnable},
 		{"parallelProjection", headsetConfig.parallelProjection},
 		{"enableEyeTracking", headsetConfig.enableEyeTracking},
+		{"proximitySensorType", (int)headsetConfig.proximitySensorType},
 		{"hiddenArea", {
 			{"enable", headsetConfig.hiddenArea.enable},
 			{"testMode", headsetConfig.hiddenArea.testMode},

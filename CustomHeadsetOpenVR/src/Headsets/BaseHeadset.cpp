@@ -48,6 +48,7 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDR10_Bool, true);
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDCP14LegacyCompat_Bool, false);
 	
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentProximity]);
 	
 	if(GetConfig().replaceIcons){
 		std::string folderName = "";
@@ -388,8 +389,8 @@ void BaseHeadsetShim::RunFrame(){
 	}
 	static int debugFrameCount = 0;
 	debugFrameCount++;
-	if(frameTime >= 1.0 / 100.0){
-		// only run a maximum of 100 times a second
+	if(frameTime >= 1.0 / 200.0){
+		// only run a maximum of 200 times a second
 		
 		vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
@@ -407,7 +408,8 @@ void BaseHeadsetShim::RunFrame(){
 				lastMovementRotation = rotation;
 				lastMovementTime = now;
 			}
-			double dimmingAmount = 1 - GetConfig().stationaryDimming.dimBrightnessPercent / 100.0;
+			double minBrightness = GetConfig().stationaryDimming.dimBrightnessPercent / 100.0;
+			double dimmingAmount = 1 - minBrightness;
 			if(lastMovementTime > now - GetConfig().stationaryDimming.movementTime){
 				// still moving
 				dimmingMultiplier += dimmingAmount / GetConfig().stationaryDimming.brightenSeconds * frameTime;
@@ -415,7 +417,10 @@ void BaseHeadsetShim::RunFrame(){
 				// stationary
 				dimmingMultiplier -= dimmingAmount / GetConfig().stationaryDimming.dimSeconds * frameTime;
 			}
-			dimmingMultiplier = std::max(GetConfig().stationaryDimming.dimBrightnessPercent / 100.0, std::min(1.0, dimmingMultiplier));
+			dimmingMultiplier = std::max(minBrightness, std::min(1.0, dimmingMultiplier));
+			if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeStationaryDimming && inputComponents[ComponentProximity]){
+				vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], dimmingMultiplier > minBrightness, 0);
+			}
 		}else{
 			dimmingMultiplier = 1;
 		}
@@ -433,6 +438,12 @@ void BaseHeadsetShim::RunFrame(){
 			vr::VRProperties()->SetVec3Property(container, vr::Prop_DisplayColorMultRight_Vector3, {(float)color.r, (float)color.g, (float)color.b});
 		}
 		
+		if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeAlwaysOn && inputComponents[ComponentProximity]){
+			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], true, 0);
+		}
+		if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeAlwaysOff && inputComponents[ComponentProximity]){
+			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], false, 0);
+		}
 		
 		lastFrameTime = now;
 	}

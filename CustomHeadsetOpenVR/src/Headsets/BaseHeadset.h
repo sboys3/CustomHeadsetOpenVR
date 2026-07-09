@@ -51,6 +51,15 @@ public:
 	vr::HmdMatrix34_t lastMovementRotation = {};
 	// brightness multiplier from for dimming when the headset is not moving
 	double dimmingMultiplier = 1;
+	// define input components. only the presense is allocated by default
+	enum InputComponents {
+		ComponentSystemClick,
+		ComponentTap,
+		ComponentProximity,
+
+		ComponentCount,
+	};
+	vr::VRInputComponentHandle_t inputComponents[ComponentCount] = {};
 	
 	// test thread that toggles testToggle every 5 seconds to test things
 	bool testToggle = false;

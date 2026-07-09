@@ -362,22 +362,25 @@ std::wstring ConvertUtf8ToWide(const std::string& str){
 }
 
 
+// convert sRGB into the section of the dci-p3 color space it occupies based on the display color points
 static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionMatrices = {
 	{Config::HeadsetType::MeganeX8K, {
-		// convert sRGB into the section of the dci-p3 color space it occupies
 		0.8224619687143621, 0.17753803128563772, 0.0, 
 		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
 		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
 
 	}},
-	
-	// {Config::HeadsetType::DreamAir, {
-	// }},
 	{Config::HeadsetType::DreamAir, {
 		// convert sRGB into the section of the dci-p3 color space it occupies
 		0.7304695448285958, 0.2440673763281347, 0.025463078843269038,
 		0.03779320999796168, 0.9518287439140447, 0.010378046087993819,
 		0.01344114195073836, 0.0475204153264534, 0.9390384427228086
+	}},
+	{Config::HeadsetType::DreamAirSE, {
+		// convert sRGB into the section of the dci-p3 color space it occupies
+		0.7788634159921426, 0.25247739019974275, -0.03379484171697117,
+		0.0037476676008244884, 0.994944069950487, 0.0022145460147468266,
+		0.012678379084786844, 0.049011831438184814, 0.9391692651968393
 	}},
 };
 
@@ -387,20 +390,20 @@ static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionWit
 	{Config::HeadsetType::MeganeX8K, {
 		// best guess for an official white point
 		// the data sheet list it as a mixture of infrared and ultraviolet
-		// convert sRGB into the section of the dci-p3 color space it occupies
 		0.8224619687143621, 0.17753803128563772, 0.0, 
 		0.033194198850961636, 0.9668058011490385, -1.3877787807814457e-17, 
 		0.01708263072112004, 0.07239744066396342, 0.9105199286149167
 
 	}},
-	
-	// {Config::HeadsetType::DreamAir, {
-	// }},
 	{Config::HeadsetType::DreamAir, {
-		// convert sRGB into the section of the dci-p3 color space it occupies
 		0.8086585139263373, 0.2701921842418791, 0.02818862968779734,
 		0.037776947709785444, 0.9514191752817748, 0.010373580450483824,
 		0.009672316745800479, 0.03419594187859908, 0.6757370235197377
+	}},
+	{Config::HeadsetType::DreamAirSE, {
+		0.7807794765648906, 0.25309850291724767, -0.033877979482138554,
+		0.0037442742266261438, 0.9940431849480164, 0.002212540825357545,
+		0.012667491683254182, 0.048969743132956656, 0.9383627651837891
 	}},
 };
 

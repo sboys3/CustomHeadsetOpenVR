@@ -32,7 +32,6 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	vr::VRDriverInput()->CreateBooleanComponent(
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
-	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentPresence]);
 
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
@@ -68,6 +67,21 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 
 	BaseHeadsetShim::RunFrame();
+	
+	if(GetInfo().directConnected){
+		// reconnect the USB
+		TryDirectConnection();
+	}
+
+	// Update the buttons state.
+	bool systemClick = false, doubleTap = false;
+	GetHmdButtonsState(systemClick, doubleTap);
+	if(inputComponents[ComponentSystemClick]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	}
+	if(inputComponents[ComponentTap]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	}
 
 	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
 	if (CheckDeviceLost()) {
@@ -82,26 +96,14 @@ void PimaxLighthouseShim::RunFrame(){
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
 	
-	if(GetInfo().directConnected){
-		// reconnect the USB
-		TryDirectConnection();
-	}
 
 	// Update proximity sensor.
-	pvrHmdStatus hmdStatus = {};
-	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
-	if(inputComponents[ComponentPresence]){
-		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
-	}
-
-	// Update the buttons state.
-	bool systemClick = false, doubleTap = false;
-	GetHmdButtonsState(systemClick, doubleTap);
-	if(inputComponents[ComponentSystemClick]){
-		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
-	}
-	if(inputComponents[ComponentTap]){
-		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
+	if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeHardware){
+		pvrHmdStatus hmdStatus = {};
+		pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
+		if(inputComponents[ComponentProximity]){
+			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], hmdStatus.HmdMounted, 0);
+		}
 	}
 
 	// Update the battery level (Crystal OG).

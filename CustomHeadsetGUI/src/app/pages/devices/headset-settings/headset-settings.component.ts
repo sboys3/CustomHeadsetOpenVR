@@ -99,6 +99,13 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     { name: $localize`Right`, value: 2 },
     { name: $localize`Both`, value: 3 }
   ];
+  proximitySensorTypeOptions = [
+    { name: $localize`None`, value: 0 },
+    { name: $localize`Hardware`, value: 1 },
+    { name: $localize`Stationary Dimming`, value: 2 },
+    { name: $localize`Always On`, value: 3 },
+    { name: $localize`Always Off`, value: 4 },
+  ];
   distortionMeshResolutionOptions = [63, 127, 255];
   distortionMeshResolutionOptionsText: { [key: number]: string } = {
     63: $localize`Low (${63})`,

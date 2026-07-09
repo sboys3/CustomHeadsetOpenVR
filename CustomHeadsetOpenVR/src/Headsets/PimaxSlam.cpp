@@ -366,7 +366,6 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	vr::VRDriverInput()->CreateBooleanComponent(
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
-	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentPresence]);
 
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
@@ -466,11 +465,13 @@ void PimaxSlamDriver::RunFrame() {
 
 	// Update proximity sensor.
 	pvrHmdStatus hmdStatus = {};
-	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
-	if(inputComponents[ComponentPresence]){
-		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentPresence], hmdStatus.HmdMounted, 0);
+	if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeHardware){
+		pvrHmdStatus hmdStatus = {};
+		pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
+		if(inputComponents[ComponentProximity]){
+			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], hmdStatus.HmdMounted, 0);
+		}
 	}
-
 	// Update the buttons state.
 	bool systemClick = false, doubleTap = false;
 	GetHmdButtonsState(systemClick, doubleTap);

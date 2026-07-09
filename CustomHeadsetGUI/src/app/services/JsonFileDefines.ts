@@ -138,6 +138,7 @@ export type BaseHeadsetConfig = {
   stationaryDimming: StationaryDimmingConfig;
   parallelProjection: boolean;
   enableEyeTracking: boolean;
+  proximitySensorType: number;
 };
 
 export type MeganeX8KConfig = BaseHeadsetConfig & {

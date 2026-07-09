@@ -38,7 +38,7 @@ struct StationaryDimmingConfig{
 	// if the display should be dimmed when the headset is stationary
 	bool enable = true;
 	// the angle that the headset has to rotate for it to be considered as moved
-	double movementThreshold = 0.4;
+	double movementThreshold = 0.5;
 	// the time in seconds that the headset has to be stationary for it to be dimmed
 	double movementTime = 15.0;
 	// the amount to dim the display to when stationary
@@ -132,9 +132,10 @@ public:
 		CrystalOG = 15,
 		Pimax5KSuper = 16,
 		Pimax5KPlus = 17,
-		Pimax8KX = 18,
-		Pimax8KPlus = 19,
-		PimaxArtisan = 20,
+		Pimax5KXR = 18,
+		Pimax8KX = 19,
+		Pimax8KPlus = 20,
+		PimaxArtisan = 21,
 	};
 	static inline bool IsPimaxHeadset(HeadsetType type){
 		return type == HeadsetType::DreamAir ||
@@ -154,6 +155,14 @@ public:
 	static inline bool IsShiftallHeadset(HeadsetType type){
 		return type == HeadsetType::MeganeX8K;
 	}
+	
+	enum ProximitySensorType{
+		ProximitySensorTypeNone = 0,
+		ProximitySensorTypeHardware = 1,
+		ProximitySensorTypeStationaryDimming = 2,
+		ProximitySensorTypeAlwaysOn = 3,
+		ProximitySensorTypeAlwaysOff = 4,
+	};
 	
 	class BaseHeadsetConfig{
 	public:
@@ -247,6 +256,8 @@ public:
 		bool parallelProjection = true;
 		// if eye tracking should be enabled
 		bool enableEyeTracking = false;
+		// where to get the proximity sensor data from
+		ProximitySensorType proximitySensorType = ProximitySensorTypeStationaryDimming;
 		// Config struct for the hidden area mesh
 		HiddenAreaMeshConfig hiddenArea;
 		// config for dimming the display when stationary
