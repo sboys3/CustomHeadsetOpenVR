@@ -512,6 +512,11 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 
 void PimaxSlamDriver::StartPvrTracking() {
 	if (GetPvrSession() && !pvrTrackingRunning.exchange(true)) {
+		// Doing an auto-recenter is not ideal, but it's better than PVR spawning us in the middle of nowhere.
+		// Players tend to start from a similar location at every boot.
+		pvr_setTrackingOriginType(GetPvrSession(), pvrTrackingOrigin_FloorLevel);
+		pvr_recenterTrackingOrigin(GetPvrSession());
+
 		DriverLog("Starting PVR tracking thread");
 		pvrTrackingThread = std::thread(&PimaxSlamDriver::PvrTrackingThread, this);
 	}
@@ -526,6 +531,8 @@ void PimaxSlamDriver::StopPvrTracking() {
 }
 
 void PimaxSlamDriver::PvrTrackingThread() {
+	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+
 	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
 	const LARGE_INTEGER noDelay = {};
 	// TODO: Make sure this is a reasonable value. 500Hz is quite high, but it doesn't seem to largely increase CPU/GPU utilization.
