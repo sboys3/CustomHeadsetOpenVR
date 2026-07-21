@@ -111,7 +111,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	
 	DistortionProfileConfig dreamAir = {};
 	dreamAir.name = "Dream Air Default";
-	dreamAir.device = {"DreamAir"};
+	dreamAir.device = {"DreamAir", "CrystalSuperMicroOLED"};
 	dreamAir.modifiedTime = 0;
 	dreamAir.description = "Default distortion profile for the Dream Air in this driver. It is a custom distortion profile created for for the Dream Air by using a calibrated camera.";
 	dreamAir.author = "SBoys3";
@@ -153,15 +153,17 @@ bool PopulateBuiltInDistortionProfiles(){
 	dreamAirSE.modifiedTime = 0;
 	dreamAirSE.description = "Default distortion profile for the Dream Air SE in this driver. It is a custom distortion profile created for for the Dream Air SE by using a calibrated camera.";
 	dreamAirSE.author = "SBoys3";
-	dreamAirSE.creationDate = 1782452702.100;
+	dreamAirSE.creationDate = 1783740598.037;
 	dreamAirSE.type = "RadialBezier";
+	dreamAirSE.offsetX = -3.0;
+	dreamAirSE.eyeRotationOffset = -1.0;
 	dreamAirSE.distortions = {
 		0.00, 0.000,
-		5.00, 12.33,
-		10.0, 24.61,
-		15.0, 36.75,
-		20.0, 48.63,
-		25.0, 60.04,
+		5.00, 12.40,
+		10.0, 24.70,
+		15.0, 36.85,
+		20.0, 48.70,
+		25.0, 60.05,
 		30.0, 70.90,
 		35.0, 81.20,
 		40.0, 90.80,
@@ -183,6 +185,46 @@ bool PopulateBuiltInDistortionProfiles(){
 		50.0, -0.6
 	};
 	builtInDistortionProfiles[dreamAirSE.name] = dreamAirSE;
+	
+	DistortionProfileConfig crystalSuperOled = {};
+	crystalSuperOled.name = "Crystal Super Micro-OLED Default";
+	crystalSuperOled.device = {"DreamAir", "CrystalSuperMicroOLED"};
+	crystalSuperOled.modifiedTime = 0;
+	crystalSuperOled.description = "Default distortion profile for the Crystal Super OLED in this driver. It is a custom distortion profile created for the Crystal Super OLED by using a calibrated camera.";
+	crystalSuperOled.author = "SBoys3";
+	crystalSuperOled.creationDate = 1783921954.447;
+	crystalSuperOled.type = "RadialBezier";
+	crystalSuperOled.offsetX = -3.0;
+	crystalSuperOled.eyeRotationOffset = -1.0;
+	crystalSuperOled.distortions = {
+		0.00, 0.000,
+		5.00, 12.80,
+		10.0, 25.50,
+		15.0, 38.00,
+		20.0, 50.23,
+		25.0, 62.05,
+		30.0, 73.35,
+		35.0, 84.10,
+		40.0, 94.20,
+		45.0, 103.25,
+		50.0, 111.1,
+		52.5, 114.3,
+		55.0, 117.3
+	};
+	crystalSuperOled.distortionsRed = {
+		0.00, 0.30,
+		25.0, 0.45,
+		40.0, 0.50,
+		50.0, 0.55,
+	};
+	crystalSuperOled.distortionsBlue = {
+		0.00, -0.2,
+		25.0, -0.4,
+		30.0, -0.5,
+		40.0, -0.7,
+		50.0, -0.7
+	};
+	builtInDistortionProfiles[crystalSuperOled.name] = crystalSuperOled;
 	
 	DistortionProfileConfig crystalSuperBad = {};
 	crystalSuperBad.name = "Crystal Super Bad";
@@ -286,6 +328,7 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 		radialBezierProfile->smoothAmount = config.smoothAmount;
 		radialBezierProfile->offsetX = config.offsetX;
 		radialBezierProfile->offsetY = config.offsetY;
+		radialBezierProfile->eyeRotationOffset = (float)config.eyeRotationOffset;
 		newProfile = radialBezierProfile;
 	}
 	else if (config.type == "Pimax"){

@@ -1,0 +1,46 @@
+<!-- Pimax SLAM Section -->
+<div class="field">
+  <div class="section-title">
+    <span i18n>Pimax SLAM</span>
+    <app-field-tip i18n-info info="Settings for Pimax SLAM tracking integration." />
+  </div>
+</div>
+
+<!-- Recenter Pimax Playspace -->
+<div class="field">
+  <app-field-note type="steamvrRestart" />
+  <div class="title">
+    <span i18n>Recenter Pimax Playspace</span>
+    <app-field-tip i18n-info info="Recenter the Pimax SLAM playspace every time SteamVR is started. This works around the bug that Pimax Play completely forgets the origin of the playspace when restarting. If your headset is in a similar place every time you start up SteamVR, this will work well." />
+    @if(settings && defaults) {
+      <app-reset-button [canReset]="settings.recenterPimaxPlayspace !== defaults.recenterPimaxPlayspace"
+          (resetClick)="resetOption('recenterPimaxPlayspace')"></app-reset-button>
+    }
+  </div>
+  <div class="control">
+    @if(settings) {
+      <mat-slide-toggle [(ngModel)]="settings.recenterPimaxPlayspace" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    }
+  </div>
+</div>
+
+<!-- Enable Pimax Passthrough -->
+<div class="field">
+  <app-field-note type="steamvrRestart" />
+  <div class="title">
+    <span i18n>Enable Pimax Passthrough</span>
+    <app-field-tip i18n-info info="Enable using the cameras on SLAM headsets for passthrough in SteamVR. Beware that there may be some bugs that cause it to hang SteamVR, and you need a new version of Pimax Evo for this to work." />
+    @if(settings && defaults) {
+      <app-reset-button [canReset]="settings.enablePimaxPassthrough !== defaults.enablePimaxPassthrough"
+          (resetClick)="resetOption('enablePimaxPassthrough')"></app-reset-button>
+    }
+  </div>
+  <div class="control">
+    @if(settings) {
+      <mat-slide-toggle [(ngModel)]="settings.enablePimaxPassthrough" (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    }
+  </div>
+</div>
+
+<!-- Content projection slot for additional Pimax SLAM settings -->
+<ng-content></ng-content>

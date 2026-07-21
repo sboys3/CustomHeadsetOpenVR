@@ -688,7 +688,7 @@
     <div class="title">
         <span i18n>Force Tracking (Headset Only)</span>
         <app-field-tip i18n-info
-            info="Forces only the headset to always report as valid and tracking, even if no tracking data is received. Controllers and trackers are unaffected." />
+            info="Forces only the headset to always report as valid and tracking, even if no tracking data is received. Controllers and trackers are unaffected. This can help prevent grey screens in certain circumstances." />
         <app-reset-button
             [canReset]="settings.forceTrackingHeadsetOnly!=defaults.forceTrackingHeadsetOnly"
             (resetClick)="resetOption('forceTrackingHeadsetOnly')"></app-reset-button>

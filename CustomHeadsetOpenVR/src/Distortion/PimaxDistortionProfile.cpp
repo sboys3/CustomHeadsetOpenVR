@@ -17,11 +17,35 @@ void PimaxDistortionProfile::GetProjectionRaw(vr::EVREye eEye, float* pfLeft, fl
 
 Point2D PimaxDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorChannel colorChannel, float fU, float fV) {
     pvrVector2f outUV[3];
-
+    
+    Config::BaseHeadsetConfig& headsetConfig = PimaxCommon::GetHeadsetConfigDefault();
+    // Counteract the display rotation and scaling applied in BaseHeadset::transformUV.
+    // Inverse operations applied in reverse order of the forward transform.
+    // Un-scale non-square resolution
     const float minResolution = (float)std::min(resolutionX, resolutionY);
-    fU = (fU * minResolution / (2.0f * resolutionY)) + 0.5f;
-    fV = (fV * minResolution / (2.0f * resolutionX)) + 0.5f;
-
+    float displayRotation = (float)headsetConfig.displayRotation;
+    fU *= minResolution / resolutionX;
+    fV *= minResolution / resolutionY;
+    // Counteract negation for 180 and 270 rotation
+    if(displayRotation == 2 || displayRotation == 3){
+        fU *= -1;
+        fV *= -1;
+    }
+    // Counteract swap for 90 and 270 rotation
+    if(displayRotation == 1 || displayRotation == 3){
+        float tmp = fU;
+        if(eEye == vr::Eye_Left){
+            fU = fV;
+            fV = -tmp;
+        }else{
+            fU = -fV;
+            fV = tmp;
+        }
+    }
+    // Convert from [-1,1] back to [0,1] and adjust for resolution aspect
+    fU = fU / 2.0f + 0.5f;
+    fV = fV / 2.0f + 0.5f;
+    
     pvr_getHmdDistortedUV(PimaxCommon::GetPvrSession(), (pvrEyeType)eEye, { fU, fV }, outUV);
 
     float fX = (outUV[colorChannel].x - 0.5f) * 2.f;

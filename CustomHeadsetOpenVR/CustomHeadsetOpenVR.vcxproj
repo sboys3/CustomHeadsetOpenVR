@@ -75,6 +75,7 @@
     <ClCompile Include="src\Helpers\DisplayHelper.cpp" />
     <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp" />
     <ClCompile Include="src\Helpers\AAPVRBlocker.cpp" />
+    <ClCompile Include="src\Helpers\MiscHelper.cpp" />
     <ClCompile Include="src\Helpers\PimaxCommon.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>

@@ -186,6 +186,18 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 		if(stationaryDimmingJson["dimSeconds"].is_number()){ newStationaryDimming.dimSeconds = stationaryDimmingJson["dimSeconds"].get<double>(); }
 		if(stationaryDimmingJson["brightenSeconds"].is_number()){ newStationaryDimming.brightenSeconds = stationaryDimmingJson["brightenSeconds"].get<double>(); }
 	}
+	// Handle Pimax-specific config via runtime type check
+	if(Config::PimaxHeadsetConfig* pimaxConfig = dynamic_cast<Config::PimaxHeadsetConfig*>(&headsetConfig)){
+		if(headsetData["recenterPimaxPlayspace"].is_boolean()){
+			pimaxConfig->recenterPimaxPlayspace = headsetData["recenterPimaxPlayspace"].get<bool>();
+		}
+		if(headsetData["enablePimaxPassthrough"].is_boolean()){
+			pimaxConfig->enablePimaxPassthrough = headsetData["enablePimaxPassthrough"].get<bool>();
+		}
+		if(headsetData["forcePimaxPassthrough"].is_boolean()){
+			pimaxConfig->forcePimaxPassthrough = headsetData["forcePimaxPassthrough"].get<bool>();
+		}
+	}
 }
 
 void ConfigLoader::ParseConfig(){
@@ -456,6 +468,9 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 		if(data["smoothAmount"].is_number()){
 			profile.smoothAmount = data["smoothAmount"].get<double>();
 		}
+		if(data["eyeRotationOffset"].is_number()){
+			profile.eyeRotationOffset = data["eyeRotationOffset"].get<double>();
+		}
 		return profile;
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse distortion profile: %s", e.what());
@@ -463,8 +478,8 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 	}
 }
 
-ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
-	return {
+ordered_json baseHeadsetInfo(Config::BaseHeadsetConfig& headsetConfig){
+	ordered_json result = {
 		{"enable", headsetConfig.enable},
 		{"ipd", headsetConfig.ipd},
 		{"ipdOffset", headsetConfig.ipdOffset},
@@ -531,6 +546,13 @@ ordered_json baseHeadsetInfo(const Config::BaseHeadsetConfig& headsetConfig){
 			{"brightenSeconds", headsetConfig.stationaryDimming.brightenSeconds},
 		}},
 	};
+	// Handle Pimax-specific config via runtime type check
+	if(Config::PimaxHeadsetConfig* pimaxConfig = dynamic_cast<Config::PimaxHeadsetConfig*>(&headsetConfig)){
+		result["recenterPimaxPlayspace"] = pimaxConfig->recenterPimaxPlayspace;
+		result["enablePimaxPassthrough"] = pimaxConfig->enablePimaxPassthrough;
+		result["forcePimaxPassthrough"] = pimaxConfig->forcePimaxPassthrough;
+	}
+	return result;
 }
 void ConfigLoader::WriteInfo(){
 	std::lock_guard<std::mutex> lock(infoWriteLock);

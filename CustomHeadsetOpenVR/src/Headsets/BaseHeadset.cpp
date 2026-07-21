@@ -183,9 +183,8 @@ bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, flo
 	float displayRotation = (float)GetConfig().displayRotation;
 	// change range to -1 to 1 for coverage of the minResolution square, apply rotation, and apply zoom
 	auto transformUV = [&](float &u, float &v){
-		// change range to -1 to 1 for coverage of the minResolution square
-		u = (u - 0.5f) * 2.0f * resolutionY / minResolution;
-		v = (v - 0.5f) * 2.0f * resolutionX / minResolution;
+		u = (u - 0.5f) * 2.0f;
+		v = (v - 0.5f) * 2.0f;
 		if(displayRotation == 1 || displayRotation == 3){
 			// swap u and v for 90 and 270 rotation
 			if(eEye == vr::Eye_Left){
@@ -202,6 +201,9 @@ bool BaseHeadsetShim::PreDisplayComponentComputeDistortion(vr::EVREye &eEye, flo
 			u *= -1;
 			v *= -1;
 		}
+		// change range to -1 to 1 for coverage of the minResolution square
+		u *= resolutionX / minResolution;
+		v *= resolutionY / minResolution;
 		u /= distortionZoom;
 		v /= distortionZoom;
 	};
@@ -461,7 +463,6 @@ void BaseHeadsetShim::UpdateSettings(){
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	
-	SetIPD((float)(GetConfig().ipd + GetConfig().ipdOffset) / 1000.f, (float)(GetConfig().eyeRotation * kPi / 180.0f), (float)GetConfig().horizontalIPDOffset / 1000.f);
 
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_DisplayGCBlackClamp_Float, (float)GetConfig().blackLevel);
 	vr::VRProperties()->SetFloatProperty(container, vr::Prop_SecondsFromVsyncToPhotons_Float, (float)GetConfig().secondsFromVsyncToPhotons);
@@ -668,12 +669,15 @@ void BaseHeadsetShim::UpdateSettings(){
 			rightEyeBottom = rightEyeRight = -rightEyeTop;
 		}
 		// calculate combined FOV from the full span of both eyes' clip planes, including eye rotation
-		double combinedFovX = (std::atan(rightEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi + GetConfig().eyeRotation * 2;
+		double combinedFovX = (std::atan(rightEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi + GetConfig().eyeRotation * 2 + distortionProfileConstructor.profile->eyeRotationOffset * 2;
 		double combinedFovY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
 		driverConfigLoader.info.combinedFovX = combinedFovX;
 		driverConfigLoader.info.combinedFovY = combinedFovY;
 		driverConfigLoader.info.needToWrite = true;
 	}
+	
+	
+	SetIPD((float)(GetConfig().ipd + GetConfig().ipdOffset) / 1000.f, (float)((GetConfig().eyeRotation + distortionProfileConstructor.profile->eyeRotationOffset) * kPi / 180.0f), (float)GetConfig().horizontalIPDOffset / 1000.f);
 }
 
 

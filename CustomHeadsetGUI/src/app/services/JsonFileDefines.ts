@@ -139,6 +139,9 @@ export type BaseHeadsetConfig = {
   parallelProjection: boolean;
   enableEyeTracking: boolean;
   proximitySensorType: number;
+  // Pimax SLAM-specific settings, only present on Pimax headset configs
+  recenterPimaxPlayspace?: boolean;
+  enablePimaxPassthrough?: boolean;
 };
 
 export type MeganeX8KConfig = BaseHeadsetConfig & {

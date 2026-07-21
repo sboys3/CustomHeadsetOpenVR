@@ -2,11 +2,12 @@ import { Component, output } from '@angular/core';
 import { CrystalSuper57PPDConfig, HeadsetType } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
+import { PimaxSlamSettingsComponent } from '../pimax-slam-settings/pimax-slam-settings.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-crystal-super-57ppd',
-  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, MatIconModule],
+  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, PimaxSlamSettingsComponent, MatIconModule],
   templateUrl: './crystal-super-57ppd.component.html',
   styleUrl: './crystal-super-57ppd.component.scss'
 })

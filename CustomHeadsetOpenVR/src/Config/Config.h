@@ -266,7 +266,10 @@ public:
 		virtual ~BaseHeadsetConfig() = default;
 	};
 	class PimaxHeadsetConfig : public BaseHeadsetConfig{
-		
+	public:
+		bool recenterPimaxPlayspace = true;
+		bool enablePimaxPassthrough = false;
+		bool forcePimaxPassthrough = false;
 	};
 	
 	class MeganeX8KConfig : public BaseHeadsetConfig{
@@ -406,8 +409,8 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperMicroOLED;
-			distortionProfile = "Dream Air Default";
-			distortionProfileDeviceType = "DreamAir";
+			distortionProfile = "Crystal Super Micro-OLED Default";
+			distortionProfileDeviceType = "CrystalSuperMicroOLED";
 			maxFovX = 98;
 			maxFovY = 88;
 			fovClamping = false;
@@ -690,6 +693,8 @@ public:
 	bool legacySmoothing = false;
 	// amount to smooth the curve from 0 to 1 for legacy smoothing
 	double smoothAmount = 0.66;
+	// additional eye rotation offset in degrees to apply on top of the headset's eye rotation
+	double eyeRotationOffset = 0.0;
 };
 
 // global config object

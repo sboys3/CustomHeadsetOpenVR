@@ -53,10 +53,9 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
         const info = this.dis.values();
         const settings = this.dss.values();
         // Not a headset with explicit toggles
-        const isOtherHeadset = info?.connectedHeadset !== HeadsetType.MeganeX8K && info?.connectedHeadset !== HeadsetType.DreamAir;
+        const isOtherHeadset = info?.connectedHeadset == HeadsetType.Other || info?.connectedHeadset == HeadsetType.Vive;
         const noDirectMode = !info?.nonNativeHeadsetFound;
         const customShaderEnabled = settings?.customShader?.enableForOther ?? false;
-        console.log(isOtherHeadset, noDirectMode, !customShaderEnabled)
         return isOtherHeadset && noDirectMode && !customShaderEnabled;
     })
     driverWarning = signal(false)

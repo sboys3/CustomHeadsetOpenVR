@@ -404,9 +404,9 @@ static bool EnsurePvrSession() {
 			// I've seen some evidence that the EDIDs might have been changed at some point.
 			if(s_info.headsetType){
 				Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(s_info.headsetType);
-				if(config && displayInfo.edid_pid && config->edidProductId != displayInfo.edid_pid){
-					DriverLog("EDID product ID mismatch: expected %04x, got %04x\n", config->edidProductId, displayInfo.edid_pid);
-					config->edidProductId = displayInfo.edid_pid;
+				if(config && displayInfo.edid_vid && config->edidVendorId != displayInfo.edid_vid){
+					DriverLog("EDID vendor ID mismatch: expected %i, got %i\n", config->edidVendorId, displayInfo.edid_vid);
+					config->edidVendorId = displayInfo.edid_vid;
 					std::string maskedSerial = std::string(info.SerialNumber);
 					if(maskedSerial.length() > 4){
 						maskedSerial = maskedSerial.substr(0, maskedSerial.size() - 4) + "XXXX";
@@ -511,22 +511,33 @@ Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& c
 	return config;
 }
 
-Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfig(){
-	Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(GetInfo().headsetType);
+Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfig(){
+	Config::PimaxHeadsetConfig* config = dynamic_cast<Config::PimaxHeadsetConfig*>(driverConfig.ConfigFromHeadsetType(GetInfo().headsetType));
 	if(!config){
 		// fallback to the Dream Air to avoid null pointer
 		config = &driverConfig.dreamAir;
 	}
-	return PatchConfig(*config);
+	PatchConfig(*config);
+	return *config;
 }
 
-Config::BaseHeadsetConfig& PimaxCommon::GetHeadsetConfigOld(){
-	Config::BaseHeadsetConfig* config = driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType);
+Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfigOld(){
+	Config::PimaxHeadsetConfig* config = dynamic_cast<Config::PimaxHeadsetConfig*>(driverConfigOld.ConfigFromHeadsetType(GetInfo().headsetType));
 	if(!config){
 		// fallback to the Dream Air to avoid null pointer
 		config = &driverConfigOld.dreamAir;
 	}
-	return PatchConfig(*config);
+	PatchConfig(*config);
+	return *config;
+}
+
+Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfigDefault(){
+	Config::PimaxHeadsetConfig* config = dynamic_cast<Config::PimaxHeadsetConfig*>(defaultDriverConfig.ConfigFromHeadsetType(GetInfo().headsetType));
+	if(!config){
+		// fallback to the Dream Air to avoid null pointer
+		config = &defaultDriverConfig.dreamAir;
+	}
+	return *config;
 }
 
 PimaxCommon::PimaxCommon() {

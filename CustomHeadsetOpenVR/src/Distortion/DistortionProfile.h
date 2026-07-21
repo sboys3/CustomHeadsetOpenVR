@@ -37,6 +37,8 @@ public:
 	float flatFovZoom = 1;
 	// if true, the distortion profile will clamp the image to the bounds of the display
 	bool fovClamping = true;
+	// additional eye rotation offset in degrees to apply on top of the headset's eye rotation. this can be used to match existing profiles when a new one is asymmetric.
+	float eyeRotationOffset = 0.0f;
 	
 	
 	

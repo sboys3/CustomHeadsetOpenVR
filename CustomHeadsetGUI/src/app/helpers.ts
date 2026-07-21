@@ -283,6 +283,7 @@ function testIsNewVersion() {
   test('1.0.0-beta.2', '1.0.0-beta', false);
   test('1.0.0-beta', '1.0.0-beta.2', true);
   test('1.0.0-beta.2', '1.0.0', true);
+  test('1.0.0-beta.2', '1.0.0-beta.10', true);
   test('1.0.0', '1.0.0-beta.2', false);
   test('1.0.0', '1.0.1-beta.2', true);
   test('1.0.1-beta.2', '1.0.0', false);
@@ -296,6 +297,8 @@ function testIsNewVersion() {
   test('1.0.0', '1.0.0.1', true);
   test('1.0.0.1', '1.0.2', true);
   test('1.0.1', '1.0.0.1', false);
+  test('1.0.1.1', '1.0.1.1', false);
+  test('1.0.1.43', '1.0.1.44', true);
   test('v1.0.1', '1.0.2', true);
   test('v1.0.1', 'v1.0.2', true);
   test('1.0.1', 'v1.0.2', true);

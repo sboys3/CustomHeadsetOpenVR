@@ -2,11 +2,12 @@ import { Component, effect, inject, output } from '@angular/core';
 import { DreamAirConfig, HeadsetType } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
+import { PimaxSlamSettingsComponent } from '../pimax-slam-settings/pimax-slam-settings.component';
 import { DriverSettingService } from '../../../services/driver-setting.service';
 
 @Component({
   selector: 'app-dream-air',
-  imports: [HeadsetSettingsComponent, PimaxLauncherComponent],
+  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, PimaxSlamSettingsComponent],
   templateUrl: './dream-air.component.html',
   styleUrl: './dream-air.component.scss'
 })

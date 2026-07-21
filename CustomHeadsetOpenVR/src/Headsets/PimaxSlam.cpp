@@ -1,6 +1,7 @@
 #include "PimaxSlam.h"
 
 #include "../Helpers/EyeTrackingOutput.h"
+#include "../Helpers/MiscHelper.h"
 #include "../Helpers/vr_blockqueue.h"
 
 #include <DirectXMath.h>
@@ -788,12 +789,21 @@ static std::shared_mutex s_controllerDriverMutex;
 static std::unique_ptr<PimaxCameraDriver> s_cameraDriver;
 
 PimaxSlamDriver::PimaxSlamDriver() {
-	// Setting up the camera component must be done early, prior to any GetComponent().
-	const auto vstType = pvr_getVSTType(GetPvrSession());
-	if (vstType != pvrVSTTypeNone) {
-		const auto format = pvr_getVSTStreamFormat(GetPvrSession());
-		if (format == pvrVST_FORMAT_NV12 || format == pvrVST_FORMAT_RAW8) {
-			s_cameraDriver = std::make_unique<PimaxCameraDriver>();
+	bool isPimaxRuntimeNewEnough = false;
+	std::string pimaxEvoVersion = GetInstalledProgramVersion("PimaxEVO");
+	if(pimaxEvoVersion != ""){
+		// Versions older than 83 will hang when attempting to get formats for the camera.
+		isPimaxRuntimeNewEnough |= IsNewVersion("1.0.0.82", pimaxEvoVersion);
+		DriverLog("Installed PimaxEVO version: %s, newer enough for passthrough: %i", pimaxEvoVersion.c_str(), isPimaxRuntimeNewEnough);
+	}
+	if((isPimaxRuntimeNewEnough && GetHeadsetConfig().enablePimaxPassthrough) || GetHeadsetConfig().forcePimaxPassthrough){
+		// Setting up the camera component must be done early, prior to any GetComponent().
+		const auto vstType = pvr_getVSTType(GetPvrSession());
+		if (vstType != pvrVSTTypeNone) {
+			const auto format = pvr_getVSTStreamFormat(GetPvrSession());
+			if (format == pvrVST_FORMAT_NV12 || format == pvrVST_FORMAT_RAW8) {
+				s_cameraDriver = std::make_unique<PimaxCameraDriver>();
+			}
 		}
 	}
 }
@@ -986,7 +996,7 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 }
 
 void PimaxSlamDriver::StartPvrTracking() {
-	if (GetPvrSession() && !pvrTrackingRunning.exchange(true)) {
+	if (GetPvrSession() && !pvrTrackingRunning.exchange(true) && GetHeadsetConfig().recenterPimaxPlayspace) {
 		// Doing an auto-recenter is not ideal, but it's better than PVR spawning us in the middle of nowhere.
 		// Players tend to start from a similar location at every boot.
 		pvr_setTrackingOriginType(GetPvrSession(), pvrTrackingOrigin_FloorLevel);

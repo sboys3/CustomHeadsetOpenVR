@@ -191,5 +191,8 @@
     <ClCompile Include="..\ThirdParty\hidapi\windows\hid.c">
       <Filter>Source Files\ThirdParty</Filter>
     </ClCompile>
+    <ClCompile Include="src\Helpers\MiscHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

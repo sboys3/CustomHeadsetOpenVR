@@ -2,11 +2,12 @@ import { Component, output } from '@angular/core';
 import { CrystalSuperUltrawideConfig, HeadsetType } from '../../../services/JsonFileDefines';
 import { HeadsetSettingsComponent, HeadsetSettingsConfig } from '../headset-settings/headset-settings.component';
 import { PimaxLauncherComponent } from '../pimax-launcher/pimax-launcher.component';
+import { PimaxSlamSettingsComponent } from '../pimax-slam-settings/pimax-slam-settings.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-crystal-super-ultrawide',
-  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, MatIconModule],
+  imports: [HeadsetSettingsComponent, PimaxLauncherComponent, PimaxSlamSettingsComponent, MatIconModule],
   templateUrl: './crystal-super-ultrawide.component.html',
   styleUrl: './crystal-super-ultrawide.component.scss'
 })

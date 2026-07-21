@@ -35,8 +35,9 @@ public:
 	static pvrSessionHandle GetPvrSession();
 	static double GetPvrTime();
 	static Config::BaseHeadsetConfig& PatchConfig(Config::BaseHeadsetConfig& config);
-	static Config::BaseHeadsetConfig& GetHeadsetConfig();
-	static Config::BaseHeadsetConfig& GetHeadsetConfigOld();
+	static Config::PimaxHeadsetConfig& GetHeadsetConfig();
+	static Config::PimaxHeadsetConfig& GetHeadsetConfigOld();
+	static Config::PimaxHeadsetConfig& GetHeadsetConfigDefault();
 
 protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
