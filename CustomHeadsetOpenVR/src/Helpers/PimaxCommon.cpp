@@ -5,9 +5,12 @@
 #include <chrono>
 #include <optional>
 #include <vector>
+#include <shared_mutex>
 
 #include "../Driver/DriverLog.h"
+#include "../Driver/DeviceProvider.h"
 #include "EyeTrackingOutput.h"
+#include "MiscHelper.h"
 
 // For "hmd_buttons" config. Not in PVR SDK.
 enum class HmdButton : int {
@@ -20,7 +23,19 @@ DEFINE_ENUM_FLAG_OPERATORS(HmdButton);
 
 static pvrEnvHandle s_pvr = {};
 static pvrSessionHandle s_pvrSession = {};
+std::shared_mutex PimaxCommon::pvrLock;
 static PimaxInfo s_info = {};
+
+bool HeadsetHasEyeTracking(Config::HeadsetType type){
+	// Crystal OG, Crystal Super (all variants), Dream Air SE, Dream Air.
+	return type == Config::HeadsetType::CrystalOG ||
+		type == Config::HeadsetType::CrystalSuper50PPD ||
+		type == Config::HeadsetType::CrystalSuper57PPD ||
+		type == Config::HeadsetType::CrystalSuperUltrawide ||
+		type == Config::HeadsetType::CrystalSuperMicroOLED ||
+		type == Config::HeadsetType::DreamAirSE ||
+		type == Config::HeadsetType::DreamAir;
+}
 
 Config::HeadsetType TypeFromProduct(int productId, std::string_view productName, std::string_view serialNumber){
 	if (productId == 0x0044 || productId == 0x0043 || productName == "Pimax Dream Air") { // Dream Air (0x0043 is USB only)
@@ -324,6 +339,7 @@ public:
 			}
 		}
 		s_info.headsetType = headsetType;
+		s_info.hasEyeTracking = HeadsetHasEyeTracking(headsetType);
 		running = true;
 		std::thread t(&PimaxDirectUSB::InfoThread, this);
 		t.detach();
@@ -336,7 +352,7 @@ public:
 		}
 		return true;
 	}
-	// You must acquire the lock before closing
+	// You must acquire the lock before calling this function
 	void Close(){
 		if(device){
 			DriverLog("Closing Pimax device %s", log.c_str());
@@ -353,12 +369,19 @@ public:
 
 static PimaxDirectUSB pimaxDirectUSB = {};
 
+void PvrThread();
+std::atomic<bool> pvrThreadRunning;
+std::thread pvrThread;
 
-
-static bool EnsurePvrSession() {
-	if(s_info.directConnected){
+static bool EnsurePvrSession(bool forceTryConnect = false) {
+	if(s_info.connected && !forceTryConnect){
 		// Don't attempt to connect to the PVR API if it already directly connected to the headset.
+		// Also don't try re-connecting to the PVR API as the PVR thread will handle it
 		return false;
+	}
+	if (!pvrThreadRunning.exchange(true)) {
+		DriverLog("Starting PVR thread");
+		pvrThread = std::thread(PvrThread);
 	}
 	if (!s_pvr) {
 		if (pvr_initialise(&s_pvr) != pvr_success) {
@@ -371,7 +394,9 @@ static bool EnsurePvrSession() {
 			return false;
 		}
 	}
-
+	
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+	
 	if (s_pvrSession && !s_info.pvrConnected) {
 		pvrHmdStatus hmdStatus = {};
 		pvr_getHmdStatus(s_pvrSession, &hmdStatus);
@@ -449,10 +474,54 @@ static bool EnsurePvrSession() {
 			s_info.cantingAngle = PVR::Quatf{ eyeInfo[pvrEye_Left].HmdToEyePose.Orientation }.Angle(eyeInfo[pvrEye_Right].HmdToEyePose.Orientation) / 2.f;
 			s_info.cantingAngle *= 180 / 3.1415926f;
 			DriverLog("Canting Angle: %.2f deg", s_info.cantingAngle);
+			s_info.hasEyeTracking = HeadsetHasEyeTracking(s_info.headsetType);
 			s_info.connected = true;
 		}
 	}
 	return true;
+}
+
+void PvrThread(){
+	bool wasEverSuccessful = false;
+	while(true){
+		EnsurePvrSession(true);
+		
+		if(s_pvrSession){
+			pvrHmdStatus hmdStatus = {};
+			pvrResult result;
+			{
+				shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+				result = pvr_getHmdStatus(s_pvrSession, &hmdStatus);
+			}
+			if (result != pvr_success || hmdStatus.ShouldQuit) {
+				if (wasEverSuccessful) {
+					DriverLog("Detected loss of connection to the headset");
+				}
+				std::lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+				if (wasEverSuccessful) {
+					DriverLog("Destroying PVR session");
+				}
+				pvr_destroySession(s_pvrSession);
+				// pvr_shutdown(s_pvr);
+				s_info.pvrConnected = false;
+				s_pvrSession = {};
+				// s_pvr = {};
+				wasEverSuccessful = false;
+			} else {
+				wasEverSuccessful = true;
+			}
+			
+			Sleep(500);
+			// bool anyHeadsetConnected = vr::VRProperties()->TrackedDeviceToPropertyContainer(0) != 0;
+			if(!s_info.connected && CustomHeadsetDeviceProvider::hasHeadsetConnected){
+				// some other non-Pimax headset is connected so stop the thread as it serves no purpose
+				DriverLog("PVR thread exiting");
+				break;
+			}
+		}else{
+			Sleep(3000);
+		}
+	}
 }
 
 PimaxInfo PimaxCommon::GetInfo() {
@@ -483,8 +552,8 @@ bool PimaxCommon::IsSlamHeadsetConnected(){
 	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected && info.useSlamTracking;
 }
 
-pvrSessionHandle PimaxCommon::GetPvrSession() {
-	EnsurePvrSession();
+pvrSessionHandle PimaxCommon::GetPvrSession(bool forceTryConnect) {
+	EnsurePvrSession(forceTryConnect);
 	return s_pvrSession;
 }
 
@@ -542,24 +611,16 @@ Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfigDefault(){
 
 PimaxCommon::PimaxCommon() {
 	// Cache useful immutable state.
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
-	hasEyeTracking = // Crystal OG, Crystal Super, Dream Air SE, Dream Air.
-		GetHmdInfo().ProductId == 0x0012 || GetHmdInfo().ProductId == 0x0040 ||
-		GetHmdInfo().ProductId == 0x0042 || GetHmdInfo().ProductId == 0x0044;
 }
 
-bool PimaxCommon::CheckDeviceLost() {
-	pvrHmdStatus hmdStatus = {};
-	pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
-	const bool deviceReady = hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit;
-	if (s_info.pvrConnected && !deviceReady) {
-		DriverLog("Detected loss of connection to the headset");
-		StopEyeTracking();
-		pvr_destroySession(GetPvrSession());
-		s_info.pvrConnected = false;
-		s_pvrSession = {};
-	}
-	return !deviceReady;
+bool PimaxCommon::CheckPvrDeviceLost() {
+	return !s_info.pvrConnected;
+}
+
+bool PimaxCommon::HasEyeTracking() const {
+	return s_info.hasEyeTracking;
 }
 
 void PimaxCommon::StartEyeTracking() {
@@ -579,6 +640,7 @@ void PimaxCommon::StopEyeTracking() {
 
 void PimaxCommon::SetVisibilityMeshes() {
 	vr::CVRHiddenAreaHelpers helpers = { vr::VRPropertiesRaw() };
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	for (int eye = 0; eye < pvrEye_Count; eye++) {
 		std::vector<vr::HmdVector2_t> vertices;
 		size_t count;
@@ -601,6 +663,7 @@ void PimaxCommon::PollMagicAttach() {
 	// Detect if Pimax LibMagic (DFR injector) was enabled after a scene application started and re-assert the
 	// PID of the current scene application.
 	const bool wasLibMagicEnabled = isLibMagicEnabled;
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	isLibMagicEnabled = pvr_getIntConfig(GetPvrSession(), "enable_foveated_rendering", 0);
 	if (isLibMagicEnabled != wasLibMagicEnabled) {
 		SetSceneApplicationProcess(lastSceneApplicationPid);
@@ -609,6 +672,7 @@ void PimaxCommon::PollMagicAttach() {
 
 void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 	if (pid) {
+		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 		// Signal Pimax Play to perform a MagicAttach (DFR injector) when a new scene app started.
 		pvr_setIntConfig(GetPvrSession(), "openvr_client_changed", pid);
 	}
@@ -616,6 +680,7 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 }
 
 void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap) {
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	const HmdButton hmdButtonsState = (HmdButton)pvr_getIntConfig(GetPvrSession(), "hmd_buttons", 0) | (HmdButton)s_info.directButtonState;
 	const auto isButtonPressed = [&hmdButtonsState](const HmdButton button) {
 		return (hmdButtonsState & button) == button;
@@ -637,6 +702,7 @@ void PimaxCommon::EyeTrackingThread() {
 		}
 
 		pvrEyeTrackingInfo eyeTrackingInfo = {};
+		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 		pvr_getEyeTrackingInfo(GetPvrSession(), GetPvrTime(), &eyeTrackingInfo);
 		if (eyeTrackingInfo.TimeInSeconds) {
 			// Convert PVR eye tracking data to angles for EyeTrackingOutput.
@@ -653,3 +719,4 @@ void PimaxCommon::EyeTrackingThread() {
 
 	DriverLog("Eye tracking thread stopped");
 }
+

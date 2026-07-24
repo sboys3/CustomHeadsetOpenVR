@@ -47,6 +47,8 @@ public:
 	// a set of all shim objects to manage
 	// this allows them to have RunThread called
 	std::set<ShimDefinition*> shims;
+	// set to true once any headset connects to SteamVR
+	static bool hasHeadsetConnected;
 private:
 	struct QueuedEvent {
 		vr::EVREventType eventType;
@@ -56,4 +58,5 @@ private:
 	// events that are waiting for a context to be found
 	std::map<uint32_t, std::vector<QueuedEvent>> queuedEvents = {};
 	bool customShaderEnabled = false;
+	double lastHeadsetProvideTime = 0;
 };

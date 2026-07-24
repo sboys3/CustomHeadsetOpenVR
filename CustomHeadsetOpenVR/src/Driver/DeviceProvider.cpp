@@ -21,6 +21,8 @@
 
 bool lockedOut = false;
 
+bool CustomHeadsetDeviceProvider::hasHeadsetConnected = false;
+
 // general driver functions
 vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriverContext){
 	// initialise this driver
@@ -69,14 +71,6 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 		AAPVRLighthouseUnblockerInjectHooks();
 	}
 	
-	// For Pimax SLAM headsets, load our own driver instead of shimming another driver.
-	if(PimaxCommon::IsSlamHeadsetConnected()) {
-		PimaxSlamDriver* pimaxSlamImplementation = new PimaxSlamDriver();
-		pimaxSlamImplementation->deviceProvider = this;
-		shims.insert(pimaxSlamImplementation);
-		vr::ITrackedDeviceServerDriver* driver = new ShimTrackedDeviceDriver(pimaxSlamImplementation, nullptr);
-		vr::VRServerDriverHost()->TrackedDeviceAdded("PimaxSlamCustomHMD", vr::TrackedDeviceClass_HMD, driver);
-	}
 
 	// the shim classes can be used to implement entirely new headsets, not just shim existing ones
 	if(driverConfig.fakeHeadset.enable){
@@ -131,6 +125,8 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	// Benchmark timing - record start
 	auto frameStart = std::chrono::high_resolution_clock::now();
 	
+	double now = std::chrono::duration<double>(frameStart.time_since_epoch()).count();
+	
 	// acquire driverConfig.configLock for the duration of this function
 	std::lock_guard<std::mutex> lock(driverConfigLock);
 	
@@ -167,6 +163,9 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			}
 		}
 		if(vrevent.eventType == vr::VREvent_TrackedDeviceActivated){
+			if(vrevent.trackedDeviceIndex == 0){
+				hasHeadsetConnected = true;
+			}
 			// set nonNativeHeadsetFound if a device with a direct mode component is found
 			vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(vrevent.trackedDeviceIndex);
 			if(container){
@@ -208,6 +207,20 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 		customShaderEnabled = true;
 	}
 	eyeTrackingOutput.RunFrame();
+	
+	// if no headset is connected see if any can be provided every 4 seconds
+	if(!hasHeadsetConnected && lastHeadsetProvideTime + 4 < now){
+		lastHeadsetProvideTime = now;
+		// For Pimax SLAM headsets, load our own driver instead of shimming another driver.
+		if(PimaxCommon::IsSlamHeadsetConnected()) {
+			PimaxSlamDriver* pimaxSlamImplementation = new PimaxSlamDriver();
+			pimaxSlamImplementation->deviceProvider = this;
+			shims.insert(pimaxSlamImplementation);
+			vr::ITrackedDeviceServerDriver* driver = new ShimTrackedDeviceDriver(pimaxSlamImplementation, nullptr);
+			vr::VRServerDriverHost()->TrackedDeviceAdded("PimaxSlamCustomHMD", vr::TrackedDeviceClass_HMD, driver);
+		}
+	}
+	
 	// clear update flag at end of frame
 	driverConfig.hasBeenUpdated = false;
 	

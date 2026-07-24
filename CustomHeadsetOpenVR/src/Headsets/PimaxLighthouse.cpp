@@ -84,7 +84,8 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 
 	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
-	if (CheckDeviceLost()) {
+	if (CheckPvrDeviceLost()) {
+		StopEyeTracking();
 		return;
 	}
 

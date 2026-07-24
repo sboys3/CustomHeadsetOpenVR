@@ -1,4 +1,5 @@
 #include "AAPVRBlocker.h"
+#include "PimaxCommon.h"
 #include "../Driver/DriverLog.h"
 #include "../Config/ConfigLoader.h"
 
@@ -256,34 +257,10 @@ bool AAPVRShouldBlock() {
 	}
 
 #ifdef PVR_EXISTS
-	pvrEnvHandle envHandle = nullptr;
-	pvrResult result = pvr_initialise(&envHandle);
-	if (result != pvr_success) {
-		sShouldBlockCached = false;
-		sShouldBlockValid = true;
-		DriverLog("AAPVRBlocker: Failed to initialize PVR API, caching block=false");
-		return sShouldBlockCached;
-	}
 
-	pvrSessionHandle sessionHandle = nullptr;
-	result = pvr_createSession(envHandle, &sessionHandle);
-	if (result != pvr_success) {
-		pvr_shutdown(envHandle);
-		sShouldBlockCached = false;
-		sShouldBlockValid = true;
-		DriverLog("AAPVRBlocker: Failed to create PVR session, caching block=false");
-		return sShouldBlockCached;
-	}
-
-	int noRender = pvr_getIntConfig(sessionHandle, "no_render", 0);
+	int noRender = pvr_getIntConfig(PimaxCommon::GetPvrSession(true), "no_render", 0);
 	sShouldBlockCached = (noRender == 1);
-	
-	#ifdef FULLY_BLOCK_AAPVR
-	if(noRender){
-		pvr_destroySession(sessionHandle);
-		pvr_shutdown(envHandle);
-	}
-	#endif
+	sShouldBlockValid = true;
 
 	DriverLog("AAPVRBlocker: PVR no_render=%d, caching block=%d", noRender, sShouldBlockCached);
 #else

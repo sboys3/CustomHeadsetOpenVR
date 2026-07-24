@@ -500,7 +500,7 @@ void BaseHeadsetShim::UpdateSettings(){
 	}else{
 		vr::VRProperties()->EraseProperty(container, vr::Prop_EdidProductID_Int32);
 	}
-	DriverLog("edid vendor %i", vr::VRProperties()->GetInt32Property(container, vr::Prop_EdidVendorID_Int32));
+	// DriverLog("edid vendor %i", vr::VRProperties()->GetInt32Property(container, vr::Prop_EdidVendorID_Int32));
 	
 	//bluetoothDevice
 	if(GetConfig().useViveBluetooth){

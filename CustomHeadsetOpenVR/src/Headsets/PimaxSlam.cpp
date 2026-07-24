@@ -219,6 +219,7 @@ public:
 
 			// Only pick the events applicable to us.
 			if (container == data.containerHandle) {
+				shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 				pvr_triggerHapticPulse(PimaxCommon::GetPvrSession(),
 					role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
 					data.fAmplitude,
@@ -273,6 +274,7 @@ public:
 				components[ComponentMenu], inputState.HandButtons[side] & pvrButton_ApplicationMenu, timeOffset);
 
 			// Update the battery level.
+			shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 			const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
 				PimaxCommon::GetPvrSession(),
 				role == vr::TrackedControllerRole_LeftHand ? pvrTrackedDevice_LeftController : pvrTrackedDevice_RightController,
@@ -382,7 +384,8 @@ public:
 	void Activate(vr::TrackedDeviceIndex_t deviceIndex) {
 		const vr::PropertyContainerHandle_t container =
 			vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
-
+			
+		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 		numCameras = pvr_getVSTType(PimaxCommon::GetPvrSession()) == pvrVSTTypeStereo ? 2 : 1;
 		for (uint32_t i = 0; i < numCameras; i++) {
 			pvr_getVSTCameraIntrinsics(PimaxCommon::GetPvrSession(), i, &cameraResolutionWidth, &cameraResolutionHeight, &focalLength[i], &principalPoint[i]);
@@ -694,6 +697,7 @@ public:
 			// Retrieve and convert the image from PVR.
 			const uint32_t frameSize = (cameraResolutionWidth * cameraResolutionHeight * numCameras * 3) / 2;
 			pvrVSTStreamFrame frame = {};
+			shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 			pvr_getVSTStreamFrame(PimaxCommon::GetPvrSession(), pvrFrameIndex, &frame);
 			pvrFrameIndex = frame.frameIdx + 1;
 
@@ -798,6 +802,7 @@ PimaxSlamDriver::PimaxSlamDriver() {
 	}
 	if((isPimaxRuntimeNewEnough && GetHeadsetConfig().enablePimaxPassthrough) || GetHeadsetConfig().forcePimaxPassthrough){
 		// Setting up the camera component must be done early, prior to any GetComponent().
+		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 		const auto vstType = pvr_getVSTType(GetPvrSession());
 		if (vstType != pvrVSTTypeNone) {
 			const auto format = pvr_getVSTStreamFormat(GetPvrSession());
@@ -843,7 +848,9 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	vr::VRDriverInput()->CreateBooleanComponent(
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
-
+	
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+	
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
@@ -875,6 +882,7 @@ void PimaxSlamDriver::RunFrame() {
 		// don't do anything if not the active device
 		return;
 	}
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
@@ -890,8 +898,9 @@ void PimaxSlamDriver::RunFrame() {
 	BaseHeadsetShim::RunFrame();
 
 	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
-	if (CheckDeviceLost()) {
+	if (CheckPvrDeviceLost()) {
 		StopPvrTracking();
+		StopEyeTracking();
 		return;
 	}
 
@@ -996,6 +1005,7 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 }
 
 void PimaxSlamDriver::StartPvrTracking() {
+	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	if (GetPvrSession() && !pvrTrackingRunning.exchange(true) && GetHeadsetConfig().recenterPimaxPlayspace) {
 		// Doing an auto-recenter is not ideal, but it's better than PVR spawning us in the middle of nowhere.
 		// Players tend to start from a similar location at every boot.
@@ -1033,7 +1043,10 @@ void PimaxSlamDriver::PvrTrackingThread() {
 		const auto pvrNow = GetPvrTime();
 
 		pvrTrackingState trackingState = {};
-		pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
+		{
+			shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+			pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
+		}
 
 		// Update the headset pose.
 		{

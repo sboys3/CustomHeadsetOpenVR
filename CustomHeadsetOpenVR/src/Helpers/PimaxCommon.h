@@ -6,6 +6,7 @@
 #include <atomic>
 #include <string>
 #include <thread>
+#include <shared_mutex>
 
 
 struct PimaxInfo {
@@ -20,6 +21,7 @@ struct PimaxInfo {
 	// if the headset is directly connected instead of using the PVR API
 	bool directConnected = false;
 	int directButtonState = 0;
+	bool hasEyeTracking = false;
 	std::string headsetName;
 };
 
@@ -32,19 +34,19 @@ public:
 	static bool IsPimaxLighthouseDevice(std::string_view model, std::string_view manufacturer);
 	static bool IsLighthouseHeadsetConnected();
 	static bool IsSlamHeadsetConnected();
-	static pvrSessionHandle GetPvrSession();
+	static pvrSessionHandle GetPvrSession(bool forceTryConnect = false);
 	static double GetPvrTime();
 	static Config::BaseHeadsetConfig& PatchConfig(Config::BaseHeadsetConfig& config);
 	static Config::PimaxHeadsetConfig& GetHeadsetConfig();
 	static Config::PimaxHeadsetConfig& GetHeadsetConfigOld();
 	static Config::PimaxHeadsetConfig& GetHeadsetConfigDefault();
-
+	static std::shared_mutex pvrLock;
 protected:
 	pvrHmdInfo GetHmdInfo() const { return hmdInfo; };
-	bool HasEyeTracking() const { return hasEyeTracking; }
+	bool HasEyeTracking() const;
 
 
-	bool CheckDeviceLost();
+	bool CheckPvrDeviceLost();
 
 	void StartEyeTracking();
 	void StopEyeTracking();
@@ -58,11 +60,14 @@ protected:
 
 private:
 	void EyeTrackingThread();
+	// thread for general pvr background management.
+	static void PvrThread();
 
 	pvrHmdInfo hmdInfo = {};
-	bool hasEyeTracking = false;
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
+	static std::thread pvrThread;
+	static std::atomic<bool> pvrThreadRunning;
 	uint32_t lastSceneApplicationPid = 0;
 	bool isLibMagicEnabled = false;
 };
