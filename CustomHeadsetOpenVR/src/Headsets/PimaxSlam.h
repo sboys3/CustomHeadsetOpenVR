@@ -16,6 +16,7 @@ public:
 	virtual void PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) override;
 	virtual void SubDeactivate() override;
 	virtual void RunFrame() override;
+	virtual void RunPvrBackground() override;
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
 
 	void StartPvrTracking();

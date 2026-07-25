@@ -1,6 +1,7 @@
 #include "PimaxLighthouse.h"
 
 #include "../Helpers/EyeTrackingOutput.h"
+#include "../Helpers/MiscHelper.h"
 
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
@@ -54,9 +55,12 @@ void PimaxLighthouseShim::RunFrame(){
 		// don't do anything if not the active device
 		return;
 	}
-	// We need to set this config value before UpdateSettings() runs.
-	// This is only necessary when using the PimaxDistortionProfile.
-	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	if (driverConfig.hasBeenUpdated) {
+		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
+		// We need to set this config value before UpdateSettings() runs.
+		// This is only necessary when using the PimaxDistortionProfile.
+		pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	}
 
 	if (driverConfig.hasBeenUpdated &&
 		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
@@ -97,7 +101,11 @@ void PimaxLighthouseShim::RunFrame(){
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
 	
+}
 
+void PimaxLighthouseShim::RunPvrBackground() {
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	
 	// Update proximity sensor.
 	if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeHardware){
 		pvrHmdStatus hmdStatus = {};
@@ -107,13 +115,15 @@ void PimaxLighthouseShim::RunFrame(){
 		}
 	}
 
-	// Update the battery level (Crystal OG).
-	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
-	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
-		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
-	if (batteryPercentage > 0) {
-		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
-		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	if(GetInfo().headsetType == Config::HeadsetType::CrystalOG){
+		// Update the battery level (Crystal OG).
+		const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+		const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+			GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+		if (batteryPercentage > 0) {
+			vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+			vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+		}
 	}
 
 	PollMagicAttach();

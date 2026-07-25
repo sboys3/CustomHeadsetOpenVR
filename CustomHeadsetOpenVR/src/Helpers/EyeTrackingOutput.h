@@ -50,6 +50,9 @@ public:
 	// IPD in mm
 	// used to calculate the focal point.
 	float ipd = 63.0f;
+	
+	// if data should be immediately output when received
+	bool immediateOutput = true;
 
 	std::mutex dataLock = {};
 	EyeTrackingData eyeData = {};

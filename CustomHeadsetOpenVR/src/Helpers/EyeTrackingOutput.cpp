@@ -32,8 +32,13 @@ void EyeTrackingOutput::SetEyeTrackingData(EyeTrackingData data){
 	if(!data.timestamp){
 		data.timestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() / 1000000.0;
 	}
-	std::lock_guard<std::mutex> lock(dataLock);
-	eyeData = data;
+	{
+		std::lock_guard<std::mutex> lock(dataLock);
+		eyeData = data;
+	}
+	if(immediateOutput){
+		RunFrame();
+	}
 }
 
 void EyeTrackingOutput::SetEyeTrackingData(float leftAngleX, float leftAngleY, float rightAngleX, float rightAngleY, float ipd, double timestamp){

@@ -14,6 +14,7 @@
 
 // For "hmd_buttons" config. Not in PVR SDK.
 enum class HmdButton : int {
+	Button_None = 0x0000,
 	Button_Power = 0x0001,
 	Button_VolumeUp = 0x0002,
 	Button_VolumeDown = 0x0004,
@@ -25,6 +26,9 @@ static pvrEnvHandle s_pvr = {};
 static pvrSessionHandle s_pvrSession = {};
 std::shared_mutex PimaxCommon::pvrLock;
 static PimaxInfo s_info = {};
+
+int directButtonState = 0;
+int pvrButtonState = 0;
 
 bool HeadsetHasEyeTracking(Config::HeadsetType type){
 	// Crystal OG, Crystal Super (all variants), Dream Air SE, Dream Air.
@@ -211,7 +215,7 @@ public:
 				if(infoData[0] == 0x53 && infoData[2] == 0x08 && infoData[3] == 0x00){
 					uint16_t ipdValue = infoData[45] | (infoData[46] << 8);
 					s_info.ipd = ipdValue / 100.0f;
-					s_info.directButtonState = infoData[49];
+					directButtonState = infoData[49];
 				}
 				continue;
 			}
@@ -372,6 +376,8 @@ static PimaxDirectUSB pimaxDirectUSB = {};
 void PvrThread();
 std::atomic<bool> pvrThreadRunning;
 std::thread pvrThread;
+static std::set<PimaxCommon*> sPimaxCommonInstances;
+static std::mutex sPimaxCommonInstanceMutex;
 
 static bool EnsurePvrSession(bool forceTryConnect = false) {
 	if(s_info.connected && !forceTryConnect){
@@ -493,6 +499,17 @@ void PvrThread(){
 				shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 				result = pvr_getHmdStatus(s_pvrSession, &hmdStatus);
 			}
+			
+			pvrButtonState = pvr_getIntConfig(s_pvrSession, "hmd_buttons", 0);
+
+			// Call RunPvrBackground on all registered instances
+			{
+				std::lock_guard<std::mutex> lock(sPimaxCommonInstanceMutex);
+				for (PimaxCommon* instance : sPimaxCommonInstances) {
+					instance->RunPvrBackground();
+				}
+			}
+			
 			if (result != pvr_success || hmdStatus.ShouldQuit) {
 				if (wasEverSuccessful) {
 					DriverLog("Detected loss of connection to the headset");
@@ -510,16 +527,16 @@ void PvrThread(){
 			} else {
 				wasEverSuccessful = true;
 			}
-			
-			Sleep(500);
-			// bool anyHeadsetConnected = vr::VRProperties()->TrackedDeviceToPropertyContainer(0) != 0;
-			if(!s_info.connected && CustomHeadsetDeviceProvider::hasHeadsetConnected){
-				// some other non-Pimax headset is connected so stop the thread as it serves no purpose
-				DriverLog("PVR thread exiting");
-				break;
-			}
+
+			Sleep(20);
 		}else{
 			Sleep(3000);
+		}
+		// bool anyHeadsetConnected = vr::VRProperties()->TrackedDeviceToPropertyContainer(0) != 0;
+		if(!s_info.connected && CustomHeadsetDeviceProvider::hasHeadsetConnected){
+			// some other non-Pimax headset is connected so stop the thread as it serves no purpose
+			DriverLog("PVR thread exiting");
+			break;
 		}
 	}
 }
@@ -610,9 +627,20 @@ Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfigDefault(){
 }
 
 PimaxCommon::PimaxCommon() {
+	// Register this instance in the global set
+	{
+		std::lock_guard<std::mutex> lock(sPimaxCommonInstanceMutex);
+		sPimaxCommonInstances.insert(this);
+	}
 	// Cache useful immutable state.
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	pvr_getHmdInfo(GetPvrSession(), &hmdInfo);
+}
+
+PimaxCommon::~PimaxCommon() {
+	// Remove this instance from the global set
+	std::lock_guard<std::mutex> lock(sPimaxCommonInstanceMutex);
+	sPimaxCommonInstances.erase(this);
 }
 
 bool PimaxCommon::CheckPvrDeviceLost() {
@@ -681,7 +709,13 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 
 void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap) {
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
-	const HmdButton hmdButtonsState = (HmdButton)pvr_getIntConfig(GetPvrSession(), "hmd_buttons", 0) | (HmdButton)s_info.directButtonState;
+	HmdButton hmdButtonsState = HmdButton::Button_None;
+	if(s_info.pvrConnected){
+		hmdButtonsState |= (HmdButton)pvrButtonState;
+	}
+	if(s_info.directConnected){
+		hmdButtonsState |= (HmdButton)directButtonState;
+	}
 	const auto isButtonPressed = [&hmdButtonsState](const HmdButton button) {
 		return (hmdButtonsState & button) == button;
 	};

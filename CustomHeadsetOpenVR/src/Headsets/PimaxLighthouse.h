@@ -16,6 +16,8 @@ public:
 	virtual void SubDeactivate() override;
 	// run eye tracking
 	virtual void RunFrame() override;
+	// run pvr background tasks
+	virtual void RunPvrBackground() override;
 	// forward events
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
 

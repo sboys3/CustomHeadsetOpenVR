@@ -20,7 +20,6 @@ struct PimaxInfo {
 	float ipd = 0;
 	// if the headset is directly connected instead of using the PVR API
 	bool directConnected = false;
-	int directButtonState = 0;
 	bool hasEyeTracking = false;
 	std::string headsetName;
 };
@@ -28,7 +27,7 @@ struct PimaxInfo {
 class PimaxCommon {
 public:
 	PimaxCommon();
-	virtual ~PimaxCommon() = default;
+	virtual ~PimaxCommon();
 	static PimaxInfo GetInfo();
 	static bool TryDirectConnection();
 	static bool IsPimaxLighthouseDevice(std::string_view model, std::string_view manufacturer);
@@ -59,17 +58,16 @@ protected:
 	void GetHmdButtonsState(bool& systemButton, bool& doubleTap);
 
 private:
+	virtual void RunPvrBackground() {}
 	void EyeTrackingThread();
-	// thread for general pvr background management.
-	static void PvrThread();
 
 	pvrHmdInfo hmdInfo = {};
 	std::thread eyeTrackingThread;
 	std::atomic<bool> eyeTrackingRunning;
-	static std::thread pvrThread;
-	static std::atomic<bool> pvrThreadRunning;
 	uint32_t lastSceneApplicationPid = 0;
 	bool isLibMagicEnabled = false;
+
+	friend void PvrThread();
 };
 
 static inline std::string pvr_getTrackedDeviceStringPropertyHelper(pvrSessionHandle sessionHandle,

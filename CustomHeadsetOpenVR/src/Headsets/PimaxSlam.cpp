@@ -883,9 +883,12 @@ void PimaxSlamDriver::RunFrame() {
 		return;
 	}
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
-	// We need to set this config value before UpdateSettings() runs.
-	// This is only necessary when using the PimaxDistortionProfile.
-	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	
+	if (driverConfig.hasBeenUpdated) {
+		// We need to set this config value before UpdateSettings() runs.
+		// This is only necessary when using the PimaxDistortionProfile.
+		pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	}
 
 	if (driverConfig.hasBeenUpdated &&
 		(GetConfig().hiddenArea != GetConfigOld().hiddenArea || GetConfigOld().disableEye != GetConfig().disableEye)) {
@@ -906,6 +909,28 @@ void PimaxSlamDriver::RunFrame() {
 
 	StartPvrTracking();
 
+	
+
+	// Update eye tracking.
+	if (HasEyeTracking() && GetConfig().enableEyeTracking) {
+		StartEyeTracking();
+	}
+	else {
+		StopEyeTracking();
+	}
+	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
+	eyeTrackingOutput.RunFrame();
+
+	
+
+	if (s_cameraDriver) {
+		s_cameraDriver->RunFrame();
+	}
+}
+
+void PimaxSlamDriver::RunPvrBackground() {
+	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+	
 	// Update controller state and buttons.
 	pvrInputState inputState = {};
 	pvr_getInputState(GetPvrSession(), &inputState);
@@ -942,17 +967,7 @@ void PimaxSlamDriver::RunFrame() {
 			s_controllerDriver[side]->UpdateInputState(inputState);
 		}
 	}
-
-	// Update eye tracking.
-	if (HasEyeTracking() && GetConfig().enableEyeTracking) {
-		StartEyeTracking();
-	}
-	else {
-		StopEyeTracking();
-	}
-	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
-	eyeTrackingOutput.RunFrame();
-
+	
 	// Update proximity sensor.
 	pvrHmdStatus hmdStatus = {};
 	if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeHardware){
@@ -971,21 +986,20 @@ void PimaxSlamDriver::RunFrame() {
 	if(inputComponents[ComponentTap]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);
 	}
-
-	// Update the battery level (Crystal OG).
-	const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
-	const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
-		GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
-	if (batteryPercentage > 0) {
-		vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
-		vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+	
+	
+	if(GetInfo().headsetType == Config::HeadsetType::CrystalOG){
+		// Update the battery level (Crystal OG).
+		const vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(deviceIndex);
+		const int batteryPercentage = pvr_getTrackedDeviceIntProperty(
+			GetPvrSession(), pvrTrackedDevice_HMD, pvrTrackedDeviceProp_BatteryPercent_int, -1);
+		if (batteryPercentage > 0) {
+			vr::VRProperties()->SetFloatProperty(container, vr::Prop_DeviceBatteryPercentage_Float, batteryPercentage / 100.f);
+			vr::VRProperties()->SetBoolProperty(container, vr::Prop_DeviceProvidesBatteryStatus_Bool, true);
+		}
 	}
 
 	PollMagicAttach();
-
-	if (s_cameraDriver) {
-		s_cameraDriver->RunFrame();
-	}
 }
 
 void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
