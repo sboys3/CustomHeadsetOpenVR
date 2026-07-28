@@ -637,6 +637,23 @@ public:
 	
 	CustomShaderConfig customShader = {};
 	
+	
+	class LighthouseOverride{
+	public:
+		// if the lighthouse overrides should be enabled
+		bool enable = true;
+		// When defined, devices that have this Lighthouse device name will have this override applied.
+		std::string targetName = "";
+		// When defined, devices that have this Lighthouse device serial will have this override applied.
+		std::string targetSerial = "";
+		// This contains arbitrary JSON data that will be merged with the Lighthouse config. This is a pointer to a ordered_json object.
+		void* overrideData = {};
+	};
+	std::vector<LighthouseOverride> lighthouseOverrides = {};
+	
+	// a list of device serials that will be blocked
+	std::vector<std::string> serialBlacklist = {};
+	
 	// if devices should always be reported as tracking
 	bool forceTracking = false;
 	

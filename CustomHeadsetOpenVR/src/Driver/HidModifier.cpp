@@ -259,6 +259,23 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	
 	ordered_json data = ordered_json::parse(configStr, nullptr, false, true);
 	
+	// Apply user-defined lighthouse overrides before reading any fields
+	for (auto& override : driverConfig.lighthouseOverrides) {
+		if (!override.enable) continue;
+		// match against the pre-override values so we can identify the device first
+		std::string currentName = data["model_number"].is_string() ? data["model_number"].get<std::string>() : "";
+		std::string currentSerial = data["device_serial_number"].is_string() ? data["device_serial_number"].get<std::string>() : "";
+		bool matches = false;
+		if (!override.targetName.empty() && currentName == override.targetName) matches = true;
+		if (!override.targetSerial.empty() && currentSerial == override.targetSerial) matches = true;
+		if (matches && override.overrideData != nullptr) {
+			ordered_json* overrideJson = static_cast<ordered_json*>(override.overrideData);
+			mergeJson(data, *overrideJson);
+			doReplace = true;
+			DriverLog("HidModifier - Applied lighthouse override for %s/%s", override.targetName.c_str(), override.targetSerial.c_str());
+		}
+	}
+	
 	if(data["model_number"].is_string()){
 		info.lighthouseDeviceName = data["model_number"].get<std::string>();
 	}

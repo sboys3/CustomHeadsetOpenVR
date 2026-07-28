@@ -366,7 +366,7 @@ public:
 		}
 		if(device2){
 			hid_close(device2);
-			device = nullptr;
+			device2 = nullptr;
 		}
 	}
 };

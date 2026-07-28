@@ -304,6 +304,13 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 	#endif
 	DriverLog("HandleDeviceAdded %s\n", pchDeviceSerialNumber);
 	
+	for(std::string serial : driverConfig.serialBlacklist){
+		if(pchDeviceSerialNumber == serial){
+			DriverLog("Device %s is blacklisted, removing", pchDeviceSerialNumber);
+			return false;
+		}
+	}
+	
 	if(hidModifier.originalDeviceClasses.find(std::string(pchDeviceSerialNumber)) != hidModifier.originalDeviceClasses.end()){
 		DriverLog("Device %s restoring original class %d", pchDeviceSerialNumber, hidModifier.originalDeviceClasses[std::string(pchDeviceSerialNumber)]);
 		eDeviceClass = (vr::ETrackedDeviceClass)hidModifier.originalDeviceClasses[std::string(pchDeviceSerialNumber)];

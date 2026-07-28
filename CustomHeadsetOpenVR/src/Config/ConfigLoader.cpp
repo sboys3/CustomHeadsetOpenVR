@@ -200,6 +200,16 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	}
 }
 
+// Helper to free override data pointers in a vector of LighthouseOverride
+void freeLighthouseOverrides(std::vector<Config::LighthouseOverride>& overrides){
+	for(auto& override : overrides){
+		if(override.overrideData != nullptr){
+			delete static_cast<ordered_json*>(override.overrideData);
+			override.overrideData = nullptr;
+		}
+	}
+}
+
 void ConfigLoader::ParseConfig(){
 	// acquire driverConfig.configLock for the duration of this function
 	// std::lock_guard<std::mutex> lock(driverConfig.configLock);
@@ -415,11 +425,31 @@ void ConfigLoader::ParseConfig(){
 		// if(data["watchDistortionProfiles"].is_boolean()){
 		// 	newConfig.watchDistortionProfiles = data["watchDistortionProfiles"].get<bool>();
 		// }
+		if(data["lighthouseOverrides"].is_array()){
+			for(json overrideEntry : data["lighthouseOverrides"]){
+				Config::LighthouseOverride override;
+				if(overrideEntry["targetName"].is_string()){
+					override.targetName = overrideEntry["targetName"].get<std::string>();
+				}
+				if(overrideEntry["targetSerial"].is_string()){
+					override.targetSerial = overrideEntry["targetSerial"].get<std::string>();
+				}
+				if(overrideEntry["override"].is_object()){
+					override.overrideData = new ordered_json(overrideEntry["override"]);
+				}
+				newConfig.lighthouseOverrides.push_back(override);
+			}
+		}
+		if(data["serialBlacklist"].is_array()){
+			newConfig.serialBlacklist = data["serialBlacklist"].get<std::vector<std::string>>();
+		}
 		// write to global config
 		{
 			std::lock_guard<std::mutex> lock(driverConfigLock);
+			Config oldConfig = driverConfig;
 			driverConfigOld = driverConfig;
 			driverConfig = newConfig;
+			freeLighthouseOverrides(oldConfig.lighthouseOverrides);
 		}
 	}catch(const std::exception& e){
 		DriverLog("Failed to parse config file: %s", e.what());
