@@ -13,9 +13,12 @@
 #include "../Headsets/GenericHeadset.h"
 #include "../Headsets/FakeHeadset.h"
 #include "../Headsets/PimaxLighthouse.h"
+#ifdef PVR_EXISTS
 #include "../Headsets/PimaxSlam.h"
+#endif
 #include "../Helpers/EyeTrackingOutput.h"
 #include "../Helpers/AAPVRBlocker.h"
+#include "../Helpers/MiscHelper.h"
 
 #include "../Config/ConfigLoader.h"
 
@@ -212,6 +215,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	if(!hasHeadsetConnected && lastHeadsetProvideTime + 4 < now){
 		lastHeadsetProvideTime = now;
 		// For Pimax SLAM headsets, load our own driver instead of shimming another driver.
+		#ifdef PVR_EXISTS
 		if(PimaxCommon::IsSlamHeadsetConnected()) {
 			PimaxSlamDriver* pimaxSlamImplementation = new PimaxSlamDriver();
 			pimaxSlamImplementation->deviceProvider = this;
@@ -219,6 +223,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			vr::ITrackedDeviceServerDriver* driver = new ShimTrackedDeviceDriver(pimaxSlamImplementation, nullptr);
 			vr::VRServerDriverHost()->TrackedDeviceAdded("PimaxSlamCustomHMD", vr::TrackedDeviceClass_HMD, driver);
 		}
+		#endif // PVR_EXISTS
 	}
 	
 	// clear update flag at end of frame
@@ -332,6 +337,14 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		
 		// TODO: validate the interface versions of drivers and make the shims conform to versions to prevent potential crashes
 		
+		
+		#ifdef __linux__
+		PimaxCommon::TryDirectConnection();
+		if(PimaxCommon::GetInfo().directConnected){
+			DriverLog("Pimax direct connection detected");
+			PISTARTLINUX
+		}
+		#endif
 		if(PimaxCommon::IsLighthouseHeadsetConnected()){
 			PimaxLighthouseShim* pimaxLighthouseShim = new PimaxLighthouseShim();
 			pimaxLighthouseShim->deviceProvider = this;

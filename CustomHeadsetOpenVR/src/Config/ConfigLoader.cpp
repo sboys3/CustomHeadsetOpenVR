@@ -175,7 +175,7 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 		if(hiddenAreaJson["radiusTopInner"].is_number()){ newHiddenArea.radiusTopInner = hiddenAreaJson["radiusTopInner"].get<double>(); }
 		if(hiddenAreaJson["radiusBottomInner"].is_number()){ newHiddenArea.radiusBottomInner = hiddenAreaJson["radiusBottomInner"].get<double>(); }
 		if(hiddenAreaJson["radiusBottomOuter"].is_number()){ newHiddenArea.radiusBottomOuter = hiddenAreaJson["radiusBottomOuter"].get<double>(); }
-		if(hiddenAreaJson["autoHiddenArea"].is_boolean()){ newHiddenArea.autoHiddenArea = hiddenAreaJson["autoHiddenArea"].get<boolean>(); }
+		if(hiddenAreaJson["autoHiddenArea"].is_boolean()){ newHiddenArea.autoHiddenArea = hiddenAreaJson["autoHiddenArea"].get<bool>(); }
 	}
 	if(json& stationaryDimmingJson = headsetData["stationaryDimming"]; stationaryDimmingJson.is_object()){
 		auto& newStationaryDimming = headsetConfig.stationaryDimming;

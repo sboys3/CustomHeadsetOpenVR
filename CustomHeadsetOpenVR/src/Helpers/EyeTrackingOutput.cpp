@@ -3,6 +3,7 @@
 #include "../Config/ConfigLoader.h"
 
 #include <chrono>
+#include <cmath>
 
 EyeTrackingOutput::EyeTrackingOutput(){
 }
@@ -53,7 +54,7 @@ void EyeTrackingOutput::SetEyeTrackingData(float leftAngleX, float leftAngleY, f
 		this->ipd = ipd;
 	}
 	float intersectionDistance = ipd / 1000.0f / (tanLeftX - tanRightX);
-	if(intersectionDistance < 0.001f || intersectionDistance > 20.0f || !isfinite(intersectionDistance)) {
+	if(intersectionDistance < 0.001f || intersectionDistance > 20.0f || !std::isfinite(intersectionDistance)) {
 		intersectionDistance = 20.0f;
 	}
 

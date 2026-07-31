@@ -24,9 +24,11 @@ Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
+#ifdef PVR_EXISTS
 	// We need to set this config value before UpdateSettings() runs.
 	// This is only necessary when using the PimaxDistortionProfile.
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
+#endif
 
 	vr::VRProperties()->SetStringProperty(
 		container, vr::Prop_InputProfilePath_String, ("{" + driverConfigLoader.info.driverName + "}/input/pimaxhmd_profile.json").c_str());
@@ -34,6 +36,7 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
 
+#ifdef PVR_EXISTS
 	if (HasEyeTracking()) {
 		eyeTrackingOutput.Initialize();
 	}
@@ -42,12 +45,15 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
 		SetVisibilityMeshes();
 	}
+#endif
 	
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
 
 void PimaxLighthouseShim::SubDeactivate(){
+#ifdef PVR_EXISTS
 	StopEyeTracking();
+#endif
 }
 
 void PimaxLighthouseShim::RunFrame(){
@@ -55,6 +61,7 @@ void PimaxLighthouseShim::RunFrame(){
 		// don't do anything if not the active device
 		return;
 	}
+#ifdef PVR_EXISTS
 	if (driverConfig.hasBeenUpdated) {
 		shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 		// We need to set this config value before UpdateSettings() runs.
@@ -69,6 +76,7 @@ void PimaxLighthouseShim::RunFrame(){
 			SetVisibilityMeshes();
 		}
 	}
+#endif
 
 	BaseHeadsetShim::RunFrame();
 	
@@ -88,6 +96,7 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 
 	// Make sure to run BaseHeadsetShim::RunFrame() for housekeeping before checking for lost connection.
+#ifdef PVR_EXISTS
 	if (CheckPvrDeviceLost()) {
 		StopEyeTracking();
 		return;
@@ -98,12 +107,14 @@ void PimaxLighthouseShim::RunFrame(){
 	} else {
 		StopEyeTracking();
 	}
+#endif
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
 	
 }
 
 void PimaxLighthouseShim::RunPvrBackground() {
+#ifdef PVR_EXISTS
 	pvr_setIntConfig(GetPvrSession(), "view_rotation_fix", GetConfig().parallelProjection);
 	
 	// Update proximity sensor.
@@ -127,17 +138,21 @@ void PimaxLighthouseShim::RunPvrBackground() {
 	}
 
 	PollMagicAttach();
+#endif
 }
 
 void PimaxLighthouseShim::HandleEvent(const vr::VREvent_t& event){
 	switch (event.eventType) {
 	case vr::VREvent_SceneApplicationChanged:
+#ifdef PVR_EXISTS
 		SetSceneApplicationProcess(event.data.process.pid);
+#endif
 		break;
 	}
 }
 
 
+#ifdef _WIN32
 extern "C" {
 // cant be bothered, implement them here
 void* zcalloc(void* opaque, unsigned int items, unsigned int size){
@@ -148,3 +163,4 @@ void zcfree(void* opaque, void* address){
 }
 const char * z_errmsg[12]{"","","","","","","","","","","",""};
 }
+#endif // _WIN32

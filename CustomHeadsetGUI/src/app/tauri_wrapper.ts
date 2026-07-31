@@ -1,5 +1,19 @@
 import { invoke } from '@tauri-apps/api/core';
 
+let _cachedPlatform: string | null = null;
+
+/**
+ * Returns the platform name ("windows", "linux", "macos", or "unknown").
+ * Cached after first call for performance.
+ */
+export async function get_platform(): Promise<string> {
+    if (_cachedPlatform) {
+        return _cachedPlatform;
+    }
+    _cachedPlatform = await invoke('get_platform') as string;
+    return _cachedPlatform;
+}
+
 export async function get_executable_path() {
     return await invoke('get_executable_path') as string;
 

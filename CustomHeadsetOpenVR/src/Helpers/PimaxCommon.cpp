@@ -1,11 +1,14 @@
 #include "PimaxCommon.h"
 
+#ifdef PVR_EXISTS
 #include <PVR_Math.h>
-#include <hidapi.h>
+#endif
+#include <hidapi/hidapi.h>
 #include <chrono>
 #include <optional>
 #include <vector>
 #include <shared_mutex>
+#include <thread>
 
 #include "../Driver/DriverLog.h"
 #include "../Driver/DeviceProvider.h"
@@ -20,10 +23,14 @@ enum class HmdButton : int {
 	Button_VolumeDown = 0x0004,
 	Button_DoubleTap = 0x0008,
 };
+#ifdef _WIN32
 DEFINE_ENUM_FLAG_OPERATORS(HmdButton);
+#endif
 
+#ifdef PVR_EXISTS
 static pvrEnvHandle s_pvr = {};
 static pvrSessionHandle s_pvrSession = {};
+#endif
 std::shared_mutex PimaxCommon::pvrLock;
 static PimaxInfo s_info = {};
 
@@ -118,7 +125,7 @@ public:
 			if(elapsed >= timeout){
 				break;
 			}
-			Sleep(5);
+			SleepMs(5);
 		}
 		return std::nullopt;
 	}
@@ -194,7 +201,7 @@ public:
 			if(elapsed >= timeout){
 				break;
 			}
-			Sleep(1);
+			SleepMs(1);
 		}
 		return 0;
 	}
@@ -223,7 +230,7 @@ public:
 				// stop running on error
 				running = false;
 			}
-			Sleep(10);
+			SleepMs(10);
 		}
 		running = false;
 	}
@@ -317,6 +324,13 @@ public:
 			std::lock_guard<std::mutex> lock(hidLock);
 			device = hid_open_path(path.c_str());
 			if(!device){
+				// get last error
+				const wchar_t* error = hid_error(NULL);
+				char errorStr[256] = {};
+				for(int i = 0; i < 255 && error[i]; i++){
+					errorStr[i] = error[i];
+				}
+				DriverLog("Error: %s", errorStr);
 				DriverLog("Failed to open Pimax device");
 				return false;
 			}
@@ -351,8 +365,8 @@ public:
 		if(firstRun){
 			firstRun = false;
 			// wait a bit for info
-			Sleep(2000);
-			// Sleep(10000);
+			SleepMs(2000);
+			// SleepMs(10000);
 		}
 		return true;
 	}
@@ -373,9 +387,9 @@ public:
 
 static PimaxDirectUSB pimaxDirectUSB = {};
 
+#ifdef PVR_EXISTS
 void PvrThread();
 std::atomic<bool> pvrThreadRunning;
-std::thread pvrThread;
 static std::set<PimaxCommon*> sPimaxCommonInstances;
 static std::mutex sPimaxCommonInstanceMutex;
 
@@ -387,7 +401,8 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 	}
 	if (!pvrThreadRunning.exchange(true)) {
 		DriverLog("Starting PVR thread");
-		pvrThread = std::thread(PvrThread);
+		std::thread pvrThread = std::thread(PvrThread);
+		pvrThread.detach();
 	}
 	if (!s_pvr) {
 		if (pvr_initialise(&s_pvr) != pvr_success) {
@@ -528,9 +543,9 @@ void PvrThread(){
 				wasEverSuccessful = true;
 			}
 
-			Sleep(20);
+			SleepMs(20);
 		}else{
-			Sleep(3000);
+			SleepMs(3000);
 		}
 		// bool anyHeadsetConnected = vr::VRProperties()->TrackedDeviceToPropertyContainer(0) != 0;
 		if(!s_info.connected && CustomHeadsetDeviceProvider::hasHeadsetConnected){
@@ -540,15 +555,22 @@ void PvrThread(){
 		}
 	}
 }
+#endif // PVR_EXISTS
 
 PimaxInfo PimaxCommon::GetInfo() {
+#ifdef PVR_EXISTS
 	EnsurePvrSession();
+#endif
 	return s_info;
 }
 
 bool PimaxCommon::TryDirectConnection() {
 	// Attempt a direct connection if it's already directly connected or if the PVR session has never been connected.
-	if(s_info.directConnected || (s_info.headsetType == Config::HeadsetType::None && !EnsurePvrSession())){
+	if(s_info.directConnected || (s_info.headsetType == Config::HeadsetType::None
+#ifdef PVR_EXISTS
+		&& !EnsurePvrSession()
+#endif
+	)){
 		s_info.directConnected |= pimaxDirectUSB.Start();
 		s_info.connected |= s_info.directConnected;
 	}
@@ -569,6 +591,7 @@ bool PimaxCommon::IsSlamHeadsetConnected(){
 	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected && info.useSlamTracking;
 }
 
+#ifdef PVR_EXISTS
 pvrSessionHandle PimaxCommon::GetPvrSession(bool forceTryConnect) {
 	EnsurePvrSession(forceTryConnect);
 	return s_pvrSession;
@@ -577,6 +600,7 @@ pvrSessionHandle PimaxCommon::GetPvrSession(bool forceTryConnect) {
 double PimaxCommon::GetPvrTime() {
 	return pvr_getTimeSeconds(s_pvr);
 }
+#endif
 
 Config::BaseHeadsetConfig& PimaxCommon::PatchConfig(Config::BaseHeadsetConfig& config) {
 	if (config.resolutionX == 0 || config.resolutionY == 0) {
@@ -625,6 +649,8 @@ Config::PimaxHeadsetConfig& PimaxCommon::GetHeadsetConfigDefault(){
 	}
 	return *config;
 }
+
+#ifdef PVR_EXISTS
 
 PimaxCommon::PimaxCommon() {
 	// Register this instance in the global set
@@ -706,23 +732,25 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 	}
 	lastSceneApplicationPid = pid;
 }
+#endif
 
 void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap) {
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	HmdButton hmdButtonsState = HmdButton::Button_None;
 	if(s_info.pvrConnected){
-		hmdButtonsState |= (HmdButton)pvrButtonState;
+		hmdButtonsState = (HmdButton)((int)hmdButtonsState | pvrButtonState);
 	}
 	if(s_info.directConnected){
-		hmdButtonsState |= (HmdButton)directButtonState;
+		hmdButtonsState = (HmdButton)((int)hmdButtonsState | directButtonState);
 	}
 	const auto isButtonPressed = [&hmdButtonsState](const HmdButton button) {
-		return (hmdButtonsState & button) == button;
+		return ((int)hmdButtonsState & (int)button) == (int)button;
 	};
 	systemButton = isButtonPressed(HmdButton::Button_VolumeUp) && isButtonPressed(HmdButton::Button_VolumeDown);
 	doubleTap = isButtonPressed(HmdButton::Button_DoubleTap);
 }
 
+#ifdef PVR_EXISTS
 void PimaxCommon::EyeTrackingThread() {
 	const HANDLE timer = CreateWaitableTimer(nullptr, false, nullptr);
 	const LARGE_INTEGER noDelay = {};
@@ -753,4 +781,5 @@ void PimaxCommon::EyeTrackingThread() {
 
 	DriverLog("Eye tracking thread stopped");
 }
+#endif // PVR_EXISTS
 

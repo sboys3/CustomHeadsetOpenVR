@@ -10,10 +10,18 @@
 // Unblock the lighthouse driver from AAPVR's LoadLibrary hook by pre-loading
 // the DLL and intercepting subsequent LoadLibrary calls to return our handle.
 // Due to unsolvable problems, instead it just completely blocks the aapvr driver from loading.
+// These are Windows-only features.
+#ifdef _WIN32
 void AAPVRLighthouseUnblockerLoadDriver();
 void AAPVRLighthouseUnblockerInjectHooks();
 void AAPVRLighthouseUnblockerRemoveHooks();
 bool AAPVRShouldBlock();
+#else
+inline void AAPVRLighthouseUnblockerLoadDriver() {}
+inline void AAPVRLighthouseUnblockerInjectHooks() {}
+inline void AAPVRLighthouseUnblockerRemoveHooks() {}
+inline bool AAPVRShouldBlock() { return false; }
+#endif
 
 
 class APPVRDeviceBlocker : public ShimDefinition{

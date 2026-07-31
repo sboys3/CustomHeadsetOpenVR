@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { appDataDir, join } from '@tauri-apps/api/path';
+import { appDataDir, configDir, join } from '@tauri-apps/api/path';
 import { exists, mkdir } from '@tauri-apps/plugin-fs';
 import { vendor } from '../../environment';
+import { get_platform } from '../tauri_wrapper';
 
 console.log("vendor", vendor || "neutral");
 
@@ -55,7 +56,11 @@ export class PathsService {
         dataDir = 'Pimax/CustomHeadset'
         break;
     }
-    const seg = [await appDataDir(), '../' + dataDir]
+    let seg = [await appDataDir(), '../' + dataDir]  
+    const platform = await get_platform();
+    if(platform === 'linux'){
+      seg = [await configDir(), dataDir]
+    }
     if (rel) {
       seg.push(rel)
     }

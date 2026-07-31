@@ -23,6 +23,7 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            js_api::get_platform,
             js_api::get_executable_path,
             js_api::is_vrmonitor_running,
             js_api::restart_vrcompositor,

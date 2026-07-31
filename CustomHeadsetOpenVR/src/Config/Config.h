@@ -623,6 +623,8 @@ public:
 				return &pimax8KPlus;
 			case HeadsetType::PimaxArtisan:
 				return &pimaxArtisan;
+			default:
+				return nullptr;
 		}
 	}
 	

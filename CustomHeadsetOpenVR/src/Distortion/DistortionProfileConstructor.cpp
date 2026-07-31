@@ -1,6 +1,8 @@
 #include "DistortionProfileConstructor.h"
 #include "RadialBezierDistortionProfile.h"
+#ifdef PVR_EXISTS
 #include "PimaxDistortionProfile.h"
+#endif
 #include <cmath>
 #include <map>
 
@@ -332,9 +334,13 @@ bool DistortionProfileConstructor::LoadDistortionProfile(std::string name){
 		newProfile = radialBezierProfile;
 	}
 	else if (config.type == "Pimax"){
+		#ifdef PVR_EXISTS
 		DriverLog("Using Pimax PVR distortion function");
 		PimaxDistortionProfile* pimaxProfile = new PimaxDistortionProfile();
 		newProfile = pimaxProfile;
+		#else
+		DriverLog("Pimax PVR distortion profile is not available");
+		#endif
 	}
 
 	bool changed = false;

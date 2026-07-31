@@ -100,7 +100,13 @@ public:
 	static int HidGetFeatureReportHook(hid_device* device, unsigned char* data, size_t length);
 	static void HidCloseHook(hid_device* device);
 	
-	// original hidapi functions
+	// LightHook information for hooked hidapi functions (stored as void* to avoid including LightHook.h in the header)
+	void* hookHidWrite;
+	void* hookHidReadTimeout;
+	void* hookHidGetFeatureReport;
+	void* hookHidClose;
+	
+	// Original (trampoline) hidapi functions - set after hooks are created
 	static int (*origHidWrite)(hid_device* device, const unsigned char* data, size_t length);
 	static int (*origHidReadTimeout)(hid_device* device, unsigned char* data, size_t length, int milliseconds);
 	static int (*origHidGetFeatureReport)(hid_device* device, unsigned char* data, size_t length);
@@ -123,3 +129,9 @@ extern HidModifier hidModifier;
 // #if __has_include("HidModifierPrivate.cpp")
 // #define HAS_PRIVATE 1
 // #endif
+
+#ifdef __linux__
+#if __has_include("HidModifierPrivate.h")
+#include "HidModifierPrivate.h"
+#endif
+#endif

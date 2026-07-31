@@ -1,5 +1,5 @@
 import { effect, Injectable, inject, signal } from '@angular/core';
-import { kill_process, launch_process } from '../tauri_wrapper';
+import { get_platform, kill_process, launch_process } from '../tauri_wrapper';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { AppSettingService } from './app-setting.service';
 import { DriverSettingService } from './driver-setting.service';
@@ -68,6 +68,14 @@ export class PimaxLauncherService {
   }
 
   private async launchSequence(): Promise<void> {
+    // Pimax launcher is Windows-only
+    const platform = await get_platform();
+    if (platform !== 'windows') {
+      console.log('Pimax launcher is not supported on this platform');
+      this.isLaunching.set(false);
+      return;
+    }
+
     const killInterval = 250; // 0.25 seconds
     const totalDuration = 40000; // 40 seconds
     const steamvrDelay = 5000; // 5 seconds

@@ -27,3 +27,6 @@
 	path = ThirdParty/hidapi
 	url = https://github.com/libusb/hidapi
 	shallow = true
+[submodule "ThirdParty/LightHook"]
+	path = ThirdParty/LightHook
+	url = https://github.com/SamuelTulach/LightHook

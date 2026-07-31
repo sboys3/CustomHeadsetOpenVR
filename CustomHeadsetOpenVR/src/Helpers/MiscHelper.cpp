@@ -5,6 +5,8 @@
 #include <vector>
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <dlfcn.h>
 #endif
 
 #undef min
@@ -182,3 +184,27 @@ std::string GetInstalledProgramVersion(const std::string& displayName) {
 	return "";
 }
 #endif
+
+void* LibOpen(const std::string& path) {
+	#ifdef _WIN32
+	return LoadLibraryA(path.c_str());
+	#else
+	return dlopen(path.c_str(), RTLD_NOW);
+	#endif
+}
+
+void LibClose(void* handle) {
+	#ifdef _WIN32
+	FreeLibrary((HMODULE)handle);
+	#else
+	dlclose(handle);
+	#endif
+}
+
+void* LibAddress(void* handle, const std::string& name) {
+	#ifdef _WIN32
+	return (void*)GetProcAddress((HMODULE)handle, name.c_str());
+	#else
+	return dlsym(handle, name.c_str());
+	#endif
+}

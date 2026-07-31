@@ -2,6 +2,8 @@
 #include "DistortionProfile.h"
 
 #include <cstdint>
+
+#ifdef PVR_EXISTS
 #include <PVR.h>
 
 class PimaxDistortionProfile : public DistortionProfile {
@@ -12,3 +14,4 @@ public:
 
 	virtual void GetRecommendedRenderTargetSize(uint32_t* pnWidth, uint32_t* pnHeight) override;
 };
+#endif

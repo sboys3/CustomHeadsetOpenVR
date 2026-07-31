@@ -36,7 +36,11 @@
     {
       "identifier": "fs:scope",
       "allow": [
-        "**/*"
+        "**/*",
+        "$HOME/.local/**/*",
+        "$HOME/.config/**/*",
+        "$HOME/.steam/**/*",
+        "/usr/share/steam/**/*"
       ]
     },
     "dialog:default",

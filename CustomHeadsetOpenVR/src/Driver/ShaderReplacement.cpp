@@ -882,7 +882,9 @@ void ShaderReplacement::Initialize(){
 
 void ShaderReplacement::ReloadShaders(){
 	// Precompile all shaders before sending the reload signal to populate the cache
+	#ifdef _WIN32
 	PrecompileShaders();
+	#endif
 	
 	DriverLog("ShaderReplacement::ReloadShaders called");
 	easywsclient::WebSocket* websocket = easywsclient::WebSocket::from_url("ws://127.0.0.1:27062/", "http://127.0.0.1:27062");

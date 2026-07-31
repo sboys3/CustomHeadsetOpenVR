@@ -1,3 +1,5 @@
+#ifdef PVR_EXISTS
+
 #include "PimaxSlam.h"
 
 #include "../Helpers/EyeTrackingOutput.h"
@@ -1108,3 +1110,5 @@ void PimaxSlamDriver::PvrTrackingThread() {
 
 	DriverLog("PVR tracking thread stopped");
 }
+
+#endif // PVR_EXISTS

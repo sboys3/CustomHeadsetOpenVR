@@ -2,12 +2,22 @@
 #include "DriverLog.h"
 #include "../Config/ConfigLoader.h"
 #include "../Helpers/PimaxCommon.h"
+#include "../Helpers/MiscHelper.h"
 
-#include "../../../ThirdParty/minhook/include/MinHook.h"
+#ifdef __linux__
+#include <unistd.h>
+#endif
+#include "../../../ThirdParty/LightHook/Source/LightHook.h"
 #include "../../../ThirdParty/zlib/zlib.h"
 #include "nlohmann/json.hpp"
 #undef max
 #undef min
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <stdlib.h>  // realpath
+#endif
 
 #if HAS_PRIVATE
 #include "HidModifierPrivate.h"
@@ -26,8 +36,16 @@ void HidModifier::InjectHooks(){
 		return;
 	}
 	
+#ifdef _WIN32
 	std::string lighthousePath = driverConfigLoader.info.steamvrResources + "../drivers/lighthouse/bin/win64/driver_lighthouse.dll";
+#else
+	// hid functions are not actually exported on Linux
+	return;
+	std::string lighthousePath = driverConfigLoader.info.steamvrResources + "../drivers/lighthouse/bin/linux64/driver_lighthouse.so";
+#endif
 	
+	
+#ifdef _WIN32
 	// resolve path
 	char szPath[MAX_PATH];
 	if(GetFullPathNameA(lighthousePath.c_str(), MAX_PATH, szPath, NULL) == 0){
@@ -35,13 +53,13 @@ void HidModifier::InjectHooks(){
 		return;
 	}
 	lighthousePath = szPath;
+#endif
 	
 	DriverLog("Loading lighthouse dll from: %s", lighthousePath.c_str());
 	
-	// load the lighthouse dll
-	HMODULE hModule = LoadLibraryExA(lighthousePath.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+	// load the lighthouse driver
+	void* hModule = LibOpen(lighthousePath);
 	
-	// HMODULE hModule = GetModuleHandle(_T("driver_lighthouse.dll"));
 	if(hModule){
 		DriverLog("Got module handle for driver_lighthouse.dll");
 	}else{
@@ -49,51 +67,48 @@ void HidModifier::InjectHooks(){
 		return;
 	}
 	
-	
-	auto err = MH_Initialize();
-	if(err != MH_OK && err != MH_ERROR_ALREADY_INITIALIZED){
-		DriverLog("Failed to initialize MinHook");
-		return;
-	}
-	
-	// Hook the hidapi function
-	auto result = MH_CreateHook((void*)GetProcAddress(hModule, "hid_write"), &HidModifier::HidWriteHook, (void**)&origHidWrite);
-	if(result == MH_OK){
-		MH_EnableHook((void*)GetProcAddress(hModule, "hid_write"));
-	}else{
+	// Hook the hidapi functions using LightHook
+	void* addrHidWrite = LibAddress(hModule, "hid_write");
+	if(!addrHidWrite){ DriverLog("Failed to resolve hid_write"); return; }
+	hookHidWrite = new HookInformation(CreateHook(addrHidWrite, (void*)&HidModifier::HidWriteHook));
+	if(!EnableHook((HookInformation*)hookHidWrite)){
 		DriverLog("Failed to create hook for hid_write");
 		return;
 	}
+	origHidWrite = (int (*)(hid_device*, const unsigned char*, size_t))((HookInformation*)hookHidWrite)->Trampoline;
 	
-	result = MH_CreateHook((void*)GetProcAddress(hModule, "hid_read_timeout"), &HidModifier::HidReadTimeoutHook, (void**)&origHidReadTimeout);
-	if(result == MH_OK){
-		MH_EnableHook((void*)GetProcAddress(hModule, "hid_read_timeout"));
-	}else{
+	void* addrHidReadTimeout = LibAddress(hModule, "hid_read_timeout");
+	if(!addrHidReadTimeout){ DriverLog("Failed to resolve hid_read_timeout"); return; }
+	hookHidReadTimeout = new HookInformation(CreateHook(addrHidReadTimeout, (void*)&HidModifier::HidReadTimeoutHook));
+	if(!EnableHook((HookInformation*)hookHidReadTimeout)){
 		DriverLog("Failed to create hook for hid_read_timeout");
 		return;
 	}
+	origHidReadTimeout = (int (*)(hid_device*, unsigned char*, size_t, int))((HookInformation*)hookHidReadTimeout)->Trampoline;
 	
-	result = MH_CreateHook((void*)GetProcAddress(hModule, "hid_get_feature_report"), &HidModifier::HidGetFeatureReportHook, (void**)&origHidGetFeatureReport);
-	if(result == MH_OK){
-		MH_EnableHook((void*)GetProcAddress(hModule, "hid_get_feature_report"));
-	}else{
+	void* addrHidGetFeatureReport = LibAddress(hModule, "hid_get_feature_report");
+	if(!addrHidGetFeatureReport){ DriverLog("Failed to resolve hid_get_feature_report"); return; }
+	hookHidGetFeatureReport = new HookInformation(CreateHook(addrHidGetFeatureReport, (void*)&HidModifier::HidGetFeatureReportHook));
+	if(!EnableHook((HookInformation*)hookHidGetFeatureReport)){
 		DriverLog("Failed to create hook for hid_get_feature_report");
 		return;
 	}
+	origHidGetFeatureReport = (int (*)(hid_device*, unsigned char*, size_t))((HookInformation*)hookHidGetFeatureReport)->Trampoline;
 	
-	result = MH_CreateHook((void*)GetProcAddress(hModule, "hid_close"), &HidModifier::HidCloseHook, (void**)&origHidClose);
-	if(result == MH_OK){
-		MH_EnableHook((void*)GetProcAddress(hModule, "hid_close"));
-	}else{
+	void* addrHidClose = LibAddress(hModule, "hid_close");
+	if(!addrHidClose){ DriverLog("Failed to resolve hid_close"); return; }
+	hookHidClose = new HookInformation(CreateHook(addrHidClose, (void*)&HidModifier::HidCloseHook));
+	if(!EnableHook((HookInformation*)hookHidClose)){
 		DriverLog("Failed to create hook for hid_close");
 		return;
 	}
+	origHidClose = (void (*)(hid_device*))((HookInformation*)hookHidClose)->Trampoline;
 	
-	origHidOpen = (hid_device* (*)(unsigned short vendor_id, unsigned short product_id, const wchar_t* serial_number))GetProcAddress(hModule, "hid_open");
-	origHidOpenPath = (hid_device* (*)(const char* path))GetProcAddress(hModule, "hid_open_path");
-	origHidError = (const wchar_t* (*)(hid_device* device))GetProcAddress(hModule, "hid_error");
-	origHidEnumerate = (struct hid_device_info* (*)(unsigned short vendor_id, unsigned short product_id))GetProcAddress(hModule, "hid_enumerate");
-	origHidFreeEnumeration = (void (*)(struct hid_device_info* devs))GetProcAddress(hModule, "hid_free_enumeration");
+	origHidOpen = (hid_device* (*)(unsigned short vendor_id, unsigned short product_id, const wchar_t* serial_number))LibAddress(hModule, "hid_open");
+	origHidOpenPath = (hid_device* (*)(const char* path))LibAddress(hModule, "hid_open_path");
+	origHidError = (const wchar_t* (*)(hid_device* device))LibAddress(hModule, "hid_error");
+	origHidEnumerate = (struct hid_device_info* (*)(unsigned short vendor_id, unsigned short product_id))LibAddress(hModule, "hid_enumerate");
+	origHidFreeEnumeration = (void (*)(struct hid_device_info* devs))LibAddress(hModule, "hid_free_enumeration");
 	
 	if(!origHidOpen){
 		DriverLog("Failed to get hid_open function");
@@ -149,7 +164,7 @@ void HidModifier::AddDevice(hid_device* device){
 	PISTART
 	#endif
 	
-	Sleep(10);
+	SleepMs(10);
 	deviceMap[device] = info;
 }
 
@@ -181,9 +196,9 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	
 	// try a few times to get the size of the config
 	if(origHidGetFeatureReport(info.device, buf, 64) < 3){
-		Sleep(2);
+		SleepMs(2);
 		if(origHidGetFeatureReport(info.device, buf, 64) < 3){
-			Sleep(20);
+			SleepMs(20);
 			if(origHidGetFeatureReport(info.device, buf, 64) < 3){
 				// DriverLog("Failed to read lighthouse config size");
 				return "";
@@ -204,7 +219,7 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 	
 	// read until we get all the data or reach the 0 read
 	for(int i = 0; i < size / 16; i++){
-		Sleep(1);
+		SleepMs(1);
 		// read data
 		buf[0] = 0x11;
 		if(origHidGetFeatureReport(info.device, buf, 64) < 2){

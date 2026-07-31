@@ -13,6 +13,16 @@ bool IsNewVersion(const std::string& current, const std::string& latest);
 // Searches both 32-bit and 64-bit registry views. Returns empty string if not found.
 std::string GetInstalledProgramVersion(const std::string& displayName);
 
+// Cross-platform sleep helper
+static inline void SleepMs(int ms) {
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+// Cross-platform dynamic library loading
+void* LibOpen(const std::string& path);
+void LibClose(void* handle);
+void* LibAddress(void* handle, const std::string& name);
+
 
 // A lock guard that uses the shared lock on a std::shared_mutex
 // This also avoids locking more than once per thread, which can result in deadlocks once non-shared locks are called. This can happen because a thread can be shared locked, and then when another thread requests the exclusive lock, the second shared lock within a thread will be blocked. Therefore, the first lock never gets freed. By preventing more than one lock per thread, this problem is mitigated.

@@ -1,3 +1,5 @@
+#ifdef PVR_EXISTS
+
 #include "PimaxDistortionProfile.h"
 #include <algorithm>
 
@@ -65,3 +67,5 @@ void PimaxDistortionProfile::GetRecommendedRenderTargetSize(uint32_t* pnWidth, u
     *pnHeight = (uint32_t)viewportSize.h;
     *pnHeight = (*pnHeight + 3) / 4 * 4;
 }
+
+#endif // PVR_EXISTS

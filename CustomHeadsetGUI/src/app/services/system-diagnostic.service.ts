@@ -1,10 +1,10 @@
 import { computed, effect, Injectable, OnDestroy, signal } from '@angular/core';
 import { copyFile, remove, exists, mkdir, readDir, readTextFile, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
-import { appLocalDataDir, basename, join } from '@tauri-apps/api/path';
+import { appLocalDataDir, configDir, basename, join, homeDir } from '@tauri-apps/api/path';
 import { DriverSettingService } from './driver-setting.service';
 import { DriverInfoService } from './driver-info.service';
 import { debounceTime, Subject } from 'rxjs';
-import { get_executable_path, restart_vrcompositor } from '../tauri_wrapper';
+import { get_executable_path, get_platform, restart_vrcompositor } from '../tauri_wrapper';
 import { open } from '@tauri-apps/plugin-dialog';
 import { DialogService } from './dialog.service';
 import { PullingService } from './PullingService';
@@ -113,7 +113,15 @@ export class SystemDiagnosticService implements OnDestroy {
     return false;
   }
   public async getOpenvrpaths() {
-    const openVrConfigPath = await join(await appLocalDataDir(), '../openvr/openvrpaths.vrpath');
+    // On Linux, openvrpaths.vrpath is in ~/.config/openvr/
+    // On Windows, it's in %LOCALAPPDATA%/openvr/
+    const platform = await get_platform();
+    let openVrConfigPath: string;
+    if (platform === 'linux') {
+      openVrConfigPath = await join(await configDir(), 'openvr/openvrpaths.vrpath');
+    } else {
+      openVrConfigPath = await join(await appLocalDataDir(), '../openvr/openvrpaths.vrpath');
+    }
     const vrPathExists = await exists(openVrConfigPath);
     if (vrPathExists) {
       try {
@@ -376,7 +384,11 @@ export class SystemDiagnosticService implements OnDestroy {
    * Verifies the driver directory name matches the expected driver name before registering.
    */
   private async registerDriver(steamVrPath: string, driverDir: string): Promise<boolean> {
-    const vrpathregPath = await join(steamVrPath, 'bin', 'win64', 'vrpathreg.exe');
+    // Determine vrpathreg path based on platform
+    const platform = await get_platform();
+    const vrpathregBinDir = platform === 'linux' ? 'linux64' : 'win64';
+    const vrpathregBin = platform === 'linux' ? 'vrpathreg' : 'vrpathreg.exe';
+    const vrpathregPath = await join(steamVrPath, 'bin', vrpathregBinDir, vrpathregBin);
     if (!await exists(vrpathregPath)) {
       return false;
     }
@@ -397,7 +409,11 @@ export class SystemDiagnosticService implements OnDestroy {
    * Unregister driver in place using vrpathreg removedriverswithname.
    */
   private async unregisterDriver(steamVrPath: string): Promise<void> {
-    const vrpathregPath = await join(steamVrPath, 'bin', 'win64', 'vrpathreg.exe');
+    // Determine vrpathreg path based on platform
+    const platform = await get_platform();
+    const vrpathregBinDir = platform === 'linux' ? 'linux64' : 'win64';
+    const vrpathregBin = platform === 'linux' ? 'vrpathreg' : 'vrpathreg.exe';
+    const vrpathregPath = await join(steamVrPath, 'bin', vrpathregBinDir, vrpathregBin);
     if (!await exists(vrpathregPath)) {
       return;
     }
@@ -474,6 +490,9 @@ export class SystemDiagnosticService implements OnDestroy {
     const steamvrPaths = [
       'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
       'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
+      // Linux paths
+      await join(await homeDir(), '.steam/steam/steamapps/common/SteamVR/bin/linux64/vrstartup'),
+      '/usr/share/steam/steamapps/common/SteamVR/bin/linux64/vrstartup',
     ];
     for (const path of steamvrPaths) {
       const success = await launch_process(path, []);

@@ -5,7 +5,20 @@ use std::process::Command;
 use std::time::Duration;
 use std::thread::sleep;
 use tauri::command;
-// use std::path::Path;
+
+/// Returns the current platform name (e.g., "windows", "linux", "macos").
+#[command]
+pub fn get_platform() -> String {
+    if cfg!(target_os = "windows") {
+        "windows".to_string()
+    } else if cfg!(target_os = "linux") {
+        "linux".to_string()
+    } else if cfg!(target_os = "macos") {
+        "macos".to_string()
+    } else {
+        "unknown".to_string()
+    }
+}
 
 #[command]
 pub fn get_executable_path() -> Result<String, String> {

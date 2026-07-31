@@ -1,4 +1,7 @@
 #include "AAPVRBlocker.h"
+
+#ifdef _WIN32
+
 #include "PimaxCommon.h"
 #include "../Driver/DriverLog.h"
 #include "../Config/ConfigLoader.h"
@@ -246,10 +249,6 @@ void AAPVRLighthouseUnblockerRemoveHooks() {
 }
 
 
-#if __has_include("C:/Program Files/Pimax/Sdk/Include/PVR_API.h")
-	#define PVR_EXISTS
-	#include "C:/Program Files/Pimax/Sdk/Include/PVR_API.h"
-#endif
 
 bool AAPVRShouldBlock() {
 	if (sShouldBlockValid) {
@@ -311,3 +310,10 @@ void APPVRDeviceBlocker::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 		DriverLog("AAPVRBlocker: AAPVR device activated: %s", model.c_str());
 	}
 }
+
+#else // _WIN32
+
+// Stub implementation for non-Windows platforms
+void APPVRDeviceBlocker::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue) {}
+
+#endif // _WIN32
