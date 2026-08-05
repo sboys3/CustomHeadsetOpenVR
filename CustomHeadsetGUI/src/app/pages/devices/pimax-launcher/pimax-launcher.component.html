@@ -1,16 +1,22 @@
 <div class="launch-section">
-  <!-- <button mat-raised-button mat-stroked-button [color]="isLaunching() ? 'warn' : 'primary'" (click)="onLaunchHeadset()">
-    <mat-icon>{{ isLaunching() ? 'stop' : 'play_arrow' }}</mat-icon>
-    <span i18n>{{ isLaunching() ? 'Cancel Launch' : 'Launch Dream Air Headset' }}</span>
-  </button> -->
-  <!-- Pimax Play must be open and logged in for this to work. Pimax has not provided me any integration with their DRM so this flaky method needs to be used. -->
-  <p class="launch-info" i18n>This beta driver requires Pimax EVO OpenPort. Start Pimax OpenPort and then launch SteamVR.</p>
+  <p class="launch-info" i18n>Pimax EVO OpenPort is the most reliable way to use this driver and is required for SLAM headsets. Start Pimax OpenPort and then launch SteamVR.</p>
+  <div class="launch-buttons">
+    <button mat-raised-button mat-stroked-button  color="primary" (click)="onLaunchSteamVR()">
+      <mat-icon>play_arrow</mat-icon>
+      <span i18n>Launch SteamVR</span>
+    </button>
+    <button mat-raised-button mat-stroked-button [color]="isLaunching() ? 'warn' : 'primary'" (click)="onLaunchHeadset()">
+      <mat-icon>{{ isLaunching() ? 'stop' : 'play_arrow' }}</mat-icon>
+      <span i18n>{{ isLaunching() ? 'Cancel Launch' : 'Legacy Lighthouse Launch' }}</span>
+    </button>
+  </div>
+  <p class="launch-info legacy-desc" i18n>Legacy Lighthouse Launch is for running Lighthouse Pimax headsets on Pimax Play without OpenPort. When using OpenPort, just launch SteamVR.</p>
   <p class="launch-info" i18n>It has been {{ daysSinceDreamAirBlocked }} days since the Lighthouse headsets could start without Pimax Play if Pimax allowed it for everyone.</p>
-  <!-- @if(advanceMode || launchDreamAirOnStartup){ -->
-  @if(launchDreamAirOnStartup){
+  @if(advanceMode || launchPimaxOnStartup){
+  <!-- @if(launchPimaxOnStartup){ -->
   <div class="launch-startup-toggle">
-    <mat-slide-toggle class="small-toggle" [(ngModel)]="launchDreamAirOnStartup" (ngModelChange)="saveLaunchSetting()"></mat-slide-toggle>
-    <span i18n matTooltip="Automatically launch the Dream Air headset when the GUI is opened. This will only launch if a Pimax headset is enabled." i18n-matTooltip matTooltipPosition="above" style="cursor: help;">Launch on GUI Startup</span>
+    <mat-slide-toggle class="small-toggle" [(ngModel)]="launchPimaxOnStartup" (ngModelChange)="saveLaunchSetting()"></mat-slide-toggle>
+    <span i18n matTooltip="Automatically launch the Pimax headset when the GUI is opened. This will only launch if a Pimax headset is enabled. The last used launch method will be used." i18n-matTooltip matTooltipPosition="above" style="cursor: help;">Launch on GUI Startup</span>
   </div>
   }
 </div>

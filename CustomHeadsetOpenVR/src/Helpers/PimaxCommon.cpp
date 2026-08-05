@@ -23,9 +23,6 @@ enum class HmdButton : int {
 	Button_VolumeDown = 0x0004,
 	Button_DoubleTap = 0x0008,
 };
-#ifdef _WIN32
-DEFINE_ENUM_FLAG_OPERATORS(HmdButton);
-#endif
 
 #ifdef PVR_EXISTS
 static pvrEnvHandle s_pvr = {};

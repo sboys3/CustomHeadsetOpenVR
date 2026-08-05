@@ -1,5 +1,5 @@
 import { effect, Injectable, inject, signal } from '@angular/core';
-import { get_platform, kill_process, launch_process } from '../tauri_wrapper';
+import { get_platform, is_process_running, kill_process, launch_process } from '../tauri_wrapper';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { AppSettingService } from './app-setting.service';
 import { DriverSettingService } from './driver-setting.service';
@@ -23,7 +23,14 @@ export class PimaxLauncherService {
       if (this.autoLaunchTriggered) return;
       if (this.ass.values()?.launchPimaxOnStartup && this.dss.values()?.dreamAir?.enable) {
         this.autoLaunchTriggered = true;
-        setTimeout(() => this.start(), 1000);
+        const method = this.ass.values()?.lastPimaxLaunchMethod ?? 'steamvr';
+        setTimeout(() => {
+          if (method === 'legacy') {
+            this.start();
+          } else {
+            this.launchSteamVR();
+          }
+        }, 1000);
       }
     });
   }
@@ -83,8 +90,13 @@ export class PimaxLauncherService {
     let steamvrLaunched = false;
     const startTime = Date.now();
 
-    // Start Pimax Play
-    await launch_process("C:/Program Files/Pimax/PimaxClient/pimaxui/PimaxClient.exe", []);
+    // Start Pimax Play (only if not already running)
+    const pimaxRunning = await is_process_running('PimaxClient.exe');
+    if (!pimaxRunning) {
+      await launch_process("C:/Program Files/Pimax/PimaxClient/pimaxui/PimaxClient.exe", []);
+    } else {
+      console.log('PimaxClient.exe is already running, skipping launch');
+    }
 
     // Recursive timeout function for killing pi_server
     const killLoop = async (): Promise<void> => {
@@ -117,32 +129,57 @@ export class PimaxLauncherService {
       }
       steamvrLaunched = true;
 
-      // Try direct SteamVR executable paths first
-      const steamvrPaths = [
-        'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
-        'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
-      ];
-
-      for (const path of steamvrPaths) {
-        const success = await launch_process(path, []);
-        if (success) {
-          console.log('SteamVR launched successfully from', path);
-          return;
-        }
-      }
-
-      // Fallback to Steam protocol URL
-      try {
-        await openUrl('steam://rungameid/250820');
-        console.log('SteamVR launch requested via Steam protocol');
-      } catch (error) {
-        console.log('Failed to launch SteamVR:', error);
-      }
+      this.launchSteamVR(false)
     }, steamvrDelay);
 
     // Wait for the full duration or cancellation
     await new Promise<void>(resolve => {
       setTimeout(() => resolve(), totalDuration);
     });
+  }
+  
+  
+
+  /**
+   * Launch Pimax Play and immediately launch SteamVR (for use with OpenPort).
+   */
+  async launchSteamVR(startPimax = true): Promise<void> {
+    const platform = await get_platform();
+    if (platform !== 'windows') {
+      console.log('SteamVR launcher is not supported on this platform');
+      return;
+    }
+    
+    if(startPimax){
+      // Start Pimax Play (only if not already running)
+      const pimaxRunning = await is_process_running('PimaxClient.exe');
+      if (!pimaxRunning) {
+        await launch_process("C:/Program Files/Pimax/PimaxClient/pimaxui/PimaxClient.exe", []);
+      } else {
+        console.log('PimaxClient.exe is already running, skipping launch');
+      }
+    }
+
+    // Immediately launch SteamVR
+    const steamvrPaths = [
+      'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
+      'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
+    ];
+
+    for (const path of steamvrPaths) {
+      const success = await launch_process(path, []);
+      if (success) {
+        console.log('SteamVR launched successfully from', path);
+        return;
+      }
+    }
+
+    // Fallback to Steam protocol URL
+    try {
+      await openUrl('steam://rungameid/250820');
+      console.log('SteamVR launch requested via Steam protocol');
+    } catch (error) {
+      console.log('Failed to launch SteamVR:', error);
+    }
   }
 }

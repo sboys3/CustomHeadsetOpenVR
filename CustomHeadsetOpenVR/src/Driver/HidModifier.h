@@ -13,6 +13,8 @@ public:
 
 	// hook the hid functions in the lighthouse driver
 	void InjectHooks();
+	// remove the hooks from the lighthouse driver's hidapi functions
+	void RemoveHooks();
 	// called every frame to allow starters to run in the main thread if needed
 	void RunFrame();
 	bool hasHooked = false;
@@ -64,15 +66,15 @@ public:
 	// info about device
 	class HidDeviceInfo {
 	public:
-		hid_device* device;
-		std::string lighthouseDeviceName;
-		std::string lighthouseDeviceManufacturer;
-		std::string lighthouseDeviceClass;
-		std::string lighthouseDeviceSerial;
+		hid_device* device = nullptr;
+		std::string lighthouseDeviceName = "";
+		std::string lighthouseDeviceManufacturer = "";
+		std::string lighthouseDeviceClass = "";
+		std::string lighthouseDeviceSerial = "";
 		// std::string lighthouseConfig;
-		unsigned char* newLighthouseConfig;
-		int newLighthouseConfigLength;
-		int newLighthouseConfigOffset;
+		unsigned char* newLighthouseConfig = nullptr;
+		int newLighthouseConfigLength = 0;
+		int newLighthouseConfigOffset = 0;
 		void Delete(){
 			if(newLighthouseConfig) {
 				delete[] newLighthouseConfig;

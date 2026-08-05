@@ -20,7 +20,7 @@ export class PimaxLauncherComponent {
   private cdr = inject(ChangeDetectorRef);
 
   public advanceMode = this.ass.values()?.advanceMode ?? false;
-  public launchDreamAirOnStartup = this.ass.values()?.launchPimaxOnStartup ?? false;
+  public launchPimaxOnStartup = this.ass.values()?.launchPimaxOnStartup ?? false;
   public isLaunching = this.launcher.isLaunching;
 
   daysSinceDreamAirBlocked = Math.floor((Date.now() - new Date('2026-02-14').getTime()) / (1000 * 60 * 60 * 24));
@@ -31,7 +31,7 @@ export class PimaxLauncherComponent {
     });
 
     effect(() => {
-      this.launchDreamAirOnStartup = this.ass.values()?.launchPimaxOnStartup ?? false;
+      this.launchPimaxOnStartup = this.ass.values()?.launchPimaxOnStartup ?? false;
     });
 
     // React to shared isLaunching signal
@@ -43,11 +43,23 @@ export class PimaxLauncherComponent {
 
   saveLaunchSetting() {
     const settings = this.ass.values() || {} as AppSetting;
-    settings.launchPimaxOnStartup = this.launchDreamAirOnStartup;
+    settings.launchPimaxOnStartup = this.launchPimaxOnStartup;
     this.ass.save(settings);
   }
 
+  async onLaunchSteamVR(): Promise<void> {
+    this.saveLastLaunchMethod('steamvr');
+    await this.launcher.launchSteamVR();
+  }
+
   async onLaunchHeadset(): Promise<void> {
+    this.saveLastLaunchMethod('legacy');
     await this.launcher.toggleLaunch();
+  }
+
+  private saveLastLaunchMethod(method: 'steamvr' | 'legacy') {
+    const settings = this.ass.values() || {} as AppSetting;
+    settings.lastPimaxLaunchMethod = method;
+    this.ass.save(settings);
   }
 }

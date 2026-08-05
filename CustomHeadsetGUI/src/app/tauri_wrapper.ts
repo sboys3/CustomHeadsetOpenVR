@@ -24,6 +24,9 @@ export async function is_vrmonitor_running() {
 export async function restart_vrcompositor() {
     return await invoke('restart_vrcompositor') as boolean;
 }
+export async function is_process_running(process_name: string): Promise<boolean> {
+    return await invoke('is_process_running', { processName: process_name }) as boolean;
+}
 export async function kill_process(process_name: string): Promise<boolean> {
     return await invoke('kill_process', { processName: process_name }) as boolean;
 }

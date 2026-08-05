@@ -187,7 +187,7 @@ std::string GetInstalledProgramVersion(const std::string& displayName) {
 
 void* LibOpen(const std::string& path) {
 	#ifdef _WIN32
-	return LoadLibraryA(path.c_str());
+	return LoadLibraryExA(path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
 	#else
 	return dlopen(path.c_str(), RTLD_NOW);
 	#endif

@@ -212,6 +212,7 @@ export type AppSetting = {
   defaultSettingsTab: 'auto' | 'General' | 'MeganeX8K' | 'DreamAir' | 'DreamAirSE' | 'CrystalSuperMicroOLED' | 'Pimax8KX';
   showIncompatibleProfiles: boolean;
   launchPimaxOnStartup: boolean;
+  lastPimaxLaunchMethod: 'steamvr' | 'legacy';
   installMethod: 'auto' | 'register' | 'copy';
 }
 

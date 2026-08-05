@@ -27,6 +27,7 @@ pub fn run() {
             js_api::get_executable_path,
             js_api::is_vrmonitor_running,
             js_api::restart_vrcompositor,
+            js_api::is_process_running,
             js_api::kill_process,
             js_api::launch_process,
             js_api::run_process_sync,

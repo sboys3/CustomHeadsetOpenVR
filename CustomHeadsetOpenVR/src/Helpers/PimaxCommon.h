@@ -7,8 +7,8 @@
 #include <shared_mutex>
 
 // PVR SDK is Windows-only
-#ifdef __has_include("PVR.h")
-#ifdef __WIN32__
+#if __has_include("PVR.h")
+#ifdef _WIN32
 	#include <PVR.h>
 	#include <PVR_API.h>
 	#ifndef PVR_EXISTS

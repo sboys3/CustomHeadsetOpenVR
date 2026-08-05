@@ -1,6 +1,6 @@
-#ifdef PVR_EXISTS
-
 #include "PimaxSlam.h"
+
+#ifdef PVR_EXISTS
 
 #include "../Helpers/EyeTrackingOutput.h"
 #include "../Helpers/MiscHelper.h"
@@ -1022,12 +1022,7 @@ void PimaxSlamDriver::HandleEvent(const vr::VREvent_t& event) {
 
 void PimaxSlamDriver::StartPvrTracking() {
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
-	if (GetPvrSession() && !pvrTrackingRunning.exchange(true) && GetHeadsetConfig().recenterPimaxPlayspace) {
-		// Doing an auto-recenter is not ideal, but it's better than PVR spawning us in the middle of nowhere.
-		// Players tend to start from a similar location at every boot.
-		pvr_setTrackingOriginType(GetPvrSession(), pvrTrackingOrigin_FloorLevel);
-		pvr_recenterTrackingOrigin(GetPvrSession());
-
+	if (GetPvrSession() && !pvrTrackingRunning.exchange(true) ) {
 		DriverLog("Starting PVR tracking thread");
 		pvrTrackingThread = std::thread(&PimaxSlamDriver::PvrTrackingThread, this);
 	}
@@ -1049,6 +1044,9 @@ void PimaxSlamDriver::PvrTrackingThread() {
 	// TODO: Make sure this is a reasonable value. 500Hz is quite high, but it doesn't seem to largely increase CPU/GPU utilization.
 	const LONG periodMs = 2;
 	SetWaitableTimer(timer, &noDelay, periodMs, nullptr, nullptr, true);
+	
+	bool hasRecentered = false;
+	double trackingSinceTime = 0;
 
 	while (true) {
 		WaitForSingleObject(timer, 100);
@@ -1062,6 +1060,21 @@ void PimaxSlamDriver::PvrTrackingThread() {
 		{
 			shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 			pvr_getTrackingState(GetPvrSession(), pvrNow, &trackingState);
+		}
+		
+		if((trackingState.HeadPose.StatusFlags & 2) == 0 || trackingSinceTime == 0){
+			// reset whenever the headset is not in 6dof mode
+			trackingSinceTime = pvrNow;
+		}
+		
+		// Recenter after fully tracking for two seconds
+		if(!hasRecentered && GetHeadsetConfig().recenterPimaxPlayspace && pvrNow - trackingSinceTime > 2){
+			// Doing an auto-recenter is not ideal, but it's better than PVR spawning us in the middle of nowhere.
+			// Players tend to start from a similar location at every boot.
+			pvr_setTrackingOriginType(GetPvrSession(), pvrTrackingOrigin_FloorLevel);
+			pvr_recenterTrackingOrigin(GetPvrSession());
+			DriverLog("Recentered PVR tracking");
+			hasRecentered = true;
 		}
 
 		// Update the headset pose.

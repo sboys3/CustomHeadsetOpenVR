@@ -140,6 +140,45 @@ void HidModifier::InjectHooks(){
 	#endif
 }
 
+void HidModifier::RemoveHooks(){
+	if(!hasHooked){
+		return;
+	}
+	
+	DriverLog("Removing lighthouse hidapi hooks");
+	
+	if(hookHidWrite){
+		DisableHook((HookInformation*)hookHidWrite);
+		delete (HookInformation*)hookHidWrite;
+		hookHidWrite = nullptr;
+	}
+	if(hookHidReadTimeout){
+		DisableHook((HookInformation*)hookHidReadTimeout);
+		delete (HookInformation*)hookHidReadTimeout;
+		hookHidReadTimeout = nullptr;
+	}
+	if(hookHidGetFeatureReport){
+		DisableHook((HookInformation*)hookHidGetFeatureReport);
+		delete (HookInformation*)hookHidGetFeatureReport;
+		hookHidGetFeatureReport = nullptr;
+	}
+	if(hookHidClose){
+		DisableHook((HookInformation*)hookHidClose);
+		delete (HookInformation*)hookHidClose;
+		hookHidClose = nullptr;
+	}
+	
+	// Clean up device map
+	for(auto& pair : deviceMap){
+		pair.second.Delete();
+	}
+	deviceMap.clear();
+	originalDeviceClasses.clear();
+	starters.clear();
+	
+	hasHooked = false;
+}
+
 void HidModifier::RunFrame(){
 	if(!hasHooked){
 		return;
@@ -418,6 +457,8 @@ std::string HidModifier::ReadLighthouseConfig(HidDeviceInfo &info){
 			DriverLog("Recompressed lighthouse config");
 		}else{
 			DriverLog("Failed to recompress lighthouse config");
+			delete[] configRecompressed;
+			return configStr;
 		}
 		// not sure why but these are always returned
 		configRecompressed[recompressedSize] = 0xff;

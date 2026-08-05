@@ -153,6 +153,19 @@ pub fn restart_vrcompositor() -> bool {
 }
 
 #[command]
+pub fn is_process_running(process_name: String) -> bool {
+    let mut system = System::new_all();
+    system.refresh_processes(ProcessesToUpdate::All, false);
+    
+    for (_pid, process) in system.processes() {
+        if process.name().eq_ignore_ascii_case(&process_name) {
+            return true;
+        }
+    }
+    false
+}
+
+#[command]
 pub fn kill_process(process_name: String) -> bool {
     let mut system = System::new_all();
     system.refresh_processes(ProcessesToUpdate::All, false);
