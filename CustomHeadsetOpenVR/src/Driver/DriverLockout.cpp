@@ -1,5 +1,6 @@
 #include "DriverLockout.h"
 #include "../Driver/DriverLog.h"
+#include "../Config/Config.h"
 #include <fstream>
 #include <sstream>
 #include "nlohmann/json.hpp"
@@ -127,4 +128,16 @@ bool IsDriverEnabled(const char* driverName){
 
 bool IsNeutralDriverEnabled(){
 	return IsDriverEnabled("CustomHeadsetOpenVR");
+}
+
+bool WriteHasBeenRunSetting(const char* driverName){
+	std::string section = "driver_" + std::string(driverName);
+	vr::EVRSettingsError error;
+	vr::VRSettings()->SetString(section.c_str(), "hasBeenRun", driverVersion.c_str(), &error);
+	if(error != vr::VRSettingsError_None){
+		DriverLog("DriverLockout: Failed to write hasBeenRun for %s, error: %s", driverName, vr::VRSettings()->GetSettingsErrorNameFromEnum(error));
+		return false;
+	}
+	DriverLog("DriverLockout: Successfully wrote hasBeenRun = %s for %s", driverVersion.c_str(), driverName);
+	return true;
 }

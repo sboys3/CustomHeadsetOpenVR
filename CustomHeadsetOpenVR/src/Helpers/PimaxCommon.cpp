@@ -352,6 +352,16 @@ public:
 				std::string maskedSerial = serial.substr(0, serial.size() - 4) + "XXXX";
 				DriverLog("Super module serial: %s", maskedSerial.c_str());
 			}
+			int edidVidOverride = 0;
+			// Module serial numbers starting in P407V0D have the PVR edid vendor
+			if(serial.find("P407V0D") == 0){
+				edidVidOverride = 53826;
+			}
+			Config::BaseHeadsetConfig* config = driverConfig.ConfigFromHeadsetType(s_info.headsetType);
+			if(config && edidVidOverride && config->edidVendorId != edidVidOverride){
+				DriverLog("EDID vendor ID mismatch: expected %i, guessing %i\n", config->edidVendorId, edidVidOverride);
+				config->edidVendorId = edidVidOverride;
+			}
 		}
 		s_info.headsetType = headsetType;
 		s_info.hasEyeTracking = HeadsetHasEyeTracking(headsetType);
@@ -420,6 +430,13 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 		pvr_getHmdStatus(s_pvrSession, &hmdStatus);
 		if (!(hmdStatus.ServiceReady && hmdStatus.HmdPresent && !hmdStatus.ShouldQuit)) {
 			return false;
+		} 
+		
+		const bool isOpenPortEnabled = pvr_getIntConfig(s_pvrSession, "no_render", 0);
+		s_info.isOpenPortEnabled = isOpenPortEnabled;
+		if(!isOpenPortEnabled){
+			// Without open port, the headset will not be usable through PVR for tracking
+			return true;
 		}
 
 		pvrHmdInfo info = {};
@@ -462,8 +479,6 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 			DriverLog("Detected PVR headset '%s' (%04x)%s", info.ProductName, info.ProductId, s_info.headsetType == Config::HeadsetType::None ? " - not supported" : "");
 		}
 
-		// This is what the OpenPort toggle sets in Pimax EVO.
-		const bool isOpenPortEnabled = pvr_getIntConfig(s_pvrSession, "no_render", 0);
 
 		// Filter by: 1) is OpenPort enabled, 2) do we support the attached headset?
 		s_info.pvrConnected = isOpenPortEnabled && s_info.headsetType != Config::HeadsetType::None;
@@ -565,7 +580,7 @@ bool PimaxCommon::TryDirectConnection() {
 	// Attempt a direct connection if it's already directly connected or if the PVR session has never been connected.
 	if(s_info.directConnected || (s_info.headsetType == Config::HeadsetType::None
 #ifdef PVR_EXISTS
-		&& !EnsurePvrSession()
+		&& (!EnsurePvrSession() || !s_info.isOpenPortEnabled)
 #endif
 	)){
 		s_info.directConnected |= pimaxDirectUSB.Start();

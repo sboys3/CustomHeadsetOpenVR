@@ -8,6 +8,8 @@ This is a custom headset driver for SteamVR that allows several to operate as na
 2. Extract the whole folder within the zip to a place you want it.
 3. Run `custom-headset-gui.exe` in `CustomHeadsetGUI` to finish the installation and configure settings.
 ![Installation Tutorial](Docs/Media/CustomHeadsetInstall.webp)
+
+**Note:** If the GUI fails to launch or displays incorrectly, you may need to install the WebView2 Evergreen Bootstrapper as administrator. The GUI is built with Tauri, which relies on the Microsoft Edge WebView2 runtime. [WebView2 Evergreen Bootstrapper](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download)
 <details>
 <summary>Manual Driver Installation</summary>
 You do not need to do this if you installed the driver with the GUI.
@@ -29,13 +31,13 @@ You do not need to do this if you installed the driver with the GUI.
 * Dream Air
 * Dream Air SE (1.3.0-beta)
 * Pimax 8K/5K (1.3.0-beta)
-* Crystal Super Micro-OLED (1.3.0-beta, distortion is still not perfect)
+* Crystal Super Micro-OLED (1.3.0-beta)
+* Crystal Super 50PPD (1.3.0-beta)
+* Crystal Super Ultrawide (1.3.0-beta)
 * The Custom Shader works with all SteamVR native headsets
 	* Vive, Index, Bigscreen Beyond
 * Future/Incomplete support
-	* Crystal Super 50PPD
 	* Crystal Super 57PPD
-	* Crystal Super Ultrawide
 	* Crystal Light
 
 

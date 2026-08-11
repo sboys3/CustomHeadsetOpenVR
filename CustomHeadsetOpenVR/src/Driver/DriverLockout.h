@@ -16,3 +16,8 @@ bool IsNeutralDriverEnabled();
 // Returns false if explicitly disabled, blocked by safe mode, or not present in settings
 bool IsDriverEnabled(const char* driverName);
 
+// Write "hasBeenRun": true to the driver's settings section in steamvr.vrsettings
+// This makes sure that the settings section is populated in the file for other drivers to see
+// Returns true if the setting was successfully written
+bool WriteHasBeenRunSetting(const char* driverName);
+

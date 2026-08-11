@@ -66,6 +66,9 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	}
 	#endif
 	
+	// Write a setting so that the section of thes driver is always defined in the settings file for other drivers to detect
+	WriteHasBeenRunSetting(driverName.c_str());
+	
 	driverConfigLoader.Start();
 	// inject hooks into functions
 	InjectHooks(this, pDriverContext);

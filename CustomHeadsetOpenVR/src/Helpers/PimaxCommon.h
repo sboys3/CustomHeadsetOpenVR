@@ -20,6 +20,7 @@
 struct PimaxInfo {
 	bool connected = false;
 	bool pvrConnected = false;
+	bool isOpenPortEnabled = false;
 	Config::HeadsetType headsetType = Config::HeadsetType::None;
 	bool useSlamTracking = false;
 	uint32_t resolutionX = 0;

@@ -886,7 +886,7 @@
         <span i18n>Eye Rotation</span>
         <app-field-tip i18n-info
             info="The angle each eye is rotated outwards. With some training it might allow increasing FOV at the expense of binocular overlap and comfort. For every 1 degree this is increased 2 degrees of fov are added. This will mess with your eyes in and out of VR unless you do some extreme modding to the headset." />
-        @if(settings.eyeRotation !== defaults.eyeRotation) {
+        @if(Math.abs(settings.eyeRotation - defaults.eyeRotation) > 1) {
           &nbsp;&nbsp;
           <mat-icon class="warn-color-flash" matTooltip="This may cause vision problems outside of the headset." i18n-matTooltip>warning</mat-icon>
         }

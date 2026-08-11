@@ -343,15 +343,15 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper50PPD;
-			distortionProfile = "Crystal Super Bad";
+			distortionProfile = "Crystal Super 50ppd Default";
 			distortionProfileDeviceType = "CrystalSuper50PPD";
-			maxFovX = 100;
-			maxFovY = 90;
+			maxFovX = 113;
+			maxFovY = 108;
 			edidVendorId = 53826; // PVR
 			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
-			eyeRotation = 5;
+			eyeRotation = 6;
 			enableEyeTracking = true;
 		}
 	};
@@ -387,15 +387,15 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperUltrawide;
-			distortionProfile = "Crystal Super Bad";
+			distortionProfile = "Crystal Super Ultrawide Default";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
-			maxFovX = 100;
-			maxFovY = 90;
+			maxFovX = 113;
+			maxFovY = 108;
 			edidVendorId = 21594; // VRT
 			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
-			eyeRotation = 7;
+			eyeRotation = 9;
 			enableEyeTracking = true;
 		}
 	};
