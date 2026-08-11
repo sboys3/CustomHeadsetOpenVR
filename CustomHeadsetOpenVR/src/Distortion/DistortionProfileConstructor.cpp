@@ -261,6 +261,77 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[crystalSuperBad.name] = crystalSuperBad;
 	
+	DistortionProfileConfig crystalSuper50PPDDefault = {};
+	crystalSuper50PPDDefault.name = "Crystal Super 50ppd Default";
+	crystalSuper50PPDDefault.device = {"CrystalSuper50PPD", "CrystalSuperUltrawide"};
+	crystalSuper50PPDDefault.modifiedTime = 0;
+	crystalSuper50PPDDefault.description = "Distortion profile for the Crystal Super 50PPD that combines the lens geometry of the Pimax native profile with the chromatic aberration calibration of the old test profile. The geometry, including the optical center sitting 3.8% above the panel center, was fitted from a capture of the distortion mesh rendered by the Pimax compositor, where it stays within 0.05 degrees. The chromatic aberration correction follows old test profile's calibration near the center and grows along a smooth quartic towards the edges, and was tuned by eye in the outer band.";
+	crystalSuper50PPDDefault.author = "Yar, Pimax, SBoys3";
+	crystalSuper50PPDDefault.creationDate = 1786060800.0;
+	crystalSuper50PPDDefault.type = "RadialBezier";
+	crystalSuper50PPDDefault.offsetY = 3.8f;
+	crystalSuper50PPDDefault.distortions = {
+		0.00, 0.000,
+		2.50, 5.499,
+		5.00, 11.014,
+		10.0, 21.965,
+		15.0, 32.786,
+		20.0, 43.369,
+		25.0, 53.609,
+		30.0, 63.416,
+		35.0, 72.617,
+		40.0, 81.122,
+		45.0, 88.710,
+		47.5, 92.107,
+		50.0, 95.252,
+		52.5, 98.070,
+		55.0, 100.366,
+		57.5, 102.950,
+		60.0, 105.730,
+		62.5, 108.833
+	};
+	crystalSuper50PPDDefault.distortionsRed = {
+		0.00, 0.51,
+		5.00, 0.51,
+		10.0, 0.52,
+		15.0, 0.54,
+		20.0, 0.57,
+		25.0, 0.60,
+		30.0, 0.63,
+		35.0, 0.67,
+		40.0, 0.71,
+		45.0, 0.75,
+		50.0, 0.79,
+		55.0, 0.82,
+		60.0, 0.84,
+		62.5, 0.85
+	};
+	crystalSuper50PPDDefault.distortionsBlue = {
+		0.00, -0.71,
+		5.00, -0.71,
+		10.0, -0.73,
+		15.0, -0.76,
+		20.0, -0.79,
+		25.0, -0.83,
+		30.0, -0.88,
+		35.0, -0.94,
+		40.0, -1.00,
+		45.0, -1.06,
+		50.0, -1.11,
+		55.0, -1.16,
+		60.0, -1.20,
+		62.5, -1.22
+	};
+	builtInDistortionProfiles[crystalSuper50PPDDefault.name] = crystalSuper50PPDDefault;
+	
+	DistortionProfileConfig crystalSuperUltrawideDefault = crystalSuper50PPDDefault;
+	crystalSuperUltrawideDefault.name = "Crystal Super Ultrawide Default";
+	crystalSuperUltrawideDefault.offsetX = -4.0;
+	crystalSuperUltrawideDefault.eyeRotationOffset = -2.0;
+	crystalSuperUltrawideDefault.description += " The screens in the ultrawide are moved outwards farther but otherwise the profile is the same.";
+	builtInDistortionProfiles[crystalSuperUltrawideDefault.name] = crystalSuperUltrawideDefault;
+	
+	
 	DistortionProfileConfig pimaxBuiltin = {};
 	pimaxBuiltin.name = "Pimax Builtin";
 	pimaxBuiltin.device = {/*"DreamAir", "DreamAirSE", "CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide", "CrystalSuperMicroOLED", "CrystalLight", "CrystalOG",*/ "Pimax5KSuper", "Pimax5KPlus", "Pimax8KX", "Pimax8KPlus", "PimaxArtisan"};

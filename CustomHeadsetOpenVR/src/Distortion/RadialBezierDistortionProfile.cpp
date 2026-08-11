@@ -606,7 +606,7 @@ Point2D RadialBezierDistortionProfile::ComputeDistortion(vr::EVREye eEye, ColorC
 	}else{
 		distortion.x -= (outerTan - innerTan) / (outerTan + innerTan);
 	}
-	distortion.y -= (topTan - bottomTan) / (topTan + bottomTan);
+	distortion.y += (topTan - bottomTan) / (topTan + bottomTan);
 	
 	// if(eEye == vr::Eye_Left){
 	// 	distortion.x = distortion.x * 2.0f + 1.0f;

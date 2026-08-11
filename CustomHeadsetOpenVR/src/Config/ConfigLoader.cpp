@@ -719,7 +719,8 @@ void ConfigLoader::WriteInfo(){
 			profileJson["smoothAmount"] = profile.smoothAmount;
 			profileJson["offsetX"] = profile.offsetX;
 			profileJson["offsetY"] = profile.offsetY;
-		} 
+		}
+		profileJson["eyeRotationOffset"] = profile.eyeRotationOffset;
 		distortionProfilesJson[profile.name] = profileJson;
 	}
 	infoFile << data.dump(1, '\t');
