@@ -499,7 +499,10 @@ int HidModifier::HidGetFeatureReportHook(hid_device* device, unsigned char* data
 	#endif
 	
 	HidDeviceInfo &info = hidModifier.deviceMap[device];
-	if(info.newLighthouseConfig != nullptr){
+	// Both branches below read data[0] and write data[1], and the 0x10 branch also writes
+	// data[2]. length is a size_t, so a caller passing less than 2 would also underflow the
+	// (length - 2) that sizes the chunk copy, yielding a negative toCopy and a huge memcpy.
+	if(info.newLighthouseConfig != nullptr && length >= 3){
 		// output the new config
 		if(data[0] == 0x10){
 			// output new size
