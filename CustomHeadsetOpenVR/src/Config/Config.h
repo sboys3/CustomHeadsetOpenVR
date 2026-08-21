@@ -345,6 +345,7 @@ public:
 			headsetType = HeadsetType::CrystalSuper50PPD;
 			distortionProfile = "Crystal Super 50ppd Default";
 			distortionProfileDeviceType = "CrystalSuper50PPD";
+			fovBurnInPrevention = false; // not needed on LCD
 			maxFovX = 113;
 			maxFovY = 108;
 			edidVendorId = 53826; // PVR
@@ -367,6 +368,7 @@ public:
 			headsetType = HeadsetType::CrystalSuper57PPD;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
+			fovBurnInPrevention = false; // not needed on LCD
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 21594; // VRT
@@ -389,6 +391,7 @@ public:
 			headsetType = HeadsetType::CrystalSuperUltrawide;
 			distortionProfile = "Crystal Super Ultrawide Default";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
+			fovBurnInPrevention = false; // not needed on LCD
 			maxFovX = 113;
 			maxFovY = 108;
 			edidVendorId = 21594; // VRT
@@ -433,6 +436,7 @@ public:
 			headsetType = HeadsetType::CrystalLight;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalLight";
+			fovBurnInPrevention = false; // not needed on LCD
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -454,6 +458,7 @@ public:
 			headsetType = HeadsetType::CrystalOG;
 			distortionProfile = "Dream Air Default";
 			distortionProfileDeviceType = "CrystalOG";
+			fovBurnInPrevention = false; // not needed on LCD
 			maxFovX = 100;
 			maxFovY = 90;
 			edidVendorId = 53826; // PVR
@@ -520,6 +525,7 @@ public:
 			headsetType = HeadsetType::Pimax8KX;
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax8KX";
+			fovBurnInPrevention = false; // not needed on LCD
 			distortionMeshResolution = 64;
 			maxFovX = 100;
 			maxFovY = 90;

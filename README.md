@@ -33,10 +33,10 @@ You do not need to do this if you installed the driver with the GUI.
 * Pimax 8K/5K (1.3.0-beta)
 * Crystal Super Micro-OLED (1.3.0-beta)
 * Crystal Super 50PPD (1.3.0-beta)
-* Crystal Super Ultrawide (1.3.0-beta)
 * The Custom Shader works with all SteamVR native headsets
 	* Vive, Index, Bigscreen Beyond
 * Future/Incomplete support
+	* Crystal Super Ultrawide
 	* Crystal Super 57PPD
 	* Crystal Light
 

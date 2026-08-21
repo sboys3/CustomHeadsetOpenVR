@@ -216,10 +216,10 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	
 	// if no headset is connected see if any can be provided every 4 seconds
 	if(!hasHeadsetConnected && lastHeadsetProvideTime + 4 < now){
-		lastHeadsetProvideTime = now;
 		// For Pimax SLAM headsets, load our own driver instead of shimming another driver.
 		#ifdef PVR_EXISTS
-		if(PimaxCommon::IsSlamHeadsetConnected()) {
+		// skip the first check so that lighthouse devices can connect first
+		if(PimaxCommon::IsSlamHeadsetConnected() && lastHeadsetProvideTime != 0){
 			PimaxSlamDriver* pimaxSlamImplementation = new PimaxSlamDriver();
 			pimaxSlamImplementation->deviceProvider = this;
 			shims.insert(pimaxSlamImplementation);
@@ -227,6 +227,7 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 			vr::VRServerDriverHost()->TrackedDeviceAdded("PimaxSlamCustomHMD", vr::TrackedDeviceClass_HMD, driver);
 		}
 		#endif // PVR_EXISTS
+		lastHeadsetProvideTime = now;
 	}
 	
 	// clear update flag at end of frame

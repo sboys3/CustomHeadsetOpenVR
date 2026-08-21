@@ -2,6 +2,7 @@
 #include "DriverLog.h"
 #include "Hooking/Hooking.h"
 #include "../Config/ConfigLoader.h"
+#include "../Helpers/ShaderDecode.h"
 #include <mutex>
 #include <map>
 #include <unordered_map>
@@ -26,8 +27,6 @@
 #include "../../../ThirdParty/minhook/include/MinHook.h"
 
 
-// this could probably use macros to get the current project location instead of hard coding it for my computer
-// std::string shaderDevPath = "C:/Users/Admin/Desktop/stuff/projects/meganex/CustomHeadsetOpenVR/CustomHeadsetOpenVR/DriverFiles/resources/shaders/d3d11/";
 // treats the current file as a directory to get relative paths
 std::string shaderDevPath = __FILE__ "/../../../DriverFiles/resources/shaders/d3d11/";
 
@@ -407,44 +406,134 @@ static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionWit
 	}},
 };
 
+
+// Decode the original shader bytecode, read the source hlsl file,
+// replace SHADER_VARIABLES with the decoded content, and write a .processed.hlsl file.
+// Always writes the output file (even if blank) to prevent stale data from being used
+// when the decoder fails on new bytecode. Returns the absolute path to the .processed.hlsl file.
+static std::string DecodeShaderAndWriteProcessedFile(std::string sourceShaderName, std::string originalShaderName){
+    
+    // Create temp directory within the shader folder
+    std::string shaderPath = getShaderPath();
+    std::string tempDir = shaderPath + "temp/";
+    if(!std::filesystem::exists(tempDir)){
+        std::filesystem::create_directories(tempDir);
+        DriverLog("Created temp directory: %s", tempDir.c_str());
+    }
+    
+    // Create output path: temp/<original-shader-name>.processed.hlsl
+    std::filesystem::path processedPath = std::filesystem::path(originalShaderName).replace_extension(".processed.hlsl");
+    std::string processedFullPath = (std::filesystem::path(tempDir) / processedPath).string();
+    
+    // Read the source hlsl file
+    std::string sourceFullPath = shaderPath + sourceShaderName;
+    std::ifstream sourceFile(sourceFullPath, std::ios::binary);
+    std::string sourceContent;
+    if(!sourceFile){
+        DriverLog("Failed to open source shader file: %s", sourceFullPath.c_str());
+    }else{
+        sourceContent.assign(std::istreambuf_iterator<char>(sourceFile), std::istreambuf_iterator<char>());
+        sourceFile.close();
+        // DriverLog("Read source shader file: %s (%zu bytes)", sourceFullPath.c_str(), sourceContent.length());
+    }
+    
+    // Decode the original shader bytecode
+    std::string hlsl;
+    std::string bytecodeFullPath = driverConfigLoader.info.steamvrResources + "shaders/d3d11/" + originalShaderName;
+    FILE* inFile = fopen(bytecodeFullPath.c_str(), "rb");
+    if(!inFile){
+        DriverLog("Failed to open original shader file: %s", bytecodeFullPath.c_str());
+    }else{
+        fseek(inFile, 0, SEEK_END);
+        size_t bytecodeLength = ftell(inFile);
+        fseek(inFile, 0, SEEK_SET);
+        std::vector<uint8_t> bytecode(bytecodeLength);
+        fread(bytecode.data(), 1, bytecodeLength, inFile);
+        fclose(inFile);
+        // DriverLog("Read original shader bytecode from %s (%zu bytes)", bytecodeFullPath.c_str(), bytecodeLength);
+        
+        // Decode shader variables
+        hlsl = DecodeShaderVariables(bytecode.data(), static_cast<uint32_t>(bytecodeLength));
+        if(hlsl.empty()){
+            DriverLog("Failed to decode shader variables for %s", originalShaderName.c_str());
+        }else{
+            // Post-process decoded HLSL to fix invalid identifiers
+            // Must replace <unnamed>::<unnamed> BEFORE <unnamed> to avoid partial matches
+            std::string temp;
+            size_t pos2;
+            while((pos2 = hlsl.find("<unnamed>::<unnamed>")) != std::string::npos){
+                hlsl.replace(pos2, 20, "UnnamedInnerStruct");
+            }
+            while((pos2 = hlsl.find("<unnamed>")) != std::string::npos){
+                hlsl.replace(pos2, 9, "UnnamedStruct");
+            }
+            // Replace param1/2/3 with uv1/2/3 for TEXCOORD inputs
+            while((pos2 = hlsl.find("param1 : TEXCOORD0")) != std::string::npos){
+                hlsl.replace(pos2, 18, "uv1 : TEXCOORD0");
+            }
+            while((pos2 = hlsl.find("param2 : TEXCOORD1")) != std::string::npos){
+                hlsl.replace(pos2, 18, "uv2 : TEXCOORD1");
+            }
+            while((pos2 = hlsl.find("param3 : TEXCOORD2")) != std::string::npos){
+                hlsl.replace(pos2, 18, "uv3 : TEXCOORD2");
+            }
+            // Replace param2 : BLENDINDICES with param4 : BLENDINDICES
+            while((pos2 = hlsl.find("uint param2 : BLENDINDICES;")) != std::string::npos){
+                hlsl.replace(pos2, 27, "uint param4 : BLENDINDICES;");
+            }
+            // Replace g_tScene[N] with g_tSceneN
+            while((pos2 = hlsl.find("g_tScene[0]")) != std::string::npos){
+                hlsl.replace(pos2, 11, "g_tScene0");
+            }
+            while((pos2 = hlsl.find("g_tScene[1]")) != std::string::npos){
+                hlsl.replace(pos2, 11, "g_tScene1");
+            }
+            while((pos2 = hlsl.find("g_tScene[2]")) != std::string::npos){
+                hlsl.replace(pos2, 11, "g_tScene2");
+            }
+        }
+    }
+    
+    // Replace SHADER_VARIABLES in source with decoded HLSL
+    std::string processedContent = sourceContent;
+    std::string shaderVariablesPlaceholder = "SHADER_VARIABLES";
+    size_t pos = processedContent.find(shaderVariablesPlaceholder);
+    if(pos != std::string::npos){
+        processedContent.replace(pos, shaderVariablesPlaceholder.length(), hlsl);
+    }else{
+        // DriverLog("WARNING: SHADER_VARIABLES shaderVariablesPlaceholder not found in %s", sourceShaderName.c_str());
+    }
+    
+    // Write processed file (always, even if empty or decode failed)
+    FILE* outFile = fopen(processedFullPath.c_str(), "wb");
+    if(!outFile){
+        DriverLog("Failed to write processed shader file: %s", processedFullPath.c_str());
+    }else{
+        fwrite(processedContent.c_str(), 1, processedContent.length(), outFile);
+        fclose(outFile);
+        // DriverLog("Wrote processed shader to %s (%zu bytes)", processedFullPath.c_str(), processedContent.length());
+    }
+    
+    return processedFullPath;
+}
+
 // compile the new distortion shader from source
-Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false){
+// originalShaderName is the name of the original SteamVR shader file (e.g. "distort_ps_layered.fxo")
+Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false, const char* originalShaderName = "distort_ps_layered.fxo"){
 	if(!IsCustomShaderEnabled()){
 		// don't replace
 		return {nullptr, 0};
 	}
 	
+	std::string fullSourcePath = getShaderPath() + "distort_ps_layered.hlsl";
 	
-	std::string fullPath = getShaderPath() + "distort_ps_layered.hlsl";
-	// FILE* file = fopen(fullPath.c_str(), "rb");
-	// if(!file){
-	// 	DriverLog("Failed to open shader file: %s", fullPath.c_str());
-	// 	return {nullptr, 0};
-	// }
-	// fseek(file, 0, SEEK_END);
-	// size_t length = ftell(file);
-	// fseek(file, 0, SEEK_SET);
-	// char* data = new char[length];
-	// fread(data, 1, length, file);
-	// fclose(file);
-	
-	// ID3DBlob* blob;
-	// // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	// // std::wstring shaderPath = converter.from_bytes(fullPath);
-	// std::wstring shaderPath = std::wstring(fullPath.begin(), fullPath.end());
-	// if(FAILED(D3DReadFileToBlob(shaderPath.c_str(), &blob))){
-	// 	DriverLog("Failed to read shader file: %s", fullPath.c_str());
-	// 	return {nullptr, 0};
-	// }
-	// char* data = new char[blob->GetBufferSize()];
-	// memcpy(data, blob->GetBufferPointer(), blob->GetBufferSize());
-	// size_t length = blob->GetBufferSize();
-	// blob->Release();
-	
+	// Decode the original shader bytecode, replace SHADER_VARIABLES, and write .processed.hlsl
+	std::string fullProcessedPath = DecodeShaderAndWriteProcessedFile("distort_ps_layered.hlsl", originalShaderName);
 	
 	// create defines for shader settings
-	D3D_SHADER_MACRO defines[50] = {};
+	D3D_SHADER_MACRO defines[60] = {};
 	int definesCount = 0;
+	
 	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
 		defines[definesCount++] = {"MEGANEX8K", "1"};
 		if(driverConfig.customShader.subpixelShift && driverConfig.meganeX8K.subpixelShift != 0 && driverConfig.meganeX8K.resolutionY == 3552){
@@ -623,12 +712,12 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	defines[definesCount++] = {nullptr, nullptr}; // end of array
 	
 	
-	std::string errorPath = fullPath + "_error" + (muraCorrection ? "_mura" : "") + (noDistortion ? "_nd" : "") + ".txt";
+	std::string errorPath = fullSourcePath + "_error" + (muraCorrection ? "_mura" : "") + (noDistortion ? "_nd" : "") + ".txt";
 	
 	// compile shader from hlsl using cached compilation
 	ID3DBlob* errorBlob = nullptr;
 	Bytecode bytecode = D3DCompileFromFileCached(
-		ConvertUtf8ToWide(fullPath).c_str(),
+		ConvertUtf8ToWide(fullProcessedPath).c_str(),
 		defines,
 		"main",
 		"ps_5_0",
@@ -636,7 +725,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 		&errorBlob
 	);
 	if(bytecode.data == nullptr || bytecode.length == 0){
-		DriverLog("Failed to compile shader file: %s", fullPath.c_str());
+		DriverLog("Failed to compile shader file: %s", fullProcessedPath.c_str());
 		if(errorBlob){
 			DriverLog("Error: %s", (char*)errorBlob->GetBufferPointer());
 			// output to file beside shader
@@ -649,7 +738,7 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 		}
 		return {nullptr, 0};
 	}else{
-		DriverLog("Successfully compiled shader file: %s", fullPath.c_str());
+		DriverLog("Successfully compiled shader file: %s", fullProcessedPath.c_str());
 		// delete error file
 		remove(errorPath.c_str());
 		return bytecode;
@@ -658,8 +747,8 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 
 
 // same as DistortionShader
-Bytecode DistortionShaderPlain(){ 
-	return DistortionShader();
+Bytecode DistortionShaderPlain(){
+	return DistortionShader(false, false, "distort_ps_layered.fxo");
 }
 
 // same as DistortionShader but with mura correction enabled
@@ -668,7 +757,7 @@ Bytecode DistortionShaderMuraCorrection(){
 		// don't compile for headsets that will not use it
 		return {nullptr, 0};
 	}
-	return DistortionShader(true);
+	return DistortionShader(true, false, "distort_ps_layered_mc.fxo");
 }
 
 // same as DistortionShader but with no distortion enabled
@@ -677,7 +766,7 @@ Bytecode DistortionShaderNoDistortion(){
 		// don't compile for headsets that will not use it
 		return {nullptr, 0};
 	}
-	return DistortionShader(false, true);
+	return DistortionShader(false, true, "distort_ps_achromatic_nd.fxo");
 }
 
 // Precompile all registered shaders to populate the cache before they are needed in the hot path

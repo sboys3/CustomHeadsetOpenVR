@@ -434,10 +434,10 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 		
 		const bool isOpenPortEnabled = pvr_getIntConfig(s_pvrSession, "no_render", 0);
 		s_info.isOpenPortEnabled = isOpenPortEnabled;
-		if(!isOpenPortEnabled){
-			// Without open port, the headset will not be usable through PVR for tracking
-			return true;
-		}
+		// if(!isOpenPortEnabled){
+		// 	// Without open port, the headset will not be usable through PVR for tracking
+		// 	return true;
+		// }
 
 		pvrHmdInfo info = {};
 		pvr_getHmdInfo(s_pvrSession, &info);
@@ -480,8 +480,8 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 		}
 
 
-		// Filter by: 1) is OpenPort enabled, 2) do we support the attached headset?
-		s_info.pvrConnected = isOpenPortEnabled && s_info.headsetType != Config::HeadsetType::None;
+		// Filter by: do we support the attached headset?
+		s_info.pvrConnected = s_info.headsetType != Config::HeadsetType::None;
 		if (s_info.pvrConnected) {
 			pvrHmdTrackingStyle trackingStyle = pvrHmdTrackingStyle_Unknown;
 			trackingStyle = (pvrHmdTrackingStyle)pvr_getTrackedDeviceIntProperty(
@@ -489,7 +489,8 @@ static bool EnsurePvrSession(bool forceTryConnect = false) {
 				pvrTrackedDevice_HMD,
 				pvrTrackedDeviceProp_Prop_HmdTrackingStyle_Int,
 				pvrHmdTrackingStyle_Unknown);
-			s_info.useSlamTracking = trackingStyle == pvrHmdTrackingStyle_InsideOutCameras;
+			// openport is required for SLAM tracking, and this will sometimes incorrectly match for Lighthouse headsets at startup, which will break non-openport launches.
+			s_info.useSlamTracking = trackingStyle == pvrHmdTrackingStyle_InsideOutCameras && isOpenPortEnabled;
 
 			DriverLog("Detected headset '%s' (%04x) with %s tracking", info.ProductName, info.ProductId, s_info.useSlamTracking ? "SLAM" : "Lighthouse");
 			DriverLog("Panel Resolution: %ux%u (Orientation: %u deg)", displayInfo.width, displayInfo.height, displayInfo.eye_rotate * 90);
@@ -528,6 +529,14 @@ void PvrThread(){
 			}
 			
 			pvrButtonState = pvr_getIntConfig(s_pvrSession, "hmd_buttons", 0);
+			
+			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
+			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Right, &eyeInfo[pvrEye_Right]);
+			float ipd = PVR::Vector3f(eyeInfo[pvrEye_Left].HmdToEyePose.Position).Distance(eyeInfo[pvrEye_Right].HmdToEyePose.Position) * 1000;
+			if(ipd > 0){
+				s_info.ipd = ipd;
+			}
 
 			// Call RunPvrBackground on all registered instances
 			{
@@ -595,12 +604,13 @@ bool PimaxCommon::IsPimaxLighthouseDevice(std::string_view model, std::string_vi
 
 bool PimaxCommon::IsLighthouseHeadsetConnected(){
 	PimaxInfo info = PimaxCommon::GetInfo();
-	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected && (s_info.directConnected || !info.useSlamTracking);
+	// useSlamTracking is unreliable early in the startup of the pi_server, even for Lighthouse headsets, so instead always allow Lighthouse devices
+	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected; //&& (s_info.directConnected || !info.useSlamTracking);
 }
 
 bool PimaxCommon::IsSlamHeadsetConnected(){
 	PimaxInfo info = PimaxCommon::GetInfo();
-	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected && info.useSlamTracking;
+	return info.headsetType && driverConfig.ConfigFromHeadsetType(info.headsetType)->enable && info.connected && info.isOpenPortEnabled && info.useSlamTracking;
 }
 
 #ifdef PVR_EXISTS

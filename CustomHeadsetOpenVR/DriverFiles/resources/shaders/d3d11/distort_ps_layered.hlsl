@@ -1,10 +1,17 @@
+
+// Replaced with variable definitions pulled out of the original shader.
+SHADER_VARIABLES
+
+/*
 // HLSL function stub generated
 
 struct UnnamedInner {
 	float4x4 matProj;
 	float4x4 matInvProj;
-	float4x4 matRendered;
-	float4x4 matInvRendered;
+	float4x4 matRendered0;
+	float4x4 matRendered1; // new in 2.17.7
+	float4x4 matInvRendered0;
+	float4x4 matInvRendered1; // new in 2.17.7
 	float4x4 matTexDetails;
 };
 
@@ -42,6 +49,8 @@ cbuffer DistortConstantBuffer_t : register(b0) {
 	float g_bMCEnabled : packoffset(c15.z);
 	float g_bGhostCorrectionEnabled : packoffset(c15.w);
 	uint g_nEye : packoffset(c16.x);
+	float g_flTargetNDCZ : packoffset(c16.y); // new in 2.17.7
+	uint g_bSceneRotationOnlyReprojection : packoffset(c16.z); // new in 2.17.7
 };
 
 #ifndef NO_DISTORTION 
@@ -70,8 +79,6 @@ Texture2D<float4> g_tGhostCorrectionTable : register(t7);
 
 
 
-
-
 #define UV_TYPE float4
 #ifdef NO_LAYER
 #define UV_TYPE float2
@@ -90,6 +97,8 @@ struct InputStruct {
 struct OutputStruct {
 	float4 Target0 : SV_Target0;
 };
+
+*/
 
 // effects that involve multiple channels must be done on the input image, not on the output image.
 // this is because each channel in the output gos to different locations on the display.
@@ -851,7 +860,7 @@ OutputStruct main(in InputStruct IN)
 	#endif
 	
 	#ifdef AFTER_TEST
-	#include "distort_ps_layered_after_test.hlsl"
+	#include "../distort_ps_layered_after_test.hlsl"
 	#endif
 	
 	

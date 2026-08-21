@@ -77,6 +77,7 @@
     <ClCompile Include="src\Helpers\AAPVRBlocker.cpp" />
     <ClCompile Include="src\Helpers\MiscHelper.cpp" />
     <ClCompile Include="src\Helpers\PimaxCommon.cpp" />
+    <ClCompile Include="src\Helpers\ShaderDecode.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>
   <ItemGroup>
