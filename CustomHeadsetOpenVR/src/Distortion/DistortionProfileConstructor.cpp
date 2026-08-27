@@ -149,6 +149,65 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[dreamAir.name] = dreamAir;
 	
+	DistortionProfileConfig dreamAirLikePimax = {};
+	dreamAirLikePimax.name = "Dream Air like Pimax";
+	dreamAirLikePimax.device = {"DreamAir"};
+	dreamAirLikePimax.modifiedTime = 0;
+	dreamAirLikePimax.description = "Distortion profile for the Dream Air that combines the lens geometry of the Pimax native profile with the chromatic aberration calibration of the camera calibrated Dream Air Default. The geometry was fitted from a capture of the distortion mesh rendered by the Pimax compositor, including the optical center sitting 2.7% towards the nose and 0.9% above the panel center, and follows the capture within 0.1 degrees. The chromatic aberration correction reproduces the Dream Air Default at every panel radius. Set Max FOV to 98.0x87.0 to render exactly the field the native profile shows.";
+	dreamAirLikePimax.author = "Pimax, Yar, SBoys3";
+	dreamAirLikePimax.creationDate = 1786665600.0;
+	dreamAirLikePimax.type = "RadialBezier";
+	dreamAirLikePimax.offsetX = -2.71f;
+	dreamAirLikePimax.offsetY = 0.9f;
+	// dreamAirLikePimax.recommendedMaxFovX = 98.0;
+	// dreamAirLikePimax.recommendedMaxFovY = 87.0;
+	dreamAirLikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 6.420,
+		5.00, 12.869,
+		10.0, 25.641,
+		15.0, 38.185,
+		20.0, 50.377,
+		25.0, 62.062,
+		30.0, 73.145,
+		35.0, 83.496,
+		40.0, 93.232,
+		45.0, 102.044,
+		47.5, 105.735,
+		50.0, 108.985,
+		52.5, 111.722,
+		55.0, 114.836
+	};
+	dreamAirLikePimax.distortionsRed = {
+		0.00, 0.30,
+		5.00, 0.33,
+		10.0, 0.37,
+		15.0, 0.40,
+		20.0, 0.42,
+		25.0, 0.44,
+		30.0, 0.46,
+		35.0, 0.46,
+		40.0, 0.48,
+		45.0, 0.48,
+		50.0, 0.48,
+		55.0, 0.60
+	};
+	dreamAirLikePimax.distortionsBlue = {
+		0.00, -0.20,
+		5.00, -0.24,
+		10.0, -0.28,
+		15.0, -0.32,
+		20.0, -0.36,
+		25.0, -0.39,
+		30.0, -0.48,
+		35.0, -0.59,
+		40.0, -0.67,
+		45.0, -0.68,
+		50.0, -0.68,
+		55.0, -0.71
+	};
+	builtInDistortionProfiles[dreamAirLikePimax.name] = dreamAirLikePimax;
+	
 	DistortionProfileConfig dreamAirSE = {};
 	dreamAirSE.name = "Dream Air SE Default";
 	dreamAirSE.device = {"DreamAirSE"};
@@ -228,6 +287,67 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[crystalSuperOled.name] = crystalSuperOled;
 	
+	DistortionProfileConfig crystalSuperOledLikePimax = {};
+	crystalSuperOledLikePimax.name = "Crystal Super micro-OLED like Pimax";
+	crystalSuperOledLikePimax.device = {"CrystalSuperMicroOLED"};
+	crystalSuperOledLikePimax.modifiedTime = 0;
+	crystalSuperOledLikePimax.description = "Distortion profile for the Crystal Super micro-OLED that combines the lens geometry of the Pimax native profile with the chromatic aberration calibration of the camera calibrated Crystal Super Micro-OLED Default. The geometry was fitted from a capture of the distortion mesh rendered by the Pimax compositor, including the optical center sitting 3.6% towards the nose and 2.7% above the panel center, and follows the capture within 0.1 degrees. The chromatic aberration correction reproduces the Micro-OLED Default at every panel radius. Set Max FOV to 98.2x87.1 to render exactly the field the native profile shows.";
+	crystalSuperOledLikePimax.author = "Pimax, Yar, SBoys3";
+	crystalSuperOledLikePimax.creationDate = 1786233600.0;
+	crystalSuperOledLikePimax.type = "RadialBezier";
+	crystalSuperOledLikePimax.offsetX = -3.59f;
+	crystalSuperOledLikePimax.offsetY = 2.69f;
+	crystalSuperOledLikePimax.eyeRotationOffset = -1.0;
+	// crystalSuperOledLikePimax.recommendedMaxFovX = 98.2;
+	// crystalSuperOledLikePimax.recommendedMaxFovY = 87.1;
+	crystalSuperOledLikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 6.430,
+		5.00, 12.871,
+		10.0, 25.638,
+		15.0, 38.183,
+		20.0, 50.374,
+		25.0, 62.063,
+		30.0, 73.141,
+		35.0, 83.498,
+		40.0, 93.230,
+		45.0, 102.040,
+		47.5, 105.733,
+		50.0, 108.973,
+		52.5, 111.730,
+		55.0, 114.792,
+		57.5, 118.138
+	};
+	crystalSuperOledLikePimax.distortionsRed = {
+		0.00, 0.30,
+		5.00, 0.33,
+		10.0, 0.37,
+		15.0, 0.40,
+		20.0, 0.42,
+		25.0, 0.44,
+		30.0, 0.46,
+		35.0, 0.46,
+		40.0, 0.48,
+		45.0, 0.48,
+		50.0, 0.48,
+		55.0, 0.59
+	};
+	crystalSuperOledLikePimax.distortionsBlue = {
+		0.00, -0.20,
+		5.00, -0.24,
+		10.0, -0.28,
+		15.0, -0.32,
+		20.0, -0.35,
+		25.0, -0.39,
+		30.0, -0.48,
+		35.0, -0.59,
+		40.0, -0.67,
+		45.0, -0.68,
+		50.0, -0.68,
+		55.0, -0.69
+	};
+	builtInDistortionProfiles[crystalSuperOledLikePimax.name] = crystalSuperOledLikePimax;
+	
 	DistortionProfileConfig crystalSuperBad = {};
 	crystalSuperBad.name = "Crystal Super Bad";
 	crystalSuperBad.device = {"CrystalSuper50PPD", "CrystalSuper57PPD", "CrystalSuperUltrawide"};
@@ -266,7 +386,7 @@ bool PopulateBuiltInDistortionProfiles(){
 	crystalSuper50PPDDefault.device = {"CrystalSuper50PPD", "CrystalSuperUltrawide"};
 	crystalSuper50PPDDefault.modifiedTime = 0;
 	crystalSuper50PPDDefault.description = "Distortion profile for the Crystal Super 50PPD that combines the lens geometry of the Pimax native profile with the chromatic aberration calibration of the old test profile. The geometry, including the optical center sitting 3.8% above the panel center, was fitted from a capture of the distortion mesh rendered by the Pimax compositor, where it stays within 0.05 degrees. The chromatic aberration correction follows old test profile's calibration near the center and grows along a smooth quartic towards the edges, and was tuned by eye in the outer band.";
-	crystalSuper50PPDDefault.author = "Yar, Pimax, SBoys3";
+	crystalSuper50PPDDefault.author = "Pimax, Yar, SBoys3";
 	crystalSuper50PPDDefault.creationDate = 1786060800.0;
 	crystalSuper50PPDDefault.type = "RadialBezier";
 	crystalSuper50PPDDefault.offsetY = 3.8f;
@@ -330,6 +450,51 @@ bool PopulateBuiltInDistortionProfiles(){
 	crystalSuperUltrawideDefault.eyeRotationOffset = -2.0;
 	crystalSuperUltrawideDefault.description += " The screens in the ultrawide are moved outwards farther but otherwise the profile is the same.";
 	builtInDistortionProfiles[crystalSuperUltrawideDefault.name] = crystalSuperUltrawideDefault;
+	
+
+	
+
+	DistortionProfileConfig crystalOGLikePimax = {};
+	// crystalOGLikePimax.name = "Crystal OG like Pimax";
+	crystalOGLikePimax.name = "Crystal OG Default";
+	crystalOGLikePimax.device = {"CrystalOG", "CrystalLight"};
+	crystalOGLikePimax.modifiedTime = 0;
+	crystalOGLikePimax.description = "Distortion profile for the Pimax Crystal fitted from a capture of the distortion mesh rendered by the Pimax compositor. The chromatic aberration was used from the old Crystal Super test profile. The optical center sits 7.0% above the panel center, so the field reaches noticeably further down than up, and the profile follows the capture within 0.1 degrees. The eye rotation offset brings the configured 4 degrees to the 5 degree cant of the captured eye pose. Set Max FOV to 92.3x93.1 to render exactly the field the native profile shows.";
+	crystalOGLikePimax.author = "Pimax, Yar, SBoys3";
+	crystalOGLikePimax.creationDate = 1786838400.0;
+	crystalOGLikePimax.type = "RadialBezier";
+	crystalOGLikePimax.offsetX = 0.0f;
+	crystalOGLikePimax.offsetY = 7.04f;
+	crystalOGLikePimax.eyeRotationOffset = 1.0;
+	// crystalOGLikePimax.recommendedMaxFovX = 92.3;
+	// crystalOGLikePimax.recommendedMaxFovY = 93.1;
+	crystalOGLikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 6.066,
+		5.00, 12.177,
+		10.0, 24.230,
+		15.0, 36.183,
+		20.0, 47.859,
+		25.0, 59.140,
+		30.0, 69.980,
+		35.0, 80.123,
+		40.0, 89.485,
+		45.0, 97.878,
+		47.5, 101.621,
+		50.0, 105.079,
+		52.5, 108.201,
+		55.0, 110.749,
+		57.5, 113.563
+	};
+	crystalOGLikePimax.distortionsRed = {
+		0.00, 0.50,
+		50.0, 0.80
+	};
+	crystalOGLikePimax.distortionsBlue = {
+		0.00, -0.7,
+		50.0, -1.1
+	};
+	builtInDistortionProfiles[crystalOGLikePimax.name] = crystalOGLikePimax;
 	
 	
 	DistortionProfileConfig pimaxBuiltin = {};

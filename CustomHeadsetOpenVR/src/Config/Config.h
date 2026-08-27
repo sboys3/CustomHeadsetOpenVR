@@ -434,16 +434,16 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalLight;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal OG Default";
 			distortionProfileDeviceType = "CrystalLight";
 			fovBurnInPrevention = false; // not needed on LCD
-			maxFovX = 100;
-			maxFovY = 90;
+			maxFovX = 93;
+			maxFovY = 93;
 			edidVendorId = 53826; // PVR
 			displayRotation = 1;
 			resolutionX = 2880;
 			resolutionY = 2880;
-			eyeRotation = 4;
+			eyeRotation = 5;
 		}
 	};
 	CrystalLightConfig crystalLight = {};
@@ -456,16 +456,16 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalOG;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal OG Default";
 			distortionProfileDeviceType = "CrystalOG";
 			fovBurnInPrevention = false; // not needed on LCD
-			maxFovX = 100;
-			maxFovY = 90;
+			maxFovX = 93;
+			maxFovY = 93;
 			edidVendorId = 53826; // PVR
 			displayRotation = 1;
 			resolutionX = 2880;
 			resolutionY = 2880;
-			eyeRotation = 4;
+			eyeRotation = 5;
 			enableEyeTracking = true;
 		}
 	};
