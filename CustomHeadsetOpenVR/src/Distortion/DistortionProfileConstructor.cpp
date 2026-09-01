@@ -247,6 +247,51 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[dreamAirSE.name] = dreamAirSE;
 	
+	DistortionProfileConfig dreamAirSELikePimax = {};
+	dreamAirSELikePimax.name = "Dream Air SE like Pimax";
+	dreamAirSELikePimax.device = {"DreamAirSE"};
+	dreamAirSELikePimax.modifiedTime = 0;
+	dreamAirSELikePimax.description = "Distortion profile for the Dream Air SE that combines the lens geometry of the Pimax native profile with the chromatic aberration calibration of the camera calibrated Dream Air SE Default. The geometry aims to closely reproduce the shape of the native Pimax rendering, including the optical center sitting 5.5% towards the nose and 2.2% above the panel center, and follows it within 0.05 degrees. The chromatic aberration correction reproduces the Dream Air SE Default at every panel radius. Set Max FOV to 89.4x89.5 to render exactly the field the native profile shows.";
+	dreamAirSELikePimax.author = "Pimax, Yar, SBoys3";
+	dreamAirSELikePimax.creationDate = 1787961600.0;
+	dreamAirSELikePimax.type = "RadialBezier";
+	dreamAirSELikePimax.offsetX = -5.48f;
+	dreamAirSELikePimax.offsetY = 2.19f;
+	dreamAirSELikePimax.eyeRotationOffset = -2.0;
+	// dreamAirSELikePimax.recommendedMaxFovX = 89.4;
+	// dreamAirSELikePimax.recommendedMaxFovY = 89.5;
+	dreamAirSELikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 6.178,
+		5.00, 12.363,
+		10.0, 24.677,
+		15.0, 36.788,
+		20.0, 48.618,
+		25.0, 60.034,
+		30.0, 70.936,
+		35.0, 81.225,
+		40.0, 90.919,
+		45.0, 99.923,
+		47.5, 104.386,
+		50.0, 109.073,
+		52.5, 113.880,
+		55.0, 118.993
+	};
+	dreamAirSELikePimax.distortionsRed = {
+		0.00, 0.30,
+		25.0, 0.45,
+		40.0, 0.50,
+		50.0, 0.55,
+	};
+	dreamAirSELikePimax.distortionsBlue = {
+		0.00, -0.2,
+		25.0, -0.4,
+		30.0, -0.4,
+		40.0, -0.5,
+		50.0, -0.6
+	};
+	builtInDistortionProfiles[dreamAirSELikePimax.name] = dreamAirSELikePimax;
+	
 	DistortionProfileConfig crystalSuperOled = {};
 	crystalSuperOled.name = "Crystal Super Micro-OLED Default";
 	crystalSuperOled.device = {"DreamAir", "CrystalSuperMicroOLED"};
@@ -444,14 +489,85 @@ bool PopulateBuiltInDistortionProfiles(){
 	};
 	builtInDistortionProfiles[crystalSuper50PPDDefault.name] = crystalSuper50PPDDefault;
 	
-	DistortionProfileConfig crystalSuperUltrawideDefault = crystalSuper50PPDDefault;
-	crystalSuperUltrawideDefault.name = "Crystal Super Ultrawide Default";
-	crystalSuperUltrawideDefault.offsetX = -4.0;
-	crystalSuperUltrawideDefault.eyeRotationOffset = -2.0;
-	crystalSuperUltrawideDefault.description += " The screens in the ultrawide are moved outwards farther but otherwise the profile is the same.";
-	builtInDistortionProfiles[crystalSuperUltrawideDefault.name] = crystalSuperUltrawideDefault;
+	DistortionProfileConfig crystalSuper57LikePimax = {};
+	crystalSuper57LikePimax.name = "Crystal Super 57ppd Default";
+	crystalSuper57LikePimax.device = {"CrystalSuper57PPD"};
+	crystalSuper57LikePimax.modifiedTime = 0;
+	crystalSuper57LikePimax.description = "Distortion profile for the Crystal Super 57PPD aiming to closely reproduce the geometric shape of the native Pimax rendering. The chromatic aberration was used from the old Crystal Super test profile. The optical center sits 6.4% above the panel center and the profile follows the native rendering within 0.08 degrees. The eye rotation offset brings the configured 7 degrees to the 6 degree cant of the captured eye pose, the same cant as the other Crystal Super QLED engines. Set Max FOV to 88.6x86.1 to render exactly the field the native profile shows.";
+	crystalSuper57LikePimax.author = "Pimax, Yar, SBoys3";
+	crystalSuper57LikePimax.creationDate = 1787961600.0;
+	crystalSuper57LikePimax.type = "RadialBezier";
+	crystalSuper57LikePimax.offsetX = 0.0f;
+	crystalSuper57LikePimax.offsetY = 6.38f;
+	crystalSuper57LikePimax.eyeRotationOffset = 0.0;
+	// crystalSuper57LikePimax.recommendedMaxFovX = 88.6;
+	// crystalSuper57LikePimax.recommendedMaxFovY = 86.1;
+	crystalSuper57LikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 6.178,
+		5.00, 12.356,
+		10.0, 24.731,
+		15.0, 37.043,
+		20.0, 49.212,
+		25.0, 61.070,
+		30.0, 72.513,
+		35.0, 83.307,
+		40.0, 93.783,
+		45.0, 103.411,
+		47.5, 107.698,
+		50.0, 112.366,
+		52.5, 117.083,
+		54.0, 120.085
+	};
+	crystalSuper57LikePimax.distortionsRed = {
+		0.00, 0.50,
+		50.0, 0.80
+	};
+	crystalSuper57LikePimax.distortionsBlue = {
+		0.00, -0.7,
+		50.0, -1.1
+	};
+	builtInDistortionProfiles[crystalSuper57LikePimax.name] = crystalSuper57LikePimax;
 	
-
+	
+	DistortionProfileConfig crystalSuperUltrawideLikePimax = {};
+	crystalSuperUltrawideLikePimax.name = "Crystal Super Ultrawide Default";
+	crystalSuperUltrawideLikePimax.device = {"CrystalSuperUltrawide"};
+	crystalSuperUltrawideLikePimax.modifiedTime = 0;
+	crystalSuperUltrawideLikePimax.description = "Distortion profile for the Crystal Super Ultrawide aiming to closely reproduce the geometric shape of the native Pimax rendering. The chromatic aberration was used from the old Crystal Super test profile. The optical center sits 6.4% towards the nose and 6.4% above the panel center, and the profile follows the native rendering within 0.06 degrees. The eye rotation offset brings the configured 9 degrees to the 6 degree cant of the captured eye pose, the same cant as the other Crystal Super QLED engines. Set Max FOV to 111.3x107.3 to render exactly the field the native profile shows.";
+	crystalSuperUltrawideLikePimax.author = "Pimax, Yar, SBoys3";
+	crystalSuperUltrawideLikePimax.creationDate = 1787961600.0;
+	crystalSuperUltrawideLikePimax.type = "RadialBezier";
+	crystalSuperUltrawideLikePimax.offsetX = -6.38f;
+	crystalSuperUltrawideLikePimax.offsetY = 6.38f;
+	crystalSuperUltrawideLikePimax.eyeRotationOffset = -3.0;
+	// crystalSuperUltrawideLikePimax.recommendedMaxFovX = 111.3;
+	// crystalSuperUltrawideLikePimax.recommendedMaxFovY = 107.3;
+	crystalSuperUltrawideLikePimax.distortions = {
+		0.00, 0.000,
+		2.50, 5.401,
+		5.00, 10.782,
+		10.0, 21.558,
+		15.0, 32.241,
+		20.0, 42.764,
+		25.0, 53.018,
+		30.0, 62.918,
+		35.0, 72.286,
+		40.0, 81.020,
+		45.0, 88.966,
+		47.5, 92.620,
+		50.0, 96.090,
+		52.5, 99.265,
+		55.0, 101.656,
+		57.5, 104.180,
+		60.0, 106.978,
+		62.5, 110.070,
+		65.0, 113.448,
+		67.5, 117.313
+	};
+	crystalSuperUltrawideLikePimax.distortionsRed = crystalSuper50PPDDefault.distortionsRed;
+	crystalSuperUltrawideLikePimax.distortionsBlue = crystalSuper50PPDDefault.distortionsBlue;
+	builtInDistortionProfiles[crystalSuperUltrawideLikePimax.name] = crystalSuperUltrawideLikePimax;
 	
 
 	DistortionProfileConfig crystalOGLikePimax = {};
@@ -459,13 +575,13 @@ bool PopulateBuiltInDistortionProfiles(){
 	crystalOGLikePimax.name = "Crystal OG Default";
 	crystalOGLikePimax.device = {"CrystalOG", "CrystalLight"};
 	crystalOGLikePimax.modifiedTime = 0;
-	crystalOGLikePimax.description = "Distortion profile for the Pimax Crystal fitted from a capture of the distortion mesh rendered by the Pimax compositor. The chromatic aberration was used from the old Crystal Super test profile. The optical center sits 7.0% above the panel center, so the field reaches noticeably further down than up, and the profile follows the capture within 0.1 degrees. The eye rotation offset brings the configured 4 degrees to the 5 degree cant of the captured eye pose. Set Max FOV to 92.3x93.1 to render exactly the field the native profile shows.";
+	crystalOGLikePimax.description = "Distortion profile for the Pimax Crystal fitted from a capture of the distortion mesh rendered by the Pimax compositor. The chromatic aberration was used from the old Crystal Super test profile. The optical center sits 7.0% above the panel center, so the field reaches noticeably further down than up, and the profile follows the capture within 0.1 degrees. Set Max FOV to 92.3x93.1 to render exactly the field the native profile shows.";
 	crystalOGLikePimax.author = "Pimax, Yar, SBoys3";
 	crystalOGLikePimax.creationDate = 1786838400.0;
 	crystalOGLikePimax.type = "RadialBezier";
 	crystalOGLikePimax.offsetX = 0.0f;
 	crystalOGLikePimax.offsetY = 7.04f;
-	crystalOGLikePimax.eyeRotationOffset = 1.0;
+	crystalOGLikePimax.eyeRotationOffset = 0.0;
 	// crystalOGLikePimax.recommendedMaxFovX = 92.3;
 	// crystalOGLikePimax.recommendedMaxFovY = 93.1;
 	crystalOGLikePimax.distortions = {

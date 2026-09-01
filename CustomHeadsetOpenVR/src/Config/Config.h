@@ -366,16 +366,16 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper57PPD;
-			distortionProfile = "Dream Air Default";
+			distortionProfile = "Crystal Super 57ppd Default";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
 			fovBurnInPrevention = false; // not needed on LCD
-			maxFovX = 100;
-			maxFovY = 90;
+			maxFovX = 89;
+			maxFovY = 86;
 			edidVendorId = 21594; // VRT
 			displayRotation = 2;
 			resolutionX = 3840;
 			resolutionY = 3744;
-			eyeRotation = 7;
+			eyeRotation = 6;
 			enableEyeTracking = true;
 		}
 	};
@@ -392,8 +392,8 @@ public:
 			distortionProfile = "Crystal Super Ultrawide Default";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
 			fovBurnInPrevention = false; // not needed on LCD
-			maxFovX = 113;
-			maxFovY = 108;
+			maxFovX = 111;
+			maxFovY = 107;
 			edidVendorId = 21594; // VRT
 			displayRotation = 2;
 			resolutionX = 3840;
@@ -437,7 +437,7 @@ public:
 			distortionProfile = "Crystal OG Default";
 			distortionProfileDeviceType = "CrystalLight";
 			fovBurnInPrevention = false; // not needed on LCD
-			maxFovX = 93;
+			maxFovX = 92;
 			maxFovY = 93;
 			edidVendorId = 53826; // PVR
 			displayRotation = 1;
