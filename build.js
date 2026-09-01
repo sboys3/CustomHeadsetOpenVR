@@ -34,6 +34,7 @@ for (let i = 0; i < args.length; i++) {
 			console.log('  --no-driver           Skip building the driver')
 			console.log('  --no-gui              Skip building the GUI')
 			console.log('')
+			process.exit(1)
 			break
 	}
 }
@@ -336,6 +337,82 @@ function cleanStagingDir(dir) {
 	}
 }
 
+// --- Archive debug artifacts (pdb, etc.) before cleaning ---
+function findTar() {
+	try {
+		let result = child_process.spawnSync("tar", ["--help"], { windowsHide: true, encoding: "utf8" })
+		let help = (result.stdout || "") + (result.stderr || "")
+		if (result.status === 0 && /xz/i.test(help)) {
+			return "tar"
+		}
+	} catch (e) {}
+	return null
+}
+
+function formatLocalDateTime(d) {
+	let pad = (n) => String(n).padStart(2, "0")
+	return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`
+}
+
+function collectDebugArtifacts(dir, results) {
+	let skipExtensions = new Set([".pdb", ".exp", ".lib", ".ilk", ".lastbuildstate"])
+
+	if (!fs.existsSync(dir)) return
+
+	let entries = fs.readdirSync(dir, { withFileTypes: true })
+	for (let entry of entries) {
+		let fullPath = path.join(dir, entry.name)
+
+		if (entry.isDirectory()) {
+			collectDebugArtifacts(fullPath, results)
+		} else {
+			let ext = path.extname(entry.name).toLowerCase()
+			if (skipExtensions.has(ext)) {
+				results.push(fullPath)
+			}
+		}
+	}
+}
+
+function archiveDebugArtifacts() {
+	let debugArtifacts = []
+	collectDebugArtifacts(outputDir, debugArtifacts)
+
+	if (debugArtifacts.length === 0) return
+
+	if (!findTar()) {
+		console.log("tar with xz support not found; debug information will be deleted without archiving.")
+		return
+	}
+
+	let debugDir = path.join(__dirname, "output", "debug")
+	fs.mkdirSync(debugDir, { recursive: true })
+	let archiveName = `CustomHeadset-${version}${vendorTag}-Windows-${formatLocalDateTime(new Date())}.tar.xz`
+	let archivePath = path.join(debugDir, archiveName)
+
+	if (fs.existsSync(archivePath)) {
+		console.warn(`Debug archive already exists, skipping: ${archivePath}`)
+		return
+	}
+
+	// Write file list (relative to outputDir, forward-slash separated) for tar -T
+	let listFile = path.join(debugDir, ".debug-artifacts-list.txt")
+	let relPaths = debugArtifacts.map((f) => path.relative(outputDir, f).split(path.sep).join("/"))
+	fs.writeFileSync(listFile, relPaths.join("\n") + "\n", "utf8")
+
+	try {
+		child_process.execSync(
+			`tar -cJf "${archivePath}" -C "${outputDir}" -T "${listFile}"`,
+			{ stdio: "inherit", windowsHide: true, cwd: __dirname }
+		)
+		console.log(`Archived debug information to: ${archivePath}`)
+	} catch (e) {
+		console.error(`Failed to archive debug information: ${e.message}`)
+	} finally {
+		try { fs.unlinkSync(listFile) } catch (e) {}
+	}
+}
+
 // --- Run both builds in parallel ---
 async function main() {
 	try {
@@ -347,6 +424,7 @@ async function main() {
 		// Clean staging directory of build artifacts
 		console.log("")
 		console.log("=== Cleaning staging artifacts ===")
+		archiveDebugArtifacts()
 		cleanStagingDir(outputDir)
 		console.log("Staging cleanup complete.")
 

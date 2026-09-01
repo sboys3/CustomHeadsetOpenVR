@@ -92,7 +92,7 @@
   } @else {
   <div class="field">
     <div class="title">
-      <span i18n>IPD</span>
+      <span i18n>Rendered IPD</span>
       <app-field-tip [info]="config().ipdInfo" />
       <app-reset-button [canReset]="settings.hardwareIpd !== defaults.hardwareIpd || settings.ipd !== defaults.ipd"
           (resetClick)="defaults.hardwareIpd ? resetIpd() : resetOption('ipd')"></app-reset-button>

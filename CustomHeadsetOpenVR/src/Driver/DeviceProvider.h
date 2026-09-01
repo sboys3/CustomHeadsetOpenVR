@@ -50,6 +50,7 @@ public:
 	// set to true once any headset connects to SteamVR
 	static bool hasHeadsetConnected;
 private:
+	void TryPimaxSlamConnect();
 	struct QueuedEvent {
 		vr::EVREventType eventType;
 		vr::VREvent_Data_t eventData;

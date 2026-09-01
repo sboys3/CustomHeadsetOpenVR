@@ -555,10 +555,10 @@ void PvrThread(){
 					DriverLog("Destroying PVR session");
 				}
 				pvr_destroySession(s_pvrSession);
-				// pvr_shutdown(s_pvr);
+				pvr_shutdown(s_pvr);
 				s_info.pvrConnected = false;
 				s_pvrSession = {};
-				// s_pvr = {};
+				s_pvr = {};
 				wasEverSuccessful = false;
 			} else {
 				wasEverSuccessful = true;

@@ -71,6 +71,7 @@
     <ClCompile Include="src\Headsets\FakeHeadset.cpp" />
     <ClCompile Include="src\Headsets\MeganeX8K.cpp" />
     <ClCompile Include="src\Headsets\GenericHeadset.cpp" />
+    <ClCompile Include="src\Headsets\NotConnectedPlaceholder.cpp" />
     <ClCompile Include="src\Headsets\PimaxSlam.cpp" />
     <ClCompile Include="src\Helpers\DisplayHelper.cpp" />
     <ClCompile Include="src\Helpers\EyeTrackingOutput.cpp" />

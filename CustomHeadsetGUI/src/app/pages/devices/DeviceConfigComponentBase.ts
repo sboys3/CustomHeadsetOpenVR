@@ -156,6 +156,15 @@ export abstract class DeviceConfigComponentBase<T extends { enable: boolean }> i
             
             this.profiles = this.profiles.map((profile) => ({...profile, displayName: this.displayNames.get(profile.name) || profile.name}))
             
+            // Always show the default distortion profile at the top of the drop-down
+            if (defaultProfileName) {
+                const defaultIdx = this.profiles.findIndex(p => p.name === defaultProfileName);
+                if (defaultIdx > 0) {
+                    const [defaultProfile] = this.profiles.splice(defaultIdx, 1);
+                    this.profiles.unshift(defaultProfile);
+                }
+            }
+            
             if(info?.defaultSettings?.customShader?.saturation && this.rootSetting && this.rootSetting?.customShader?.chroma != info?.defaultSettings?.customShader?.chroma && (this?.rootSetting?.customShader?.saturation == undefined || this.rootSetting?.customShader?.saturation == info.defaultSettings?.customShader?.saturation)) {
                 // migrate chroma to saturation if chroma is set and saturation is not
                 this.rootSetting.customShader.saturation = this.rootSetting.customShader.chroma

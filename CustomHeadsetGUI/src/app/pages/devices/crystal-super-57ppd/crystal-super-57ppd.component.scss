@@ -10,7 +10,9 @@
     gap: 8px;
     padding: 16px;
     margin-bottom: 16px;
-    background-color: rgba(255, 152, 0, 0.1);
-    border: 1px solid var(--mat-sys-error);
+    // background-color: rgba(255, 152, 0, 0.1);
+    // border: 1px solid var(--mat-sys-error);
+    background-color: rgba(255, 225, 0, 0.1);
+    border: 1px solid rgba(255, 225, 0, 0.7);
     border-radius: 4px;
 }

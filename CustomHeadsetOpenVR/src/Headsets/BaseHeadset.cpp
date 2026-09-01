@@ -60,19 +60,19 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 			case Config::HeadsetType::DreamAirSE:
 				folderName = "dreamair";
 				break;
-			// case Config::HeadsetType::CrystalSuper50PPD:
-			// case Config::HeadsetType::CrystalSuper57PPD:
-			// case Config::HeadsetType::CrystalSuperUltrawide:
-			// case Config::HeadsetType::CrystalSuperMicroOLED:
-			// case Config::HeadsetType::CrystalLight:
-			// case Config::HeadsetType::CrystalOG:
-			// case Config::HeadsetType::Pimax5KSuper:
-			// case Config::HeadsetType::Pimax5KPlus:
-			// case Config::HeadsetType::Pimax8KX:
-			// case Config::HeadsetType::Pimax8KPlus:
-			// case Config::HeadsetType::PimaxArtisan:
-			// 	folderName = "crystal";
-			// 	break;
+			case Config::HeadsetType::CrystalSuper50PPD:
+			case Config::HeadsetType::CrystalSuper57PPD:
+			case Config::HeadsetType::CrystalSuperUltrawide:
+			case Config::HeadsetType::CrystalSuperMicroOLED:
+			case Config::HeadsetType::CrystalLight:
+			case Config::HeadsetType::CrystalOG:
+			case Config::HeadsetType::Pimax5KSuper:
+			case Config::HeadsetType::Pimax5KPlus:
+			case Config::HeadsetType::Pimax8KX:
+			case Config::HeadsetType::Pimax8KPlus:
+			case Config::HeadsetType::PimaxArtisan:
+				folderName = "crystal";
+				break;
 		}
 		if(folderName != ""){
 			// update icons

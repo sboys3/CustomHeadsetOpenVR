@@ -24,7 +24,7 @@
                         <ng-container matColumnDef="details">
                             <th mat-header-cell *matHeaderCellDef i18n>Type</th>
                             <td mat-cell *matCellDef="let profile" class="details-cell">
-                                <div class="details-device" matTooltip="Target Device" i18n-matTooltip>{{ profile.device ?? 'Unknown' }}</div>
+                                <div class="details-device" [matTooltip]="'Target Device' + (profile.device ? ': ' + profile.device.toString() : '')" i18n-matTooltip>{{ profile.device ? profile.device.toString().slice(0, 17) + (profile.device.toString().length > 17 ? "..." : "") : 'Unknown' }}</div>
                                 <div class="details-meta">
                                     <span class="details-type" matTooltip="Distortion Algorithm" i18n-matTooltip>{{ profile.type ?? 'N/A' }}</span>
                                     <span class="details-separator">·</span>
@@ -93,7 +93,7 @@
                     <ng-container matColumnDef="details">
                         <th mat-header-cell *matHeaderCellDef i18n>Type</th>
                         <td mat-cell *matCellDef="let profile" class="details-cell">
-                            <div class="details-device" matTooltip="Target Device" i18n-matTooltip>{{ profile.device ? profile.device.toString().slice(0, 15) + (profile.device.toString().length > 15 ? "..." : "") : 'Unknown' }}</div>
+                            <div class="details-device" [matTooltip]="'Target Device' + (profile.device ? ': ' + profile.device.toString() : '')" i18n-matTooltip>{{ profile.device ? profile.device.toString().slice(0, 17) + (profile.device.toString().length > 17 ? "..." : "") : 'Unknown' }}<span i18n style="display: none;">Target Device</span></div>
                             <div class="details-meta">
                                 <span class="details-type" matTooltip="Distortion Algorithm" i18n-matTooltip>{{ profile.type ?? 'N/A' }}</span>
                                 <span class="details-separator">·</span>
