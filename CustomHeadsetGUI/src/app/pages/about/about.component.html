@@ -7,7 +7,7 @@
     <div class="title" i18n>App Version</div>
     <div class="control">
         @if(aus.updateInfo();as update){
-        <span>{{update.currentVersion}}</span>
+        <span>{{update.currentVersion}} </span>
         @if(update.updateAvailable){
         <a (click)="openExternal($event, update.url)" [href]="update.url">
             <span i18n>New version available</span><mat-icon class="warn-color" style="vertical-align: middle;">priority_high</mat-icon>

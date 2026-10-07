@@ -6,6 +6,7 @@
 #include "DriverLockout.h"
 
 #include <chrono>
+#include <filesystem>
 
 #include "Hooking/InterfaceHookInjector.h"
 
@@ -50,6 +51,9 @@ vr::EVRInitError CustomHeadsetDeviceProvider::Init(vr::IVRDriverContext *pDriver
 	driverConfigLoader.info.steamvrResources = driverPath;
 	vr::VRResources()->GetResourceFullPath(("{" + driverName + "}").c_str(), "", driverPath, sizeof(driverPath));
 	driverConfigLoader.info.driverResources = driverPath;
+	if(driverConfigLoader.info.steamvrResources != ""){
+		driverConfigLoader.info.steamvrRoot = (std::filesystem::path(driverConfigLoader.info.steamvrResources) / "..").lexically_normal().string();
+	}
 	
 	DriverLog("Initializing %s", driverName.c_str());
 	
@@ -363,13 +367,10 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		// TODO: validate the interface versions of drivers and make the shims conform to versions to prevent potential crashes
 		
 		
-		#ifdef __linux__
-		PimaxCommon::TryDirectConnection();
-		if(PimaxCommon::GetInfo().directConnected){
-			DriverLog("Pimax direct connection detected");
-			PISTARTLINUX
-		}
+		#ifdef PISTARTHMD
+		PISTARTHMD
 		#endif
+		
 		if(PimaxCommon::IsLighthouseHeadsetConnected()){
 			PimaxLighthouseShim* pimaxLighthouseShim = new PimaxLighthouseShim();
 			pimaxLighthouseShim->deviceProvider = this;

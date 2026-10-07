@@ -3,6 +3,7 @@ import { get_platform, is_process_running, kill_process, launch_process } from '
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { AppSettingService } from './app-setting.service';
 import { DriverSettingService } from './driver-setting.service';
+import { SystemDiagnosticService } from './system-diagnostic.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { DriverSettingService } from './driver-setting.service';
 export class PimaxLauncherService {
   private ass = inject(AppSettingService);
   private dss = inject(DriverSettingService);
+  private sds = inject(SystemDiagnosticService);
 
   public isLaunching = signal(false);
   private autoLaunchTriggered = false;
@@ -161,25 +163,6 @@ export class PimaxLauncherService {
     }
 
     // Immediately launch SteamVR
-    const steamvrPaths = [
-      'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
-      'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
-    ];
-
-    for (const path of steamvrPaths) {
-      const success = await launch_process(path, []);
-      if (success) {
-        console.log('SteamVR launched successfully from', path);
-        return;
-      }
-    }
-
-    // Fallback to Steam protocol URL
-    try {
-      await openUrl('steam://rungameid/250820');
-      console.log('SteamVR launch requested via Steam protocol');
-    } catch (error) {
-      console.log('Failed to launch SteamVR:', error);
-    }
+    await this.sds.launchSteamVR()
   }
 }

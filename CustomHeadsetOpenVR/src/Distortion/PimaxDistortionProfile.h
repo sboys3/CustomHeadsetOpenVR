@@ -1,5 +1,6 @@
 #pragma once
 #include "DistortionProfile.h"
+#include "../Config/Config.h"
 
 #include <cstdint>
 

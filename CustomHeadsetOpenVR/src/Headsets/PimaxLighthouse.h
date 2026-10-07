@@ -4,6 +4,7 @@
 
 class PimaxLighthouseShim : public BaseHeadsetShim, public PimaxCommon{
 public:
+	PimaxLighthouseShim();
 	// function that returns if this is a Pimax headset
 	virtual bool IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container) override;
 	// function that returns the config for this headset
@@ -20,6 +21,8 @@ public:
 	virtual void RunPvrBackground() override;
 	// forward events
 	virtual void HandleEvent(const vr::VREvent_t& event) override;
+	// return the camera component if passthrough is enabled
+	virtual void PosTrackedDeviceGetComponent(const char*& pchComponentNameAndVersion, void*& returnComponent) override;
 
 private:
 };

@@ -197,6 +197,12 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 		if(headsetData["forcePimaxPassthrough"].is_boolean()){
 			pimaxConfig->forcePimaxPassthrough = headsetData["forcePimaxPassthrough"].get<bool>();
 		}
+		if(headsetData["enablePimaxHandTracking"].is_boolean()){
+			pimaxConfig->enablePimaxHandTracking = headsetData["enablePimaxHandTracking"].get<bool>();
+		}
+		if(headsetData["pimaxLegacyHandTrackingInput"].is_boolean()){
+			pimaxConfig->pimaxLegacyHandTrackingInput = headsetData["pimaxLegacyHandTrackingInput"].get<bool>();
+		}
 	}
 }
 
@@ -581,6 +587,8 @@ ordered_json baseHeadsetInfo(Config::BaseHeadsetConfig& headsetConfig){
 		result["recenterPimaxPlayspace"] = pimaxConfig->recenterPimaxPlayspace;
 		result["enablePimaxPassthrough"] = pimaxConfig->enablePimaxPassthrough;
 		result["forcePimaxPassthrough"] = pimaxConfig->forcePimaxPassthrough;
+		result["enablePimaxHandTracking"] = pimaxConfig->enablePimaxHandTracking;
+		result["pimaxLegacyHandTrackingInput"] = pimaxConfig->pimaxLegacyHandTrackingInput;
 	}
 	return result;
 }
@@ -597,133 +605,138 @@ void ConfigLoader::WriteInfo(){
 		#endif
 		return;
 	}
-	Config defaultSettings = {};
-	std::map<std::string,int> emptyObject = {};
-	ordered_json data = {
-		{"about", "This file is not for configuration. It provides info from the driver for other utilities to use."},
-		{"defaultSettings", {
-			{"meganeX8K", baseHeadsetInfo(defaultSettings.meganeX8K)},
-			{"dreamAir", baseHeadsetInfo(defaultSettings.dreamAir)},
-			{"dreamAirSE", baseHeadsetInfo(defaultSettings.dreamAirSE)},
-			{"crystalSuper50PPD", baseHeadsetInfo(defaultSettings.crystalSuper50PPD)},
-			{"crystalSuper57PPD", baseHeadsetInfo(defaultSettings.crystalSuper57PPD)},
-			{"crystalSuperUltrawide", baseHeadsetInfo(defaultSettings.crystalSuperUltrawide)},
-			{"crystalSuperMicroOLED", baseHeadsetInfo(defaultSettings.crystalSuperMicroOLED)},
-			{"crystalLight", baseHeadsetInfo(defaultSettings.crystalLight)},
-			{"crystalOG", baseHeadsetInfo(defaultSettings.crystalOG)},
-			{"pimax5KSuper", baseHeadsetInfo(defaultSettings.pimax5KSuper)},
-			{"pimax5KPlus", baseHeadsetInfo(defaultSettings.pimax5KPlus)},
-			{"pimax8KX", baseHeadsetInfo(defaultSettings.pimax8KX)},
-			{"pimax8KPlus", baseHeadsetInfo(defaultSettings.pimax8KPlus)},
-			{"pimaxArtisan", baseHeadsetInfo(defaultSettings.pimaxArtisan)},
-			{"generalHeadset", {
-				{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
-				{"lighthouseCalibrationDeviceOverride", defaultSettings.generalHeadset.lighthouseCalibrationDeviceOverride},
-			}},
-			{"customShader", {
-				{"enable", defaultSettings.customShader.enable},
-				{"enableForMeganeX8K", defaultSettings.customShader.enableForMeganeX8K},
-				{"enableForPimax", defaultSettings.customShader.enableForPimax},
-				{"enableForOther", defaultSettings.customShader.enableForOther},
-				{"contrast", defaultSettings.customShader.contrast},
-				{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
-				{"contrastLinear", defaultSettings.customShader.contrastLinear},
-				{"contrastPerEye", defaultSettings.customShader.contrastPerEye},
-				{"contrastPerEyeLinear", defaultSettings.customShader.contrastPerEyeLinear},
-				{"contrastLeft", defaultSettings.customShader.contrastLeft},
-				{"contrastMidpointLeft", defaultSettings.customShader.contrastMidpointLeft},
-				{"contrastRight", defaultSettings.customShader.contrastRight},
-				{"contrastMidpointRight", defaultSettings.customShader.contrastMidpointRight},
-				{"saturation", defaultSettings.customShader.saturation},
-				{"gamma", defaultSettings.customShader.gamma},
-				{"subpixelShift", defaultSettings.customShader.subpixelShift},
-				{"disableMuraCorrection", defaultSettings.customShader.disableMuraCorrection},
-				{"disableBlackLevels", defaultSettings.customShader.disableBlackLevels},
-				{"srgbColorCorrection", defaultSettings.customShader.srgbColorCorrection},
-				{"srgbWhitePointCorrection", defaultSettings.customShader.srgbWhitePointCorrection},
-				{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
-				{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
-				{"dither10Bit", defaultSettings.customShader.dither10Bit},
-				{"enableFilterForOverlay", defaultSettings.customShader.enableFilterForOverlay},
-				{"enableFilterForDashboard", defaultSettings.customShader.enableFilterForDashboard},
-				{"samplingFilter", defaultSettings.customShader.samplingFilter},
-				{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
-				{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
-				{"samplingFilterFXAA2CASStrength", defaultSettings.customShader.samplingFilterFXAA2CASStrength},
-				{"samplingFilterFXAA2CASContrast", defaultSettings.customShader.samplingFilterFXAA2CASContrast},
-				{"samplingFilterLumaSharpenStrength", defaultSettings.customShader.samplingFilterLumaSharpenStrength},
-				{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
-				{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
-				{"samplingFilterLumaSharpenRadius", defaultSettings.customShader.samplingFilterLumaSharpenRadius},
-				{"samplingFilterCASStrength", defaultSettings.customShader.samplingFilterCASStrength},
-				{"samplingFilterCASContrast", defaultSettings.customShader.samplingFilterCASContrast},
-				{"colorMultiplier", {
-					{"r", defaultSettings.customShader.colorMultiplier.r},
-					{"g", defaultSettings.customShader.colorMultiplier.g},
-					{"b", defaultSettings.customShader.colorMultiplier.b},
+	try{
+		Config defaultSettings = {};
+		std::map<std::string,int> emptyObject = {};
+		ordered_json data = {
+			{"about", "This file is not for configuration. It provides info from the driver for other utilities to use."},
+			{"defaultSettings", {
+				{"meganeX8K", baseHeadsetInfo(defaultSettings.meganeX8K)},
+				{"dreamAir", baseHeadsetInfo(defaultSettings.dreamAir)},
+				{"dreamAirSE", baseHeadsetInfo(defaultSettings.dreamAirSE)},
+				{"crystalSuper50PPD", baseHeadsetInfo(defaultSettings.crystalSuper50PPD)},
+				{"crystalSuper57PPD", baseHeadsetInfo(defaultSettings.crystalSuper57PPD)},
+				{"crystalSuperUltrawide", baseHeadsetInfo(defaultSettings.crystalSuperUltrawide)},
+				{"crystalSuperMicroOLED", baseHeadsetInfo(defaultSettings.crystalSuperMicroOLED)},
+				{"crystalLight", baseHeadsetInfo(defaultSettings.crystalLight)},
+				{"crystalOG", baseHeadsetInfo(defaultSettings.crystalOG)},
+				{"pimax5KSuper", baseHeadsetInfo(defaultSettings.pimax5KSuper)},
+				{"pimax5KPlus", baseHeadsetInfo(defaultSettings.pimax5KPlus)},
+				{"pimax8KX", baseHeadsetInfo(defaultSettings.pimax8KX)},
+				{"pimax8KPlus", baseHeadsetInfo(defaultSettings.pimax8KPlus)},
+				{"pimaxArtisan", baseHeadsetInfo(defaultSettings.pimaxArtisan)},
+				{"generalHeadset", {
+					{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
+					{"lighthouseCalibrationDeviceOverride", defaultSettings.generalHeadset.lighthouseCalibrationDeviceOverride},
 				}},
+				{"customShader", {
+					{"enable", defaultSettings.customShader.enable},
+					{"enableForMeganeX8K", defaultSettings.customShader.enableForMeganeX8K},
+					{"enableForPimax", defaultSettings.customShader.enableForPimax},
+					{"enableForOther", defaultSettings.customShader.enableForOther},
+					{"contrast", defaultSettings.customShader.contrast},
+					{"contrastMidpoint", defaultSettings.customShader.contrastMidpoint},
+					{"contrastLinear", defaultSettings.customShader.contrastLinear},
+					{"contrastPerEye", defaultSettings.customShader.contrastPerEye},
+					{"contrastPerEyeLinear", defaultSettings.customShader.contrastPerEyeLinear},
+					{"contrastLeft", defaultSettings.customShader.contrastLeft},
+					{"contrastMidpointLeft", defaultSettings.customShader.contrastMidpointLeft},
+					{"contrastRight", defaultSettings.customShader.contrastRight},
+					{"contrastMidpointRight", defaultSettings.customShader.contrastMidpointRight},
+					{"saturation", defaultSettings.customShader.saturation},
+					{"gamma", defaultSettings.customShader.gamma},
+					{"subpixelShift", defaultSettings.customShader.subpixelShift},
+					{"disableMuraCorrection", defaultSettings.customShader.disableMuraCorrection},
+					{"disableBlackLevels", defaultSettings.customShader.disableBlackLevels},
+					{"srgbColorCorrection", defaultSettings.customShader.srgbColorCorrection},
+					{"srgbWhitePointCorrection", defaultSettings.customShader.srgbWhitePointCorrection},
+					{"srgbColorCorrectionMatrix", defaultSettings.customShader.srgbColorCorrectionMatrix},
+					{"lensColorCorrection", defaultSettings.customShader.lensColorCorrection},
+					{"dither10Bit", defaultSettings.customShader.dither10Bit},
+					{"enableFilterForOverlay", defaultSettings.customShader.enableFilterForOverlay},
+					{"enableFilterForDashboard", defaultSettings.customShader.enableFilterForDashboard},
+					{"samplingFilter", defaultSettings.customShader.samplingFilter},
+					{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
+					{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
+					{"samplingFilterFXAA2CASStrength", defaultSettings.customShader.samplingFilterFXAA2CASStrength},
+					{"samplingFilterFXAA2CASContrast", defaultSettings.customShader.samplingFilterFXAA2CASContrast},
+					{"samplingFilterLumaSharpenStrength", defaultSettings.customShader.samplingFilterLumaSharpenStrength},
+					{"samplingFilterLumaSharpenClamp", defaultSettings.customShader.samplingFilterLumaSharpenClamp},
+					{"samplingFilterLumaSharpenPattern", defaultSettings.customShader.samplingFilterLumaSharpenPattern},
+					{"samplingFilterLumaSharpenRadius", defaultSettings.customShader.samplingFilterLumaSharpenRadius},
+					{"samplingFilterCASStrength", defaultSettings.customShader.samplingFilterCASStrength},
+					{"samplingFilterCASContrast", defaultSettings.customShader.samplingFilterCASContrast},
+					{"colorMultiplier", {
+						{"r", defaultSettings.customShader.colorMultiplier.r},
+						{"g", defaultSettings.customShader.colorMultiplier.g},
+						{"b", defaultSettings.customShader.colorMultiplier.b},
+					}},
+				}},
+				{"forceTracking", defaultSettings.forceTracking},
+				{"forceTrackingHeadsetOnly", defaultSettings.forceTrackingHeadsetOnly},
+				{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},
+				{"onlyHandlePrivateFunctionality", defaultSettings.onlyHandlePrivateFunctionality},
+				// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
 			}},
-			{"forceTracking", defaultSettings.forceTracking},
-			{"forceTrackingHeadsetOnly", defaultSettings.forceTrackingHeadsetOnly},
-			{"takeCompositorScreenshots", defaultSettings.takeCompositorScreenshots},
-			{"onlyHandlePrivateFunctionality", defaultSettings.onlyHandlePrivateFunctionality},
-			// {"watchDistortionProfiles", defaultSettings.watchDistortionProfiles}
-		}},
-		{"builtInDistortionProfiles", emptyObject},
-		{"resolution", {
-			{"fovX", info.renderFovX},
-			{"fovY", info.renderFovY},
-			{"fovMaxX", info.renderFovMaxX},
-			{"fovMaxY", info.renderFovMaxY},
-			{"combinedFovX", info.combinedFovX},
-			{"combinedFovY", info.combinedFovY},
-			{"renderResolution1To1X", info.renderResolution1To1X},
-			{"renderResolution1To1Y", info.renderResolution1To1Y},
-			{"renderResolution1To1Percent", info.renderResolution1To1Percent},
-			{"renderResolution100PercentX", info.renderResolution100PercentX},
-			{"renderResolution100PercentY", info.renderResolution100PercentY},
-			{"outputResolutionX", info.outputResolutionX},
-			{"outputResolutionY", info.outputResolutionY},
-		}},
-		{"connectedHeadset", (int)info.connectedHeadset},
-		{"nonNativeHeadsetFound", info.nonNativeHeadsetFound},
-		{"isDashboardOpen", info.isDashboardOpen},
-		{"debugLog", info.debugLog},
-		{"driverName", info.driverName},
-		{"driverResources", info.driverResources},
-		{"steamvrResources", info.steamvrResources},
-		{"driverVersion", driverVersion}
-	};
-	ordered_json& distortionProfilesJson = data["builtInDistortionProfiles"];
-	for(auto profilePair : builtInDistortionProfiles){
-		auto profile = profilePair.second;
-		// Serialize as single string when there's only one device for backward compatibility
-		ordered_json deviceJson;
-		if(profile.device.size() == 1){
-			deviceJson = profile.device[0];
-		}else{
-			deviceJson = profile.device;
-		}
-		ordered_json profileJson = {
-			{"device", deviceJson},
-			{"description", profile.description},
-			{"author", profile.author},
-			{"creationDate", profile.creationDate},
-			{"type", profile.type},
+			{"builtInDistortionProfiles", emptyObject},
+			{"resolution", {
+				{"fovX", info.renderFovX},
+				{"fovY", info.renderFovY},
+				{"fovMaxX", info.renderFovMaxX},
+				{"fovMaxY", info.renderFovMaxY},
+				{"combinedFovX", info.combinedFovX},
+				{"combinedFovY", info.combinedFovY},
+				{"renderResolution1To1X", info.renderResolution1To1X},
+				{"renderResolution1To1Y", info.renderResolution1To1Y},
+				{"renderResolution1To1Percent", info.renderResolution1To1Percent},
+				{"renderResolution100PercentX", info.renderResolution100PercentX},
+				{"renderResolution100PercentY", info.renderResolution100PercentY},
+				{"outputResolutionX", info.outputResolutionX},
+				{"outputResolutionY", info.outputResolutionY},
+			}},
+			{"connectedHeadset", (int)info.connectedHeadset},
+			{"nonNativeHeadsetFound", info.nonNativeHeadsetFound},
+			{"isDashboardOpen", info.isDashboardOpen},
+			{"debugLog", info.debugLog},
+			{"driverName", info.driverName},
+			{"driverResources", info.driverResources},
+			{"steamvrResources", info.steamvrResources},
+			{"steamvrRoot", info.steamvrRoot},
+			{"driverVersion", driverVersion}
 		};
-		if(profile.type == "RadialBezier"){
-			profileJson["distortions"] = profile.distortions;
-			profileJson["distortionsRed"] = profile.distortionsRed;
-			profileJson["distortionsBlue"] = profile.distortionsBlue;
-			profileJson["legacySmoothing"] = profile.legacySmoothing;
-			profileJson["smoothAmount"] = profile.smoothAmount;
-			profileJson["offsetX"] = profile.offsetX;
-			profileJson["offsetY"] = profile.offsetY;
+		ordered_json& distortionProfilesJson = data["builtInDistortionProfiles"];
+		for(auto profilePair : builtInDistortionProfiles){
+			auto profile = profilePair.second;
+			// Serialize as single string when there's only one device for backward compatibility
+			ordered_json deviceJson;
+			if(profile.device.size() == 1){
+				deviceJson = profile.device[0];
+			}else{
+				deviceJson = profile.device;
+			}
+			ordered_json profileJson = {
+				{"device", deviceJson},
+				{"description", profile.description},
+				{"author", profile.author},
+				{"creationDate", profile.creationDate},
+				{"type", profile.type},
+			};
+			if(profile.type == "RadialBezier"){
+				profileJson["distortions"] = profile.distortions;
+				profileJson["distortionsRed"] = profile.distortionsRed;
+				profileJson["distortionsBlue"] = profile.distortionsBlue;
+				profileJson["legacySmoothing"] = profile.legacySmoothing;
+				profileJson["smoothAmount"] = profile.smoothAmount;
+				profileJson["offsetX"] = profile.offsetX;
+				profileJson["offsetY"] = profile.offsetY;
+			}
+			profileJson["eyeRotationOffset"] = profile.eyeRotationOffset;
+			distortionProfilesJson[profile.name] = profileJson;
 		}
-		profileJson["eyeRotationOffset"] = profile.eyeRotationOffset;
-		distortionProfilesJson[profile.name] = profileJson;
+		infoFile << data.dump(1, '\t');
+	}catch(const std::exception& e){
+		DriverLog("Failed to write info: %s", e.what());
 	}
-	infoFile << data.dump(1, '\t');
 	infoFile.close();
 }
 
@@ -749,6 +762,9 @@ void ConfigLoader::ReadInfo(){
 		}
 		if(data["steamvrResources"].is_string()){
 			info.steamvrResources = data["steamvrResources"].get<std::string>();
+		}
+		if(data["steamvrRoot"].is_string()){
+			info.steamvrRoot = data["steamvrRoot"].get<std::string>();
 		}
 		if(data["connectedHeadset"].is_number()){
 			info.connectedHeadset = (Config::HeadsetType)data["connectedHeadset"].get<int>();

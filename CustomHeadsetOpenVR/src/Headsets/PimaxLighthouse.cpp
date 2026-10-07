@@ -2,6 +2,20 @@
 
 #include "../Helpers/EyeTrackingOutput.h"
 #include "../Helpers/MiscHelper.h"
+#ifdef PVR_EXISTS
+#include "../Helpers/PimaxCamera.h"
+
+#include <memory>
+
+static std::unique_ptr<PimaxCamera> s_cameraDriver;
+#endif
+
+PimaxLighthouseShim::PimaxLighthouseShim(){
+#ifdef PVR_EXISTS
+	// Setting up the camera component must be done early, prior to any GetComponent().
+	s_cameraDriver = PimaxCamera::TryCreatePassthrough();
+#endif
+}
 
 bool PimaxLighthouseShim::IsDesiredHeadset(std::string model, vr::PropertyContainerHandle_t container){
 	std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::Prop_TrackingSystemName_String);
@@ -19,6 +33,15 @@ Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfig(){
 
 Config::BaseHeadsetConfig& PimaxLighthouseShim::GetConfigOld(){
 	return GetHeadsetConfigOld();
+}
+
+void PimaxLighthouseShim::PosTrackedDeviceGetComponent(const char*& pchComponentNameAndVersion, void*& returnComponent){
+	BaseHeadsetShim::PosTrackedDeviceGetComponent(pchComponentNameAndVersion, returnComponent);
+#ifdef PVR_EXISTS
+	if (strcmp(pchComponentNameAndVersion, vr::IVRCameraComponent_Version) == 0 && s_cameraDriver) {
+		returnComponent = s_cameraDriver.get();
+	}
+#endif
 }
 
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){
@@ -45,7 +68,12 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	if (GetConfig().hiddenArea.enable && GetConfig().hiddenArea.autoHiddenArea) {
 		SetVisibilityMeshes();
 	}
+
+	if (s_cameraDriver) {
+		s_cameraDriver->Activate(unObjectId);
+	}
 #endif
+
 	
 	BaseHeadsetShim::PosTrackedDeviceActivate(unObjectId, returnValue);
 }
@@ -110,6 +138,11 @@ void PimaxLighthouseShim::RunFrame(){
 #endif
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
 	eyeTrackingOutput.RunFrame();
+#ifdef PVR_EXISTS
+	if (s_cameraDriver) {
+		s_cameraDriver->RunFrame();
+	}
+#endif
 	
 }
 

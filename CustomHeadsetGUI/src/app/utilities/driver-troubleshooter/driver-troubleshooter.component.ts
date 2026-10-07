@@ -8,6 +8,7 @@ import { SystemDiagnosticService } from '../../services/system-diagnostic.servic
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { launch_process } from '../../tauri_wrapper';
 import { MatIconModule } from '@angular/material/icon';
 import { customHeadsetDriverName } from '../../../environment';
 @Component({
@@ -52,6 +53,15 @@ export class DriverTroubleshooterComponent {
     await openUrl('steam://install/250820')
   }
   async launchSteamVR() {
+    // Prefer the SteamVR root directory reported by the driver, if available
+    const driverReportedPath = await this.sds.getDriverReportedSteamVRLaunchPath();
+    if (driverReportedPath) {
+      const success = await launch_process(driverReportedPath, []);
+      if (success) {
+        console.log('SteamVR launched successfully from driver-reported path', driverReportedPath);
+        return;
+      }
+    }
     await openUrl('steam://rungameid/250820')
   }
 

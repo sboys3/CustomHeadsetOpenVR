@@ -142,6 +142,7 @@ export type BaseHeadsetConfig = {
   // Pimax SLAM-specific settings, only present on Pimax headset configs
   recenterPimaxPlayspace?: boolean;
   enablePimaxPassthrough?: boolean;
+  enablePimaxHandTracking?: boolean;
 };
 
 export type MeganeX8KConfig = BaseHeadsetConfig & {
@@ -245,7 +246,8 @@ export type DriverInfo = {
   resolution: ResolutionInfo,
   driverVersion: string,
   connectedHeadset: number,
-  nonNativeHeadsetFound: boolean
+  nonNativeHeadsetFound: boolean,
+  steamvrRoot?: string
 }
 export type ResolutionInfo = {
   fovX: number,

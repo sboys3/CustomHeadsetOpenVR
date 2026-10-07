@@ -270,6 +270,10 @@ public:
 		bool recenterPimaxPlayspace = true;
 		bool enablePimaxPassthrough = false;
 		bool forcePimaxPassthrough = false;
+		// if hand tracking data should be forwarded to SteamVR
+		bool enablePimaxHandTracking = false;
+		// if the legacy bone transform translation should be used, for testing
+		bool pimaxLegacyHandTrackingInput = false;
 	};
 	
 	class MeganeX8KConfig : public BaseHeadsetConfig{
@@ -740,4 +744,13 @@ extern std::string driverVersion;
 
 #if __has_include("../Driver/HidModifierPrivate.h")
 #define HAS_PRIVATE 1
+#endif
+
+// PVR SDK is Windows-only
+#if __has_include("PVR.h")
+	#ifdef _WIN32
+		#ifndef PVR_EXISTS
+			#define PVR_EXISTS
+		#endif
+	#endif
 #endif

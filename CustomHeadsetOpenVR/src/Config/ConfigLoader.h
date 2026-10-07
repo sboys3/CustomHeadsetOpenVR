@@ -30,6 +30,7 @@ public:
 		std::string driverName = "";
 		std::string driverResources = "";
 		std::string steamvrResources = "";
+		std::string steamvrRoot = "";
 		Config::HeadsetType connectedHeadset = Config::HeadsetType::None;
 		// if a headset that does not use the steamvr compositor is connected
 		bool nonNativeHeadsetFound = false;

@@ -1,6 +1,7 @@
+#include "PimaxDistortionProfile.h"
+
 #ifdef PVR_EXISTS
 
-#include "PimaxDistortionProfile.h"
 #include <algorithm>
 
 #define NOMINMAX

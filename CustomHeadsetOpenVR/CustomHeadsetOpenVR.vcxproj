@@ -34,6 +34,8 @@
     <ClInclude Include="src\Headsets\PimaxLighthouse.h" />
     <ClInclude Include="src\Headsets\PimaxSlam.h" />
     <ClInclude Include="src\Helpers\PimaxCommon.h" />
+    <ClInclude Include="src\Helpers\PimaxHandTracking.h" />
+    <ClInclude Include="src\Helpers\PimaxCamera.h" />
     <ClInclude Include="src\HiddenArea\HiddenArea.h" />
     <ClInclude Include="src\Helpers\AAPVRBlocker.h" />
   </ItemGroup>
@@ -78,6 +80,8 @@
     <ClCompile Include="src\Helpers\AAPVRBlocker.cpp" />
     <ClCompile Include="src\Helpers\MiscHelper.cpp" />
     <ClCompile Include="src\Helpers\PimaxCommon.cpp" />
+    <ClCompile Include="src\Helpers\PimaxHandTracking.cpp" />
+    <ClCompile Include="src\Helpers\PimaxCamera.cpp" />
     <ClCompile Include="src\Helpers\ShaderDecode.cpp" />
     <ClCompile Include="src\HiddenArea\HiddenArea.cpp" />
   </ItemGroup>

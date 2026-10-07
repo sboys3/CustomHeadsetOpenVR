@@ -32,6 +32,7 @@ export class SystemDiagnosticService implements OnDestroy {
   private _steamVrConfig = signal<any>(undefined);
   public readonly steamVrConfig = this._steamVrConfig.asReadonly();
   private cleanUp: (() => void)[] = []
+  private _watchTaskRunning = false;
   private _initTask: Promise<any>;
   public get initTask() {
     return this._initTask;
@@ -41,7 +42,10 @@ export class SystemDiagnosticService implements OnDestroy {
   constructor(public dss: DriverSettingService, public dis: DriverInfoService, private dialog: DialogService, private appSettingService: AppSettingService) {
     let readySetup = false
     effect(() => {
-      this.watchSteamVRSettings();
+      if (!this._watchTaskRunning) {
+        this._watchTaskRunning = true
+        this.watchSteamVRSettings();
+      }
       const ready = this.systemReady()
       if (ready && !readySetup) {
         readySetup = true;
@@ -70,6 +74,8 @@ export class SystemDiagnosticService implements OnDestroy {
         subject.next()
       });
       subject.next()
+    } else {
+      this._watchTaskRunning = false
     }
   }
   async readySetup() {
@@ -485,9 +491,29 @@ export class SystemDiagnosticService implements OnDestroy {
   public async restartCompositor() {
     return await restart_vrcompositor()
   }
+  /**
+   * Get the path to the SteamVR vrstartup executable derived from the SteamVR root
+   * directory reported by the driver (info.json). Returns undefined if the driver
+   * hasn't reported a root directory or the executable doesn't exist there.
+   */
+  public async getDriverReportedSteamVRLaunchPath(): Promise<string | undefined> {
+    const steamvrRoot = this.dis.values()?.steamvrRoot;
+    if (!steamvrRoot) {
+      return undefined;
+    }
+    const platform = await get_platform();
+    const binDir = platform === 'linux' ? 'linux64' : 'win64';
+    const exeName = platform === 'linux' ? 'vrstartup' : 'vrstartup.exe';
+    const path = await join(steamvrRoot, 'bin', binDir, exeName);
+    if (await exists(path)) {
+      return path;
+    }
+    return undefined;
+  }
   public async launchSteamVR(){
     // Try direct SteamVR executable paths first
     const steamvrPaths = [
+      await this.getDriverReportedSteamVRLaunchPath(),
       'C:/Program Files (x86)/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
       'C:/Program Files/Steam/steamapps/common/SteamVR/bin/win64/vrstartup.exe',
       // Linux paths
@@ -495,10 +521,12 @@ export class SystemDiagnosticService implements OnDestroy {
       '/usr/share/steam/steamapps/common/SteamVR/bin/linux64/vrstartup',
     ];
     for (const path of steamvrPaths) {
-      const success = await launch_process(path, []);
-      if (success) {
-        console.log('SteamVR launched successfully from', path);
-        return;
+      if(path){
+        const success = await launch_process(path, []);
+        if (success) {
+          console.log('SteamVR launched successfully from', path);
+          return;
+        }
       }
     }
 
