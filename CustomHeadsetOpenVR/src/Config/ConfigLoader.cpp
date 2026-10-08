@@ -298,6 +298,12 @@ void ConfigLoader::ParseConfig(){
 			if(generalHeadsetData["lighthouseCalibrationDeviceOverride"].is_string()){
 				newConfig.generalHeadset.lighthouseCalibrationDeviceOverride = generalHeadsetData["lighthouseCalibrationDeviceOverride"].get<std::string>();
 			}
+			if(generalHeadsetData["renderResolutionMultiplierX"].is_number()){
+				newConfig.generalHeadset.renderResolutionMultiplierX = generalHeadsetData["renderResolutionMultiplierX"].get<double>();
+			}
+			if(generalHeadsetData["renderResolutionMultiplierY"].is_number()){
+				newConfig.generalHeadset.renderResolutionMultiplierY = generalHeadsetData["renderResolutionMultiplierY"].get<double>();
+			}
 		}
 		if(data["customShader"].is_object()){
 			json customShaderData = data["customShader"];
@@ -378,6 +384,12 @@ void ConfigLoader::ParseConfig(){
 			}
 			if(customShaderData["samplingFilter"].is_string()){
 				newConfig.customShader.samplingFilter = customShaderData["samplingFilter"].get<std::string>();
+			}
+			if(customShaderData["samplingFilterHorizontalPercent"].is_number()){
+				newConfig.customShader.samplingFilterHorizontalPercent = customShaderData["samplingFilterHorizontalPercent"].get<double>();
+			}
+			if(customShaderData["samplingFilterVerticalPercent"].is_number()){
+				newConfig.customShader.samplingFilterVerticalPercent = customShaderData["samplingFilterVerticalPercent"].get<double>();
 			}
 			if(customShaderData["samplingFilterFXAA2SharpenStrength"].is_number()){
 				newConfig.customShader.samplingFilterFXAA2SharpenStrength = customShaderData["samplingFilterFXAA2SharpenStrength"].get<double>();
@@ -628,6 +640,8 @@ void ConfigLoader::WriteInfo(){
 				{"generalHeadset", {
 					{"useViveBluetooth", defaultSettings.generalHeadset.useViveBluetooth},
 					{"lighthouseCalibrationDeviceOverride", defaultSettings.generalHeadset.lighthouseCalibrationDeviceOverride},
+					{"renderResolutionMultiplierX", defaultSettings.generalHeadset.renderResolutionMultiplierX},
+					{"renderResolutionMultiplierY", defaultSettings.generalHeadset.renderResolutionMultiplierY},
 				}},
 				{"customShader", {
 					{"enable", defaultSettings.customShader.enable},
@@ -656,6 +670,8 @@ void ConfigLoader::WriteInfo(){
 					{"enableFilterForOverlay", defaultSettings.customShader.enableFilterForOverlay},
 					{"enableFilterForDashboard", defaultSettings.customShader.enableFilterForDashboard},
 					{"samplingFilter", defaultSettings.customShader.samplingFilter},
+					{"samplingFilterHorizontalPercent", defaultSettings.customShader.samplingFilterHorizontalPercent},
+					{"samplingFilterVerticalPercent", defaultSettings.customShader.samplingFilterVerticalPercent},
 					{"samplingFilterFXAA2SharpenStrength", defaultSettings.customShader.samplingFilterFXAA2SharpenStrength},
 					{"samplingFilterFXAA2SharpenClamp", defaultSettings.customShader.samplingFilterFXAA2SharpenClamp},
 					{"samplingFilterFXAA2CASStrength", defaultSettings.customShader.samplingFilterFXAA2CASStrength},

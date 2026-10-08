@@ -272,6 +272,44 @@
     </div>
 </div>
 }
+@if(typeof defaults.customShader.samplingFilterHorizontalPercent != "undefined" && settings.customShader.samplingFilter != 'None'){
+<div class="field">
+    <div class="title">
+        <span i18n>Filter Horizontal Percentage</span>
+        <app-field-tip i18n-info
+            info="Percentage of the image width that the filter is applied to. Values below 100 crop the filtered region to that size in the center of the image. This can increase performance by restricting intensive filters to only part of the image." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterHorizontalPercent!=defaults.customShader.samplingFilterHorizontalPercent"
+            (resetClick)="nested('customShader').resetOption('samplingFilterHorizontalPercent')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterHorizontalPercent" step="5"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="5" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterHorizontalPercent"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Filter Vertical Percentage</span>
+        <app-field-tip i18n-info
+            info="Percentage of the image height that the filter is applied to. Values below 100 crop the filtered region to that size in the center of the screen. This can increase performance by restricting intensive filters to only part of the image." />
+        <app-reset-button
+            [canReset]="settings.customShader.samplingFilterVerticalPercent!=defaults.customShader.samplingFilterVerticalPercent"
+            (resetClick)="nested('customShader').resetOption('samplingFilterVerticalPercent')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.customShader.samplingFilterVerticalPercent" step="5"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="100" min="0" step="5" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.customShader.samplingFilterVerticalPercent"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+}
 @if(typeof defaults.customShader.enableFilterForOverlay != "undefined"){
 <div class="field">
     <div class="title">
@@ -715,6 +753,54 @@
             (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
 </div>
+@if(advanceMode()){
+
+<div class="field">
+    <div class="section-title">
+        <span i18n>Other Headset Settings</span>
+        <app-field-tip i18n-info
+            info="These settings only apply to SteamVR headset that are not run by this driver." />
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Multiply 100% Width</span>
+        <app-field-note type="steamvrRestart" />
+        <app-field-tip i18n-info
+            info="Multiplies the width of the 100% render resolution reported to SteamVR. This only applies to headsets that are not fully handled by this driver. NOTE: This has the possibility cause incompatibilities in future SteamVR updates." />
+        <app-reset-button
+            [canReset]="settings.generalHeadset.renderResolutionMultiplierX!=defaults.generalHeadset.renderResolutionMultiplierX"
+            (resetClick)="nested('generalHeadset').resetOption('renderResolutionMultiplierX')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.generalHeadset.renderResolutionMultiplierX" step="0.05"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="2.0" min="0.1" step="0.05" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.generalHeadset.renderResolutionMultiplierX"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+<div class="field">
+    <div class="title">
+        <span i18n>Multiply 100% Height</span>
+        <app-field-note type="steamvrRestart" />
+        <app-field-tip i18n-info
+            info="Multiplies the height of the 100% render resolution reported to SteamVR.This only applies to headsets that are not fully handled by this driver. NOTE: This has the possibility cause incompatibilities in future SteamVR updates." />
+        <app-reset-button
+            [canReset]="settings.generalHeadset.renderResolutionMultiplierY!=defaults.generalHeadset.renderResolutionMultiplierY"
+            (resetClick)="nested('generalHeadset').resetOption('renderResolutionMultiplierY')"></app-reset-button>
+    </div>
+    <div class="control">
+        <input matInput [(ngModel)]="settings.generalHeadset.renderResolutionMultiplierY" step="0.05"
+            (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider max="2.0" min="0.1" step="0.05" showTickMarks>
+            <input matSliderThumb [(ngModel)]="settings.generalHeadset.renderResolutionMultiplierY"
+                (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+    </div>
+</div>
+}
 <!-- @if(advanceMode()){
 <div class="field">
     <div class="title">

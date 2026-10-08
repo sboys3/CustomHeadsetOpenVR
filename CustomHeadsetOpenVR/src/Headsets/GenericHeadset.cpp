@@ -36,8 +36,21 @@ void GenericHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRI
 	
 	
 	
-	// currently this does nothing else so disable the shim
-	shimActive = false;
+	// for other headsets keep the shim enabled so the display component can scale the recommended render target size
+	if(Config::IsOtherHeadset(driverConfigLoader.info.connectedHeadset) &&
+		(driverConfig.generalHeadset.renderResolutionMultiplierX != 1.0 || driverConfig.generalHeadset.renderResolutionMultiplierY != 1.0)){
+		shimDisplayComponent = true;
+	}else{
+		// currently this does nothing else so disable the shim
+		shimActive = false;
+	}
+}
+
+void GenericHeadsetShim::PosDisplayComponentGetRecommendedRenderTargetSize(uint32_t *&pnWidth, uint32_t *&pnHeight){
+	if(Config::IsOtherHeadset(driverConfigLoader.info.connectedHeadset)){
+		*pnWidth = (uint32_t)(*pnWidth * driverConfig.generalHeadset.renderResolutionMultiplierX);
+		*pnHeight = (uint32_t)(*pnHeight * driverConfig.generalHeadset.renderResolutionMultiplierY);
+	}
 }
 
 void GenericHeadsetShim::HandleEvent(const vr::VREvent_t &event){

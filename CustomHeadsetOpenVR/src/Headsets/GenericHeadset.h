@@ -11,5 +11,7 @@ public:
 	
 	virtual void PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInitError &returnValue) override;
 	
+	virtual void PosDisplayComponentGetRecommendedRenderTargetSize(uint32_t *&pnWidth, uint32_t *&pnHeight) override;
+	
 	virtual void HandleEvent(const vr::VREvent_t &event) override;
 };

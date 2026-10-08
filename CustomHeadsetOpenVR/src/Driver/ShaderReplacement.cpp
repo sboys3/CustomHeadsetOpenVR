@@ -667,6 +667,14 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	std::string samplingFilterString = "FILTER_" + driverConfig.customShader.samplingFilter;
 	std::transform(samplingFilterString.begin(), samplingFilterString.end(), samplingFilterString.begin(), ::toupper);
 	defines[definesCount++] = {samplingFilterString.c_str(), "1"};
+	std::string samplingFilterHorizontalPercent;
+	std::string samplingFilterVerticalPercent;
+	if(driverConfig.customShader.samplingFilter != "None" && (driverConfig.customShader.samplingFilterHorizontalPercent != 100.0 || driverConfig.customShader.samplingFilterVerticalPercent != 100.0)){
+		samplingFilterHorizontalPercent = std::to_string(driverConfig.customShader.samplingFilterHorizontalPercent);
+		samplingFilterVerticalPercent = std::to_string(driverConfig.customShader.samplingFilterVerticalPercent);
+		defines[definesCount++] = {"FILTER_HORIZONTAL_PERCENT", samplingFilterHorizontalPercent.c_str()};
+		defines[definesCount++] = {"FILTER_VERTICAL_PERCENT", samplingFilterVerticalPercent.c_str()};
+	}
 	std::string sharpStrengthString, sharpClampString, patternString, radiusString, contrastString;
 	if(driverConfig.customShader.samplingFilter == "FXAA2" && driverConfig.customShader.samplingFilterFXAA2SharpenStrength != 0){
 		sharpStrengthString = std::to_string(driverConfig.customShader.samplingFilterFXAA2SharpenStrength);
@@ -1036,6 +1044,8 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.samplingFilterLumaSharpenRadius != driverConfigOld.customShader.samplingFilterLumaSharpenRadius;
 				reloadShaders |= driverConfig.customShader.samplingFilterCASStrength != driverConfigOld.customShader.samplingFilterCASStrength;
 				reloadShaders |= driverConfig.customShader.samplingFilterCASContrast != driverConfigOld.customShader.samplingFilterCASContrast;
+				reloadShaders |= driverConfig.customShader.samplingFilterHorizontalPercent != driverConfigOld.customShader.samplingFilterHorizontalPercent;
+				reloadShaders |= driverConfig.customShader.samplingFilterVerticalPercent != driverConfigOld.customShader.samplingFilterVerticalPercent;
 				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || 
 					driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || 
 					driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;

@@ -465,11 +465,21 @@ float4 CASPass(in Texture2D<float4> sTexColor, float2 texcoord, in float2 invers
 #endif
 
 // #define FILTER_NEARESTNEIGHBOR
-float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy){
+float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy, float4 textureRange){
 	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR) || defined(FILTER_CAS)
 	int2 textureSize = int2(1024,1024);
 	tex.GetDimensions(textureSize.x, textureSize.y);
 	float2 inverseTextureSize = float2(1.0/textureSize.x, 1.0/textureSize.y);
+	
+	#ifdef FILTER_HORIZONTAL_PERCENT
+	float2 filterCover = float2(FILTER_HORIZONTAL_PERCENT * 0.01, FILTER_VERTICAL_PERCENT * 0.01);
+	bool2 filterCoverTest = abs(uv.xy - textureRange.xy) > filterCover * textureRange.zw;
+	if(filterCoverTest.x | filterCoverTest.y){
+		float4 color = tex.Sample(g_sScene, uv);
+		return inputColorProcessor(color);
+	}
+	#endif
+	
 	#endif
 	#ifdef FILTER_FXAA2
 	// FXAA 2
@@ -605,26 +615,31 @@ OutputStruct main(in InputStruct IN)
 	// 	return OUT;
 	// }
 	
+	#ifndef NO_DISTORTION 
+	float4 textureRange = g_SceneTextureData[IN.param4].eye[g_nEye].matTexDetails._m20_m21_m22_m23;
+	#else
+	float4 textureRange = 0.5;
+	#endif
 	
 	float4 col = 1;
 	#ifndef NO_DISTORTION
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col.x = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy).x;
-			col.y = sampleSceneTexture(g_tScene0, IN.uv2.xy, uvDx, uvDy).y;
-			col.z = sampleSceneTexture(g_tScene0, IN.uv3.xy, uvDx, uvDy).z;
+			col.x = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange).x;
+			col.y = sampleSceneTexture(g_tScene0, IN.uv2.xy, uvDx, uvDy, textureRange).y;
+			col.z = sampleSceneTexture(g_tScene0, IN.uv3.xy, uvDx, uvDy, textureRange).z;
 			break;
 		}
 		case 1:{
-			col.x = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy).x;
-			col.y = sampleSceneTexture(g_tScene1, IN.uv2.xy, uvDx, uvDy).y;
-			col.z = sampleSceneTexture(g_tScene1, IN.uv3.xy, uvDx, uvDy).z;
+			col.x = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange).x;
+			col.y = sampleSceneTexture(g_tScene1, IN.uv2.xy, uvDx, uvDy, textureRange).y;
+			col.z = sampleSceneTexture(g_tScene1, IN.uv3.xy, uvDx, uvDy, textureRange).z;
 			break;
 		}
 		default:{
-			col.x = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy).x;
-			col.y = sampleSceneTexture(g_tScene2, IN.uv2.xy, uvDx, uvDy).y;
-			col.z = sampleSceneTexture(g_tScene2, IN.uv3.xy, uvDx, uvDy).z;
+			col.x = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange).x;
+			col.y = sampleSceneTexture(g_tScene2, IN.uv2.xy, uvDx, uvDy, textureRange).y;
+			col.z = sampleSceneTexture(g_tScene2, IN.uv3.xy, uvDx, uvDy, textureRange).z;
 		break;
 	}}
 	#else
@@ -632,15 +647,15 @@ OutputStruct main(in InputStruct IN)
 	float2 uvDy = ddy(IN.uv1.xy);
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy);
+			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange);
 			break;
 		}
 		case 1:{
-			col = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy);
+			col = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange);
 			break;
 		}
 		default:{
-			col = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy);
+			col = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange);
 		break;
 	}}
 	#endif
@@ -652,7 +667,6 @@ OutputStruct main(in InputStruct IN)
 	
 	#ifndef NO_DISTORTION 
 	// clip the edges of the texture as sometimes the UVs only cover a section of a larger texture
-	float4 textureRange = g_SceneTextureData[IN.param4].eye[g_nEye].matTexDetails._m20_m21_m22_m23;
 	float2 redInRange = abs(IN.uv1.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
 	float2 greenInRange = abs(IN.uv2.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
 	float2 blueInRange = abs(IN.uv3.xy - textureRange.xy) <= textureRange.zw ? 1 : 0;
@@ -669,9 +683,9 @@ OutputStruct main(in InputStruct IN)
  	float2 layerGA = sampleSceneTextureBasic(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
  	float2 layerBA = sampleSceneTextureBasic(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
 	#else
- 	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay).ra;
- 	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
- 	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
+ 	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ra;
+ 	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ga;
+ 	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ba;
 	#endif
 	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
 	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);

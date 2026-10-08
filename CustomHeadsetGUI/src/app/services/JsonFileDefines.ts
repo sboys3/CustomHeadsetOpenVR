@@ -83,6 +83,8 @@ export type CustomShaderConfig = {
   enableFilterForOverlay: boolean;
   enableFilterForDashboard: boolean;
   samplingFilter: string;
+  samplingFilterHorizontalPercent: number;
+  samplingFilterVerticalPercent: number;
   samplingFilterFXAA2SharpenStrength: number;
   samplingFilterFXAA2SharpenClamp: number;
   samplingFilterFXAA2CASStrength: number;
@@ -204,6 +206,8 @@ export type PimaxArtisanConfig = BaseHeadsetConfig & {
 export type GeneralHeadsetConfig = {
   useViveBluetooth: boolean;
   lighthouseCalibrationDeviceOverride: string;
+  renderResolutionMultiplierX: number;
+  renderResolutionMultiplierY: number;
 }
 
 export type AppSetting = {

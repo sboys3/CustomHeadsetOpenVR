@@ -110,6 +110,9 @@ struct CustomShaderConfig{
  	// CAS filter parameters
  	double samplingFilterCASStrength = 1.0;
  	double samplingFilterCASContrast = 1.0;
+	// percentage of the image width/height that the filter is applied to, values below 100 crop the filtered region to the center of the image
+	double samplingFilterHorizontalPercent = 50;
+	double samplingFilterVerticalPercent = 60;
 	// color multiplier for tint adjustments
 	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
 };
@@ -154,6 +157,11 @@ public:
 	}
 	static inline bool IsShiftallHeadset(HeadsetType type){
 		return type == HeadsetType::MeganeX8K;
+	}
+	// include all headsets that are not compeltly run in this driver
+	static inline bool IsOtherHeadset(HeadsetType type){
+		return type == HeadsetType::Other ||
+		       type == HeadsetType::Vive;
 	}
 	
 	enum ProximitySensorType{
@@ -644,6 +652,10 @@ public:
 		bool useViveBluetooth = false;
 		// when defined, force this device to be the main lighthouse device used for lighthouse calibration. This is done by telling the lighthouse driver that this device is an HMD while everything else is controllers. That means if this device does not exist, you will get a random device selected as your main device. This can be a serial or device name.
 		std::string lighthouseCalibrationDeviceOverride = "";
+		// multiplier for the 100% render resolution width for other headsets
+		double renderResolutionMultiplierX = 1.0;
+		// multiplier for the 100% render resolution height for other headsets
+		double renderResolutionMultiplierY = 1.0;
 	};
 	GeneralHeadsetConfig generalHeadset = {};
 	
