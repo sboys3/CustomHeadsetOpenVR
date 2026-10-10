@@ -21,7 +21,8 @@
         "resizable": true,
         "fullscreen": false,
         "maximizable": true,
-        "url": "en-US/index.html"
+        "url": "en-US/index.html",
+        "additionalBrowserArgs": "--disable-gpu"
       }
     ],
     "security": {
