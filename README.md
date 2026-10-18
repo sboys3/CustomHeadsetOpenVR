@@ -76,6 +76,17 @@ You may have to go back to older commits if the current one uses windows specifi
 5. `make -j16`
 6. `rsync -a --delete CustomHeadsetOpenVR/ ~/.steam/steam/steamapps/common/SteamVR/drivers/CustomHeadsetOpenVR/`
 
+#### Pimax Crystal Super on Linux (Lighthouse faceplate)
+Tested with a Crystal Super micro-OLED, SteamVR's lighthouse tracking and an RTX 5090. Without the Pimax runtime the
+driver connects to the headset over USB directly at startup. The headset itself has to be kept awake and its panel
+switched on by another program (Pimax Play does this on Windows), and the NVIDIA driver must allow its DSC mode.
+[omarchyvr](https://github.com/artscout/omarchyvr) (`docs/CRYSTAL-SUPER.md`) does both.
+
+Eye tracking: on Linux the driver reads the gaze from an external eye tracker through shared memory, by default
+`/dev/shm/omarchyvr-eye-gaze` (the environment variable `CUSTOM_HEADSET_EYE_GAZE_SHM` overrides the path). The format
+is described in `src/Helpers/SharedMemoryEyeSource.h`. SteamVR then offers `XR_EXT_eye_gaze_interaction` to OpenXR
+apps as on Windows.
+
 ### Manual Configuration
 Enter `%APPDATA%/CustomHeadset` into the file browser top bar to get to the settings folder.  
 Edit the `settings.json` file based on the [Config header file](./CustomHeadsetOpenVR/src/Config/Config.h)  

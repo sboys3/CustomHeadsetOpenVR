@@ -2,6 +2,9 @@
 
 #include "../Helpers/EyeTrackingOutput.h"
 #include "../Helpers/MiscHelper.h"
+#ifndef PVR_EXISTS
+#include "../Helpers/SharedMemoryEyeSource.h"
+#endif
 #ifdef PVR_EXISTS
 #include "../Helpers/PimaxCamera.h"
 
@@ -72,6 +75,11 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	if (s_cameraDriver) {
 		s_cameraDriver->Activate(unObjectId);
 	}
+#else
+	// Without the Pimax runtime (Linux) the gaze comes from an external eye tracker through shared memory.
+	if (GetInfo().hasEyeTracking) {
+		eyeTrackingOutput.Initialize();
+	}
 #endif
 
 	
@@ -81,6 +89,8 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 void PimaxLighthouseShim::SubDeactivate(){
 #ifdef PVR_EXISTS
 	StopEyeTracking();
+#else
+	sharedMemoryEyeSource.Stop();
 #endif
 }
 
@@ -134,6 +144,12 @@ void PimaxLighthouseShim::RunFrame(){
 		StartEyeTracking();
 	} else {
 		StopEyeTracking();
+	}
+#else
+	if(GetInfo().hasEyeTracking && GetConfig().enableEyeTracking){
+		sharedMemoryEyeSource.Start();
+	} else {
+		sharedMemoryEyeSource.Stop();
 	}
 #endif
 	eyeTrackingOutput.ipd = (float)(GetConfig().ipd + GetConfig().ipdOffset);
