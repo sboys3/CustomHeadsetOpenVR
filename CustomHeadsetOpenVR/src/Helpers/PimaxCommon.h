@@ -67,7 +67,7 @@ protected:
 	void SetSceneApplicationProcess(uint32_t pid);
 #endif
 
-	void GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown);
+	void GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown, bool active);
 	void ResetVolumeButtons() {
 		std::lock_guard<std::mutex> lock(volumeButtonsMutex);
 		volumeButtons.Reset();

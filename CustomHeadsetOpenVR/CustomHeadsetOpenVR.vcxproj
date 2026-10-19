@@ -34,7 +34,6 @@
     <ClInclude Include="src\Headsets\PimaxLighthouse.h" />
     <ClInclude Include="src\Headsets\PimaxSlam.h" />
     <ClInclude Include="src\Helpers\PimaxCommon.h" />
-    <ClInclude Include="src\Helpers\PimaxVolumeButtons.h" />
     <ClInclude Include="src\Helpers\PimaxHandTracking.h" />
     <ClInclude Include="src\Helpers\PimaxCamera.h" />
     <ClInclude Include="src\HiddenArea\HiddenArea.h" />

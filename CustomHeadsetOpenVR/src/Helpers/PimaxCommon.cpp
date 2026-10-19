@@ -758,7 +758,7 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 }
 #endif
 
-void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown) {
+void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown, bool active) {
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	HmdButton hmdButtonsState = HmdButton::Button_None;
 	if(s_info.pvrConnected){
@@ -774,7 +774,7 @@ void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& 
 	doubleTap = isButtonPressed(HmdButton::Button_DoubleTap);
 	// Other headsets/runtimes may already handle volume themselves. Limit the
 	// fallback to the reported Crystal Light + OpenPort configuration.
-	const bool enableVolume = pvrButtonsAvailable && s_info.pvrConnected && s_info.isOpenPortEnabled &&
+	const bool enableVolume = active && pvrButtonsAvailable && s_info.pvrConnected && s_info.isOpenPortEnabled &&
 		s_info.headsetType == Config::HeadsetType::CrystalLight;
 	const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::steady_clock::now().time_since_epoch()).count();

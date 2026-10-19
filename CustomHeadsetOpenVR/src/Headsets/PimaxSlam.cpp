@@ -528,7 +528,7 @@ void PimaxSlamDriver::RunPvrBackground() {
 	}
 	// Update the buttons state.
 	bool systemClick = false, doubleTap = false, volumeUp = false, volumeDown = false;
-	GetHmdButtonsState(systemClick, doubleTap, volumeUp, volumeDown);
+	GetHmdButtonsState(systemClick, doubleTap, volumeUp, volumeDown, isActive);
 	if(inputComponents[ComponentSystemClick]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
 	}
