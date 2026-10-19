@@ -51,7 +51,7 @@ Earlier defaults (including 1.3.0) required two combined presses in quick succes
 
 After updating the driver, restart SteamVR. If you have a custom Pimax headset binding for SteamVR Dashboard, select the default binding or change its Open Dashboard action to Single Press to use this behavior.
 
-To check the input, use SteamVR Settings > Controllers > Test Controller (which also supports headset inputs). The system input should activate when both volume buttons are held and release when either is released. To validate the dashboard behavior, turn off motion controllers, open it with one combined press, click an item, close it, and repeat several times, both outside and inside a VR application. Also check that individual volume buttons do not open the dashboard. This binding change still needs hardware validation on Crystal Light with Pimax EVO OpenPort and on other Pimax models.
+To check the input, use SteamVR Settings > Controllers > Test Controller (which also supports headset inputs). The system input should activate when both volume buttons are held and release when either is released. To validate the dashboard behavior, turn off motion controllers, open it with one combined press, click an item, close it, and repeat several times, both outside and inside a VR application. Also check that individual volume buttons do not open the dashboard. The reporter of issue #125 confirmed that this binding change resolves the dashboard issue on Crystal Light with Pimax EVO OpenPort using the existing 1.3.0 driver binary. The full checklist above and other Pimax models still need validation.
 
 
 ## Donations and Affiliates
