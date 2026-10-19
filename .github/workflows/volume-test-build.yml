@@ -1,0 +1,29 @@
+name: Crystal Light volume test build
+on:
+  push:
+    branches: [fix/pimax-individual-volume]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: microsoft/setup-msbuild@v2
+      - name: Test volume gesture handling
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+          cl /nologo /std:c++17 /EHsc /W4 /WX tests\PimaxVolumeButtonsTest.cpp /Fe:volume-tests.exe
+          if errorlevel 1 exit /b 1
+          volume-tests.exe
+          if errorlevel 1 exit /b 1
+      - name: Build Release x64 without installing
+        run: msbuild CustomHeadsetOpenVR.sln /m /p:Configuration=Release /p:Platform=x64 /p:SkipPostBuild=true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CrystalLight-volume-driver
+          path: output/CustomHeadsetOpenVR
+          if-no-files-found: error

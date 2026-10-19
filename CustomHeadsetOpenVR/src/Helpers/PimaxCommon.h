@@ -1,5 +1,6 @@
 #pragma once
 #include "../Config/Config.h"
+#include "PimaxVolumeButtons.h"
 
 #include <atomic>
 #include <string>
@@ -66,9 +67,15 @@ protected:
 	void SetSceneApplicationProcess(uint32_t pid);
 #endif
 
-	void GetHmdButtonsState(bool& systemButton, bool& doubleTap);
+	void GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown);
+	void ResetVolumeButtons() {
+		std::lock_guard<std::mutex> lock(volumeButtonsMutex);
+		volumeButtons.Reset();
+	}
 
 private:
+	PimaxVolumeButtons volumeButtons;
+	std::mutex volumeButtonsMutex;
 	virtual void RunPvrBackground() {}
 #ifdef PVR_EXISTS
 	void EyeTrackingThread();

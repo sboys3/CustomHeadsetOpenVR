@@ -40,6 +40,24 @@
       "sources": [
         {
           "inputs": {
+            "click": {
+              "output": "/actions/system/in/VolumeUp"
+            }
+          },
+          "mode": "button",
+          "path": "/user/head/input/volume_up"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/system/in/VolumeDown"
+            }
+          },
+          "mode": "button",
+          "path": "/user/head/input/volume_down"
+        },
+        {
+          "inputs": {
             "single": {
               "output": "/actions/system/in/opendashboard"
             }

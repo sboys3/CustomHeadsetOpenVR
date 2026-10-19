@@ -374,6 +374,7 @@ void PimaxSlamDriver::PosTrackedDeviceGetComponent(const char*& pchComponentName
 }
 
 void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue) {
+	ResetVolumeButtons();
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
 	vr::VRProperties()->SetStringProperty(container, vr::Prop_TrackingSystemName_String, "aapvr");
@@ -389,6 +390,8 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 	vr::VRDriverInput()->CreateBooleanComponent(
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/volume_up/click", &inputComponents[ComponentVolumeUp]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/volume_down/click", &inputComponents[ComponentVolumeDown]);
 	
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	
@@ -414,6 +417,7 @@ void PimaxSlamDriver::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInit
 }
 
 void PimaxSlamDriver::SubDeactivate() {
+	ResetVolumeButtons();
 	StopPvrTracking();
 	StopEyeTracking();
 	pimaxHandTracking.Stop();
@@ -523,10 +527,16 @@ void PimaxSlamDriver::RunPvrBackground() {
 		}
 	}
 	// Update the buttons state.
-	bool systemClick = false, doubleTap = false;
-	GetHmdButtonsState(systemClick, doubleTap);
+	bool systemClick = false, doubleTap = false, volumeUp = false, volumeDown = false;
+	GetHmdButtonsState(systemClick, doubleTap, volumeUp, volumeDown);
 	if(inputComponents[ComponentSystemClick]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	}
+	if(inputComponents[ComponentVolumeUp]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentVolumeUp], volumeUp, 0);
+	}
+	if(inputComponents[ComponentVolumeDown]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentVolumeDown], volumeDown, 0);
 	}
 	if(inputComponents[ComponentTap]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);

@@ -45,6 +45,7 @@ void PimaxLighthouseShim::PosTrackedDeviceGetComponent(const char*& pchComponent
 }
 
 void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVRInitError& returnValue){
+	ResetVolumeButtons();
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(unObjectId);
 
 #ifdef PVR_EXISTS
@@ -58,6 +59,8 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 	vr::VRDriverInput()->CreateBooleanComponent(
 		container, "/input/system/click", &inputComponents[ComponentSystemClick]);
 	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/tap/click", &inputComponents[ComponentTap]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/volume_up/click", &inputComponents[ComponentVolumeUp]);
+	vr::VRDriverInput()->CreateBooleanComponent(container, "/input/volume_down/click", &inputComponents[ComponentVolumeDown]);
 
 #ifdef PVR_EXISTS
 	if (HasEyeTracking()) {
@@ -79,6 +82,7 @@ void PimaxLighthouseShim::PosTrackedDeviceActivate(uint32_t& unObjectId, vr::EVR
 }
 
 void PimaxLighthouseShim::SubDeactivate(){
+	ResetVolumeButtons();
 #ifdef PVR_EXISTS
 	StopEyeTracking();
 #endif
@@ -114,10 +118,16 @@ void PimaxLighthouseShim::RunFrame(){
 	}
 
 	// Update the buttons state.
-	bool systemClick = false, doubleTap = false;
-	GetHmdButtonsState(systemClick, doubleTap);
+	bool systemClick = false, doubleTap = false, volumeUp = false, volumeDown = false;
+	GetHmdButtonsState(systemClick, doubleTap, volumeUp, volumeDown);
 	if(inputComponents[ComponentSystemClick]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentSystemClick], systemClick, 0);
+	}
+	if(inputComponents[ComponentVolumeUp]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentVolumeUp], volumeUp, 0);
+	}
+	if(inputComponents[ComponentVolumeDown]){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentVolumeDown], volumeDown, 0);
 	}
 	if(inputComponents[ComponentTap]){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentTap], doubleTap, 0);

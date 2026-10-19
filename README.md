@@ -45,7 +45,7 @@ Run `custom-headset-gui.exe` to configure settings.
 Almost all settings will be immediately applied without restarting SteamVR.  
 
 ### Pimax headset buttons
-With the default SteamVR bindings, press and release **Volume+ and Volume- together once** to open the dashboard. While the dashboard is open, aim with your head and use the same combined press to click, including the dashboard's close control. Individual volume buttons retain their volume function. The headset-side double-tap gesture remains assigned to passthrough where supported.
+With the default SteamVR bindings, press and release **Volume+ and Volume- together once** to open the dashboard. While the dashboard is open, aim with your head and use the same combined press to click, including the dashboard's close control. On Crystal Light with OpenPort, an individual Volume+ or Volume- press changes SteamVR volume once when released. Holding a button does not repeat. If both buttons were pressed before releasing them, neither changes volume, even if the presses or releases were staggered. This fallback is disabled on other headset/runtime combinations to avoid duplicating their native volume handling. The headset-side double-tap gesture remains assigned to passthrough where supported.
 
 Earlier defaults (including 1.3.0) required two combined presses in quick succession to open the dashboard, even though clicking inside it only required one. The new default uses SteamVR's `complex_button` / `single` opening action, as used by the Index headset, to remove that double-click timing requirement.
 
