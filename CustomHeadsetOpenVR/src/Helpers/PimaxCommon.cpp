@@ -32,8 +32,8 @@ std::shared_mutex PimaxCommon::pvrLock;
 static PimaxInfo s_info = {};
 
 std::atomic<int> directButtonState{ 0 };
-std::atomic<int> pvrButtonState{ 0 };
-std::atomic<bool> pvrButtonsAvailable{ false };
+// Publish validity and bits together so reconnecting cannot expose stale input.
+std::atomic<int> pvrButtonState{ -1 };
 
 bool HeadsetHasEyeTracking(Config::HeadsetType type){
 	// Crystal OG, Crystal Super (all variants), Dream Air SE, Dream Air.
@@ -529,8 +529,8 @@ void PvrThread(){
 				result = pvr_getHmdStatus(s_pvrSession, &hmdStatus);
 			}
 			
-			pvrButtonsAvailable = result == pvr_success && !hmdStatus.ShouldQuit;
-			pvrButtonState = pvrButtonsAvailable ? pvr_getIntConfig(s_pvrSession, "hmd_buttons", 0) : 0;
+			pvrButtonState = result == pvr_success && !hmdStatus.ShouldQuit
+				? pvr_getIntConfig(s_pvrSession, "hmd_buttons", 0) : -1;
 			
 			pvrEyeRenderInfo eyeInfo[pvrEye_Count] = {};
 			pvr_getEyeRenderInfo(s_pvrSession, pvrEye_Left, &eyeInfo[pvrEye_Left]);
@@ -761,8 +761,9 @@ void PimaxCommon::SetSceneApplicationProcess(uint32_t pid) {
 void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& volumeUp, bool& volumeDown, bool active) {
 	shared_lock_guard<std::shared_mutex> lock(PimaxCommon::pvrLock);
 	HmdButton hmdButtonsState = HmdButton::Button_None;
-	if(s_info.pvrConnected){
-		hmdButtonsState = (HmdButton)((int)hmdButtonsState | pvrButtonState.load());
+	const int pvrButtons = pvrButtonState.load();
+	if(s_info.pvrConnected && pvrButtons >= 0){
+		hmdButtonsState = (HmdButton)((int)hmdButtonsState | pvrButtons);
 	}
 	if(s_info.directConnected){
 		hmdButtonsState = (HmdButton)((int)hmdButtonsState | directButtonState.load());
@@ -774,7 +775,7 @@ void PimaxCommon::GetHmdButtonsState(bool& systemButton, bool& doubleTap, bool& 
 	doubleTap = isButtonPressed(HmdButton::Button_DoubleTap);
 	// Other headsets/runtimes may already handle volume themselves. Limit the
 	// fallback to the reported Crystal Light + OpenPort configuration.
-	const bool enableVolume = active && pvrButtonsAvailable && s_info.pvrConnected && s_info.isOpenPortEnabled &&
+	const bool enableVolume = active && pvrButtons >= 0 && s_info.pvrConnected && s_info.isOpenPortEnabled &&
 		s_info.headsetType == Config::HeadsetType::CrystalLight;
 	const auto nowMs = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::steady_clock::now().time_since_epoch()).count();
