@@ -93,6 +93,33 @@ bool IsNewVersion(const std::string& current, const std::string& latest) {
 	return false;
 }
 
+int LevenshteinDistance(const std::string& a, const std::string& b) {
+	// Edit distance is symmetric, so keep the row dimension on the shorter
+	// string to minimize memory usage.
+	const std::string& from = a.size() > b.size() ? b : a;
+	const std::string& to = a.size() > b.size() ? a : b;
+
+	std::vector<int> previous(to.size() + 1);
+	for (size_t j = 0; j <= to.size(); j++) {
+		previous[j] = static_cast<int>(j);
+	}
+
+	std::vector<int> current(to.size() + 1);
+	for (size_t i = 1; i <= from.size(); i++) {
+		current[0] = static_cast<int>(i);
+		for (size_t j = 1; j <= to.size(); j++) {
+			int substitutionCost = (from[i - 1] == to[j - 1]) ? 0 : 1;
+			int deletion = previous[j] + 1;        // remove from[i - 1]
+			int insertion = current[j - 1] + 1;    // insert to[j - 1]
+			int substitution = previous[j - 1] + substitutionCost;
+			current[j] = std::min({deletion, insertion, substitution});
+		}
+		previous.swap(current);
+	}
+
+	return previous[to.size()];
+}
+
 #ifdef _WIN32
 static std::string WStringToString(const std::wstring& ws) {
 	if (ws.empty()) return "";
@@ -159,7 +186,12 @@ std::string GetInstalledProgramVersion(const std::string& displayName) {
 			if (subKeyResult == ERROR_SUCCESS) {
 				std::wstring displayNameValue;
 				if (ReadRegistryStringValue(hSubKey, L"DisplayName", displayNameValue) && !displayNameValue.empty()) {
-					if (ContainsInsensitive(displayNameValue, searchName)) {
+					std::wstring lowerDisplay(displayNameValue);
+					std::transform(lowerDisplay.begin(), lowerDisplay.end(), lowerDisplay.begin(), towlower);
+					std::wstring lowerSearch(searchName);
+					std::transform(lowerSearch.begin(), lowerSearch.end(), lowerSearch.begin(), towlower);
+					if (ContainsInsensitive(displayNameValue, searchName) ||
+						LevenshteinDistance(WStringToString(lowerDisplay), WStringToString(lowerSearch)) <= 2) {
 						std::wstring versionValue;
 						if (ReadRegistryStringValue(hSubKey, L"DisplayVersion", versionValue)) {
 							resultVersion = WStringToString(versionValue);

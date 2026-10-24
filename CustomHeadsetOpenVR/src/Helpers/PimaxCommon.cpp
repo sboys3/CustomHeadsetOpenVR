@@ -240,7 +240,7 @@ public:
 		if(running){
 			return false;
 		}
-		double now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000.0;
+		double now = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if(now - lastRun < 5){
 			return false;
 		}
@@ -401,6 +401,28 @@ static std::set<PimaxCommon*> sPimaxCommonInstances;
 static std::mutex sPimaxCommonInstanceMutex;
 
 static bool EnsurePvrSession(bool forceTryConnect = false) {
+	// One-time check: PVR can only be initialized if Pimax Play or Pimax Evo is installed.
+	static std::atomic<bool> s_pvrRuntimeChecked = false;
+	static std::atomic<bool> s_pvrRuntimePresent = false;
+	if(!s_pvrRuntimeChecked.load()){
+		std::string pimaxPlayVersion = GetInstalledProgramVersion("PimaxPlay");
+		std::string pimaxEvoVersion = GetInstalledProgramVersion("PimaxEVO");
+		if(!pimaxPlayVersion.empty()){
+			DriverLog("Found installed Pimax Play (version %s)", pimaxPlayVersion.c_str());
+			s_pvrRuntimePresent = true;
+		}
+		if(!pimaxEvoVersion.empty()){
+			DriverLog("Found installed Pimax Evo (version %s)", pimaxEvoVersion.c_str());
+			s_pvrRuntimePresent = true;
+		}
+		if(!s_pvrRuntimePresent){
+			DriverLog("Neither Pimax Play nor Pimax Evo is installed, PVR initialization is locked out.");
+		}
+		s_pvrRuntimeChecked = true;
+	}
+	if(!s_pvrRuntimePresent.load()){
+		return false;
+	}
 	if(s_info.connected && !forceTryConnect){
 		// Don't attempt to connect to the PVR API if it already directly connected to the headset.
 		// Also don't try re-connecting to the PVR API as the PVR thread will handle it

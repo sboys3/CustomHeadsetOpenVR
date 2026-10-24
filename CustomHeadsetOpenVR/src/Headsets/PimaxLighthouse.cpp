@@ -155,7 +155,7 @@ void PimaxLighthouseShim::RunPvrBackground() {
 		pvrHmdStatus hmdStatus = {};
 		pvr_getHmdStatus(GetPvrSession(), &hmdStatus);
 		if(inputComponents[ComponentProximity]){
-			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], hmdStatus.HmdMounted, 0);
+			SetProximity(hmdStatus.HmdMounted);
 		}
 	}
 

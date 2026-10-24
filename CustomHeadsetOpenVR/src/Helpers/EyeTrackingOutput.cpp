@@ -31,7 +31,7 @@ void EyeTrackingOutput::Initialize(){
 
 void EyeTrackingOutput::SetEyeTrackingData(EyeTrackingData data){
 	if(!data.timestamp){
-		data.timestamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() / 1000000.0;
+		data.timestamp = std::chrono::duration<double>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 	}
 	{
 		std::lock_guard<std::mutex> lock(dataLock);
@@ -87,7 +87,7 @@ void EyeTrackingOutput::RunFrame(){
 	vr::IVRDriverInput* driverInput = vr::VRDriverInput();
 	if(driverInput && eyeTrackingComponentHandle != vr::k_ulInvalidInputComponentHandle && localData.timestamp > 0.0){
 		vr::VREyeTrackingData_t eyeTrackingData;
-		double now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() / 1000000.0;
+		double now = std::chrono::duration<double>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 		double timeOffset = localData.timestamp - now;
 		double timeSinceUpdate = now - localData.timestamp;
 		if(timeSinceUpdate < 1.0){

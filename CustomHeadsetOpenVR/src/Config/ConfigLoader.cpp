@@ -487,7 +487,7 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 		// parse with support for comments
 		json data = json::parse(configFile, nullptr, true, true);
 		DistortionProfileConfig profile = {};
-		profile.modifiedTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::filesystem::last_write_time(profilePath).time_since_epoch()).count() / 1000000000.0;
+		profile.modifiedTime = std::chrono::duration<double>(std::filesystem::last_write_time(profilePath).time_since_epoch()).count();
 		profile.name = name;
 		if(data["description"].is_string()){
 			profile.description = data["description"].get<std::string>();

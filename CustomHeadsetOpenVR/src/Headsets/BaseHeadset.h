@@ -45,12 +45,16 @@ public:
 	float fovBurnInOffset = 0;
 	// last color multiplier applied
 	ConfigColor lastColorMultiplier = {};
-	// last time the the headset was detected as moving
+	// last time the headset was detected as moving
 	double lastMovementTime = 0;
 	// last rotation of the headset that was detected as movement
 	vr::HmdMatrix34_t lastMovementRotation = {};
 	// brightness multiplier from for dimming when the headset is not moving
 	double dimmingMultiplier = 1;
+	// last time proximity was input
+	double lastProximityTime = 0;
+	bool lastProximityValue = false;
+	bool lastProximityEnabled = true;
 	// define input components. only the presense is allocated by default
 	enum InputComponents {
 		ComponentSystemClick,
@@ -80,6 +84,9 @@ public:
 	void GetRecommendedRenderTargetSize(uint32_t* renderWidth, uint32_t* renderHeight);
 	
 	void SetIPD(float ipd, float angle = 0, float horizontalOffset = 0);
+	
+	// Use this to set proximity consistently. This will time out after five seconds and fall back to the default movement. Now is optional.
+	void SetProximity(bool inProximity, double now = 0);
 	
 	virtual void RunFrame() override;
 	

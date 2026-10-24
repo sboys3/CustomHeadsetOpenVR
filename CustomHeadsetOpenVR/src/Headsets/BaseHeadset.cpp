@@ -48,7 +48,12 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDR10_Bool, true);
 	// vr::VRProperties()->SetBoolProperty(container, vr::Prop_Hmd_SupportsHDCP14LegacyCompat_Bool, false);
 	
-	vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentProximity]);
+	vr::EVRInputError proximityCreationResult = vr::VRDriverInput()->CreateBooleanComponent(container, "/proximity", &inputComponents[ComponentProximity]);
+	if(proximityCreationResult || !inputComponents[ComponentProximity]){
+		DriverLog("Create proximity input failed with error %i", proximityCreationResult);
+	}else{
+		DriverLog("Create proximity input success %i", inputComponents[ComponentProximity]);
+	}
 	
 	if(GetConfig().replaceIcons){
 		std::string folderName = "";
@@ -377,13 +382,24 @@ void BaseHeadsetShim::SetIPD(float ipd, float angle, float horizontalOffset){
 	vr::VRServerDriverHost()->SetDisplayEyeToHead(0, leftEye, rightEye);
 }
 
+void BaseHeadsetShim::SetProximity(bool inProximity, double now){
+	if(now == 0){
+		now = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+	lastProximityTime = now;
+	if(lastProximityValue != inProximity || std::abs(now - lastProximityTime) > 0.5){
+		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], inProximity, 0);
+		lastProximityValue = inProximity;
+	}
+}
+
 
 void BaseHeadsetShim::RunFrame(){
 	if(!isActive){
 		// don't do anything if not the active device
 		return;
 	}
-	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
+	double now = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 	double frameTime = now - lastFrameTime;
 	if(lastFrameTime == 0){
 		lastFrameTime = now;
@@ -421,7 +437,7 @@ void BaseHeadsetShim::RunFrame(){
 			}
 			dimmingMultiplier = std::max(minBrightness, std::min(1.0, dimmingMultiplier));
 			if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeStationaryDimming && inputComponents[ComponentProximity]){
-				vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], dimmingMultiplier > minBrightness, 0);
+				SetProximity(dimmingMultiplier > minBrightness || now - lastMovementTime < 1, now);
 			}
 		}else{
 			dimmingMultiplier = 1;
@@ -441,15 +457,20 @@ void BaseHeadsetShim::RunFrame(){
 		}
 		
 		if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeAlwaysOn && inputComponents[ComponentProximity]){
-			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], true, 0);
+			SetProximity(true, now);
 		}
 		if(GetConfig().proximitySensorType == Config::ProximitySensorType::ProximitySensorTypeAlwaysOff && inputComponents[ComponentProximity]){
-			vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], false, 0);
+			SetProximity(false, now);
+		}
+		
+		bool isProximitySensorEnabled = std::abs(now - lastProximityTime) < 5 && GetConfig().proximitySensorType != Config::ProximitySensorType::ProximitySensorTypeNone;
+		if(lastProximityEnabled != isProximitySensorEnabled){
+			vr::VRProperties()->SetBoolProperty(container, vr::Prop_ContainsProximitySensor_Bool, isProximitySensorEnabled);
+			lastProximityEnabled = isProximitySensorEnabled;
 		}
 		
 		lastFrameTime = now;
 	}
-	
 	
 	if(driverConfig.hasBeenUpdated || ((now - lastDistortionChangeTime) > 0.5 && needsDistortionFinalization)){
 		UpdateSettings();
@@ -459,7 +480,7 @@ void BaseHeadsetShim::RunFrame(){
 }
 
 void BaseHeadsetShim::UpdateSettings(){
-	double now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000000.0;
+	double now = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 	
 	vr::PropertyContainerHandle_t container = vr::VRProperties()->TrackedDeviceToPropertyContainer(0);
 	

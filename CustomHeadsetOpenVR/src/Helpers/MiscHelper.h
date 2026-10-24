@@ -10,8 +10,14 @@
 bool IsNewVersion(const std::string& current, const std::string& latest);
 
 // Looks up the DisplayVersion from the Windows registry Uninstall keys for a program matching displayName.
-// Searches both 32-bit and 64-bit registry views. Returns empty string if not found.
+// The name must either be contained in (or within a Levenshtein distance of 2 from) the installed
+// program's DisplayName. Searches both 32-bit and 64-bit registry views. Returns empty string if not found.
 std::string GetInstalledProgramVersion(const std::string& displayName);
+
+// Computes the Levenshtein edit distance between two strings: the minimum
+// number of single-character insertions, deletions, or substitutions needed
+// to transform 'a' into 'b'. Case-sensitive.
+int LevenshteinDistance(const std::string& a, const std::string& b);
 
 // Cross-platform sleep helper
 static inline void SleepMs(int ms) {
