@@ -371,6 +371,11 @@ bool CustomHeadsetDeviceProvider::HandleDeviceAdded(const char *&pchDeviceSerial
 		PISTARTHMD
 		#endif
 		
+		#ifndef PVR_EXISTS
+		// Without PVR (Linux) the headset is only known through the direct USB connection, which is otherwise started by
+		// the HID hooks (not available on Linux) or by the Pimax shim itself, so connect before deciding on the shim.
+		PimaxCommon::TryDirectConnection();
+		#endif
 		if(PimaxCommon::IsLighthouseHeadsetConnected()){
 			PimaxLighthouseShim* pimaxLighthouseShim = new PimaxLighthouseShim();
 			pimaxLighthouseShim->deviceProvider = this;
