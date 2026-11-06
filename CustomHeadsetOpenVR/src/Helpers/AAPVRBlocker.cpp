@@ -8,7 +8,7 @@
 
 
 #ifdef PVR_EXISTS
-	#include "C:/Program Files/Pimax/Sdk/Include/PVR_API.h"
+	#include <PVR_API.h>
 #endif
 
 #include <windows.h>

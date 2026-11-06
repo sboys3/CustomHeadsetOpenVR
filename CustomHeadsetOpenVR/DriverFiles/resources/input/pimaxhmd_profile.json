@@ -7,6 +7,14 @@
     "image": "{CustomHeadsetOpenVR}/icons/hmd.svg"
   },
   "input_source": {
+    "/input/volume_up": {
+      "type": "button",
+      "binding_image_point": [ 120, 75 ]
+    },
+    "/input/volume_down": {
+      "type": "button",
+      "binding_image_point": [ 144, 75 ]
+    },
     "/input/system": {
       "type": "button",
       "binding_image_point": [ 132, 75 ]

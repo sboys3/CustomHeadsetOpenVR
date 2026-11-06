@@ -60,6 +60,8 @@ public:
 		ComponentSystemClick,
 		ComponentTap,
 		ComponentProximity,
+		ComponentVolumeUp,
+		ComponentVolumeDown,
 
 		ComponentCount,
 	};
