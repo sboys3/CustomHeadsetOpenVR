@@ -26,7 +26,16 @@ export class DriverSettingService extends JsonSettingServiceBase<Settings> {
   private readonly _distortionProfileList = signal<DistortionProfileFile[]>([]);
   public readonly distortionProfileList = this._distortionProfileList.asReadonly();
   constructor(private pathService: PathsService, driverInfoService: DriverInfoService) {
-    super(pathService.settingPath, pathService.appDataDirPath, computed(() => driverInfoService.values()?.defaultSettings ?? ({} as Settings)), false, true);
+    super(
+      pathService.settingPath,
+      pathService.appDataDirPath,
+      computed(
+        () => driverInfoService.values()?.defaultSettings ?? ({} as Settings),
+        { equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) }
+      ),
+      false,
+      true
+    );
   }
   protected override async init() {
     await super.init();

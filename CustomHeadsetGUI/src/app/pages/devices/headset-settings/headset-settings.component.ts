@@ -172,13 +172,30 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     }
   }
 
+  private lastKnownEdgeFov = new Map<HeadsetType, Partial<Record<'fovMaxOuter' | 'fovMaxInner' | 'fovMaxTop' | 'fovMaxBottom', number>>>();
+
+  private resolveEdgeMaxFov(edge: 'fovMaxOuter' | 'fovMaxInner' | 'fovMaxTop' | 'fovMaxBottom'): number {
+    const headset = this.headsetType();
+    const value = this.headsetMatches() ? this.dis.values()?.resolution?.[edge] : undefined;
+    let cached = this.lastKnownEdgeFov.get(headset);
+    if (value) {
+      if (!cached) {
+        cached = {};
+        this.lastKnownEdgeFov.set(headset, cached);
+      }
+      cached[edge] = value;
+      return Math.ceil(value);
+    }
+    return Math.ceil(cached?.[edge] ?? 90);
+  }
+
   // Computed keys to force slider re-render when max changes
   sliderMaxFovX = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX : this.config().defaultMaxFovX));
   sliderMaxFovY = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY : this.config().defaultMaxFovY));
-  sliderMaxFovOuter = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxOuter || 90 : 90));
-  sliderMaxFovInner = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxInner || 90 : 90));
-  sliderMaxFovTop = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxTop || 90 : 90));
-  sliderMaxFovBottom = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxBottom || 90 : 90));
+  sliderMaxFovOuter = computed(() => this.resolveEdgeMaxFov('fovMaxOuter'));
+  sliderMaxFovInner = computed(() => this.resolveEdgeMaxFov('fovMaxInner'));
+  sliderMaxFovTop = computed(() => this.resolveEdgeMaxFov('fovMaxTop'));
+  sliderMaxFovBottom = computed(() => this.resolveEdgeMaxFov('fovMaxBottom'));
 
   trackBySliderMax(index: number, value: number): number {
     return value;

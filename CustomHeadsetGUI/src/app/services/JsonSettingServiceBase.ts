@@ -79,7 +79,6 @@ export abstract class JsonSettingServiceBase<T> {
                             reason: FileReadErrorReason.ParsingFailed,
                             message: `${e}`
                         });
-                        this._values.set(undefined);
                     }
                 } else {
                     this._readFileError.set({ reason: FileReadErrorReason.NotExists });
