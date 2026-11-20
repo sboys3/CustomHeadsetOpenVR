@@ -14,7 +14,7 @@ import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.compon
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
 import { ColorPickerComponent } from '../../../utilities/color-picker/color-picker.component';
 import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
-import { BaseHeadsetConfig, HeadsetType } from '../../../services/JsonFileDefines';
+import { BaseHeadsetConfig, HeadsetType, ResolutionInfo } from '../../../services/JsonFileDefines';
 
 export interface ResolutionOption {
   name: string;
@@ -175,6 +175,10 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   // Computed keys to force slider re-render when max changes
   sliderMaxFovX = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX : this.config().defaultMaxFovX));
   sliderMaxFovY = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY : this.config().defaultMaxFovY));
+  sliderMaxFovOuter = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxOuter || 90 : 90));
+  sliderMaxFovInner = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxInner || 90 : 90));
+  sliderMaxFovTop = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxTop || 90 : 90));
+  sliderMaxFovBottom = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxBottom || 90 : 90));
 
   trackBySliderMax(index: number, value: number): number {
     return value;
@@ -188,10 +192,15 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     return Math.max(0, horizontalFov - (this.settings?.eyeRotation || 0) * 2);
   }
 
-  showBurnInDeviationNote(maxPossibleFovX: number, maxPossibleFovY: number) {
+  showBurnInDeviationNote(res: ResolutionInfo) {
     if (!this.settings?.fovBurnInPrevention) {
       return false;
     }
-    return this.settings.maxFovX < maxPossibleFovX || this.settings.maxFovY < maxPossibleFovY;
+    return this.settings.maxFovX < res.fovMaxX
+      || this.settings.maxFovY < res.fovMaxY
+      || this.settings.maxFovOuter < res.fovMaxOuter
+      || this.settings.maxFovInner < res.fovMaxInner
+      || this.settings.maxFovTop < res.fovMaxTop
+      || this.settings.maxFovBottom < res.fovMaxBottom;
   }
 }
