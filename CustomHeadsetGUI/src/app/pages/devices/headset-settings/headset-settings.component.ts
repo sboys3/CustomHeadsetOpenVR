@@ -234,8 +234,12 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     return Math.ceil(originalFOV / (this.settings?.fovZoom || 1));
   }
 
-  binocularOverlap(horizontalFov: number) {
-    return Math.max(0, horizontalFov - (this.settings?.eyeRotation || 0) * 2);
+  // The combined FOV counts the outer edges twice plus the eye rotation, so twice the per eye FOV minus the combined FOV leaves twice the inner edge minus rotation.
+  binocularOverlap(res: ResolutionInfo) {
+    if (res.combinedFovX) {
+      return Math.max(0, 2 * res.fovX - res.combinedFovX);
+    }
+    return Math.max(0, res.fovX - (this.settings?.eyeRotation || 0) * 2);
   }
 
   showBurnInDeviationNote(res: ResolutionInfo) {
