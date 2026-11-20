@@ -410,6 +410,22 @@ void RadialBezierDistortionProfile::Initialize(){
 	halfFovTopY *= multiplierY;
 	halfFovBottomY *= multiplierY;
 	
+	// limit each edge on its own so one side can be cropped without changing the others
+	// for example limiting the outer edge reduces the total fov while keeping the stereo overlap
+	// 90 or more means no limit for that edge
+	auto limitEdge = [](float halfFov, float limit){
+		if(limit >= 90.0f){
+			return halfFov;
+		}
+		return std::min(halfFov, std::max(limit, 1.0f));
+	};
+	halfFovOuterX = limitEdge(halfFovOuterX, maxFovOuter);
+	halfFovInnerX = limitEdge(halfFovInnerX, maxFovInner);
+	halfFovTopY = limitEdge(halfFovTopY, maxFovTop);
+	halfFovBottomY = limitEdge(halfFovBottomY, maxFovBottom);
+	fovX = halfFovOuterX + halfFovInnerX;
+	fovY = halfFovTopY + halfFovBottomY;
+	
 	// halfFovY = halfFovX;
 	DriverLog("FOV: %fx%f", fovX * 2, fovY * 2);
 	DriverLog("FOV Halfs: Outer: %f, Inner: %f, Top: %f, Bottom: %f", halfFovOuterX, halfFovInnerX, halfFovTopY, halfFovBottomY);
@@ -428,8 +444,10 @@ void RadialBezierDistortionProfile::Initialize(){
 	// calculate tangents for the edges of the input screen
 	maxHalfFovX = std::max(halfFovOuterX, halfFovInnerX);
 	maxHalfFovY = std::max(halfFovTopY, halfFovBottomY);
-	float edgeTanX = std::tan(maxHalfFovX * kPi / 180.0f);
-	float edgeTanY = std::tan(maxHalfFovY * kPi / 180.0f);
+	// the rendered image spans from one edge tangent to the other, so use the average of both edges
+	// this keeps the render aspect ratio correct when one edge is cropped more than the other
+	float edgeTanX = (std::tan(halfFovOuterX * kPi / 180.0f) + std::tan(halfFovInnerX * kPi / 180.0f)) / 2.0f;
+	float edgeTanY = (std::tan(halfFovTopY * kPi / 180.0f) + std::tan(halfFovBottomY * kPi / 180.0f)) / 2.0f;
 	
 	// calculate the maximum output percentage for the edge of the output
 	float maxOutputPercentageX = SampleFromPoints(distortionsSmoothGreen, edgeTanX);

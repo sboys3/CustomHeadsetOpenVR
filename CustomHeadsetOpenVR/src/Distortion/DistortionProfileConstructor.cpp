@@ -727,6 +727,10 @@ void DistortionProfileConstructor::ReInitializeProfile(){
 	profile->resolutionY = distortionSettings.resolutionY;
 	profile->maxFovX = distortionSettings.maxFovX;
 	profile->maxFovY = distortionSettings.maxFovY;
+	profile->maxFovOuter = distortionSettings.maxFovOuter;
+	profile->maxFovInner = distortionSettings.maxFovInner;
+	profile->maxFovTop = distortionSettings.maxFovTop;
+	profile->maxFovBottom = distortionSettings.maxFovBottom;
 	profile->fovZoom = distortionSettings.fovZoom;
 	profile->flatFovZoom = distortionSettings.flatFovZoom;
 	profile->fovClamping = distortionSettings.fovClamping;

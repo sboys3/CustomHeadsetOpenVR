@@ -581,11 +581,29 @@ void BaseHeadsetShim::UpdateSettings(){
 		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffsetX;
 		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffsetY;
 	}
-	
-	
+	distortionProfileConstructor.distortionSettings.maxFovOuter = (float)GetConfig().maxFovOuter;
+	distortionProfileConstructor.distortionSettings.maxFovInner = (float)GetConfig().maxFovInner;
+	distortionProfileConstructor.distortionSettings.maxFovTop = (float)GetConfig().maxFovTop;
+	distortionProfileConstructor.distortionSettings.maxFovBottom = (float)GetConfig().maxFovBottom;
+	if(GetConfig().fovBurnInPrevention){
+		// each edge covers about half of the total fov, so it gets half of the random offset
+		auto edgeBurnInOffset = [&](double maxPossible, double limit){
+			return std::max(std::min((float)maxPossible - (float)limit, fovBurnInOffset / 2.0f), 0.0f);
+		};
+		distortionProfileConstructor.distortionSettings.maxFovOuter += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxOuter, GetConfig().maxFovOuter);
+		distortionProfileConstructor.distortionSettings.maxFovInner += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxInner, GetConfig().maxFovInner);
+		distortionProfileConstructor.distortionSettings.maxFovTop += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxTop, GetConfig().maxFovTop);
+		distortionProfileConstructor.distortionSettings.maxFovBottom += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxBottom, GetConfig().maxFovBottom);
+	}
+
+
 	bool shouldReInitializeDistortion = false;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovX != GetConfig().maxFovX;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovY != GetConfig().maxFovY;
+	shouldReInitializeDistortion |= GetConfigOld().maxFovOuter != GetConfig().maxFovOuter;
+	shouldReInitializeDistortion |= GetConfigOld().maxFovInner != GetConfig().maxFovInner;
+	shouldReInitializeDistortion |= GetConfigOld().maxFovTop != GetConfig().maxFovTop;
+	shouldReInitializeDistortion |= GetConfigOld().maxFovBottom != GetConfig().maxFovBottom;
 	shouldReInitializeDistortion |= GetConfigOld().fovZoom != GetConfig().fovZoom;
 	shouldReInitializeDistortion |= GetConfigOld().flatFovZoom != GetConfig().flatFovZoom;
 	shouldReInitializeDistortion |= GetConfigOld().renderResolutionMultiplierX != GetConfig().renderResolutionMultiplierX;
@@ -654,6 +672,10 @@ void BaseHeadsetShim::UpdateSettings(){
 			maxFovConstructor.distortionSettings = distortionProfileConstructor.distortionSettings;
 			maxFovConstructor.distortionSettings.maxFovX = 170;
 			maxFovConstructor.distortionSettings.maxFovY = 170;
+			maxFovConstructor.distortionSettings.maxFovOuter = 90;
+			maxFovConstructor.distortionSettings.maxFovInner = 90;
+			maxFovConstructor.distortionSettings.maxFovTop = 90;
+			maxFovConstructor.distortionSettings.maxFovBottom = 90;
 			// When FOV clamping is disabled on the main profile, keep FOV clamping enabled on the test instance.
 			// Instead, take the results and multiply by 1.1 to approximate the unclamped profile.
 			maxFovConstructor.distortionSettings.fovClamping = true;
@@ -661,13 +683,26 @@ void BaseHeadsetShim::UpdateSettings(){
 			maxFovConstructor.profile->GetProjectionRaw(vr::Eye_Left, &leftEyeLeft, &leftEyeRight, &leftEyeBottom, &leftEyeTop);
 			double renderFovMaxX = (std::atan(leftEyeRight) - std::atan(leftEyeLeft)) * 180.0 / kPi;
 			double renderFovMaxY = (std::atan(leftEyeTop) - std::atan(leftEyeBottom)) * 180.0 / kPi;
+			// per edge maximums measured on the left eye, where left is outer and right is inner
+			double renderFovMaxOuter = -std::atan(leftEyeLeft) * 180.0 / kPi;
+			double renderFovMaxInner = std::atan(leftEyeRight) * 180.0 / kPi;
+			double renderFovMaxTop = std::atan(leftEyeTop) * 180.0 / kPi;
+			double renderFovMaxBottom = -std::atan(leftEyeBottom) * 180.0 / kPi;
 			// When FOV clamping is disabled, multiply the test instance results by 1.1
 			if(!GetConfig().fovClamping){
 				renderFovMaxX *= 1.1;
 				renderFovMaxY *= 1.1;
+				renderFovMaxOuter *= 1.1;
+				renderFovMaxInner *= 1.1;
+				renderFovMaxTop *= 1.1;
+				renderFovMaxBottom *= 1.1;
 			}
 			driverConfigLoader.info.renderFovMaxX = renderFovMaxX;
 			driverConfigLoader.info.renderFovMaxY = renderFovMaxY;
+			driverConfigLoader.info.renderFovMaxOuter = renderFovMaxOuter;
+			driverConfigLoader.info.renderFovMaxInner = renderFovMaxInner;
+			driverConfigLoader.info.renderFovMaxTop = renderFovMaxTop;
+			driverConfigLoader.info.renderFovMaxBottom = renderFovMaxBottom;
 			// update render target size
 			uint32_t renderResolutionX, renderResolutionY;
 			GetRecommendedRenderTargetSize(&renderResolutionX, &renderResolutionY);

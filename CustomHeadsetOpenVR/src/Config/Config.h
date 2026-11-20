@@ -212,6 +212,14 @@ public:
 		double maxFovX = 100.0;
 		// max vertical fov
 		double maxFovY = 96.0;
+		// max fov in degrees from the center of each eye toward the ear, 90 means no limit
+		double maxFovOuter = 90.0;
+		// max fov in degrees from the center of each eye toward the nose, this controls stereo overlap, 90 means no limit
+		double maxFovInner = 90.0;
+		// max fov in degrees from the center of each eye upwards, 90 means no limit
+		double maxFovTop = 90.0;
+		// max fov in degrees from the center of each eye downwards, 90 means no limit
+		double maxFovBottom = 90.0;
 		// distortion mesh resolution
 		int distortionMeshResolution = 127;
 		// if the fov should be slightly adjusted each session to prevent sharp burn in along the edges
