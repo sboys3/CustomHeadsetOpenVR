@@ -446,8 +446,6 @@ void RadialBezierDistortionProfile::Initialize(){
 	}
 	
 	// calculate tangents for the edges of the input screen
-	maxHalfFovX = std::max(halfFovOuterX, halfFovInnerX);
-	maxHalfFovY = std::max(halfFovTopY, halfFovBottomY);
 	// the rendered image spans from one edge tangent to the other, so use the average of both edges
 	// this keeps the render aspect ratio correct when one edge is cropped more than the other
 	float edgeTanX = (std::tan(halfFovOuterX * kPi / 180.0f) + std::tan(halfFovInnerX * kPi / 180.0f)) / 2.0f;
