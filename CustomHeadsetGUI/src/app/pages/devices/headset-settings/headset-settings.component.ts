@@ -42,6 +42,8 @@ export interface HeadsetSettingsConfig {
   defaultMaxFovY: number;
 }
 
+type EdgeFovKey = 'maxFovOuter' | 'maxFovInner' | 'maxFovTop' | 'maxFovBottom';
+
 @Component({
   selector: 'app-headset-settings',
   imports: [
@@ -196,6 +198,33 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   sliderMaxFovInner = computed(() => this.resolveEdgeMaxFov('fovMaxInner'));
   sliderMaxFovTop = computed(() => this.resolveEdgeMaxFov('fovMaxTop'));
   sliderMaxFovBottom = computed(() => this.resolveEdgeMaxFov('fovMaxBottom'));
+
+  private edgeSliderMax(key: EdgeFovKey): number {
+    switch (key) {
+      case 'maxFovOuter': return this.sliderMaxFovOuter();
+      case 'maxFovInner': return this.sliderMaxFovInner();
+      case 'maxFovTop': return this.sliderMaxFovTop();
+      case 'maxFovBottom': return this.sliderMaxFovBottom();
+    }
+  }
+
+  // An edge limit at or above the edge's real maximum crops nothing, so the slider shows it as the maximum.
+  edgeFovValue(key: EdgeFovKey): number {
+    return Math.min(this.settings?.[key] ?? 90, this.edgeSliderMax(key));
+  }
+
+  // Moving an edge to its maximum stores 90 (no limit), so the limit stays off if a later profile allows a wider FOV.
+  setEdgeFovValue(key: EdgeFovKey, value: number) {
+    if (!this.settings || value == null) {
+      return;
+    }
+    this.settings[key] = value >= this.edgeSliderMax(key) ? 90 : value;
+    this.saveConfigSettings();
+  }
+
+  edgeFovLimited(key: EdgeFovKey): boolean {
+    return (this.settings?.[key] ?? 90) < this.edgeSliderMax(key);
+  }
 
   trackBySliderMax(index: number, value: number): number {
     return value;

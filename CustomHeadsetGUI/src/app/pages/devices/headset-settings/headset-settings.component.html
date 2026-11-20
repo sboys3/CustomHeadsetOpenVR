@@ -161,14 +161,14 @@
       <div class="title">
         <span i18n>Max Outer Fov</span>
         <app-field-tip i18n-info
-            info="Limits the outer edge, from the center of each eye toward the ear, in degrees. Lowering it reduces the total FOV and keeps the stereo overlap. 90 means no limit." />
-        <app-reset-button [canReset]="settings.maxFovOuter !== defaults.maxFovOuter"
+            info="Limits the outer edge, from the center of each eye toward the ear, in degrees. Lowering it reduces the total FOV and keeps the stereo overlap. At the maximum, this edge is not limited." />
+        <app-reset-button [canReset]="edgeFovLimited('maxFovOuter')"
             (resetClick)="resetOption('maxFovOuter')"></app-reset-button>
       </div>
       <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovOuter" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <input matInput [ngModel]="edgeFovValue('maxFovOuter')" step="1" (ngModelChange)="setEdgeFovValue('maxFovOuter', $event)" type="number">
         <mat-slider *ngFor="let max of [sliderMaxFovOuter()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-          <input matSliderThumb [(ngModel)]="settings.maxFovOuter" (ngModelChange)="saveConfigSettings()">
+          <input matSliderThumb [ngModel]="edgeFovValue('maxFovOuter')" (ngModelChange)="setEdgeFovValue('maxFovOuter', $event)">
         </mat-slider>
       </div>
     </div>
@@ -178,14 +178,14 @@
       <div class="title">
         <span i18n>Max Inner Fov</span>
         <app-field-tip i18n-info
-            info="Limits the inner edge, from the center of each eye toward the nose, in degrees. Lowering it reduces the stereo overlap and keeps the outer edge. 90 means no limit." />
-        <app-reset-button [canReset]="settings.maxFovInner !== defaults.maxFovInner"
+            info="Limits the inner edge, from the center of each eye toward the nose, in degrees. Lowering it reduces the stereo overlap and keeps the outer edge. At the maximum, this edge is not limited." />
+        <app-reset-button [canReset]="edgeFovLimited('maxFovInner')"
             (resetClick)="resetOption('maxFovInner')"></app-reset-button>
       </div>
       <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovInner" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <input matInput [ngModel]="edgeFovValue('maxFovInner')" step="1" (ngModelChange)="setEdgeFovValue('maxFovInner', $event)" type="number">
         <mat-slider *ngFor="let max of [sliderMaxFovInner()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-          <input matSliderThumb [(ngModel)]="settings.maxFovInner" (ngModelChange)="saveConfigSettings()">
+          <input matSliderThumb [ngModel]="edgeFovValue('maxFovInner')" (ngModelChange)="setEdgeFovValue('maxFovInner', $event)">
         </mat-slider>
       </div>
     </div>
@@ -195,14 +195,14 @@
       <div class="title">
         <span i18n>Max Upper Fov</span>
         <app-field-tip i18n-info
-            info="Limits the upper edge, from the center of each eye upward, in degrees. 90 means no limit." />
-        <app-reset-button [canReset]="settings.maxFovTop !== defaults.maxFovTop"
+            info="Limits the upper edge, from the center of each eye upward, in degrees. At the maximum, this edge is not limited." />
+        <app-reset-button [canReset]="edgeFovLimited('maxFovTop')"
             (resetClick)="resetOption('maxFovTop')"></app-reset-button>
       </div>
       <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovTop" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <input matInput [ngModel]="edgeFovValue('maxFovTop')" step="1" (ngModelChange)="setEdgeFovValue('maxFovTop', $event)" type="number">
         <mat-slider *ngFor="let max of [sliderMaxFovTop()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-          <input matSliderThumb [(ngModel)]="settings.maxFovTop" (ngModelChange)="saveConfigSettings()">
+          <input matSliderThumb [ngModel]="edgeFovValue('maxFovTop')" (ngModelChange)="setEdgeFovValue('maxFovTop', $event)">
         </mat-slider>
       </div>
     </div>
@@ -212,14 +212,14 @@
       <div class="title">
         <span i18n>Max Lower Fov</span>
         <app-field-tip i18n-info
-            info="Limits the lower edge, from the center of each eye downward, in degrees. 90 means no limit." />
-        <app-reset-button [canReset]="settings.maxFovBottom !== defaults.maxFovBottom"
+            info="Limits the lower edge, from the center of each eye downward, in degrees. At the maximum, this edge is not limited." />
+        <app-reset-button [canReset]="edgeFovLimited('maxFovBottom')"
             (resetClick)="resetOption('maxFovBottom')"></app-reset-button>
       </div>
       <div class="control">
-        <input matInput [(ngModel)]="settings.maxFovBottom" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <input matInput [ngModel]="edgeFovValue('maxFovBottom')" step="1" (ngModelChange)="setEdgeFovValue('maxFovBottom', $event)" type="number">
         <mat-slider *ngFor="let max of [sliderMaxFovBottom()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-          <input matSliderThumb [(ngModel)]="settings.maxFovBottom" (ngModelChange)="saveConfigSettings()">
+          <input matSliderThumb [ngModel]="edgeFovValue('maxFovBottom')" (ngModelChange)="setEdgeFovValue('maxFovBottom', $event)">
         </mat-slider>
       </div>
     </div>
