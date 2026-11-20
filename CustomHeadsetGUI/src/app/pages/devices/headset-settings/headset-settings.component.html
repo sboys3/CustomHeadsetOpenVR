@@ -111,7 +111,7 @@
     <div class="title">
       <span i18n>Advanced FOV Limits</span>
       <app-field-tip i18n-info
-          info="Limit the FOV of each edge (ear side, nose side, top, bottom) instead of the total horizontal and vertical FOV. Lowering only the ear side keeps the stereo overlap; lowering only the nose side reduces it." />
+          info="Limit each edge of the FOV (outer, inner, upper, lower) in degrees instead of the total horizontal and vertical FOV. Lowering only the outer edge keeps the stereo overlap; lowering only the inner edge reduces it." />
       <app-reset-button [canReset]="settings.advancedFovLimits !== defaults.advancedFovLimits"
           (resetClick)="resetOption('advancedFovLimits')"></app-reset-button>
     </div>
@@ -156,12 +156,12 @@
       </div>
     </div>
   } @else {
-    <!-- Max Ear-Side FOV -->
+    <!-- Max Outer FOV -->
     <div class="field">
       <div class="title">
-        <span i18n>Max Ear-Side Fov</span>
+        <span i18n>Max Outer Fov</span>
         <app-field-tip i18n-info
-            info="Limits the FOV from the center of each eye toward the ear in degrees. Lowering it reduces the total FOV and keeps the stereo overlap. 90 means no limit." />
+            info="Limits the outer edge, from the center of each eye toward the ear, in degrees. Lowering it reduces the total FOV and keeps the stereo overlap. 90 means no limit." />
         <app-reset-button [canReset]="settings.maxFovOuter !== defaults.maxFovOuter"
             (resetClick)="resetOption('maxFovOuter')"></app-reset-button>
       </div>
@@ -173,12 +173,12 @@
       </div>
     </div>
 
-    <!-- Max Nose-Side FOV -->
+    <!-- Max Inner FOV -->
     <div class="field">
       <div class="title">
-        <span i18n>Max Nose-Side Fov</span>
+        <span i18n>Max Inner Fov</span>
         <app-field-tip i18n-info
-            info="Limits the FOV from the center of each eye toward the nose in degrees. Lowering it reduces the stereo overlap and keeps the outer edge. 90 means no limit." />
+            info="Limits the inner edge, from the center of each eye toward the nose, in degrees. Lowering it reduces the stereo overlap and keeps the outer edge. 90 means no limit." />
         <app-reset-button [canReset]="settings.maxFovInner !== defaults.maxFovInner"
             (resetClick)="resetOption('maxFovInner')"></app-reset-button>
       </div>
@@ -190,12 +190,12 @@
       </div>
     </div>
 
-    <!-- Max Top FOV -->
+    <!-- Max Upper FOV -->
     <div class="field">
       <div class="title">
-        <span i18n>Max Top Fov</span>
+        <span i18n>Max Upper Fov</span>
         <app-field-tip i18n-info
-            info="Limits the FOV from the center of each eye upward in degrees. 90 means no limit." />
+            info="Limits the upper edge, from the center of each eye upward, in degrees. 90 means no limit." />
         <app-reset-button [canReset]="settings.maxFovTop !== defaults.maxFovTop"
             (resetClick)="resetOption('maxFovTop')"></app-reset-button>
       </div>
@@ -207,12 +207,12 @@
       </div>
     </div>
 
-    <!-- Max Bottom FOV -->
+    <!-- Max Lower FOV -->
     <div class="field">
       <div class="title">
-        <span i18n>Max Bottom Fov</span>
+        <span i18n>Max Lower Fov</span>
         <app-field-tip i18n-info
-            info="Limits the FOV from the center of each eye downward in degrees. 90 means no limit." />
+            info="Limits the lower edge, from the center of each eye downward, in degrees. 90 means no limit." />
         <app-reset-button [canReset]="settings.maxFovBottom !== defaults.maxFovBottom"
             (resetClick)="resetOption('maxFovBottom')"></app-reset-button>
       </div>
@@ -305,7 +305,7 @@
               }
               @if(res.fovMaxOuter) {
                 <p>
-                  <span i18n>Maximum possible FOV per edge (ear side, nose side, top, bottom)</span>
+                  <span i18n>Maximum possible FOV per edge (outer, inner, upper, lower)</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovMaxOuter.toFixed(1)}} / {{res.fovMaxInner.toFixed(1)}} / {{res.fovMaxTop.toFixed(1)}} / {{res.fovMaxBottom.toFixed(1)}}</span>
                 </p>
