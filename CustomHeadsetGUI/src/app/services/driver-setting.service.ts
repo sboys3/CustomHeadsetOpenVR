@@ -19,6 +19,11 @@ export type DistortionProfileFile = {
   device?: string | string[];
   entry: DirEntry;
 };
+// info.json is rewritten several times a second, and settings.json should only reload when the defaults change.
+function stableDefaultSettings(driverInfoService: DriverInfoService) {
+  const defaultSettingsJson = computed(() => JSON.stringify(driverInfoService.values()?.defaultSettings ?? {}));
+  return computed(() => JSON.parse(defaultSettingsJson()) as Settings);
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -29,10 +34,7 @@ export class DriverSettingService extends JsonSettingServiceBase<Settings> {
     super(
       pathService.settingPath,
       pathService.appDataDirPath,
-      computed(
-        () => driverInfoService.values()?.defaultSettings ?? ({} as Settings),
-        { equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) }
-      ),
+      stableDefaultSettings(driverInfoService),
       false,
       true
     );

@@ -31,7 +31,8 @@ export abstract class JsonSettingServiceBase<T> {
         private _fileDir: string,
         private defaultValue: Signal<T | undefined>,
         private autoCreate: boolean,
-        private watchFileforAutoReload: boolean) {
+        private watchFileforAutoReload: boolean,
+        private keepValuesOnParseError: boolean = false) {
         const appSettings = inject(AppSettingAccessor)
         this.debouncedFileWriter = debouncedFileWriter(_filePath, _fileDir, () => appSettings.settings.updateMode == 'rewrite');
         this._initTask = this.init();
@@ -79,6 +80,9 @@ export abstract class JsonSettingServiceBase<T> {
                             reason: FileReadErrorReason.ParsingFailed,
                             message: `${e}`
                         });
+                        if (!this.keepValuesOnParseError) {
+                            this._values.set(undefined);
+                        }
                     }
                 } else {
                     this._readFileError.set({ reason: FileReadErrorReason.NotExists });
