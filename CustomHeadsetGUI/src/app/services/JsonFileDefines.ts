@@ -121,6 +121,11 @@ export type BaseHeadsetConfig = {
   displayRotation: number;
   maxFovX: number;
   maxFovY: number;
+  advancedFovLimits: boolean;
+  maxFovOuter: number;
+  maxFovInner: number;
+  maxFovTop: number;
+  maxFovBottom: number;
   distortionMeshResolution: number;
   fovBurnInPrevention: boolean;
   fovClamping: boolean;
@@ -258,6 +263,10 @@ export type ResolutionInfo = {
   fovY: number,
   fovMaxX: number,
   fovMaxY: number,
+  fovMaxOuter: number,
+  fovMaxInner: number,
+  fovMaxTop: number,
+  fovMaxBottom: number,
   combinedFovX: number,
   combinedFovY: number,
   renderResolution1To1X: number,

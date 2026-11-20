@@ -35,8 +35,6 @@ private:
 	float halfFovOuterX = 0.0f;
 	float halfFovTopY = 0.0f;
 	float halfFovBottomY = 0.0f;
-	float maxHalfFovX = 0.0f;
-	float maxHalfFovY = 0.0f;
 	// recommended render resolution
 	uint32_t recommendedRenderWidth = 0;
 	uint32_t recommendedRenderHeight = 0;
