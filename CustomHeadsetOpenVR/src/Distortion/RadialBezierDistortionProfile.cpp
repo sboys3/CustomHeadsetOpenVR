@@ -393,38 +393,42 @@ void RadialBezierDistortionProfile::Initialize(){
 	halfFovBottomY = std::min(halfFovBottomY, SampleFromPointsInverse(distortionsSmoothGreen, radiusBottom));
 	halfFovBottomY = std::min(halfFovBottomY, SampleFromPointsInverse(distortionsSmoothBlue, radiusBottom));
 	
-	// limit to max fov
+	if(advancedFovLimits){
+		// limit each edge on its own so one side can be cropped without changing the others
+		// for example limiting the outer edge reduces the total fov while keeping the stereo overlap
+		// 90 or more keeps the edge of the lens
+		// without fov clamping a lower value sets the edge exactly, like maxFovX and maxFovY do
+		auto limitEdge = [&](float halfFov, float limit){
+			if(limit >= 90.0f){
+				return halfFov;
+			}
+			limit = std::max(limit, 1.0f);
+			return fovClamping ? std::min(halfFov, limit) : limit;
+		};
+		halfFovOuterX = limitEdge(halfFovOuterX, maxFovOuter);
+		halfFovInnerX = limitEdge(halfFovInnerX, maxFovInner);
+		halfFovTopY = limitEdge(halfFovTopY, maxFovTop);
+		halfFovBottomY = limitEdge(halfFovBottomY, maxFovBottom);
+	}else{
+		// limit to max fov
+		float fovX = halfFovOuterX + halfFovInnerX;
+		float fovY = halfFovTopY + halfFovBottomY;
+		if(fovClamping){
+			fovX = std::min(fovX, maxFovX);
+			fovY = std::min(fovY, maxFovY);
+		}else{
+			fovX = maxFovX;
+			fovY = maxFovY;
+		}
+		float multiplierX = fovX / (halfFovOuterX + halfFovInnerX);
+		float multiplierY = fovY / (halfFovTopY + halfFovBottomY);
+		halfFovOuterX *= multiplierX;
+		halfFovInnerX *= multiplierX;
+		halfFovTopY *= multiplierY;
+		halfFovBottomY *= multiplierY;
+	}
 	float fovX = halfFovOuterX + halfFovInnerX;
 	float fovY = halfFovTopY + halfFovBottomY;
-	if(fovClamping){
-		fovX = std::min(fovX, maxFovX);
-		fovY = std::min(fovY, maxFovY);
-	}else{
-		fovX = maxFovX;
-		fovY = maxFovY;
-	}
-	float multiplierX = fovX / (halfFovOuterX + halfFovInnerX);
-	float multiplierY = fovY / (halfFovTopY + halfFovBottomY);
-	halfFovOuterX *= multiplierX;
-	halfFovInnerX *= multiplierX;
-	halfFovTopY *= multiplierY;
-	halfFovBottomY *= multiplierY;
-	
-	// limit each edge on its own so one side can be cropped without changing the others
-	// for example limiting the outer edge reduces the total fov while keeping the stereo overlap
-	// 90 or more means no limit for that edge
-	auto limitEdge = [](float halfFov, float limit){
-		if(limit >= 90.0f){
-			return halfFov;
-		}
-		return std::min(halfFov, std::max(limit, 1.0f));
-	};
-	halfFovOuterX = limitEdge(halfFovOuterX, maxFovOuter);
-	halfFovInnerX = limitEdge(halfFovInnerX, maxFovInner);
-	halfFovTopY = limitEdge(halfFovTopY, maxFovTop);
-	halfFovBottomY = limitEdge(halfFovBottomY, maxFovBottom);
-	fovX = halfFovOuterX + halfFovInnerX;
-	fovY = halfFovTopY + halfFovBottomY;
 	
 	// halfFovY = halfFovX;
 	DriverLog("FOV: %fx%f", fovX * 2, fovY * 2);

@@ -106,107 +106,124 @@
   </div>
   }
 
-  <!-- Max FOV Horizontal -->
+  <!-- Advanced FOV Limits -->
   <div class="field">
     <div class="title">
-      <span i18n>Max Per Eye Fov Horizontal</span>
+      <span i18n>Advanced FOV Limits</span>
       <app-field-tip i18n-info
-          info="The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
-      <app-reset-button [canReset]="settings.maxFovX !== defaults.maxFovX"
-          (resetClick)="resetOption('maxFovX')"></app-reset-button>
+          info="Limit the FOV of each edge (ear side, nose side, top, bottom) instead of the total horizontal and vertical FOV. Lowering only the ear side keeps the stereo overlap; lowering only the nose side reduces it." />
+      <app-reset-button [canReset]="settings.advancedFovLimits !== defaults.advancedFovLimits"
+          (resetClick)="resetOption('advancedFovLimits')"></app-reset-button>
     </div>
     <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovX()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
+      <mat-slide-toggle [(ngModel)]="settings.advancedFovLimits"
+          (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
     </div>
   </div>
 
-  <!-- Max FOV Vertical -->
-  <div class="field">
-    <div class="title">
-      <span i18n>Max Per Eye Fov Vertical</span>
-      <app-field-tip i18n-info
-          info="The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
-      <app-reset-button [canReset]="settings.maxFovY !== defaults.maxFovY"
-          (resetClick)="resetOption('maxFovY')"></app-reset-button>
+  @if(!settings.advancedFovLimits) {
+    <!-- Max FOV Horizontal -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Per Eye Fov Horizontal</span>
+        <app-field-tip i18n-info
+            info="The maximum per eye FOV that will be displayed horizontally in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
+        <app-reset-button [canReset]="settings.maxFovX !== defaults.maxFovX"
+            (resetClick)="resetOption('maxFovX')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovX" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovX()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovX" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-    <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovY()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
-    </div>
-  </div>
 
-  <!-- Max Outer FOV -->
-  <div class="field">
-    <div class="title">
-      <span i18n>Max Outer Fov (Toward Ear)</span>
-      <app-field-tip i18n-info
-          info="Limits the FOV from the center of each eye toward the ear in degrees. Lowering this reduces the total FOV without changing the stereo overlap. Applied after the horizontal and vertical limits above. 90 means no limit." />
-      <app-reset-button [canReset]="settings.maxFovOuter !== defaults.maxFovOuter"
-          (resetClick)="resetOption('maxFovOuter')"></app-reset-button>
+    <!-- Max FOV Vertical -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Per Eye Fov Vertical</span>
+        <app-field-tip i18n-info
+            info="The maximum FOV that will be displayed vertically in the headset. The actual FOV can be lower if this FOV can't fit on the screen after distortion. This may sometimes require restarting the game to fully apply." />
+        <app-reset-button [canReset]="settings.maxFovY !== defaults.maxFovY"
+            (resetClick)="resetOption('maxFovY')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovY" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovY()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovY" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-    <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovOuter" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovOuter()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovOuter" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
+  } @else {
+    <!-- Max Ear-Side FOV -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Ear-Side Fov</span>
+        <app-field-tip i18n-info
+            info="Limits the FOV from the center of each eye toward the ear in degrees. Lowering it reduces the total FOV and keeps the stereo overlap. 90 means no limit." />
+        <app-reset-button [canReset]="settings.maxFovOuter !== defaults.maxFovOuter"
+            (resetClick)="resetOption('maxFovOuter')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovOuter" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovOuter()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovOuter" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-  </div>
 
-  <!-- Max Inner FOV -->
-  <div class="field">
-    <div class="title">
-      <span i18n>Max Inner Fov (Toward Nose)</span>
-      <app-field-tip i18n-info
-          info="Limits the FOV from the center of each eye toward the nose in degrees. This controls the stereo overlap between the eyes. Lowering it reduces overlap while keeping the outer edge. Applied after the horizontal and vertical limits above. 90 means no limit." />
-      <app-reset-button [canReset]="settings.maxFovInner !== defaults.maxFovInner"
-          (resetClick)="resetOption('maxFovInner')"></app-reset-button>
+    <!-- Max Nose-Side FOV -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Nose-Side Fov</span>
+        <app-field-tip i18n-info
+            info="Limits the FOV from the center of each eye toward the nose in degrees. Lowering it reduces the stereo overlap and keeps the outer edge. 90 means no limit." />
+        <app-reset-button [canReset]="settings.maxFovInner !== defaults.maxFovInner"
+            (resetClick)="resetOption('maxFovInner')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovInner" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovInner()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovInner" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-    <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovInner" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovInner()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovInner" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
-    </div>
-  </div>
 
-  <!-- Max Top FOV -->
-  <div class="field">
-    <div class="title">
-      <span i18n>Max Top Fov</span>
-      <app-field-tip i18n-info
-          info="Limits the FOV from the center of each eye upwards in degrees. Applied after the vertical limit above. 90 means no limit." />
-      <app-reset-button [canReset]="settings.maxFovTop !== defaults.maxFovTop"
-          (resetClick)="resetOption('maxFovTop')"></app-reset-button>
+    <!-- Max Top FOV -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Top Fov</span>
+        <app-field-tip i18n-info
+            info="Limits the FOV from the center of each eye upward in degrees. 90 means no limit." />
+        <app-reset-button [canReset]="settings.maxFovTop !== defaults.maxFovTop"
+            (resetClick)="resetOption('maxFovTop')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovTop" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovTop()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovTop" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-    <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovTop" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovTop()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovTop" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
-    </div>
-  </div>
 
-  <!-- Max Bottom FOV -->
-  <div class="field">
-    <div class="title">
-      <span i18n>Max Bottom Fov</span>
-      <app-field-tip i18n-info
-          info="Limits the FOV from the center of each eye downwards in degrees. Applied after the vertical limit above. 90 means no limit." />
-      <app-reset-button [canReset]="settings.maxFovBottom !== defaults.maxFovBottom"
-          (resetClick)="resetOption('maxFovBottom')"></app-reset-button>
+    <!-- Max Bottom FOV -->
+    <div class="field">
+      <div class="title">
+        <span i18n>Max Bottom Fov</span>
+        <app-field-tip i18n-info
+            info="Limits the FOV from the center of each eye downward in degrees. 90 means no limit." />
+        <app-reset-button [canReset]="settings.maxFovBottom !== defaults.maxFovBottom"
+            (resetClick)="resetOption('maxFovBottom')"></app-reset-button>
+      </div>
+      <div class="control">
+        <input matInput [(ngModel)]="settings.maxFovBottom" step="1" (ngModelChange)="saveConfigSettings()" type="number">
+        <mat-slider *ngFor="let max of [sliderMaxFovBottom()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
+          <input matSliderThumb [(ngModel)]="settings.maxFovBottom" (ngModelChange)="saveConfigSettings()">
+        </mat-slider>
+      </div>
     </div>
-    <div class="control">
-      <input matInput [(ngModel)]="settings.maxFovBottom" step="1" (ngModelChange)="saveConfigSettings()" type="number">
-      <mat-slider *ngFor="let max of [sliderMaxFovBottom()]; trackBy: trackBySliderMax" [max]="max" min="1" step="1">
-        <input matSliderThumb [(ngModel)]="settings.maxFovBottom" (ngModelChange)="saveConfigSettings()">
-      </mat-slider>
-    </div>
-  </div>
+  }
   
   <!-- Disable FOV Clamping -->
   <div class="field">
@@ -288,7 +305,7 @@
               }
               @if(res.fovMaxOuter) {
                 <p>
-                  <span i18n>Maximum possible FOV per edge (outer, inner, top, bottom)</span>
+                  <span i18n>Maximum possible FOV per edge (ear side, nose side, top, bottom)</span>
                   <span>&nbsp;:&nbsp;</span>
                   <span>{{res.fovMaxOuter.toFixed(1)}} / {{res.fovMaxInner.toFixed(1)}} / {{res.fovMaxTop.toFixed(1)}} / {{res.fovMaxBottom.toFixed(1)}}</span>
                 </p>

@@ -570,34 +570,38 @@ void BaseHeadsetShim::UpdateSettings(){
 	}
 
 	
-	distortionProfileConstructor.distortionSettings.maxFovX = (float)GetConfig().maxFovX;
-	distortionProfileConstructor.distortionSettings.maxFovY = (float)GetConfig().maxFovY;
 	distortionProfileConstructor.distortionSettings.fovZoom = (float)GetConfig().fovZoom;
 	distortionProfileConstructor.distortionSettings.flatFovZoom = (float)GetConfig().flatFovZoom;
 	distortionProfileConstructor.distortionSettings.fovClamping = GetConfig().fovClamping;
-	if(GetConfig().fovBurnInPrevention){
-		float fovBurnInOffsetX = std::max(std::min((float)driverConfigLoader.info.renderFovMaxX - (float)GetConfig().maxFovX, fovBurnInOffset), 0.0f);
-		float fovBurnInOffsetY = std::max(std::min((float)driverConfigLoader.info.renderFovMaxY - (float)GetConfig().maxFovY, fovBurnInOffset), 0.0f);
-		distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffsetX;
-		distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffsetY;
-	}
+	// the distortion profile applies either the total limits or the per-edge limits, see advancedFovLimits
+	distortionProfileConstructor.distortionSettings.advancedFovLimits = GetConfig().advancedFovLimits;
+	distortionProfileConstructor.distortionSettings.maxFovX = (float)GetConfig().maxFovX;
+	distortionProfileConstructor.distortionSettings.maxFovY = (float)GetConfig().maxFovY;
 	distortionProfileConstructor.distortionSettings.maxFovOuter = (float)GetConfig().maxFovOuter;
 	distortionProfileConstructor.distortionSettings.maxFovInner = (float)GetConfig().maxFovInner;
 	distortionProfileConstructor.distortionSettings.maxFovTop = (float)GetConfig().maxFovTop;
 	distortionProfileConstructor.distortionSettings.maxFovBottom = (float)GetConfig().maxFovBottom;
 	if(GetConfig().fovBurnInPrevention){
-		// each edge covers about half of the total fov, so it gets half of the random offset
-		auto edgeBurnInOffset = [&](double maxPossible, double limit){
-			return std::max(std::min((float)maxPossible - (float)limit, fovBurnInOffset / 2.0f), 0.0f);
-		};
-		distortionProfileConstructor.distortionSettings.maxFovOuter += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxOuter, GetConfig().maxFovOuter);
-		distortionProfileConstructor.distortionSettings.maxFovInner += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxInner, GetConfig().maxFovInner);
-		distortionProfileConstructor.distortionSettings.maxFovTop += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxTop, GetConfig().maxFovTop);
-		distortionProfileConstructor.distortionSettings.maxFovBottom += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxBottom, GetConfig().maxFovBottom);
+		if(GetConfig().advancedFovLimits){
+			// each edge covers about half of the total fov, so it gets half of the random offset
+			auto edgeBurnInOffset = [&](double maxPossible, double limit){
+				return std::max(std::min((float)maxPossible - (float)limit, fovBurnInOffset / 2.0f), 0.0f);
+			};
+			distortionProfileConstructor.distortionSettings.maxFovOuter += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxOuter, GetConfig().maxFovOuter);
+			distortionProfileConstructor.distortionSettings.maxFovInner += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxInner, GetConfig().maxFovInner);
+			distortionProfileConstructor.distortionSettings.maxFovTop += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxTop, GetConfig().maxFovTop);
+			distortionProfileConstructor.distortionSettings.maxFovBottom += edgeBurnInOffset(driverConfigLoader.info.renderFovMaxBottom, GetConfig().maxFovBottom);
+		}else{
+			float fovBurnInOffsetX = std::max(std::min((float)driverConfigLoader.info.renderFovMaxX - (float)GetConfig().maxFovX, fovBurnInOffset), 0.0f);
+			float fovBurnInOffsetY = std::max(std::min((float)driverConfigLoader.info.renderFovMaxY - (float)GetConfig().maxFovY, fovBurnInOffset), 0.0f);
+			distortionProfileConstructor.distortionSettings.maxFovX += fovBurnInOffsetX;
+			distortionProfileConstructor.distortionSettings.maxFovY += fovBurnInOffsetY;
+		}
 	}
 
 
 	bool shouldReInitializeDistortion = false;
+	shouldReInitializeDistortion |= GetConfigOld().advancedFovLimits != GetConfig().advancedFovLimits;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovX != GetConfig().maxFovX;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovY != GetConfig().maxFovY;
 	shouldReInitializeDistortion |= GetConfigOld().maxFovOuter != GetConfig().maxFovOuter;

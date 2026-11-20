@@ -213,11 +213,13 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     if (!this.settings?.fovBurnInPrevention) {
       return false;
     }
+    if (this.settings.advancedFovLimits) {
+      return this.settings.maxFovOuter < res.fovMaxOuter
+        || this.settings.maxFovInner < res.fovMaxInner
+        || this.settings.maxFovTop < res.fovMaxTop
+        || this.settings.maxFovBottom < res.fovMaxBottom;
+    }
     return this.settings.maxFovX < res.fovMaxX
-      || this.settings.maxFovY < res.fovMaxY
-      || this.settings.maxFovOuter < res.fovMaxOuter
-      || this.settings.maxFovInner < res.fovMaxInner
-      || this.settings.maxFovTop < res.fovMaxTop
-      || this.settings.maxFovBottom < res.fovMaxBottom;
+      || this.settings.maxFovY < res.fovMaxY;
   }
 }

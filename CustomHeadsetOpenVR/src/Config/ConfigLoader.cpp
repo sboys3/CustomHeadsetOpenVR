@@ -90,6 +90,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["maxFovY"].is_number()){
 		headsetConfig.maxFovY = headsetData["maxFovY"].get<double>();
 	}
+	if(headsetData["advancedFovLimits"].is_boolean()){
+		headsetConfig.advancedFovLimits = headsetData["advancedFovLimits"].get<bool>();
+	}
 	if(headsetData["maxFovOuter"].is_number()){
 		headsetConfig.maxFovOuter = headsetData["maxFovOuter"].get<double>();
 	}
@@ -562,6 +565,7 @@ ordered_json baseHeadsetInfo(Config::BaseHeadsetConfig& headsetConfig){
 		{"displayRotation", headsetConfig.displayRotation},
 		{"maxFovX", headsetConfig.maxFovX},
 		{"maxFovY", headsetConfig.maxFovY},
+		{"advancedFovLimits", headsetConfig.advancedFovLimits},
 		{"maxFovOuter", headsetConfig.maxFovOuter},
 		{"maxFovInner", headsetConfig.maxFovInner},
 		{"maxFovTop", headsetConfig.maxFovTop},

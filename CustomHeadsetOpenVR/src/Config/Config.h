@@ -212,6 +212,8 @@ public:
 		double maxFovX = 100.0;
 		// max vertical fov
 		double maxFovY = 96.0;
+		// use per-edge fov limits instead of total horizontal and vertical fov limits
+		bool advancedFovLimits = false;
 		// max fov in degrees from the center of each eye toward the ear, 90 means no limit
 		double maxFovOuter = 90.0;
 		// max fov in degrees from the center of each eye toward the nose, this controls stereo overlap, 90 means no limit

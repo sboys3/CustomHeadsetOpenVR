@@ -121,6 +121,7 @@ export type BaseHeadsetConfig = {
   displayRotation: number;
   maxFovX: number;
   maxFovY: number;
+  advancedFovLimits: boolean;
   maxFovOuter: number;
   maxFovInner: number;
   maxFovTop: number;
