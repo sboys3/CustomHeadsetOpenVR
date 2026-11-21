@@ -34,6 +34,8 @@
   </div>
   }
 
+  <app-profile-bar />
+
   <!-- Outer group tabs -->
   <mat-tab-group [selectedIndex]="selectedGroupIndex" (selectedIndexChange)="onGroupChange($event)">
     @for (group of tabGroups; track group.name) {

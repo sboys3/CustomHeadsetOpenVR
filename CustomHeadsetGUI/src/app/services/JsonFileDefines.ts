@@ -224,6 +224,10 @@ export type AppSetting = {
   launchPimaxOnStartup: boolean;
   lastPimaxLaunchMethod: 'steamvr' | 'legacy';
   installMethod: 'auto' | 'register' | 'copy';
+  // file name, without .json, of the selected profile in the Profiles folder. Empty when no profile is selected.
+  activeProfile: string;
+  // set once the first run has created the Default profile from settings.json
+  profilesInitialized: boolean;
 }
 
 export const HeadsetType = {
