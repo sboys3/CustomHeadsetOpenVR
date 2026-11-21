@@ -4,6 +4,7 @@ import {
   keepHeadsetEnableFlags,
   maxProfileNameLength,
   profileIdFromName,
+  profileSettings,
   settingsMatch,
   sparseSettings,
   validateProfileName,
@@ -431,5 +432,18 @@ describe('settingsMatch', () => {
     expect(settingsMatch(undefined, undefined, defaults)).toBeTrue();
     expect(settingsMatch(value, undefined, defaults)).toBeFalse();
     expect(settingsMatch(undefined, value, defaults)).toBeFalse();
+  });
+});
+
+describe('profileSettings', () => {
+  it('leaves out headset enable flags but keeps customShader.enable', () => {
+    const defaults: any = { meganeX8K: { enable: true, forceEnable: false, ipd: 63 }, customShader: { enable: false } };
+    const values: any = { meganeX8K: { enable: false, forceEnable: true, ipd: 66 }, customShader: { enable: true } };
+    expect(profileSettings(values, defaults)).toEqual({ customShader: { enable: true }, meganeX8K: { ipd: 66 } } as any);
+    expect(values.meganeX8K.enable).toBeFalse();
+  });
+
+  it('returns an empty object for undefined values', () => {
+    expect(profileSettings<any>(undefined, {})).toEqual({});
   });
 });

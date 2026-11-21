@@ -34,7 +34,7 @@ export function profileIdFromName(name: string, existingIds: string[]): string {
   return id;
 }
 
-function isPlainObject(value: any): boolean {
+export function isPlainObject(value: any): boolean {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
@@ -111,7 +111,7 @@ export function keepHeadsetEnableFlags<T>(target: T, current: T | undefined): T 
   return target;
 }
 
-function withoutHeadsetEnableFlags<T>(settings: T): T {
+export function withoutHeadsetEnableFlags<T>(settings: T): T {
   const result = cloneJson(settings) as any;
   for (const section of headsetSections(result)) {
     for (const key of keptHeadsetKeys) {
@@ -119,6 +119,11 @@ function withoutHeadsetEnableFlags<T>(settings: T): T {
     }
   }
   return result;
+}
+
+// Returns the settings as a profile stores them: only values that differ from the defaults, without headset enable flags.
+export function profileSettings<T>(values: T | undefined, defaults: T | undefined): Partial<T> {
+  return sparseSettings(values === undefined ? undefined : withoutHeadsetEnableFlags(values), defaults);
 }
 
 // Compares full settings objects as a profile would store them, ignoring the headset enable flags.

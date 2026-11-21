@@ -40,10 +40,12 @@ export class DialogService {
   }
   // Resolves the trimmed text, or undefined when cancelled.
   async prompt(data: PromptData): Promise<string | undefined> {
-    return await firstValueFrom(this.matDialog.open(PromptComponent, {
+    const result = await firstValueFrom(this.matDialog.open(PromptComponent, {
       hasBackdrop: true,
       data
     }).afterClosed());
+    // the Cancel button closes with an empty string
+    return result || undefined;
   }
   async message(title: string, message: string): Promise<void> {
     return await firstValueFrom(this.matDialog.open(MessageComponent, {

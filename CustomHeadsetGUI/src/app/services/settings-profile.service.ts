@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { join } from '@tauri-apps/api/path';
-import { exists, readDir, readTextFile, remove, rename, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
+import { exists, mkdir, readDir, readTextFile, remove, rename, watchImmediate, writeTextFile } from '@tauri-apps/plugin-fs';
 import { debounceTime, filter, firstValueFrom, Subject } from 'rxjs';
 import { cleanJsonComments, delay } from '../helpers';
 import { AppSettingService } from './app-setting.service';
@@ -9,7 +9,7 @@ import { DriverInfoService } from './driver-info.service';
 import { DriverSettingService } from './driver-setting.service';
 import { Settings } from './JsonFileDefines';
 import { PathsService } from './paths.service';
-import { cloneJson, fullSettings, keepHeadsetEnableFlags, profileIdFromName, settingsMatch, sparseSettings } from './settings-profile-helpers';
+import { cloneJson, fullSettings, isPlainObject, keepHeadsetEnableFlags, profileIdFromName, profileSettings, settingsMatch } from './settings-profile-helpers';
 
 export type SettingsProfile = {
   // file name in the Profiles folder without .json
@@ -92,6 +92,9 @@ export class SettingsProfileService {
 
   private async doInit() {
     await Promise.all([this.dss.initTask, this.ass.initTask, this.settingsLoaded, this.appSettingsLoaded]);
+    if (!await exists(this.paths.profilesDirPath)) {
+      await mkdir(this.paths.profilesDirPath);
+    }
     // info.json holds the driver defaults, which keep profiles small. It is missing until the driver first runs, so wait only briefly.
     await Promise.race([this.infoLoaded, delay(3000)]);
     await this.reload();
@@ -114,13 +117,17 @@ export class SettingsProfileService {
     const entries = await readDir(this.paths.profilesDirPath);
     const profiles: SettingsProfile[] = [];
     for (const entry of entries) {
-      if (!entry.isFile || !entry.name.toLowerCase().endsWith('.json')) {
+      // only lower case ".json", so the id always maps back to the same file name on Linux
+      const id = entry.name.slice(0, -'.json'.length);
+      if (!entry.isFile || !entry.name.endsWith('.json') || !id) {
         continue;
       }
-      const id = entry.name.slice(0, -'.json'.length);
       try {
         const parsed = JSON.parse(cleanJsonComments(await readTextFile(await join(this.paths.profilesDirPath, entry.name))));
-        const settings = typeof parsed?.settings === 'object' && parsed.settings !== null ? parsed.settings : {};
+        if (parsed?.settings !== undefined && !isPlainObject(parsed.settings)) {
+          throw new Error('"settings" is not an object');
+        }
+        const settings = parsed?.settings ?? {};
         const name = typeof parsed?.name === 'string' && parsed.name.trim() ? parsed.name.trim() : id;
         profiles.push({ id, name, settings });
       } catch (e) {
@@ -141,7 +148,7 @@ export class SettingsProfileService {
     }
     let activeProfile = this.activeId();
     if (this.profiles().length == 0) {
-      const profile = await this.writeNewProfile($localize`Default`, sparseSettings(this.dss.values(), this.defaults()));
+      const profile = await this.writeNewProfile($localize`Default`, profileSettings(this.dss.values(), this.defaults()));
       activeProfile = profile.id;
     }
     await this.saveAppSettings({ profilesInitialized: true, activeProfile });
@@ -201,7 +208,7 @@ export class SettingsProfileService {
     if (!profile || !values) {
       return;
     }
-    await this.writeProfile({ ...profile, settings: sparseSettings(values, this.defaults()) });
+    await this.writeProfile({ ...profile, settings: profileSettings(values, this.defaults()) });
   }
 
   // Writes the profile's settings to settings.json and makes it the active profile.
@@ -219,13 +226,17 @@ export class SettingsProfileService {
   // Creates a profile from the driver defaults and selects it. Headsets stay enabled or disabled as they are now.
   public async createFromDefaults(name: string) {
     const settings = keepHeadsetEnableFlags(cloneJson(this.defaults() ?? {} as Settings), this.dss.values());
-    const profile = await this.writeNewProfile(name, sparseSettings(settings, this.defaults()));
+    const profile = await this.writeNewProfile(name, profileSettings(settings, this.defaults()));
     await this.select(profile.id);
   }
 
   // Creates a profile from the current settings, including unsaved changes, and selects it.
   public async createFromCurrent(name: string) {
-    const profile = await this.writeNewProfile(name, sparseSettings(this.dss.values(), this.defaults()));
+    const values = this.dss.values();
+    if (!values) {
+      throw new Error($localize`settings.json could not be read`);
+    }
+    const profile = await this.writeNewProfile(name, profileSettings(values, this.defaults()));
     await this.saveAppSettings({ activeProfile: profile.id });
   }
 

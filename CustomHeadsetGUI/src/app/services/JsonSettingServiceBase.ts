@@ -67,14 +67,26 @@ export abstract class JsonSettingServiceBase<T> {
     }
     async loadSetting(): Promise<boolean> {
         return await navigator.locks.request(`loadfile_${this._filePath}`, async () => {
+            const saveCountBefore = this.debouncedFileWriter.saveCount();
+            // A save that is not on disk yet, or that happened during the read, is newer than what the read returns.
+            // Its own write triggers another load, so drop this one instead of putting old values back.
+            const readIsStale = () => this.debouncedFileWriter.hasPendingSave() || this.debouncedFileWriter.saveCount() != saveCountBefore;
             try {
                 if (await exists(this._filePath)) {
                     try {
                         const copiedDefaults = deepCopy(this.defaults);
-                        this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(await readTextFile(this._filePath)))));
+                        const content = await readTextFile(this._filePath);
+                        if (readIsStale()) {
+                            return false;
+                        }
+                        this._values.set(deepMerge(copiedDefaults as any, JSON.parse(cleanJsonComments(content))));
                         this._readFileError.set(undefined);
                         return true;
                     } catch (e) {
+                        if (readIsStale()) {
+                            // most likely a read of a file our pending save is rewriting
+                            return false;
+                        }
                         console.error('parsing setting error', this._filePath, e)
                         this._readFileError.set({
                             reason: FileReadErrorReason.ParsingFailed,
