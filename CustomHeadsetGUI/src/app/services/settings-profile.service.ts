@@ -23,6 +23,15 @@ type SettingsProfileFile = {
   settings: Partial<Settings>;
 };
 
+// Windows file names ignore case, so profile ids do too.
+function sameId(a: string, b: string) {
+  return a.toLowerCase() == b.toLowerCase();
+}
+
+function sortProfiles(profiles: SettingsProfile[]) {
+  return profiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+}
+
 /**
  * Named copies of settings.json in the Profiles folder.
  * Edits in the GUI still go to settings.json right away. A profile changes only when the user saves it.
@@ -42,17 +51,19 @@ export class SettingsProfileService {
   private readonly _ready = signal(false);
   public readonly ready = this._ready.asReadonly();
   public readonly activeId = computed(() => this.ass.values()?.activeProfile ?? '');
-  public readonly activeProfile = computed(() => this.profiles().find(p => p.id == this.activeId()));
-  // true when settings.json differs from the saved active profile
+  public readonly activeProfile = computed(() => this.profiles().find(p => sameId(p.id, this.activeId())));
+  // true when settings.json differs from the active profile, or from every profile when none is active
   public readonly isDirty = computed(() => {
-    const profile = this.activeProfile();
     const values = this.dss.values();
-    if (!profile || !values) {
+    if (!values) {
       return false;
     }
-    const defaults = this.defaults();
-    return !settingsMatch(values, fullSettings(profile.settings, defaults), defaults);
+    const active = this.activeProfile();
+    const candidates = active ? [active] : this.profiles();
+    return !candidates.some(p => this.matches(values, p));
   });
+  // false while settings.json is missing or broken, so a profile action cannot overwrite it blindly
+  public readonly usable = computed(() => this.ready() && !!this.dss.values() && !this.dss.readFileError());
   private readonly defaults = computed(() => {
     // dss.values() changes after dss.defaults, so reading it here keeps this computed current
     this.dss.values();
@@ -63,8 +74,20 @@ export class SettingsProfileService {
   private readonly infoLoaded = firstValueFrom(toObservable(this.dis.values).pipe(filter(v => !!v)));
   private initTask?: Promise<void>;
 
+  private matches(values: Settings, profile: SettingsProfile) {
+    const defaults = this.defaults();
+    return settingsMatch(values, fullSettings(profile.settings, defaults), defaults);
+  }
+
+  // Runs folder reads and writes one at a time, so a reload never puts back a profile that a write just replaced.
+  private withFolderLock<T>(action: () => Promise<T>): Promise<T> {
+    return navigator.locks.request('settings-profiles-folder', action);
+  }
+
   public init() {
-    return this.initTask ??= this.doInit();
+    return this.initTask ??= this.doInit().catch(e => {
+      console.error('settings profiles failed to start', e);
+    });
   }
 
   private async doInit() {
@@ -83,7 +106,11 @@ export class SettingsProfileService {
     this._ready.set(true);
   }
 
-  private async reload() {
+  private reload() {
+    return this.withFolderLock(() => this.readProfiles());
+  }
+
+  private async readProfiles() {
     const entries = await readDir(this.paths.profilesDirPath);
     const profiles: SettingsProfile[] = [];
     for (const entry of entries) {
@@ -98,15 +125,14 @@ export class SettingsProfileService {
         profiles.push({ id, name, settings });
       } catch (e) {
         // keep the last good copy when a file is read mid-write or was broken by hand
-        const previous = this._profiles().find(p => p.id == id);
+        const previous = this._profiles().find(p => sameId(p.id, id));
         if (previous) {
           profiles.push(previous);
         }
         console.error('failed to read settings profile', entry.name, e);
       }
     }
-    profiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
-    this._profiles.set(profiles);
+    this._profiles.set(sortProfiles(profiles));
   }
 
   private async createDefaultProfileOnFirstRun() {
@@ -132,24 +158,40 @@ export class SettingsProfileService {
     return await join(this.paths.profilesDirPath, `${id}.json`);
   }
 
-  private async writeProfile(profile: SettingsProfile) {
+  // Call only while holding the folder lock.
+  private async writeProfileFile(profile: SettingsProfile) {
     const file: SettingsProfileFile = { name: profile.name, settings: profile.settings };
     // write a temporary file and rename it, so the folder watcher never reads a half-written profile
     const tempPath = await join(this.paths.profilesDirPath, `${profile.id}.${self.crypto.randomUUID()}.tmp`);
-    await writeTextFile(tempPath, JSON.stringify(file, undefined, 4));
-    await rename(tempPath, await this.profilePath(profile.id));
-    const others = this._profiles().filter(p => p.id != profile.id);
-    this._profiles.set([...others, profile].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })));
+    try {
+      await writeTextFile(tempPath, JSON.stringify(file, undefined, 4));
+      await rename(tempPath, await this.profilePath(profile.id));
+    } finally {
+      if (await exists(tempPath)) {
+        await remove(tempPath);
+      }
+    }
+    const others = this._profiles().filter(p => !sameId(p.id, profile.id));
+    this._profiles.set(sortProfiles([...others, profile]));
   }
 
-  private async writeNewProfile(name: string, settings: Partial<Settings>) {
-    const profile: SettingsProfile = {
-      id: profileIdFromName(name, this.profiles().map(p => p.id)),
-      name: name.trim(),
-      settings
-    };
-    await this.writeProfile(profile);
-    return profile;
+  private writeProfile(profile: SettingsProfile) {
+    return this.withFolderLock(() => this.writeProfileFile(profile));
+  }
+
+  private writeNewProfile(name: string, settings: Partial<Settings>) {
+    return this.withFolderLock(async () => {
+      // take ids from the folder, not the loaded list, so a file that failed to parse is never overwritten
+      const files = await readDir(this.paths.profilesDirPath);
+      const takenIds = files.filter(f => f.name.toLowerCase().endsWith('.json')).map(f => f.name.slice(0, -'.json'.length));
+      const profile: SettingsProfile = {
+        id: profileIdFromName(name, takenIds),
+        name: name.trim(),
+        settings
+      };
+      await this.writeProfileFile(profile);
+      return profile;
+    });
   }
 
   // Writes the current settings into the active profile.
@@ -164,13 +206,14 @@ export class SettingsProfileService {
 
   // Writes the profile's settings to settings.json and makes it the active profile.
   public async select(id: string) {
-    const profile = this.profiles().find(p => p.id == id);
-    if (!profile) {
+    const profile = this.profiles().find(p => sameId(p.id, id));
+    const current = this.dss.values();
+    if (!profile || !current) {
       return;
     }
-    const next = keepHeadsetEnableFlags(fullSettings(profile.settings, this.defaults()), this.dss.values());
+    const next = keepHeadsetEnableFlags(fullSettings(profile.settings, this.defaults()), current);
     await this.dss.save(next);
-    await this.saveAppSettings({ activeProfile: id });
+    await this.saveAppSettings({ activeProfile: profile.id });
   }
 
   // Creates a profile from the driver defaults and selects it. Headsets stay enabled or disabled as they are now.
@@ -188,12 +231,14 @@ export class SettingsProfileService {
 
   // Deletes the profile file. Deleting the active profile leaves settings.json as it is.
   public async delete(id: string) {
-    const path = await this.profilePath(id);
-    if (await exists(path)) {
-      await remove(path);
-    }
-    this._profiles.set(this._profiles().filter(p => p.id != id));
-    if (this.activeId() == id) {
+    await this.withFolderLock(async () => {
+      const path = await this.profilePath(id);
+      if (await exists(path)) {
+        await remove(path);
+      }
+      this._profiles.set(this._profiles().filter(p => !sameId(p.id, id)));
+    });
+    if (sameId(this.activeId(), id)) {
       await this.saveAppSettings({ activeProfile: '' });
     }
   }

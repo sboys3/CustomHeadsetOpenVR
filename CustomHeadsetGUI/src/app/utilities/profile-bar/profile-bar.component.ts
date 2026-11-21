@@ -39,29 +39,43 @@ export class ProfileBarComponent {
     }
   }
 
-  // Asks what to do with unsaved changes. Resolves false when the user cancels.
-  private async resolveUnsavedChanges(): Promise<boolean> {
+  // Asks what to do with settings that are not saved in a profile. Resolves false when the user cancels.
+  // reservedNames are names the caller is about to use, so a profile saved here cannot take them.
+  private async resolveUnsavedChanges(reservedNames: string[] = []): Promise<boolean> {
     if (!this.sps.isDirty()) {
       return true;
     }
-    const name = this.sps.activeProfile()?.name ?? '';
+    const active = this.sps.activeProfile();
+    if (active) {
+      const choice = await this.dialog.choose(
+        $localize`Unsaved changes`,
+        $localize`Profile "${active.name}" has unsaved changes.`,
+        $localize`Save`,
+        $localize`Discard`,
+        'primary');
+      if (choice) {
+        await this.sps.saveActive();
+      }
+      return choice !== undefined;
+    }
     const choice = await this.dialog.choose(
-      $localize`Unsaved changes`,
-      $localize`Profile "${name}" has unsaved changes.`,
-      $localize`Save`,
+      $localize`Unsaved settings`,
+      $localize`The current settings are not saved in any profile.`,
+      $localize`Save as profile`,
       $localize`Discard`,
       'primary');
-    if (choice === undefined) {
-      return false;
-    }
     if (choice) {
-      await this.sps.saveActive();
+      const name = await this.askName($localize`Save as profile`, $localize`The new profile gets the current settings.`, '', reservedNames);
+      if (!name) {
+        return false;
+      }
+      await this.sps.createFromCurrent(name);
     }
-    return true;
+    return choice !== undefined;
   }
 
-  private async askName(title: string, message: string, value: string) {
-    const names = this.sps.profiles().map(p => p.name);
+  private async askName(title: string, message: string, value: string, reservedNames: string[] = []) {
+    const names = [...this.sps.profiles().map(p => p.name), ...reservedNames];
     return await this.dialog.prompt({
       title,
       message,
@@ -74,12 +88,12 @@ export class ProfileBarComponent {
 
   async select(id: string, profileSelect: MatSelect) {
     await this.run(async () => {
-      if (id != this.sps.activeId() && await this.resolveUnsavedChanges()) {
+      if (id != this.sps.activeProfile()?.id && await this.resolveUnsavedChanges()) {
         await this.sps.select(id);
       }
     });
     // the select keeps the clicked option even when the switch is cancelled or skipped, so put it back to the active profile
-    profileSelect.value = this.sps.activeId();
+    profileSelect.value = this.sps.activeProfile()?.id ?? '';
   }
 
   save() {
@@ -100,11 +114,9 @@ export class ProfileBarComponent {
 
   create() {
     this.run(async () => {
-      if (!await this.resolveUnsavedChanges()) {
-        return;
-      }
+      // ask for the name first, so cancelling it leaves everything as it was
       const name = await this.askName($localize`New profile`, $localize`The new profile starts from the driver defaults. Headsets stay enabled or disabled as they are now.`, '');
-      if (name) {
+      if (name && await this.resolveUnsavedChanges([name])) {
         await this.sps.createFromDefaults(name);
       }
     });
