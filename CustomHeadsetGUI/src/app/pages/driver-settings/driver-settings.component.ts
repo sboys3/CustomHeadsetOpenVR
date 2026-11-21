@@ -14,6 +14,7 @@ import { Pimax5KComponent } from '../devices/pimax-5k/pimax-5k.component';
 import { PimaxArtisanComponent } from '../devices/pimax-artisan/pimax-artisan.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GeneralComponent } from '../devices/general/general.component';
+import { ProfileBarComponent } from '../../utilities/profile-bar/profile-bar.component';
 import { HeadsetType, HeadsetType as HeadsetTypeEnum, Settings } from '../../services/JsonFileDefines';
 import { DriverInfoService } from '../../services/driver-info.service';
 import { DriverSettingService } from '../../services/driver-setting.service';
@@ -56,6 +57,7 @@ export interface TabGroup {
         Pimax5KComponent,
         PimaxArtisanComponent,
         GeneralComponent,
+        ProfileBarComponent,
         MatTabsModule,
         MatIconModule,
         MatButtonModule,

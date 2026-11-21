@@ -11,7 +11,8 @@ export class DriverInfoService extends JsonSettingServiceBase<DriverInfo> {
   currentHeadsetType = signal<HeadsetType | undefined>(undefined);
 
   constructor(pathService: PathsService) {
-    super(pathService.infoPath, pathService.appDataDirPath, signal(undefined), false, true);
+    // The driver rewrites info.json in place, so a read can hit a half-written file.
+    super(pathService.infoPath, pathService.appDataDirPath, signal(undefined), false, true, true);
 
     effect(() => {
       const info = this.values();

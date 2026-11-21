@@ -18,7 +18,9 @@ export class AppSettingService extends JsonSettingServiceBase<AppSetting> {
       showIncompatibleProfiles: false,
       launchPimaxOnStartup: false,
       lastPimaxLaunchMethod: 'steamvr',
-      installMethod: 'auto'
+      installMethod: 'auto',
+      activeProfile: '',
+      profilesInitialized: false
     }), true, true)
     const appSettingHolder = inject(AppSettingHolder)
     effect(() => {

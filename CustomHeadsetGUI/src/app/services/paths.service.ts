@@ -15,6 +15,10 @@ export class PathsService {
   public get distortionDirPath(): string {
     return this._distortionDirPath;
   }
+  private _profilesDirPath!: string;
+  public get profilesDirPath(): string {
+    return this._profilesDirPath;
+  }
   private _appDataDirPath!: string;
   public get appDataDirPath(): string {
     return this._appDataDirPath;
@@ -38,6 +42,7 @@ export class PathsService {
   async ensureAllDirCreated() {
     this._appDataDirPath = await this.getDriverAppDirPath();
     this._distortionDirPath = await this.getDriverAppDirPath('Distortion');
+    this._profilesDirPath = await this.getDriverAppDirPath('Profiles');
     this._infoPath = await this.getDriverAppDirPath('info.json');
     this._guiSettingPath = await this.getDriverAppDirPath('gui-settings.json');
     this._settingPath = await this.getDriverAppDirPath('settings.json');
@@ -47,6 +52,9 @@ export class PathsService {
     }
     if (!await exists(this.distortionDirPath)) {
       await mkdir(this.distortionDirPath)
+    }
+    if (!await exists(this.profilesDirPath)) {
+      await mkdir(this.profilesDirPath)
     }
   }
   private async getDriverAppDirPath(rel?: string) {

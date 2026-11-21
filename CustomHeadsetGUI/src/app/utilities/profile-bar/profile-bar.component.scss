@@ -1,0 +1,51 @@
+:host {
+    display: block;
+}
+
+.profile-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.profile-label {
+    font-weight: 500;
+    user-select: none;
+}
+
+.profile-select {
+    width: 13rem;
+}
+
+.profile-dirty {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--mat-sys-tertiary);
+    cursor: help;
+    user-select: none;
+
+    &.hidden {
+        visibility: hidden;
+    }
+}
+
+.profile-dirty-dot {
+    font-size: 0.75rem;
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-left: auto;
+
+    button mat-icon {
+        margin-right: 0.25rem;
+    }
+}

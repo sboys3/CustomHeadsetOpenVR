@@ -121,6 +121,11 @@ export type BaseHeadsetConfig = {
   displayRotation: number;
   maxFovX: number;
   maxFovY: number;
+  advancedFovLimits: boolean;
+  maxFovOuter: number;
+  maxFovInner: number;
+  maxFovTop: number;
+  maxFovBottom: number;
   distortionMeshResolution: number;
   fovBurnInPrevention: boolean;
   fovClamping: boolean;
@@ -219,6 +224,10 @@ export type AppSetting = {
   launchPimaxOnStartup: boolean;
   lastPimaxLaunchMethod: 'steamvr' | 'legacy';
   installMethod: 'auto' | 'register' | 'copy';
+  // file name, without .json, of the selected profile in the Profiles folder. Empty when no profile is selected.
+  activeProfile: string;
+  // set once the first run has created the Default profile from settings.json
+  profilesInitialized: boolean;
 }
 
 export const HeadsetType = {
@@ -258,6 +267,10 @@ export type ResolutionInfo = {
   fovY: number,
   fovMaxX: number,
   fovMaxY: number,
+  fovMaxOuter: number,
+  fovMaxInner: number,
+  fovMaxTop: number,
+  fovMaxBottom: number,
   combinedFovX: number,
   combinedFovY: number,
   renderResolution1To1X: number,
