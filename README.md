@@ -38,7 +38,11 @@ You do not need to do this if you installed the driver with the GUI.
 * Crystal Light
 * Crystal OG
 * The Custom Shader works with all SteamVR native headsets
-	* Vive, Index, Bigscreen Beyond
+	* Vive
+	* Index
+	* Bigscreen Beyond
+	* PSVR 2
+	* Any other wired headsets that use the SteamVR Compositor directly
 
 ## Configuring
 Run `custom-headset-gui.exe` to configure settings.

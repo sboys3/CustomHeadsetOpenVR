@@ -171,6 +171,9 @@ void CustomHeadsetDeviceProvider::RunFrame(){
 	// acquire driverConfig.configLock for the duration of this function
 	std::lock_guard<std::mutex> lock(driverConfigLock);
 	
+	// poll global hotkeys (and any other periodic misc tasks)
+	MiscHelperRunFrame();
+	
 	hidModifier.RunFrame();
 	
 	#ifdef HAS_PRIVATE

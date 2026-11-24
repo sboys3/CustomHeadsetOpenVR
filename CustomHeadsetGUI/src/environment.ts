@@ -16,4 +16,4 @@ switch(environment.vendor){
 }
 
 // when true copy the driver into the SteamVR folder, when false register it in place
-export let driverCopyInstallationMethod = !environment.vendor
+export let driverCopyInstallationMethod = false

@@ -96,6 +96,14 @@ export type CustomShaderConfig = {
   samplingFilterCASStrength: number;
   samplingFilterCASContrast: number;
   colorMultiplier: LinearColor;
+  enablePackedFoveation: boolean;
+  packedFoveationDataThreshold: number;
+  packedFoveationDisableForInvalidData: boolean;
+  packedFoveationFovX: number;
+  packedFoveationFovY: number;
+  packedFoveationCenterSizeX: number;
+  packedFoveationCenterSizeY: number;
+  packedFoveationCentered: boolean;
 }
 
 /**
@@ -105,6 +113,7 @@ export type CustomShaderConfig = {
 export type BaseHeadsetConfig = {
   enable: boolean;
   forceEnable: boolean;
+  displayName: string;
   ipd: number;
   ipdOffset: number;
   horizontalIPDOffset: number;
@@ -219,6 +228,7 @@ export type AppSetting = {
   launchPimaxOnStartup: boolean;
   lastPimaxLaunchMethod: 'steamvr' | 'legacy';
   installMethod: 'auto' | 'register' | 'copy';
+  packedFoveationWarningAcknowledged?: boolean;
 }
 
 export const HeadsetType = {

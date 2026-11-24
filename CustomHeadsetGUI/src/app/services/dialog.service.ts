@@ -22,6 +22,18 @@ export class DialogService {
       }
     }).afterClosed());
   }
+  async confirmWithDontShowAgain(title: string, message: string, yesText?: string, yesClass?: string): Promise<{ confirmed: boolean, dontShowAgain: boolean }> {
+    return await firstValueFrom(this.matDialog.open(ConfirmComponent, {
+      hasBackdrop: true,
+      data: {
+        title,
+        message,
+        yesText,
+        yesClass,
+        dontShowAgain: true
+      }
+    }).afterClosed()) as { confirmed: boolean, dontShowAgain: boolean };
+  }
   async message(title: string, message: string): Promise<void> {
     return await firstValueFrom(this.matDialog.open(MessageComponent, {
       hasBackdrop: true,

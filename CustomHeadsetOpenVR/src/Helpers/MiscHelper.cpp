@@ -1,4 +1,5 @@
 #include "MiscHelper.h"
+#include "../Driver/DriverLog.h"
 
 #include <algorithm>
 #include <sstream>
@@ -238,5 +239,45 @@ void* LibAddress(void* handle, const std::string& name) {
 	return (void*)GetProcAddress((HMODULE)handle, name.c_str());
 	#else
 	return dlsym(handle, name.c_str());
+	#endif
+}
+
+#ifdef _WIN32
+static std::map<int, std::function<void()>> hotkeyCallbacks;
+static std::map<int, bool> hotkeyWasDown;
+#endif
+
+
+void MiscHelperRunFrame(){
+	#ifdef _WIN32
+	for(auto& [key, callback] : hotkeyCallbacks){
+		bool keyIsDown = (GetAsyncKeyState(key) & 0x8000) != 0;
+		bool wasDown = hotkeyWasDown[key];
+		hotkeyWasDown[key] = keyIsDown;
+		if(keyIsDown && !wasDown){
+			callback();
+		}
+	}
+	#endif
+}
+
+bool RegisterGlobalHotkey(int vkCode, std::function<void()> callback) {
+	#ifdef _WIN32
+	hotkeyCallbacks[vkCode] = std::move(callback);
+	hotkeyWasDown[vkCode] = false;
+	return true;
+	#else
+	(void)vkCode;
+	(void)callback;
+	return false;
+	#endif
+}
+
+void UnregisterGlobalHotkey(int vkCode) {
+	#ifdef _WIN32
+	hotkeyCallbacks.erase(vkCode);
+	hotkeyWasDown.erase(vkCode);
+	#else
+	(void)vkCode;
 	#endif
 }

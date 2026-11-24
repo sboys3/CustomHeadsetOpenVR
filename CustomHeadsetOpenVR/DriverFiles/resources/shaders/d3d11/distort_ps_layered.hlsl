@@ -125,8 +125,8 @@ float4 inputColorProcessor(float4 color){
 // replacing the sampling here with something that does not have as many artifacts as bilinear may help
 // #define FxaaTexLod0(t, p) tex.SampleLevel(g_sScene, p, 0.0) 
 // #define FxaaTexOff(t, p, o, r) tex.SampleLevel(g_sScene, p, 0.0, o)
-#define FxaaTexLod0(tex, p, s) tex.Sample(g_sScene, p) 
-#define FxaaTexOff(tex, p, o, r, s) tex.Sample(g_sScene, p + (o * r)) 
+#define FxaaTexLod0(tex, p, s) tex.SampleLevel(g_sScene, p, 0) 
+#define FxaaTexOff(tex, p, o, r, s) tex.SampleLevel(g_sScene, p + (o * r), 0) 
 // #define FxaaTexLod0(t, p, s) getTexel(tex, p, s) 
 // #define FxaaTexOff(t, p, o, r, s) getTexel(tex, p + (o * r), s) 
 
@@ -287,7 +287,7 @@ uniform bool show_sharpen <
 // #define offset_bias 1.0
 #define show_sharpen false
 
-#define tex2D(tex, uv) tex.Sample(g_sScene, uv)
+#define tex2D(tex, uv) tex.SampleLevel(g_sScene, uv, 0)
 
    /*-----------------------------------------------------------.
   /                      Developer settings                     /
@@ -414,7 +414,7 @@ float4 LumaSharpenPass(in Texture2D<float4> tex, in float2 uv, in float2 inverse
 // #define CAS_SHARPENING 1.0
 // #define CAS_CONTRAST 1.0
 
-#define tex2Doffset(tex, p, o, r) tex.Sample(g_sScene, p + (o * r)) 
+#define tex2Doffset(tex, p, o, r) tex.SampleLevel(g_sScene, p + (o * r), 0) 
 float4 CASPass(in Texture2D<float4> sTexColor, float2 texcoord, in float2 inverseTextureSize){    
     // fetch a 3x3 neighborhood around the pixel 'e',
     //  a b c
@@ -464,18 +464,49 @@ float4 CASPass(in Texture2D<float4> sTexColor, float2 texcoord, in float2 invers
 }
 #endif
 
+//#define PACKED_FOVEATION
+
+#ifdef NO_DISTORTION
+// Not supported currently
+#undef PACKED_FOVEATION
+#endif
+
+
+#ifdef PACKED_FOVEATION
+
+
+#endif
+
+
 // #define FILTER_NEARESTNEIGHBOR
-float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy, float4 textureRange){
-	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR) || defined(FILTER_CAS)
+float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy, in float4 textureRange, in InputStruct IN, in bool isScene){
+	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR) || defined(FILTER_CAS) || defined(PACKED_FOVEATION)
 	int2 textureSize = int2(1024,1024);
 	tex.GetDimensions(textureSize.x, textureSize.y);
+	#endif
+	
+	float2 origOrigUV = uv;
+	
+	#ifdef PACKED_FOVEATION
+	bool isFovea = false;
+	if(isScene){
+		
+	}
+	#endif
+	
+	#if defined(FILTER_FXAA2) || defined(FILTER_LUMASHARPEN) || defined(FILTER_NEARESTNEIGHBOR) || defined(FILTER_CAS)
+	
 	float2 inverseTextureSize = float2(1.0/textureSize.x, 1.0/textureSize.y);
 	
 	#ifdef FILTER_HORIZONTAL_PERCENT
 	float2 filterCover = float2(FILTER_HORIZONTAL_PERCENT * 0.01, FILTER_VERTICAL_PERCENT * 0.01);
-	bool2 filterCoverTest = abs(uv.xy - textureRange.xy) > filterCover * textureRange.zw;
+	bool2 filterCoverTest = abs(origOrigUV.xy - textureRange.xy) > filterCover * textureRange.zw;
+	#ifdef PACKED_FOVEATION
+	if(!isFovea && (filterCoverTest.x | filterCoverTest.y)){
+	#else
 	if(filterCoverTest.x | filterCoverTest.y){
-		float4 color = tex.Sample(g_sScene, uv);
+	#endif
+		float4 color = tex.SampleLevel(g_sScene, uv, 0);
 		return inputColorProcessor(color);
 	}
 	#endif
@@ -496,13 +527,13 @@ float4 sampleSceneTexture(in Texture2D<float4> tex, in float2 uv, in float2 dx, 
 	float4 color = tex.SampleLevel(g_sScene, (round(uv * textureSize - 0.5) + 0.5) * inverseTextureSize, 0);
 	#else
 	// standard bilinear
-	float4 color = tex.Sample(g_sScene, uv);
+	float4 color = tex.SampleLevel(g_sScene, uv, 0);
 	#endif
 	return inputColorProcessor(color);
 }
 
 float4 sampleSceneTextureBasic(in Texture2D<float4> tex, in float2 uv, in float2 dx, in float2 dy){
-	float4 color = tex.Sample(g_sScene, uv);
+	float4 color = tex.SampleLevel(g_sScene, uv, 0);
 	return inputColorProcessor(color);
 }
 
@@ -616,7 +647,15 @@ OutputStruct main(in InputStruct IN)
 	// }
 	
 	#ifndef NO_DISTORTION 
+	// Under some circumstances, only a section of the buffer is used for the real image. The rest is garbage.
+	// Before 2.19.3, xy:center of range, zw: half size of the range
+	// As of 2.19.3, xy:start of range, zw: half size of the range
 	float4 textureRange = g_SceneTextureData[IN.param4].eye[g_nEye].matTexDetails._m20_m21_m22_m23;
+	// New versions of SteamVR change XY to refer to the start of the texture range instead of the center.
+	if(textureRange.y - textureRange.w < -0.01){
+		// Make it represent the center like before.
+		textureRange.xy += textureRange.zw;
+	}
 	#else
 	float4 textureRange = 0.5;
 	#endif
@@ -625,21 +664,21 @@ OutputStruct main(in InputStruct IN)
 	#ifndef NO_DISTORTION
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col.x = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange).x;
-			col.y = sampleSceneTexture(g_tScene0, IN.uv2.xy, uvDx, uvDy, textureRange).y;
-			col.z = sampleSceneTexture(g_tScene0, IN.uv3.xy, uvDx, uvDy, textureRange).z;
+			col.x = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true).x;
+			col.y = sampleSceneTexture(g_tScene0, IN.uv2.xy, uvDx, uvDy, textureRange, IN, true).y;
+			col.z = sampleSceneTexture(g_tScene0, IN.uv3.xy, uvDx, uvDy, textureRange, IN, true).z;
 			break;
 		}
 		case 1:{
-			col.x = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange).x;
-			col.y = sampleSceneTexture(g_tScene1, IN.uv2.xy, uvDx, uvDy, textureRange).y;
-			col.z = sampleSceneTexture(g_tScene1, IN.uv3.xy, uvDx, uvDy, textureRange).z;
+			col.x = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true).x;
+			col.y = sampleSceneTexture(g_tScene1, IN.uv2.xy, uvDx, uvDy, textureRange, IN, true).y;
+			col.z = sampleSceneTexture(g_tScene1, IN.uv3.xy, uvDx, uvDy, textureRange, IN, true).z;
 			break;
 		}
 		default:{
-			col.x = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange).x;
-			col.y = sampleSceneTexture(g_tScene2, IN.uv2.xy, uvDx, uvDy, textureRange).y;
-			col.z = sampleSceneTexture(g_tScene2, IN.uv3.xy, uvDx, uvDy, textureRange).z;
+			col.x = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true).x;
+			col.y = sampleSceneTexture(g_tScene2, IN.uv2.xy, uvDx, uvDy, textureRange, IN, true).y;
+			col.z = sampleSceneTexture(g_tScene2, IN.uv3.xy, uvDx, uvDy, textureRange, IN, true).z;
 		break;
 	}}
 	#else
@@ -647,15 +686,15 @@ OutputStruct main(in InputStruct IN)
 	float2 uvDy = ddy(IN.uv1.xy);
 	[forcecase] switch (IN.param4){
 		case 0:{
-			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange);
+			col = sampleSceneTexture(g_tScene0, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true);
 			break;
 		}
 		case 1:{
-			col = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange);
+			col = sampleSceneTexture(g_tScene1, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true);
 			break;
 		}
 		default:{
-			col = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange);
+			col = sampleSceneTexture(g_tScene2, IN.uv1.xy, uvDx, uvDy, textureRange, IN, true);
 		break;
 	}}
 	#endif
@@ -683,9 +722,9 @@ OutputStruct main(in InputStruct IN)
  	float2 layerGA = sampleSceneTextureBasic(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay).ga;
  	float2 layerBA = sampleSceneTextureBasic(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay).ba;
 	#else
- 	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ra;
- 	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ga;
- 	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay, (float4)0.5).ba;
+ 	float2 layerRA = sampleSceneTexture(g_tLayer, IN.uv1.zw, uvDxOverlay, uvDyOverlay, (float4)0.5, IN, false).ra;
+ 	float2 layerGA = sampleSceneTexture(g_tLayer, IN.uv2.zw, uvDxOverlay, uvDyOverlay, (float4)0.5, IN, false).ga;
+ 	float2 layerBA = sampleSceneTexture(g_tLayer, IN.uv3.zw, uvDxOverlay, uvDyOverlay, (float4)0.5, IN, false).ba;
 	#endif
 	float3 layerColors = float3(layerRA.x, layerGA.x, layerBA.x);
 	float3 layerAlphas = float3(layerRA.y, layerGA.y, layerBA.y);

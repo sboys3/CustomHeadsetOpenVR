@@ -4,6 +4,7 @@
 #include <map>
 #include <mutex>
 #include <thread>
+#include <functional>
 
 // Compares two version strings and returns true if 'latest' is newer than 'current'.
 // Handles optional leading 'v'/'V' prefix, numeric and alphanumeric parts separated by '.' or '-'.
@@ -29,6 +30,10 @@ void* LibOpen(const std::string& path);
 void LibClose(void* handle);
 void* LibAddress(void* handle, const std::string& name);
 
+// Called once per frame from the device provider as a general hook for periodic tasks.
+void MiscHelperRunFrame();
+bool RegisterGlobalHotkey(int vkCode, std::function<void()> callback);
+void UnregisterGlobalHotkey(int vkCode);
 
 // A lock guard that uses the shared lock on a std::shared_mutex
 // This also avoids locking more than once per thread, which can result in deadlocks once non-shared locks are called. This can happen because a thread can be shared locked, and then when another thread requests the exclusive lock, the second shared lock within a thread will be blocked. Therefore, the first lock never gets freed. By preventing more than one lock per thread, this problem is mitigated.

@@ -15,6 +15,8 @@
 #include <fstream>
 #include <thread>
 #include <cstdint>
+#include <cmath>
+#include <cstdio>
 
 #include "../../../ThirdParty/easywsclient/easywsclient.hpp"
 
@@ -99,6 +101,9 @@ static std::unordered_map<uint64_t, CachedShader> shaderCache;
 // Ordered list of hashes for LRU eviction (oldest at front)
 static std::list<uint64_t> shaderCacheOrder;
 
+// stores the last compiled bytecode for each shader type so the hot path can reuse it instead of recompiling
+static std::unordered_map<std::string, Bytecode> lastCompiledShaders;
+
 // FNV-1a hash function for generating unique hashes from data
 static uint64_t FNV1aHash(const void* data, size_t length){
 	uint64_t hash = 0xCBF29CE484222325; // FNV offset basis
@@ -132,6 +137,21 @@ static void EvictOldestShaderCacheEntry(){
 	if(it != shaderCache.end()){
 		shaderCache.erase(it);
 	}
+}
+
+// returns the last compiled bytecode for a shader type, compiling and storing it if not yet cached
+static Bytecode GetLastCompiledShader(const std::string& identifierString){
+	// fast path: reuse the last compiled version to avoid recompiling in the hot path
+	{
+		std::lock_guard<std::mutex> lock(shaderCacheMutex);
+		auto it = lastCompiledShaders.find(identifierString);
+		if(it != lastCompiledShaders.end() && it->second.data != nullptr && it->second.length > 0){
+			Bytecode result = {new char[it->second.length], it->second.length};
+			memcpy(result.data, it->second.data, it->second.length);
+			return result;
+		}
+	}
+	return {};
 }
 
 // Compile a shader from file with caching based on file content and defines
@@ -279,7 +299,7 @@ static void DetourCreatePixelShader(ID3D11Device* _this, const void* pShaderByte
 	std::string identifierString((char*)pShaderBytecode, 32);
 	// LogShaderIdentifier(identifierString, BytecodeLength);
 	if(driverConfig.customShader.enable && shaderReplacements.find(identifierString) != shaderReplacements.end()){
-		Bytecode newBytecode = shaderReplacements[identifierString]();
+		Bytecode newBytecode = GetLastCompiledShader(identifierString);
 		// DriverLog("==================================");
 		if(newBytecode.data == nullptr || newBytecode.length == 0){
 			DriverLog("Failed to get new bytecode");
@@ -411,7 +431,7 @@ static std::map<Config::HeadsetType, std::vector<double>> srgbColorCorrectionWit
 // replace SHADER_VARIABLES with the decoded content, and write a .processed.hlsl file.
 // Always writes the output file (even if blank) to prevent stale data from being used
 // when the decoder fails on new bytecode. Returns the absolute path to the .processed.hlsl file.
-static std::string DecodeShaderAndWriteProcessedFile(std::string sourceShaderName, std::string originalShaderName){
+static std::string DecodeShaderAndWriteProcessedFile(std::string sourceShaderName, std::string originalShaderName, std::string* outputIdentifierString = nullptr){
     
     // Create temp directory within the shader folder
     std::string shaderPath = getShaderPath();
@@ -451,6 +471,10 @@ static std::string DecodeShaderAndWriteProcessedFile(std::string sourceShaderNam
         fread(bytecode.data(), 1, bytecodeLength, inFile);
         fclose(inFile);
         // DriverLog("Read original shader bytecode from %s (%zu bytes)", bytecodeFullPath.c_str(), bytecodeLength);
+		
+		if(outputIdentifierString && bytecodeLength >= 32){
+			*outputIdentifierString = std::string((char*)bytecode.data(), 32);
+		}
         
         // Decode shader variables
         hlsl = DecodeShaderVariables(bytecode.data(), static_cast<uint32_t>(bytecodeLength));
@@ -527,11 +551,12 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 	
 	std::string fullSourcePath = getShaderPath() + "distort_ps_layered.hlsl";
 	
+	std::string identifierString;
 	// Decode the original shader bytecode, replace SHADER_VARIABLES, and write .processed.hlsl
-	std::string fullProcessedPath = DecodeShaderAndWriteProcessedFile("distort_ps_layered.hlsl", originalShaderName);
+	std::string fullProcessedPath = DecodeShaderAndWriteProcessedFile("distort_ps_layered.hlsl", originalShaderName, &identifierString);
 	
 	// create defines for shader settings
-	D3D_SHADER_MACRO defines[60] = {};
+	D3D_SHADER_MACRO defines[80] = {};
 	int definesCount = 0;
 	
 	if(driverConfigLoader.info.connectedHeadset == Config::HeadsetType::MeganeX8K){
@@ -704,6 +729,101 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 		contrastString = std::to_string(driverConfig.customShader.samplingFilterCASContrast);
 		defines[definesCount++] = {"CAS_CONTRAST", contrastString.c_str()};
 	}
+	std::string packedFoveationDataThreshold;
+	std::string packedFoveationFovX;
+	std::string packedFoveationFovY;
+	std::string packedFoveationCenterSize;
+	std::string packedFoveationS;
+	std::string packedFoveationN1;
+	std::string packedFoveationP1;
+	std::string packedFoveationQ1;
+	std::string packedFoveationP2;
+	std::string packedFoveationQ2;
+	if(driverConfig.customShader.enablePackedFoveation){
+		defines[definesCount++] = {"PACKED_FOVEATION", "1"};
+		if(driverConfig.customShader.packedFoveationCentered){
+			defines[definesCount++] = {"PACKED_FOVEATION_CENTERED", "1"};
+		}
+		packedFoveationDataThreshold = std::to_string(driverConfig.customShader.packedFoveationDataThreshold);
+		defines[definesCount++] = {"PACKED_FOVEATION_DATA_THRESHOLD", packedFoveationDataThreshold.c_str()};
+		if(driverConfig.customShader.packedFoveationDisableForInvalidData){
+			defines[definesCount++] = {"PACKED_FOVEATION_DISABLE_FOR_INVALID_DATA", "1"};
+		}
+		packedFoveationFovX = std::to_string(driverConfig.customShader.packedFoveationFovX);
+		defines[definesCount++] = {"PACKED_FOVEATION_FOV_X", packedFoveationFovX.c_str()};
+		packedFoveationFovY = std::to_string(driverConfig.customShader.packedFoveationFovY);
+		defines[definesCount++] = {"PACKED_FOVEATION_FOV_Y", packedFoveationFovY.c_str()};
+		packedFoveationCenterSize = std::to_string(driverConfig.customShader.packedFoveationCenterSizeX) + ", " + std::to_string(driverConfig.customShader.packedFoveationCenterSizeY);
+		defines[definesCount++] = {"PACKED_FOVEATION_CENTER_SIZE", packedFoveationCenterSize.c_str()};
+		{
+			const float fov5Cells = 64.0f;   // total background cells
+			auto fmtDecimal = [](float v){ char b[48]; snprintf(b, sizeof(b), "%.9f", (double)v); return std::string(b); };
+			float sx = (float)driverConfig.customShader.packedFoveationCenterSizeX;
+			float sy = (float)driverConfig.customShader.packedFoveationCenterSizeY;
+			// which rectangles make up the free space + how many of each (m).
+			// corner: one TOP bounded by the sides + one full-height SIDE (m=1,1).
+			// centred: two full-height SIDE strips + two TOP/BOTTOM caps (m=2,2).
+			// Only w/h and m differ between layouts; the search and seating below
+			// are shared.
+			float w1, h1, w2, h2, m1, m2;
+			if(driverConfig.customShader.packedFoveationCentered){
+				w1 = (1.0f - sx) * 0.5f; h1 = 1.0f;                // a SIDE strip (two)
+				w2 = sx;                   h2 = (1.0f - sy) * 0.5f; // a CAP (two)
+				m1 = 2.0f; m2 = 2.0f;
+			}else{
+				w1 = sx;                   h1 = 1.0f - sy;         // TOP, bounded by the sides (one)
+				w2 = 1.0f - sx;            h2 = 1.0f;             // full-height SIDE (one)
+				m1 = 1.0f; m2 = 1.0f;
+			}
+			float cArea = w1 * h1 * m1 + w2 * h2 * m2;    // free area (1 - sx*sy)
+			// degenerate defaults (the fovea covers the whole buffer, no cell
+			// fits): the shader routes every pixel to the corner and never calls
+			// the packing map, so these just need to be self-consistent.
+			float s = 0.0f, n1 = 0.0f, p1 = 1.0f, q1 = 1.0f, p2 = 1.0f, q2 = 1.0f;
+			if(cArea > 0.0f){
+				auto fov5Cap = [](float a1, float b1, float m1, float a2, float b2, float m2, float ss) -> float {
+					if(ss <= 0.0f) return 1.0e9f;
+					return m1 * floorf(a1/ss) * floorf(b1/ss) + m2 * floorf(a2/ss) * floorf(b2/ss);
+				};
+				// binary-search s* = max{s : C(s) >= 64}; hi is the area bound
+				// (64 squares of side s need 64*s^2 <= C), lo starts feasible. C
+				// is monotone non-increasing, so lo stays feasible / hi infeasible
+				// every step and the search can never overshoot s*. 32 halvings
+				// drive hi-lo below one ulp of s*.
+				float hi = sqrtf(cArea / fov5Cells);
+				float lo = 0.0f;
+				for(int i = 0; i < 32; i++){
+					float m = (lo + hi) * 0.5f;
+					if(fov5Cap(w1, h1, m1, w2, h2, m2, m) >= fov5Cells){ lo = m; }
+					else { hi = m; }
+				}
+				s = lo;
+				// seat the cells greedily to capacity at s*: TOP first (it holds the
+				// first cells), spilling the rest to SIDE. C(s*)>=64 guarantees the
+				// two corner grids hold >= 64 slots, so all 64 fit and k = 8*s* = k*.
+				float cap1 = floorf(w1/s) * floorf(h1/s);
+				float t1 = m1 * cap1; if(t1 > fov5Cells) t1 = fov5Cells;
+				n1 = t1 / m1;
+				float n2 = (fov5Cells - t1) / m2;
+				if(n1 > 0.0f){ p1 = floorf(w1/s); if(p1 < 1.0f) p1 = 1.0f; q1 = ceilf(n1/p1); }
+				else         { p1 = 1.0f; q1 = 1.0f; }
+				if(n2 > 0.0f){ p2 = floorf(w2/s); if(p2 < 1.0f) p2 = 1.0f; q2 = ceilf(n2/p2); }
+				else         { p2 = 1.0f; q2 = 1.0f; }
+			}
+			packedFoveationS  = fmtDecimal(s);
+			packedFoveationN1 = fmtDecimal(n1);
+			packedFoveationP1 = fmtDecimal(p1);
+			packedFoveationQ1 = fmtDecimal(q1);
+			packedFoveationP2 = fmtDecimal(p2);
+			packedFoveationQ2 = fmtDecimal(q2);
+		}
+		defines[definesCount++] = {"PACKED_FOVEATION_S",  packedFoveationS.c_str()};
+		defines[definesCount++] = {"PACKED_FOVEATION_N1", packedFoveationN1.c_str()};
+		defines[definesCount++] = {"PACKED_FOVEATION_P1", packedFoveationP1.c_str()};
+		defines[definesCount++] = {"PACKED_FOVEATION_Q1", packedFoveationQ1.c_str()};
+		defines[definesCount++] = {"PACKED_FOVEATION_P2", packedFoveationP2.c_str()};
+		defines[definesCount++] = {"PACKED_FOVEATION_Q2", packedFoveationQ2.c_str()};
+	}
 	std::string colorMultiplierString = "";
 	if(driverConfig.customShader.colorMultiplier.r != 1.0 || driverConfig.customShader.colorMultiplier.g != 1.0 || driverConfig.customShader.colorMultiplier.b != 1.0) {
 		colorMultiplierString = std::to_string(driverConfig.customShader.colorMultiplier.r) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.g) + ", " + std::to_string(driverConfig.customShader.colorMultiplier.b);
@@ -749,6 +869,17 @@ Bytecode DistortionShader(bool muraCorrection = false, bool noDistortion = false
 		DriverLog("Successfully compiled shader file: %s", fullProcessedPath.c_str());
 		// delete error file
 		remove(errorPath.c_str());
+		// store in last used cache
+		if(bytecode.data != nullptr && bytecode.length > 0){
+			std::lock_guard<std::mutex> lock(shaderCacheMutex);
+			auto it = lastCompiledShaders.find(identifierString);
+			if(it != lastCompiledShaders.end()){
+				delete[] it->second.data;
+			}
+			Bytecode stored = {new char[bytecode.length], bytecode.length};
+			memcpy(stored.data, bytecode.data, bytecode.length);
+			lastCompiledShaders[identifierString] = stored;
+		}
 		return bytecode;
 	}
 }
@@ -1046,9 +1177,15 @@ void ShaderReplacement::CheckSettingsThread(){
 				reloadShaders |= driverConfig.customShader.samplingFilterCASContrast != driverConfigOld.customShader.samplingFilterCASContrast;
 				reloadShaders |= driverConfig.customShader.samplingFilterHorizontalPercent != driverConfigOld.customShader.samplingFilterHorizontalPercent;
 				reloadShaders |= driverConfig.customShader.samplingFilterVerticalPercent != driverConfigOld.customShader.samplingFilterVerticalPercent;
-				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || 
-					driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || 
-					driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;
+				reloadShaders |= driverConfig.customShader.colorMultiplier.r != driverConfigOld.customShader.colorMultiplier.r || driverConfig.customShader.colorMultiplier.g != driverConfigOld.customShader.colorMultiplier.g || driverConfig.customShader.colorMultiplier.b != driverConfigOld.customShader.colorMultiplier.b;
+				reloadShaders |= driverConfig.customShader.enablePackedFoveation != driverConfigOld.customShader.enablePackedFoveation;
+				reloadShaders |= driverConfig.customShader.packedFoveationDataThreshold != driverConfigOld.customShader.packedFoveationDataThreshold;
+				reloadShaders |= driverConfig.customShader.packedFoveationDisableForInvalidData != driverConfigOld.customShader.packedFoveationDisableForInvalidData;
+				reloadShaders |= driverConfig.customShader.packedFoveationFovX != driverConfigOld.customShader.packedFoveationFovX;
+				reloadShaders |= driverConfig.customShader.packedFoveationFovY != driverConfigOld.customShader.packedFoveationFovY;
+				reloadShaders |= driverConfig.customShader.packedFoveationCenterSizeX != driverConfigOld.customShader.packedFoveationCenterSizeX;
+				reloadShaders |= driverConfig.customShader.packedFoveationCenterSizeY != driverConfigOld.customShader.packedFoveationCenterSizeY;
+				reloadShaders |= driverConfig.customShader.packedFoveationCentered != driverConfigOld.customShader.packedFoveationCentered;
 				if(driverConfig.customShader.srgbColorCorrectionMatrix.size() == 9 && driverConfigOld.customShader.srgbColorCorrectionMatrix.size() == 9){
 					for(int i = 0; i < 9; i++){
 						reloadShaders |= driverConfig.customShader.srgbColorCorrectionMatrix[i] != driverConfigOld.customShader.srgbColorCorrectionMatrix[i];

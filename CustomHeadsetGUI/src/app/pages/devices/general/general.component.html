@@ -340,6 +340,146 @@
     </div>
 </div>
 }
+@if(typeof defaults.customShader.enablePackedFoveation != "undefined" && advanceMode()){
+<div class="field">
+    <div class="title">
+        <span i18n>Enable Packed Foveation</span>
+        <app-field-tip i18n-info
+            info="Enables packed foveation Which packs a high resolution foveated image into the buffer between the game and SteamVR. This is a custom non-standard foveation format. This requires the application to pack eye tracking data into the scene texture." />
+        <app-reset-button [canReset]="settings.customShader.enablePackedFoveation!=defaults.customShader.enablePackedFoveation"
+            (resetClick)="nested('customShader').resetOption('enablePackedFoveation')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.enablePackedFoveation"
+            (ngModelChange)="onPackedFoveationChange($event)"></mat-slide-toggle>
+    </div>
+</div>
+@if(settings.customShader.enablePackedFoveation){
+<div class="field">
+    <div class="title">
+        <span i18n>Disable for Invalid Data</span>
+        <app-field-tip i18n-info
+            info="When enabled, packed foveation is disabled on the SteamVR side if the packed data is invalid. This will occasionally result in flickers and should not be used as a substitute for turning off packed foveation when it is not in use." />
+        <app-reset-button [canReset]="settings.customShader.packedFoveationDisableForInvalidData!=defaults.customShader.packedFoveationDisableForInvalidData"
+            (resetClick)="nested('customShader').resetOption('packedFoveationDisableForInvalidData')"></app-reset-button>
+    </div>
+    <div class="control">
+        <mat-slide-toggle [(ngModel)]="settings.customShader.packedFoveationDisableForInvalidData"
+            (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+    </div>
+</div>
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-description>
+            <span i18n>Advanced Packed Foveation Settings</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="field">
+        <div class="note small-warning">
+            <mat-icon class="warn-color" style="vertical-align: middle;">warning</mat-icon><span i18n>These values must exactly match the packed foveation configuration used by the application. If they do not match, the image will be severely distorted.</span>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Packed Foveation Data Threshold</span>
+            <app-field-tip i18n-info
+                info="This can be varied to combat effects that post processing has on the data. It is the threshold for determining if a packed data channel is a 1 or 0." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationDataThreshold!=defaults.customShader.packedFoveationDataThreshold"
+                (resetClick)="nested('customShader').resetOption('packedFoveationDataThreshold')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.customShader.packedFoveationDataThreshold" step="0.01"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="1.0" min="0.0" step="0.01" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.customShader.packedFoveationDataThreshold"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Centered Fovea</span>
+            <app-field-tip i18n-info
+                info="If the foveated region is located at the center of the buffer. Centering the foveation results in better compatibility with the VRC UI. This must match the application settings." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationCentered!=defaults.customShader.packedFoveationCentered"
+                (resetClick)="nested('customShader').resetOption('packedFoveationCentered')"></app-reset-button>
+        </div>
+        <div class="control">
+            <mat-slide-toggle [(ngModel)]="settings.customShader.packedFoveationCentered"
+                (ngModelChange)="saveConfigSettings()"></mat-slide-toggle>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Packed Foveation FOV X</span>
+            <app-field-tip i18n-info
+                info="Horizontal field of view of the foveation camera in degrees. This controls how much of the scene is visible in the foveated region." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationFovX!=defaults.customShader.packedFoveationFovX"
+                (resetClick)="nested('customShader').resetOption('packedFoveationFovX')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.customShader.packedFoveationFovX" step="1"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="90" min="1" step="1" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.customShader.packedFoveationFovX"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Packed Foveation FOV Y</span>
+            <app-field-tip i18n-info
+                info="Vertical field of view of the foveation camera in degrees. This controls how much of the scene is visible in the foveated region." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationFovY!=defaults.customShader.packedFoveationFovY"
+                (resetClick)="nested('customShader').resetOption('packedFoveationFovY')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.customShader.packedFoveationFovY" step="1"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="90" min="1" step="1" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.customShader.packedFoveationFovY"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Packed Foveation Center Size X</span>
+            <app-field-tip i18n-info
+                info="X size of the foveation center region (0-1). This controls the horizontal size of the high-resolution foveated region. Larger values allow for a higher resolution foveated region when using smaller overall buffer sizes at the expense of the peripheral quality." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationCenterSizeX!=defaults.customShader.packedFoveationCenterSizeX"
+                (resetClick)="nested('customShader').resetOption('packedFoveationCenterSizeX')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.customShader.packedFoveationCenterSizeX" step="0.01"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="1.0" min="0.0" step="0.01" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.customShader.packedFoveationCenterSizeX"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+    <div class="field">
+        <div class="title">
+            <span i18n>Packed Foveation Center Size Y</span>
+            <app-field-tip i18n-info
+                info="Y size of the foveation center region (0-1). This controls the vertical size of the high-resolution foveated region. Larger values allow for a higher resolution foveated region when using smaller overall buffer sizes at the expense of the peripheral quality." />
+            <app-reset-button [canReset]="settings.customShader.packedFoveationCenterSizeY!=defaults.customShader.packedFoveationCenterSizeY"
+                (resetClick)="nested('customShader').resetOption('packedFoveationCenterSizeY')"></app-reset-button>
+        </div>
+        <div class="control">
+            <input matInput [(ngModel)]="settings.customShader.packedFoveationCenterSizeY" step="0.01"
+                (ngModelChange)="saveConfigSettings()" type="number">
+            <mat-slider max="1.0" min="0.0" step="0.01" showTickMarks>
+                <input matSliderThumb [(ngModel)]="settings.customShader.packedFoveationCenterSizeY"
+                    (ngModelChange)="saveConfigSettings()">
+            </mat-slider>
+        </div>
+    </div>
+</mat-expansion-panel>
+}
+}
 <div class="field">
     <div class="title">
         <span i18n>Contrast</span>
