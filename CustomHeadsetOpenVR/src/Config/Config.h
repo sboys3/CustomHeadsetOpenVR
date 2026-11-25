@@ -115,6 +115,22 @@ struct CustomShaderConfig{
 	double samplingFilterVerticalPercent = 60;
 	// color multiplier for tint adjustments
 	ConfigColor colorMultiplier = {1.0, 1.0, 1.0};
+	// if packed foveation should be enabled (reads eye tracking data packed into the scene texture)
+	bool enablePackedFoveation = false;
+	// threshold for determining if a packed data channel is a 1 or 0
+	double packedFoveationDataThreshold = 0.5;
+	// if foveation should be disabled when the packed data is invalid
+	bool packedFoveationDisableForInvalidData = true;
+	// horizontal field of view of the foveation camera in degrees
+	double packedFoveationFovX = 25;
+	// vertical field of view of the foveation camera in degrees
+	double packedFoveationFovY = 25;
+	// x size of the foveation center region (0-1)
+	double packedFoveationCenterSizeX = 0.6;
+	// y size of the foveation center region (0-1)
+	double packedFoveationCenterSizeY = 0.6;
+	// Locates the foveated region in the center of the image instead of the corner.
+	bool packedFoveationCentered = true;
 };
 
 
@@ -178,6 +194,8 @@ public:
 		bool enable = true;
 		// the type of headset this is
 		HeadsetType headsetType = HeadsetType::None;
+		// overwrite the headset name to this value to properly show which headset it is in SteamVR, blank passes through the existing name.
+		std::string displayName = "";
 		// ipd in mm
 		double ipd = 63.0;
 		// ipd offset from the ipd value in mm
@@ -365,6 +383,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper50PPD;
+			displayName = "Pimax Crystal Super 50ppd";
 			distortionProfile = "Crystal Super 50ppd Default";
 			distortionProfileDeviceType = "CrystalSuper50PPD";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -388,6 +407,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuper57PPD;
+			displayName = "Pimax Crystal Super 57ppd";
 			distortionProfile = "Crystal Super 57ppd Default";
 			distortionProfileDeviceType = "CrystalSuper57PPD";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -411,6 +431,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperUltrawide;
+			displayName = "Pimax Crystal Super Ultrawide";
 			distortionProfile = "Crystal Super Ultrawide Default";
 			distortionProfileDeviceType = "CrystalSuperUltrawide";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -434,6 +455,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalSuperMicroOLED;
+			displayName = "Pimax Crystal Super Micro-OLED";
 			distortionProfile = "Crystal Super Micro-OLED Default";
 			distortionProfileDeviceType = "CrystalSuperMicroOLED";
 			maxFovX = 98;
@@ -456,6 +478,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalLight;
+			displayName = "Pimax Crystal Light";
 			distortionProfile = "Crystal OG Default";
 			distortionProfileDeviceType = "CrystalLight";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -478,6 +501,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::CrystalOG;
+			displayName = "Pimax Crystal";
 			distortionProfile = "Crystal OG Default";
 			distortionProfileDeviceType = "CrystalOG";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -501,6 +525,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::Pimax5KSuper;
+			displayName = "Pimax 5K Super";
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax5KSuper";
 			distortionMeshResolution = 64;
@@ -523,6 +548,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::Pimax5KPlus;
+			displayName = "Pimax 5K Plus";
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax5KPlus";
 			distortionMeshResolution = 64;
@@ -545,6 +571,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::Pimax8KX;
+			displayName = "Pimax 8KX";
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax8KX";
 			fovBurnInPrevention = false; // not needed on LCD
@@ -568,6 +595,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::Pimax8KPlus;
+			displayName = "Pimax 8K Plus";
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "Pimax8KPlus";
 			distortionMeshResolution = 64;
@@ -590,6 +618,7 @@ public:
 			enable = false;
 			#endif
 			headsetType = HeadsetType::PimaxArtisan;
+			displayName = "Pimax Artisan";
 			distortionProfile = "Pimax Builtin";
 			distortionProfileDeviceType = "PimaxArtisan";
 			distortionMeshResolution = 64;

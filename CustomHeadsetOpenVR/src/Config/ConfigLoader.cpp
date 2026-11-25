@@ -36,6 +36,9 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["enable"].is_boolean()){
 		headsetConfig.enable = headsetData["enable"].get<bool>();
 	}
+	if(headsetData["displayName"].is_string()){
+		headsetConfig.displayName = headsetData["displayName"].get<std::string>();
+	}
 	if(headsetData["ipd"].is_number()){
 		headsetConfig.ipd = headsetData["ipd"].get<double>();
 	}
@@ -442,6 +445,30 @@ void ConfigLoader::ParseConfig(){
 				if(customShaderData["colorMultiplier"]["g"].is_number()){ colorMultiplier.g = customShaderData["colorMultiplier"]["g"].get<double>(); }
 				if(customShaderData["colorMultiplier"]["b"].is_number()){ colorMultiplier.b = customShaderData["colorMultiplier"]["b"].get<double>(); }
 			}
+			if(customShaderData["enablePackedFoveation"].is_boolean()){
+				newConfig.customShader.enablePackedFoveation = customShaderData["enablePackedFoveation"].get<bool>();
+			}
+			if(customShaderData["packedFoveationDataThreshold"].is_number()){
+				newConfig.customShader.packedFoveationDataThreshold = customShaderData["packedFoveationDataThreshold"].get<double>();
+			}
+			if(customShaderData["packedFoveationDisableForInvalidData"].is_boolean()){
+				newConfig.customShader.packedFoveationDisableForInvalidData = customShaderData["packedFoveationDisableForInvalidData"].get<bool>();
+			}
+			if(customShaderData["packedFoveationFovX"].is_number()){
+				newConfig.customShader.packedFoveationFovX = customShaderData["packedFoveationFovX"].get<double>();
+			}
+			if(customShaderData["packedFoveationFovY"].is_number()){
+				newConfig.customShader.packedFoveationFovY = customShaderData["packedFoveationFovY"].get<double>();
+			}
+			if(customShaderData["packedFoveationCenterSizeX"].is_number()){
+				newConfig.customShader.packedFoveationCenterSizeX = customShaderData["packedFoveationCenterSizeX"].get<double>();
+			}
+			if(customShaderData["packedFoveationCenterSizeY"].is_number()){
+				newConfig.customShader.packedFoveationCenterSizeY = customShaderData["packedFoveationCenterSizeY"].get<double>();
+			}
+			if(customShaderData["packedFoveationCentered"].is_boolean()){
+				newConfig.customShader.packedFoveationCentered = customShaderData["packedFoveationCentered"].get<bool>();
+			}
 		}
 		if(data["forceTracking"].is_boolean()){
 			newConfig.forceTracking = data["forceTracking"].get<bool>();
@@ -544,6 +571,7 @@ DistortionProfileConfig ConfigLoader::ParseDistortionConfig(std::string name){
 ordered_json baseHeadsetInfo(Config::BaseHeadsetConfig& headsetConfig){
 	ordered_json result = {
 		{"enable", headsetConfig.enable},
+		{"displayName", headsetConfig.displayName},
 		{"ipd", headsetConfig.ipd},
 		{"ipdOffset", headsetConfig.ipdOffset},
 		{"hardwareIpd", headsetConfig.hardwareIpd},
@@ -707,6 +735,14 @@ void ConfigLoader::WriteInfo(){
 						{"g", defaultSettings.customShader.colorMultiplier.g},
 						{"b", defaultSettings.customShader.colorMultiplier.b},
 					}},
+					{"enablePackedFoveation", defaultSettings.customShader.enablePackedFoveation},
+					{"packedFoveationDataThreshold", defaultSettings.customShader.packedFoveationDataThreshold},
+					{"packedFoveationDisableForInvalidData", defaultSettings.customShader.packedFoveationDisableForInvalidData},
+					{"packedFoveationFovX", defaultSettings.customShader.packedFoveationFovX},
+					{"packedFoveationFovY", defaultSettings.customShader.packedFoveationFovY},
+					{"packedFoveationCenterSizeX", defaultSettings.customShader.packedFoveationCenterSizeX},
+					{"packedFoveationCenterSizeY", defaultSettings.customShader.packedFoveationCenterSizeY},
+					{"packedFoveationCentered", defaultSettings.customShader.packedFoveationCentered},
 				}},
 				{"forceTracking", defaultSettings.forceTracking},
 				{"forceTrackingHeadsetOnly", defaultSettings.forceTrackingHeadsetOnly},

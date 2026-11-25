@@ -25,7 +25,7 @@ export class DialogService {
   }
   // Resolves true for yes, false for no, and undefined for cancel.
   async choose(title: string, message: string, yesText: string, noText: string, yesClass?: string): Promise<boolean | undefined> {
-    // the Cancel button closes with an empty string, and Escape or a backdrop click closes with undefined
+    // Cancel, Escape and a backdrop click all close with undefined
     const result = await firstValueFrom(this.matDialog.open(ConfirmComponent, {
       hasBackdrop: true,
       data: {
@@ -37,6 +37,18 @@ export class DialogService {
       }
     }).afterClosed());
     return typeof result === 'boolean' ? result : undefined;
+  }
+  async confirmWithDontShowAgain(title: string, message: string, yesText?: string, yesClass?: string): Promise<{ confirmed: boolean, dontShowAgain: boolean }> {
+    return await firstValueFrom(this.matDialog.open(ConfirmComponent, {
+      hasBackdrop: true,
+      data: {
+        title,
+        message,
+        yesText,
+        yesClass,
+        dontShowAgain: true
+      }
+    }).afterClosed()) as { confirmed: boolean, dontShowAgain: boolean };
   }
   // Resolves the trimmed text, or undefined when cancelled.
   async prompt(data: PromptData): Promise<string | undefined> {

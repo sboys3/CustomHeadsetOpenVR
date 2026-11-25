@@ -7,4 +7,34 @@
         font-size: 85% !important;
         padding: 0.25rem 1rem !important;
     }
+
+    mat-expansion-panel {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+        box-shadow: none;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &::ng-deep .mat-expansion-panel-header {
+            background: transparent;
+            border-bottom: none;
+            box-shadow: none;
+            height: auto;
+            min-height: 3rem;
+            margin: 0;
+            padding: 0 1rem;
+
+            .mat-expansion-panel-header-title {
+                font-size: inherit;
+                font-weight: 500;
+            }
+        }
+
+        &::ng-deep .mat-expansion-panel-content {
+            padding: 0;
+        }
+    }
 }

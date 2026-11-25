@@ -5,7 +5,7 @@ let child_process = require("child_process")
 // --- Argument parsing ---
 let args = process.argv.slice(2)
 let vendor = "neutral"
-let vendorUi = "pimax"
+let vendorUi = "neutral"
 let buildDriver = true
 let buildGui = true
 

@@ -30,6 +30,11 @@ void BaseHeadsetShim::PosTrackedDeviceActivate(uint32_t &unObjectId, vr::EVRInit
 	driverConfigLoader.info.connectedHeadset = GetConfig().headsetType;
 	
 	isActive = true;
+	
+	if(GetConfig().displayName != ""){
+		modelNumber = GetConfig().displayName;
+		vr::VRProperties()->SetStringProperty(container, vr::Prop_ModelNumber_String, modelNumber.c_str());
+	}
 
 	// avoid "not fullscreen" warnings from vrmonitor
 	vr::VRProperties()->SetBoolProperty( container, vr::Prop_IsOnDesktop_Bool, !GetConfig().directMode);
@@ -386,11 +391,11 @@ void BaseHeadsetShim::SetProximity(bool inProximity, double now){
 	if(now == 0){
 		now = std::chrono::duration<double>(std::chrono::system_clock::now().time_since_epoch()).count();
 	}
-	lastProximityTime = now;
 	if(lastProximityValue != inProximity || std::abs(now - lastProximityTime) > 0.5){
 		vr::VRDriverInput()->UpdateBooleanComponent(inputComponents[ComponentProximity], inProximity, 0);
 		lastProximityValue = inProximity;
 	}
+	lastProximityTime = now;
 }
 
 

@@ -96,6 +96,14 @@ export type CustomShaderConfig = {
   samplingFilterCASStrength: number;
   samplingFilterCASContrast: number;
   colorMultiplier: LinearColor;
+  enablePackedFoveation: boolean;
+  packedFoveationDataThreshold: number;
+  packedFoveationDisableForInvalidData: boolean;
+  packedFoveationFovX: number;
+  packedFoveationFovY: number;
+  packedFoveationCenterSizeX: number;
+  packedFoveationCenterSizeY: number;
+  packedFoveationCentered: boolean;
 }
 
 /**
@@ -105,6 +113,7 @@ export type CustomShaderConfig = {
 export type BaseHeadsetConfig = {
   enable: boolean;
   forceEnable: boolean;
+  displayName: string;
   ipd: number;
   ipdOffset: number;
   horizontalIPDOffset: number;
@@ -228,6 +237,7 @@ export type AppSetting = {
   activeProfile: string;
   // set once the first run has created the Default profile from settings.json
   profilesInitialized: boolean;
+  packedFoveationWarningAcknowledged?: boolean;
 }
 
 export const HeadsetType = {
