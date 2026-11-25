@@ -7,6 +7,7 @@ import {
   profileSettings,
   settingsMatch,
   sparseSettings,
+  turnsOnPackedFoveation,
   validateProfileName,
 } from './settings-profile-helpers';
 
@@ -445,5 +446,19 @@ describe('profileSettings', () => {
 
   it('returns an empty object for undefined values', () => {
     expect(profileSettings<any>(undefined, {})).toEqual({});
+  });
+});
+
+describe('turnsOnPackedFoveation', () => {
+  it('is true only when next enables it and current does not', () => {
+    const on = { customShader: { enablePackedFoveation: true } };
+    const off = { customShader: { enablePackedFoveation: false } };
+    expect(turnsOnPackedFoveation(on, off)).toBeTrue();
+    expect(turnsOnPackedFoveation(on, {})).toBeTrue();
+    expect(turnsOnPackedFoveation(on, undefined)).toBeTrue();
+    expect(turnsOnPackedFoveation(on, on)).toBeFalse();
+    expect(turnsOnPackedFoveation(off, on)).toBeFalse();
+    expect(turnsOnPackedFoveation({}, off)).toBeFalse();
+    expect(turnsOnPackedFoveation(undefined, off)).toBeFalse();
   });
 });

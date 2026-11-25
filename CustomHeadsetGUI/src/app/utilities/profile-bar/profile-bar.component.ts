@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '../../services/dialog.service';
+import { PackedFoveationWarningService } from '../../services/packed-foveation-warning.service';
 import { validateProfileName } from '../../services/settings-profile-helpers';
 import { SettingsProfileService } from '../../services/settings-profile.service';
 
@@ -17,6 +18,7 @@ import { SettingsProfileService } from '../../services/settings-profile.service'
 export class ProfileBarComponent {
   sps = inject(SettingsProfileService);
   private dialog = inject(DialogService);
+  private packedFoveationWarning = inject(PackedFoveationWarningService);
   // true while a profile action runs, so a second click cannot start another one
   busy = signal(false);
 
@@ -86,9 +88,15 @@ export class ProfileBarComponent {
     });
   }
 
+  // A profile can turn packed foveation on without the toggle being touched, so it gets the same warning.
+  // Resolves false when the user cancels.
+  private async confirmProfileSettings(id: string): Promise<boolean> {
+    return !this.sps.selectTurnsOnPackedFoveation(id) || await this.packedFoveationWarning.confirmEnable();
+  }
+
   async select(id: string, profileSelect: MatSelect) {
     await this.run(async () => {
-      if (id != this.sps.activeProfile()?.id && await this.resolveUnsavedChanges()) {
+      if (id != this.sps.activeProfile()?.id && await this.confirmProfileSettings(id) && await this.resolveUnsavedChanges()) {
         await this.sps.select(id);
       }
     });
@@ -106,7 +114,8 @@ export class ProfileBarComponent {
       if (!profile) {
         return;
       }
-      if (await this.dialog.confirm($localize`Discard changes`, $localize`Load the saved settings of profile "${profile.name}" again?`, $localize`Discard`)) {
+      if (await this.dialog.confirm($localize`Discard changes`, $localize`Load the saved settings of profile "${profile.name}" again?`, $localize`Discard`)
+        && await this.confirmProfileSettings(profile.id)) {
         await this.sps.select(profile.id);
       }
     });

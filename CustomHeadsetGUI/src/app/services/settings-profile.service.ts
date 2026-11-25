@@ -9,7 +9,7 @@ import { DriverInfoService } from './driver-info.service';
 import { DriverSettingService } from './driver-setting.service';
 import { Settings } from './JsonFileDefines';
 import { PathsService } from './paths.service';
-import { cloneJson, fullSettings, isPlainObject, keepHeadsetEnableFlags, profileIdFromName, profileSettings, settingsMatch } from './settings-profile-helpers';
+import { cloneJson, fullSettings, isPlainObject, keepHeadsetEnableFlags, profileIdFromName, profileSettings, settingsMatch, turnsOnPackedFoveation } from './settings-profile-helpers';
 
 export type SettingsProfile = {
   // file name in the Profiles folder without .json
@@ -209,6 +209,12 @@ export class SettingsProfileService {
       return;
     }
     await this.writeProfile({ ...profile, settings: profileSettings(values, this.defaults()) });
+  }
+
+  // True when selecting the profile would turn packed foveation on, so the caller can warn first.
+  public selectTurnsOnPackedFoveation(id: string): boolean {
+    const profile = this.profiles().find(p => sameId(p.id, id));
+    return !!profile && turnsOnPackedFoveation(fullSettings(profile.settings, this.defaults()), this.dss.values());
   }
 
   // Writes the profile's settings to settings.json and makes it the active profile.

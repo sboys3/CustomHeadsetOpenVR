@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { AppSetting, Settings } from '../../../services/JsonFileDefines';
-import { DialogService } from '../../../services/dialog.service';
+import { Settings } from '../../../services/JsonFileDefines';
+import { PackedFoveationWarningService } from '../../../services/packed-foveation-warning.service';
 import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -44,28 +44,15 @@ export class GeneralComponent extends DeviceConfigComponentBase<Settings & { ena
   vendorUi = vendorUi;
   showMeganeX8K = !vendorUi || vendorUi == "shiftall";
   showPimax = !vendorUi || vendorUi == "pimax";
-  private dialog = inject(DialogService);
+  private packedFoveationWarning = inject(PackedFoveationWarningService);
   private cdr = inject(ChangeDetectorRef);
   async onPackedFoveationChange(value: boolean) {
-    if (value) {
-      const acknowledged = this.ass.values()?.packedFoveationWarningAcknowledged;
-      if (!acknowledged) {
-        const result = await this.dialog.confirmWithDontShowAgain(
-          $localize`Enable Packed Foveation`,
-          $localize`THIS IS NOT STANDARD FOVEATION!!!\nIf what you are using does not specifically specify *packed foveation*, you should not have this enabled. Enabling it will break the image in all other applications. Packed foveation only works with applications that have packed foveation enabled.\nMake sure to disable this after you are finished using packed foveation.\n\nIf you are looking for standard foveation, install the Quad Views Foveated OpenXR layer or enable foveation in the application you are using and leave this disabled.\n\nAre you sure you want to enable it?`
-        );
-        if (result.dontShowAgain) {
-          const appSettings = (this.ass.values() ?? {}) as AppSetting;
-          this.ass.save({ ...appSettings, packedFoveationWarningAcknowledged: true });
-        }
-        if (!result.confirmed) {
-          // canceling means it should not be enabled
-          this.settings!.customShader.enablePackedFoveation = false;
-          // the ngModel already set the toggle to "on" when clicked; force the view to sync back to the reverted model
-          this.cdr.detectChanges();
-          return;
-        }
-      }
+    if (value && !await this.packedFoveationWarning.confirmEnable()) {
+      // canceling means it should not be enabled
+      this.settings!.customShader.enablePackedFoveation = false;
+      // the ngModel already set the toggle to "on" when clicked; force the view to sync back to the reverted model
+      this.cdr.detectChanges();
+      return;
     }
     this.saveConfigSettings();
   }

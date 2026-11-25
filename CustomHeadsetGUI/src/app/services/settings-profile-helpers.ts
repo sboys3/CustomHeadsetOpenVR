@@ -126,6 +126,13 @@ export function profileSettings<T>(values: T | undefined, defaults: T | undefine
   return sparseSettings(values === undefined ? undefined : withoutHeadsetEnableFlags(values), defaults);
 }
 
+// True when next turns packed foveation on and current has it off.
+export function turnsOnPackedFoveation(
+  next: { customShader?: { enablePackedFoveation?: boolean } } | undefined,
+  current: { customShader?: { enablePackedFoveation?: boolean } } | undefined): boolean {
+  return next?.customShader?.enablePackedFoveation === true && current?.customShader?.enablePackedFoveation !== true;
+}
+
 // Compares full settings objects as a profile would store them, ignoring the headset enable flags.
 export function settingsMatch<T>(a: T | undefined, b: T | undefined, defaults: T | undefined): boolean {
   if (!a || !b) {
