@@ -11,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 })
 export class ConfirmComponent {
   dontShowAgain = false;
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { title: string, message: string, yesText?: string, yesClass?: string, dontShowAgain?: boolean }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { title: string, message: string, yesText?: string, yesClass?: string, noText?: string, dontShowAgain?: boolean }) { }
   cancelValue() {
     return this.data.dontShowAgain ? { confirmed: false, dontShowAgain: this.dontShowAgain } : undefined;
   }

@@ -11,6 +11,10 @@ export async function delay(ms: number = 1) {
 export type DebouncedFileWriter = {
   save: (content: string) => void;
   isSavingFile: () => boolean;
+  // increases on every save call
+  saveCount: () => number;
+  // true while the content of the latest save call has not been written yet
+  hasPendingSave: () => boolean;
 };
 export function cleanJsonComments(jsonString: string) {
   return jsonString.replace(/\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g, (m, g) => g ? "" : m)
@@ -180,9 +184,12 @@ export const deepMerge = <TX extends IObject, TY extends IObject, TR = TX & TY>(
   return result as TR;
 };
 export function debouncedFileWriter(path: string | Promise<string>, tempFileDir: string | Promise<string>, directWrite?: (() => boolean)): DebouncedFileWriter {
-  const saveSbj = new Subject<string>();
+  const saveSbj = new Subject<{ content: string, saveNumber: number }>();
   let savingFile = false
-  saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe(async (content) => {
+  // number of save calls, and the number of the last save that reached the file
+  let saveCount = 0;
+  let writtenSaveNumber = 0;
+  saveSbj.pipe(throttleTime(50, undefined, { trailing: true })).subscribe(async ({ content, saveNumber }) => {
     await navigator.locks.request(`saving file_${await path}`, async () => {
       savingFile = true;
       try {
@@ -205,14 +212,18 @@ export function debouncedFileWriter(path: string | Promise<string>, tempFileDir:
         }
       } finally {
         savingFile = false;
+        // also on a failed write, so a broken file cannot block reloads forever
+        writtenSaveNumber = Math.max(writtenSaveNumber, saveNumber);
       }
     })
   });
   return {
     save: (content: string) => {
-      saveSbj.next(content)
+      saveSbj.next({ content, saveNumber: ++saveCount })
     },
-    isSavingFile: () => savingFile
+    isSavingFile: () => savingFile,
+    saveCount: () => saveCount,
+    hasPendingSave: () => writtenSaveNumber < saveCount
   }
 }
 export function isNewVersion(current: string, latest: string): boolean {

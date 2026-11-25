@@ -1,0 +1,12 @@
+mat-dialog-content {
+    white-space: pre-wrap;
+}
+
+.prompt-field {
+    width: 100%;
+    min-width: 20rem;
+}
+
+.prompt-error {
+    color: var(--mat-sys-error);
+}

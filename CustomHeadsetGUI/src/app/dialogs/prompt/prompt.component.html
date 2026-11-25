@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+  @if(data.message){
+  <p>{{data.message}}</p>
+  }
+  <mat-form-field class="prompt-field">
+    <mat-label>{{data.label}}</mat-label>
+    <input matInput cdkFocusInitial [ngModel]="value()" (ngModelChange)="value.set($event)" (keydown.enter)="submit()" />
+    @if(error() && value()){
+    <mat-hint class="prompt-error">{{error()}}</mat-hint>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button mat-dialog-close i18n>Cancel</button>
+  <button mat-stroked-button [disabled]="!!error()" (click)="submit()">
+    @if(data.okText){
+    <span>{{data.okText}}</span>
+    }@else {
+    <span i18n>Ok</span>
+    }
+  </button>
+</mat-dialog-actions>

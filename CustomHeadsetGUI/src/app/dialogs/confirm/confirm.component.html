@@ -9,6 +9,9 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-stroked-button [mat-dialog-close]="cancelValue()" i18n>Cancel</button>
+  @if(data.noText){
+  <button mat-stroked-button [mat-dialog-close]="false">{{data.noText}}</button>
+  }
   <button mat-stroked-button [mat-dialog-close]="yesValue()" [class]="data.yesClass??'warn'">
     @if(data.yesText){
     <span>{{data.yesText}}</span>

@@ -1,0 +1,37 @@
+<div class="profile-bar">
+  <span class="profile-label" i18n>Profile</span>
+  <mat-select #profileSelect class="profile-select" [value]="sps.activeProfile()?.id ?? ''" (selectionChange)="select($event.value, profileSelect)"
+    [disabled]="!sps.usable() || busy()" placeholder="No profile selected" i18n-placeholder>
+    @for(profile of sps.profiles(); track profile.id){
+    <mat-option [value]="profile.id">{{profile.name}}</mat-option>
+    }
+  </mat-select>
+  <!-- always rendered and only hidden, so the buttons do not move when it appears -->
+  <span class="profile-dirty" [class.hidden]="!sps.isDirty()"
+    matTooltip="The current settings are not saved in the selected profile, or in any profile when none is selected." i18n-matTooltip>
+    <mat-icon class="profile-dirty-dot">circle</mat-icon>
+    <span i18n>Unsaved</span>
+  </span>
+  <div class="profile-actions">
+    <button mat-stroked-button (click)="save()" [disabled]="!sps.usable() || !sps.activeProfile() || !sps.isDirty() || busy()"
+      matTooltip="Save the current settings into this profile" i18n-matTooltip>
+      <mat-icon>save</mat-icon><span i18n>Save</span>
+    </button>
+    <button mat-stroked-button (click)="discard()" [disabled]="!sps.usable() || !sps.activeProfile() || !sps.isDirty() || busy()"
+      matTooltip="Load the saved settings of this profile again" i18n-matTooltip>
+      <mat-icon>undo</mat-icon><span i18n>Discard</span>
+    </button>
+    <button mat-stroked-button (click)="create()" [disabled]="!sps.usable() || busy()"
+      matTooltip="Create a profile from the driver defaults" i18n-matTooltip>
+      <mat-icon>add</mat-icon><span i18n>New</span>
+    </button>
+    <button mat-stroked-button (click)="copy()" [disabled]="!sps.usable() || busy()"
+      matTooltip="Create a profile from the current settings" i18n-matTooltip>
+      <mat-icon>content_copy</mat-icon><span i18n>Copy</span>
+    </button>
+    <button mat-stroked-button class="warn" (click)="delete()" [disabled]="!sps.usable() || !sps.activeProfile() || busy()"
+      matTooltip="Delete this profile" i18n-matTooltip>
+      <mat-icon>delete</mat-icon><span i18n>Delete</span>
+    </button>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, computed, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgModel } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,7 @@ import { FieldTipComponent } from '../../../utilities/field-tip/field-tip.compon
 import { ResetButtonComponent } from '../../../utilities/reset-button/reset-button.component';
 import { ColorPickerComponent } from '../../../utilities/color-picker/color-picker.component';
 import { DeviceConfigComponentBase } from '../DeviceConfigComponentBase';
-import { BaseHeadsetConfig, HeadsetType } from '../../../services/JsonFileDefines';
+import { BaseHeadsetConfig, HeadsetType, ResolutionInfo } from '../../../services/JsonFileDefines';
 
 export interface ResolutionOption {
   name: string;
@@ -41,6 +41,8 @@ export interface HeadsetSettingsConfig {
   defaultMaxFovX: number;
   defaultMaxFovY: number;
 }
+
+type EdgeFovKey = 'maxFovOuter' | 'maxFovInner' | 'maxFovTop' | 'maxFovBottom';
 
 @Component({
   selector: 'app-headset-settings',
@@ -175,6 +177,55 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
   // Computed keys to force slider re-render when max changes
   sliderMaxFovX = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxX || this.config().defaultMaxFovX : this.config().defaultMaxFovX));
   sliderMaxFovY = computed(() => Math.ceil(this.headsetMatches() ? this.dis.values()?.resolution?.fovMaxY || this.config().defaultMaxFovY : this.config().defaultMaxFovY));
+  // Capped at 89 so the slider never reaches 90, which the driver reads as no limit
+  edgeSliderMax = computed<Record<EdgeFovKey, number>>(() => {
+    const res = this.headsetMatches() ? this.dis.values()?.resolution : undefined;
+    const max = (value?: number) => Math.min(Math.ceil(value || 90), 89);
+    return {
+      maxFovOuter: max(res?.fovMaxOuter),
+      maxFovInner: max(res?.fovMaxInner),
+      maxFovTop: max(res?.fovMaxTop),
+      maxFovBottom: max(res?.fovMaxBottom),
+    };
+  });
+
+  private edgeFovMaxKey: Record<EdgeFovKey, keyof ResolutionInfo> = {
+    maxFovOuter: 'fovMaxOuter',
+    maxFovInner: 'fovMaxInner',
+    maxFovTop: 'fovMaxTop',
+    maxFovBottom: 'fovMaxBottom',
+  };
+
+  edgeFovValue(key: EdgeFovKey): number {
+    const value = this.settings?.[key] ?? 90;
+    const sliderMax = this.edgeSliderMax()[key];
+    if (value < 90) {
+      return Math.min(value, sliderMax);
+    }
+    if (this.settings?.fovClamping === false) {
+      // The driver multiplies the per-edge maxima by 1.1 when clamping is off (BaseHeadset.cpp)
+      const fovMax = this.headsetMatches() ? this.dis.values()?.resolution?.[this.edgeFovMaxKey[key]] : undefined;
+      if (fovMax) {
+        return Math.min(Math.round(fovMax / 1.1), sliderMax);
+      }
+    }
+    return sliderMax;
+  }
+
+  // With clamping on, the slider end stores 90 (no limit) so a wider profile stays uncropped.
+  // With clamping off, the value is stored as given, the same as maxFovX/maxFovY.
+  setEdgeFovValue(key: EdgeFovKey, value: number) {
+    if (!this.settings || value == null) {
+      return;
+    }
+    this.settings[key] = this.settings.fovClamping !== false && value >= this.edgeSliderMax()[key] ? 90 : value;
+    this.saveConfigSettings();
+  }
+
+  // Show the stored value again when a typed value was stored as something else
+  syncEdgeInput(key: EdgeFovKey, model: NgModel) {
+    model.control.setValue(this.edgeFovValue(key), { emitViewToModelChange: false });
+  }
 
   trackBySliderMax(index: number, value: number): number {
     return value;
@@ -184,14 +235,25 @@ export class HeadsetSettingsComponent extends DeviceConfigComponentBase<BaseHead
     return Math.ceil(originalFOV / (this.settings?.fovZoom || 1));
   }
 
-  binocularOverlap(horizontalFov: number) {
-    return Math.max(0, horizontalFov - (this.settings?.eyeRotation || 0) * 2);
+  // The combined FOV counts the outer edges twice plus the eye rotation, so twice the per eye FOV minus the combined FOV leaves twice the inner edge minus rotation.
+  binocularOverlap(res: ResolutionInfo) {
+    if (res.combinedFovX) {
+      return Math.max(0, 2 * res.fovX - res.combinedFovX);
+    }
+    return Math.max(0, res.fovX - (this.settings?.eyeRotation || 0) * 2);
   }
 
-  showBurnInDeviationNote(maxPossibleFovX: number, maxPossibleFovY: number) {
+  showBurnInDeviationNote(res: ResolutionInfo) {
     if (!this.settings?.fovBurnInPrevention) {
       return false;
     }
-    return this.settings.maxFovX < maxPossibleFovX || this.settings.maxFovY < maxPossibleFovY;
+    if (this.settings.advancedFovLimits) {
+      return this.settings.maxFovOuter < res.fovMaxOuter
+        || this.settings.maxFovInner < res.fovMaxInner
+        || this.settings.maxFovTop < res.fovMaxTop
+        || this.settings.maxFovBottom < res.fovMaxBottom;
+    }
+    return this.settings.maxFovX < res.fovMaxX
+      || this.settings.maxFovY < res.fovMaxY;
   }
 }
