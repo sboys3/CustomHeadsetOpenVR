@@ -31,6 +31,15 @@ public:
 	float maxFovX = 175;
 	// max fov to be displayed vertically
 	float maxFovY = 175;
+	// if true, maxFovOuter/Inner/Top/Bottom limit each edge and maxFovX/maxFovY are ignored
+	// if false, maxFovX/maxFovY limit the total fov and the per-edge values are ignored
+	bool advancedFovLimits = false;
+	// max fov in degrees from the center of the eye to each edge, 90 means no limit
+	// outer is toward the ear and inner is toward the nose
+	float maxFovOuter = 90;
+	float maxFovInner = 90;
+	float maxFovTop = 90;
+	float maxFovBottom = 90;
 	// amount to divide the fov by
 	float fovZoom = 1;
 	// amount to zoom in the FOV using tangent-based scaling for flatter perception

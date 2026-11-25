@@ -93,6 +93,21 @@ void parseBaseHeadsetConfig(json headsetData, Config::BaseHeadsetConfig& headset
 	if(headsetData["maxFovY"].is_number()){
 		headsetConfig.maxFovY = headsetData["maxFovY"].get<double>();
 	}
+	if(headsetData["advancedFovLimits"].is_boolean()){
+		headsetConfig.advancedFovLimits = headsetData["advancedFovLimits"].get<bool>();
+	}
+	if(headsetData["maxFovOuter"].is_number()){
+		headsetConfig.maxFovOuter = headsetData["maxFovOuter"].get<double>();
+	}
+	if(headsetData["maxFovInner"].is_number()){
+		headsetConfig.maxFovInner = headsetData["maxFovInner"].get<double>();
+	}
+	if(headsetData["maxFovTop"].is_number()){
+		headsetConfig.maxFovTop = headsetData["maxFovTop"].get<double>();
+	}
+	if(headsetData["maxFovBottom"].is_number()){
+		headsetConfig.maxFovBottom = headsetData["maxFovBottom"].get<double>();
+	}
 	if(headsetData["distortionMeshResolution"].is_number()){
 		headsetConfig.distortionMeshResolution = headsetData["distortionMeshResolution"].get<int>();
 	}
@@ -578,6 +593,11 @@ ordered_json baseHeadsetInfo(Config::BaseHeadsetConfig& headsetConfig){
 		{"displayRotation", headsetConfig.displayRotation},
 		{"maxFovX", headsetConfig.maxFovX},
 		{"maxFovY", headsetConfig.maxFovY},
+		{"advancedFovLimits", headsetConfig.advancedFovLimits},
+		{"maxFovOuter", headsetConfig.maxFovOuter},
+		{"maxFovInner", headsetConfig.maxFovInner},
+		{"maxFovTop", headsetConfig.maxFovTop},
+		{"maxFovBottom", headsetConfig.maxFovBottom},
 		{"distortionMeshResolution", headsetConfig.distortionMeshResolution},
 		{"fovBurnInPrevention", headsetConfig.fovBurnInPrevention},
 		{"fovClamping", headsetConfig.fovClamping},
@@ -736,6 +756,10 @@ void ConfigLoader::WriteInfo(){
 				{"fovY", info.renderFovY},
 				{"fovMaxX", info.renderFovMaxX},
 				{"fovMaxY", info.renderFovMaxY},
+				{"fovMaxOuter", info.renderFovMaxOuter},
+				{"fovMaxInner", info.renderFovMaxInner},
+				{"fovMaxTop", info.renderFovMaxTop},
+				{"fovMaxBottom", info.renderFovMaxBottom},
 				{"combinedFovX", info.combinedFovX},
 				{"combinedFovY", info.combinedFovY},
 				{"renderResolution1To1X", info.renderResolution1To1X},
@@ -827,6 +851,10 @@ void ConfigLoader::ReadInfo(){
 			if(res["fovY"].is_number()) info.renderFovY = res["fovY"].get<double>();
 			if(res["fovMaxX"].is_number()) info.renderFovMaxX = res["fovMaxX"].get<double>();
 			if(res["fovMaxY"].is_number()) info.renderFovMaxY = res["fovMaxY"].get<double>();
+			if(res["fovMaxOuter"].is_number()) info.renderFovMaxOuter = res["fovMaxOuter"].get<double>();
+			if(res["fovMaxInner"].is_number()) info.renderFovMaxInner = res["fovMaxInner"].get<double>();
+			if(res["fovMaxTop"].is_number()) info.renderFovMaxTop = res["fovMaxTop"].get<double>();
+			if(res["fovMaxBottom"].is_number()) info.renderFovMaxBottom = res["fovMaxBottom"].get<double>();
 			if(res["combinedFovX"].is_number()) info.combinedFovX = res["combinedFovX"].get<double>();
 			if(res["combinedFovY"].is_number()) info.combinedFovY = res["combinedFovY"].get<double>();
 			if(res["renderResolution1To1X"].is_number()) info.renderResolution1To1X = res["renderResolution1To1X"].get<int>();

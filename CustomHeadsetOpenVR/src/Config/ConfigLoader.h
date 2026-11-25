@@ -16,6 +16,11 @@ public:
 		double renderFovY = 0;
 		double renderFovMaxX = 0;
 		double renderFovMaxY = 0;
+		// largest possible fov in degrees from the center of the left eye to each edge
+		double renderFovMaxOuter = 0;
+		double renderFovMaxInner = 0;
+		double renderFovMaxTop = 0;
+		double renderFovMaxBottom = 0;
 		double combinedFovX = 0;
 		double combinedFovY = 0;
 		uint32_t renderResolution1To1X = 0;
